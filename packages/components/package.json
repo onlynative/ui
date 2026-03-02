@@ -23,12 +23,24 @@
       "types": "./dist/layout/index.d.ts",
       "react-native": "./src/layout/index.ts",
       "default": "./dist/layout/index.js"
+    },
+    "./button": {
+      "types": "./dist/button/index.d.ts",
+      "react-native": "./src/button/index.ts",
+      "default": "./dist/button/index.js"
+    },
+    "./icon-button": {
+      "types": "./dist/icon-button/index.d.ts",
+      "react-native": "./src/icon-button/index.ts",
+      "default": "./dist/icon-button/index.js"
     }
   },
   "typesVersions": {
     "*": {
       "typography": ["dist/typography/index.d.ts"],
-      "layout": ["dist/layout/index.d.ts"]
+      "layout": ["dist/layout/index.d.ts"],
+      "button": ["dist/button/index.d.ts"],
+      "icon-button": ["dist/icon-button/index.d.ts"]
     }
   },
   "publishConfig": {
@@ -39,7 +51,7 @@
     "src"
   ],
   "scripts": {
-    "build": "tsup src/index.ts src/typography/index.ts src/layout/index.ts --dts --format cjs --outDir dist --clean",
+    "build": "tsup src/index.ts src/typography/index.ts src/layout/index.ts src/button/index.ts src/icon-button/index.ts --dts --format cjs --outDir dist --clean",
     "typecheck": "tsc --noEmit",
     "test": "jest --passWithNoTests"
   },

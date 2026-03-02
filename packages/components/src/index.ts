@@ -10,3 +10,13 @@ export type {
   RowProps,
   SpacingValue,
 } from './layout'
+
+export { Button } from './button'
+export type { ButtonProps, ButtonVariant } from './button'
+
+export { IconButton } from './icon-button'
+export type {
+  IconButtonProps,
+  IconButtonSize,
+  IconButtonVariant,
+} from './icon-button'
