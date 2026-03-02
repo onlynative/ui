@@ -20,3 +20,6 @@ export type {
   IconButtonSize,
   IconButtonVariant,
 } from './icon-button'
+
+export { AppBar } from './appbar'
+export type { AppBarAction, AppBarProps, AppBarVariant } from './appbar'
