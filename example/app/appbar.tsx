@@ -1,0 +1,159 @@
+import { useMemo } from 'react'
+import { useRouter } from 'expo-router'
+import { useTheme } from '@onlynative/core'
+import { AppBar, Box, Typography, Column } from '@onlynative/components'
+import type { AppBarAction, AppBarVariant } from '@onlynative/components'
+import { ScrollView, StyleSheet } from 'react-native'
+
+const variants: Array<{
+  key: AppBarVariant
+  label: string
+  variant: AppBarVariant
+  title: string
+}> = [
+  {
+    key: 'small',
+    label: 'Small',
+    variant: 'small',
+    title: 'Small App Bar',
+  },
+  {
+    key: 'center-aligned',
+    label: 'Center Aligned',
+    variant: 'center-aligned',
+    title: 'Centered App Bar',
+  },
+  {
+    key: 'medium',
+    label: 'Medium',
+    variant: 'medium',
+    title: 'Medium App Bar',
+  },
+  {
+    key: 'large',
+    label: 'Large',
+    variant: 'large',
+    title: 'Large App Bar',
+  },
+]
+
+const longTitle = 'Very Long App Bar Title That Should Truncate Properly'
+const actions: AppBarAction[] = [
+  {
+    icon: 'magnify',
+    accessibilityLabel: 'Search',
+  },
+  {
+    icon: 'dots-vertical',
+    accessibilityLabel: 'More options',
+  },
+]
+
+export default function AppBarScreen() {
+  const router = useRouter()
+  const theme = useTheme()
+  const previewStyle = useMemo(
+    () => ({
+      borderWidth: 1,
+      borderColor: theme.colors.outlineVariant,
+      borderRadius: theme.shape.cornerMedium,
+      overflow: 'hidden' as const,
+    }),
+    [theme.colors.outlineVariant, theme.shape.cornerMedium],
+  )
+
+  return (
+    <ScrollView style={styles.container} contentContainerStyle={styles.content}>
+      <Typography variant="headlineSmall">AppBar Showcase</Typography>
+
+      <Column gap="sm">
+        <Typography variant="titleSmall">Variants</Typography>
+        <Column gap="md">
+          {variants.map((item) => (
+            <Column key={`base-${item.key}`} gap="sm">
+              <Typography variant="labelMedium">{item.label}</Typography>
+              <Box style={previewStyle}>
+                <AppBar
+                  title={item.title}
+                  variant={item.variant}
+                  actions={actions}
+                />
+              </Box>
+            </Column>
+          ))}
+        </Column>
+      </Column>
+
+      <Column gap="sm">
+        <Typography variant="titleSmall">With Back Button</Typography>
+        <Column gap="md">
+          {variants.map((item) => (
+            <Column key={`back-${item.key}`} gap="sm">
+              <Typography variant="labelMedium">{item.label}</Typography>
+              <Box style={previewStyle}>
+                <AppBar
+                  title={item.title}
+                  variant={item.variant}
+                  canGoBack
+                  actions={actions}
+                  onBackPress={() => router.back()}
+                />
+              </Box>
+            </Column>
+          ))}
+        </Column>
+      </Column>
+
+      <Column gap="sm">
+        <Typography variant="titleSmall">Elevated</Typography>
+        <Column gap="md">
+          {variants.map((item) => (
+            <Column key={`elevated-${item.key}`} gap="sm">
+              <Typography variant="labelMedium">{item.label}</Typography>
+              <Box style={previewStyle}>
+                <AppBar
+                  title={item.title}
+                  variant={item.variant}
+                  elevated
+                  canGoBack
+                  actions={actions}
+                  onBackPress={() => router.back()}
+                />
+              </Box>
+            </Column>
+          ))}
+        </Column>
+      </Column>
+
+      <Column gap="sm">
+        <Typography variant="titleSmall">Long Title</Typography>
+        <Column gap="md">
+          {variants.map((item) => (
+            <Column key={`long-${item.key}`} gap="sm">
+              <Typography variant="labelMedium">{item.label}</Typography>
+              <Box style={previewStyle}>
+                <AppBar
+                  title={longTitle}
+                  variant={item.variant}
+                  canGoBack
+                  actions={actions}
+                  onBackPress={() => router.back()}
+                />
+              </Box>
+            </Column>
+          ))}
+        </Column>
+      </Column>
+    </ScrollView>
+  )
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  content: {
+    padding: 24,
+    rowGap: 20,
+  },
+})

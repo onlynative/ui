@@ -1,0 +1,52 @@
+{
+  "expo": {
+    "name": "onlynative/ui",
+    "slug": "onlynative-ui",
+    "scheme": "onlynative",
+    "version": "0.0.0",
+    "platforms": [
+      "ios",
+      "android",
+      "web"
+    ],
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#ffffff"
+      }
+    },
+    "plugins": [
+      "expo-router"
+    ],
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "experiments": {
+      "baseUrl": "/ui"
+    },
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/80a063aa-5b5e-4466-8c89-c869b3a5cb44"
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "80a063aa-5b5e-4466-8c89-c869b3a5cb44"
+      }
+    },
+    "owner": "onlynative"
+  }
+}
