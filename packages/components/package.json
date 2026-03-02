@@ -18,11 +18,17 @@
       "types": "./dist/typography/index.d.ts",
       "react-native": "./src/typography/index.ts",
       "default": "./dist/typography/index.js"
+    },
+    "./layout": {
+      "types": "./dist/layout/index.d.ts",
+      "react-native": "./src/layout/index.ts",
+      "default": "./dist/layout/index.js"
     }
   },
   "typesVersions": {
     "*": {
-      "typography": ["dist/typography/index.d.ts"]
+      "typography": ["dist/typography/index.d.ts"],
+      "layout": ["dist/layout/index.d.ts"]
     }
   },
   "publishConfig": {
@@ -33,7 +39,7 @@
     "src"
   ],
   "scripts": {
-    "build": "tsup src/index.ts src/typography/index.ts --dts --format cjs --outDir dist --clean",
+    "build": "tsup src/index.ts src/typography/index.ts src/layout/index.ts --dts --format cjs --outDir dist --clean",
     "typecheck": "tsc --noEmit",
     "test": "jest --passWithNoTests"
   },

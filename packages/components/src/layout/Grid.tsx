@@ -1,0 +1,49 @@
+import React, { useMemo } from 'react'
+import type { ViewStyle } from 'react-native'
+import { View } from 'react-native'
+import { useTheme } from '@onlynative/core'
+
+import { Row } from './Row'
+import { resolveSpacing } from './resolveSpacing'
+import type { GridProps } from './types'
+
+export function Grid({
+  columns,
+  gap,
+  columnGap,
+  rowGap,
+  children,
+  style,
+  ...rowProps
+}: GridProps) {
+  const { spacing } = useTheme()
+  const resolvedColumnGap = resolveSpacing(spacing, columnGap ?? gap)
+  const resolvedRowGap = resolveSpacing(spacing, rowGap ?? gap)
+  const halfGap = resolvedColumnGap ? resolvedColumnGap / 2 : 0
+
+  const cellStyle = useMemo<ViewStyle>(
+    () => ({
+      flexBasis: `${100 / columns}%` as unknown as number,
+      flexShrink: 1,
+      paddingLeft: halfGap,
+      paddingRight: halfGap,
+    }),
+    [columns, halfGap],
+  )
+
+  const rowStyle = useMemo<ViewStyle>(
+    () => ({
+      marginLeft: -halfGap,
+      marginRight: -halfGap,
+    }),
+    [halfGap],
+  )
+
+  return (
+    <Row wrap rowGap={resolvedRowGap} {...rowProps} style={[rowStyle, style]}>
+      {React.Children.map(children, (child) =>
+        child != null ? <View style={cellStyle}>{child}</View> : null,
+      )}
+    </Row>
+  )
+}
