@@ -1,2 +1,2 @@
-// Components will be added here as they are transferred.
-export {}
+export { Typography } from './typography'
+export type { TypographyProps, TypographyVariant } from './typography'

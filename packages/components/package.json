@@ -13,10 +13,17 @@
       "types": "./dist/index.d.ts",
       "react-native": "./src/index.ts",
       "default": "./dist/index.js"
+    },
+    "./typography": {
+      "types": "./dist/typography/index.d.ts",
+      "react-native": "./src/typography/index.ts",
+      "default": "./dist/typography/index.js"
     }
   },
   "typesVersions": {
-    "*": {}
+    "*": {
+      "typography": ["dist/typography/index.d.ts"]
+    }
   },
   "publishConfig": {
     "access": "public"
@@ -26,7 +33,7 @@
     "src"
   ],
   "scripts": {
-    "build": "tsup src/index.ts --dts --format cjs --outDir dist --clean",
+    "build": "tsup src/index.ts src/typography/index.ts --dts --format cjs --outDir dist --clean",
     "typecheck": "tsc --noEmit",
     "test": "jest --passWithNoTests"
   },
