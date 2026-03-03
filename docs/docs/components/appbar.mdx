@@ -1,0 +1,51 @@
+---
+sidebar_position: 3
+---
+
+# AppBar
+
+Top app bars display navigation, title, and actions at the top of the screen.
+Follows the [Material Design 3 Top App Bar](https://m3.material.io/components/top-app-bar/overview) specification.
+
+## Usage
+
+```tsx
+import { AppBar } from '@onlynative/components/appbar'
+
+<AppBar title="Home" />
+```
+
+## Variants
+
+| Variant | Description |
+|---------|-------------|
+| `small` | Compact single-row bar (default) |
+| `center-aligned` | Title centered in the bar |
+| `medium` | Expanded two-row bar |
+| `large` | Expanded with larger title typography |
+
+## With Back Button
+
+```tsx
+<AppBar
+  title="Details"
+  canGoBack
+  onBackPress={() => navigation.goBack()}
+/>
+```
+
+## With Actions
+
+```tsx
+<AppBar
+  title="Inbox"
+  actions={[
+    { icon: 'magnify', accessibilityLabel: 'Search', onPress: () => {} },
+    { icon: 'dots-vertical', accessibilityLabel: 'More', onPress: () => {} },
+  ]}
+/>
+```
+
+## Props
+
+<PropTable name="AppBar" />

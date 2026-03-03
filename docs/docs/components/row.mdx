@@ -1,0 +1,46 @@
+---
+sidebar_position: 2
+---
+
+# Row
+
+Lays children out horizontally. Extends [Box](./box) with all spacing, alignment, and gap props.
+
+## Usage
+
+```tsx
+import { Row } from '@onlynative/components/layout'
+
+<Row gap="sm" align="center">
+  <Button variant="filled">Save</Button>
+  <Button variant="outlined">Cancel</Button>
+</Row>
+```
+
+## Wrapping
+
+Enable `wrap` to let children flow onto the next line when they overflow:
+
+```tsx
+<Row wrap gap="sm">
+  {tags.map((tag) => (
+    <Chip key={tag}>{tag}</Chip>
+  ))}
+</Row>
+```
+
+## Inverted
+
+Reverse the layout direction with `inverted`:
+
+```tsx
+<Row inverted gap="sm">
+  <Typography>First</Typography>
+  <Typography>Second</Typography>
+  {/* Renders: Second  First */}
+</Row>
+```
+
+## Props
+
+<PropTable name="Row" />

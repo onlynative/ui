@@ -1,0 +1,43 @@
+---
+sidebar_position: 5
+---
+
+# Switch
+
+Switches toggle the state of a single item on or off.
+Follows the [Material Design 3 Switch](https://m3.material.io/components/switch/overview) specification.
+
+## Usage
+
+```tsx
+import { Switch } from '@onlynative/components/switch'
+
+<Switch value={isOn} onValueChange={setIsOn} />
+```
+
+## With Icons
+
+By default, the selected state shows a check icon on the thumb. You can customize both selected and unselected icons.
+
+```tsx
+<Switch value={isOn} onValueChange={setIsOn} selectedIcon="check" />
+<Switch
+  value={isOn}
+  onValueChange={setIsOn}
+  selectedIcon="bell"
+  unselectedIcon="bell-off"
+/>
+```
+
+When `unselectedIcon` is provided, the thumb renders at the larger selected size in both states.
+
+## Disabled
+
+```tsx
+<Switch value={false} disabled />
+<Switch value disabled />
+```
+
+## Props
+
+<PropTable name="Switch" />

@@ -1,0 +1,40 @@
+---
+sidebar_position: 7
+---
+
+# Radio
+
+Radio buttons allow users to select one option from a set of mutually exclusive choices.
+Follows the [Material Design 3 Radio button](https://m3.material.io/components/radio-button/overview) specification.
+
+## Usage
+
+```tsx
+import { Radio } from '@onlynative/components/radio'
+
+<Radio value={selected === 'a'} onValueChange={() => setSelected('a')} />
+<Radio value={selected === 'b'} onValueChange={() => setSelected('b')} />
+```
+
+## Radio Group
+
+Build a radio group by controlling which Radio has `value={true}`:
+
+```tsx
+const [choice, setChoice] = useState('option1')
+
+<Radio value={choice === 'option1'} onValueChange={() => setChoice('option1')} />
+<Radio value={choice === 'option2'} onValueChange={() => setChoice('option2')} />
+<Radio value={choice === 'option3'} onValueChange={() => setChoice('option3')} />
+```
+
+## Disabled
+
+```tsx
+<Radio value={false} disabled />
+<Radio value disabled />
+```
+
+## Props
+
+<PropTable name="Radio" />

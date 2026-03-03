@@ -1,0 +1,56 @@
+---
+sidebar_position: 6
+---
+
+# Typography
+
+Typography renders text using the Material Design 3 type scale.
+
+## Usage
+
+```tsx
+import { Typography } from '@onlynative/components/typography'
+
+<Typography variant="headlineMedium">Hello World</Typography>
+<Typography variant="bodyLarge">Body text content.</Typography>
+```
+
+## Variants
+
+The full MD3 type scale:
+
+| Category | Variants |
+|----------|----------|
+| Display | `displayLarge`, `displayMedium`, `displaySmall` |
+| Headline | `headlineLarge`, `headlineMedium`, `headlineSmall` |
+| Title | `titleLarge`, `titleMedium`, `titleSmall` |
+| Body | `bodyLarge`, `bodyMedium`, `bodySmall` |
+| Label | `labelLarge`, `labelMedium`, `labelSmall` |
+
+## Accessibility
+
+Display and headline variants automatically receive `accessibilityRole="header"` for screen readers.
+
+## Custom Styles
+
+```tsx
+<Typography variant="bodyMedium" style={{ color: 'red' }}>
+  Custom colored text
+</Typography>
+```
+
+## Custom Text Component
+
+Use the `as` prop to render with a custom text component:
+
+```tsx
+import { Animated } from 'react-native'
+
+<Typography variant="titleLarge" as={Animated.Text}>
+  Animated text
+</Typography>
+```
+
+## Props
+
+<PropTable name="Typography" />

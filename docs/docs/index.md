@@ -1,0 +1,85 @@
+---
+slug: /
+sidebar_position: 1
+---
+
+# OnlyNative UI
+
+Material Design 3 component library for React Native.
+
+## Features
+
+- Follows the [Material Design 3](https://m3.material.io/) specification
+- Built-in light and dark theme support
+- Full TypeScript support with strict types
+- Accessible by default — proper roles, labels, and states
+- Tree-shakeable with subpath exports
+- Responsive layout hooks (`useBreakpoint`, `useBreakpointValue`)
+
+## Quick Start
+
+```bash
+pnpm add @onlynative/core @onlynative/components
+```
+
+Wrap your app with `MaterialProvider`:
+
+```tsx
+import { MaterialProvider } from '@onlynative/core'
+
+export default function App() {
+  return (
+    <MaterialProvider>
+      {/* Your app */}
+    </MaterialProvider>
+  )
+}
+```
+
+Use a component:
+
+```tsx
+import { Button } from '@onlynative/components/button'
+
+<Button variant="filled" onPress={() => {}}>
+  Get Started
+</Button>
+```
+
+## Components
+
+### Layout
+
+| Component | Description |
+|-----------|-------------|
+| [Box](./components/box) | Theme-aware View with spacing shorthand props |
+| [Row](./components/row) | Horizontal layout with wrap and invert support |
+| [Column](./components/column) | Vertical layout with invert support |
+| [Grid](./components/grid) | Equal-width multi-column grid |
+| [Layout](./components/layout) | Safe area wrapper with theme background |
+
+### Inputs
+
+| Component | Description |
+|-----------|-------------|
+| [Button](./components/button) | Actions and choices with a single tap |
+| [Checkbox](./components/checkbox) | Selection controls for multiple choices |
+| [Chip](./components/chip) | Compact elements for filters and selections |
+| [IconButton](./components/icon-button) | Icon-only actions |
+| [Radio](./components/radio) | Selection controls for single choice options |
+| [Switch](./components/switch) | Toggle controls for on/off settings |
+| [TextField](./components/text-field) | Text input with labels and validation |
+
+### Data Display
+
+| Component | Description |
+|-----------|-------------|
+| [Card](./components/card) | Contained surfaces for related content |
+| [List](./components/list) | Vertically arranged items with text and icons |
+| [Typography](./components/typography) | MD3 type scale text rendering |
+
+### Surfaces
+
+| Component | Description |
+|-----------|-------------|
+| [AppBar](./components/appbar) | Top navigation with title and actions |

@@ -1,0 +1,73 @@
+---
+sidebar_position: 1
+---
+
+# Box
+
+A theme-aware replacement for `View` with shorthand props for padding, margin, gap, alignment, and background color. Spacing values can be theme tokens (`xs`, `sm`, `md`, `lg`, `xl`) or raw numbers.
+
+## Usage
+
+```tsx
+import { Box } from '@onlynative/components/layout'
+
+<Box p="md" bg="#f5f5f5">
+  <Typography variant="bodyMedium">Padded content</Typography>
+</Box>
+```
+
+## Spacing Tokens
+
+| Token | Value |
+|-------|-------|
+| `xs` | 4 |
+| `sm` | 8 |
+| `md` | 16 |
+| `lg` | 24 |
+| `xl` | 32 |
+
+You can also pass a raw number:
+
+```tsx
+<Box p={20} mx={12}>
+  {/* 20dp padding, 12dp horizontal margin */}
+</Box>
+```
+
+## Padding & Margin
+
+```tsx
+{/* All sides */}
+<Box p="md" m="sm" />
+
+{/* Horizontal / Vertical */}
+<Box px="lg" py="sm" />
+
+{/* Individual sides (RTL-aware) */}
+<Box pt="sm" pb="md" ps="lg" pe="xl" />
+```
+
+`ps` and `pe` map to `paddingStart` / `paddingEnd`, so they flip automatically in RTL layouts. The same applies to `ms` / `me`.
+
+## Gap
+
+```tsx
+<Box gap="sm">
+  <Button variant="filled">First</Button>
+  <Button variant="outlined">Second</Button>
+</Box>
+```
+
+`rowGap` and `columnGap` are also available for finer control.
+
+## Alignment
+
+```tsx
+<Box align="center" justify="space-between">
+  {/* Children are centered on the cross axis and spaced on the main axis */}
+</Box>
+```
+
+## Props
+
+<PropTable name="Box" />

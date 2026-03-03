@@ -1,0 +1,43 @@
+---
+sidebar_position: 5
+---
+
+# Layout
+
+Layout provides a safe area wrapper with the theme background color applied automatically.
+
+## Usage
+
+```tsx
+import { Layout } from '@onlynative/components/layout'
+
+<Layout>
+  {/* Content is inside safe area with theme background */}
+</Layout>
+```
+
+## Immersive Mode
+
+For full-screen layouts that extend behind the status bar:
+
+```tsx
+<Layout immersive>
+  {/* No safe area insets */}
+</Layout>
+```
+
+## Custom Edges
+
+Control which safe area edges are applied:
+
+```tsx
+<Layout edges={['top', 'bottom']}>
+  {/* Safe area on top and bottom only */}
+</Layout>
+```
+
+By default, only the `bottom` edge is applied. In immersive mode, no edges are applied.
+
+## Props
+
+<PropTable name="Layout" />

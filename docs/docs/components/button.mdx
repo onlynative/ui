@@ -1,0 +1,45 @@
+---
+sidebar_position: 1
+---
+
+# Button
+
+Buttons help people take actions and make choices with a single tap.
+Follows the [Material Design 3 Button](https://m3.material.io/components/buttons/overview) specification.
+
+## Usage
+
+```tsx
+import { Button } from '@onlynative/components/button'
+
+<Button variant="filled" onPress={() => console.log('pressed')}>
+  Save
+</Button>
+```
+
+## Variants
+
+| Variant | Use case |
+|---------|----------|
+| `filled` | Primary action, highest emphasis |
+| `elevated` | Elevated surface, medium emphasis |
+| `outlined` | Secondary action, medium emphasis |
+| `text` | Low emphasis, often in dialogs |
+| `tonal` | Secondary container fill |
+
+## With Icons
+
+```tsx
+<Button leadingIcon="plus" onPress={() => {}}>Add Item</Button>
+<Button trailingIcon="arrow-right" onPress={() => {}}>Continue</Button>
+```
+
+## Disabled
+
+```tsx
+<Button disabled onPress={() => {}}>Disabled</Button>
+```
+
+## Props
+
+<PropTable name="Button" />

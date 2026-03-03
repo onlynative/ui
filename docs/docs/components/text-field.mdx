@@ -1,0 +1,62 @@
+---
+sidebar_position: 5
+---
+
+# TextField
+
+Text fields let users enter and edit text.
+Follows the [Material Design 3 Text Field](https://m3.material.io/components/text-fields/overview) specification.
+
+## Usage
+
+```tsx
+import { TextField } from '@onlynative/components/text-field'
+
+const [value, setValue] = useState('')
+
+<TextField
+  label="Email"
+  value={value}
+  onChangeText={setValue}
+/>
+```
+
+## Variants
+
+| Variant | Description |
+|---------|-------------|
+| `filled` | Filled container with bottom border (default) |
+| `outlined` | Outlined border around the field |
+
+```tsx
+<TextField label="Name" variant="filled" />
+<TextField label="Name" variant="outlined" />
+```
+
+## With Icons
+
+```tsx
+<TextField
+  label="Search"
+  leadingIcon="magnify"
+  trailingIcon="close"
+  onTrailingIconPress={() => setValue('')}
+/>
+```
+
+## Validation
+
+```tsx
+<TextField
+  label="Email"
+  value={email}
+  onChangeText={setEmail}
+  error={!isValid}
+  errorText="Please enter a valid email address"
+  supportingText="We'll never share your email"
+/>
+```
+
+## Props
+
+<PropTable name="TextField" />

@@ -1,0 +1,42 @@
+---
+sidebar_position: 2
+---
+
+# Card
+
+Cards contain content and actions about a single subject.
+Follows the [Material Design 3 Card](https://m3.material.io/components/cards/overview) specification.
+
+## Usage
+
+```tsx
+import { Card } from '@onlynative/components/card'
+import { Typography } from '@onlynative/components/typography'
+
+<Card variant="elevated">
+  <Typography variant="titleMedium">Card Title</Typography>
+  <Typography variant="bodyMedium">Card content goes here.</Typography>
+</Card>
+```
+
+## Variants
+
+| Variant | Use case |
+|---------|----------|
+| `elevated` | Default surface with shadow |
+| `filled` | Filled surface, no shadow |
+| `outlined` | Bordered surface, no shadow |
+
+## Interactive Card
+
+When `onPress` is provided, the card renders as a `Pressable` with state-layer feedback:
+
+```tsx
+<Card variant="filled" onPress={() => console.log('tapped')}>
+  <Typography>Tap me</Typography>
+</Card>
+```
+
+## Props
+
+<PropTable name="Card" />

@@ -1,0 +1,35 @@
+---
+sidebar_position: 6
+---
+
+# Checkbox
+
+Checkboxes allow users to select one or more items from a set, or turn an option on or off.
+Follows the [Material Design 3 Checkbox](https://m3.material.io/components/checkbox/overview) specification.
+
+## Usage
+
+```tsx
+import { Checkbox } from '@onlynative/components/checkbox'
+
+<Checkbox value={isChecked} onValueChange={setIsChecked} />
+```
+
+## Multiple Checkboxes
+
+```tsx
+<Checkbox value={optionA} onValueChange={setOptionA} />
+<Checkbox value={optionB} onValueChange={setOptionB} />
+<Checkbox value={optionC} onValueChange={setOptionC} />
+```
+
+## Disabled
+
+```tsx
+<Checkbox value={false} disabled />
+<Checkbox value disabled />
+```
+
+## Props
+
+<PropTable name="Checkbox" />

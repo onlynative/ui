@@ -1,0 +1,80 @@
+---
+sidebar_position: 4
+---
+
+# Chip
+
+Chips help people enter information, make selections, filter content, or trigger actions.
+Follows the [Material Design 3 Chip](https://m3.material.io/components/chips/overview) specification.
+
+## Usage
+
+```tsx
+import { Chip } from '@onlynative/components/chip'
+
+<Chip variant="assist" onPress={() => console.log('pressed')}>
+  Assist
+</Chip>
+```
+
+## Variants
+
+| Variant | Use case |
+|---------|----------|
+| `assist` | Smart or automated actions |
+| `filter` | Filter content, toggle on/off |
+| `input` | User-entered info like tags |
+| `suggestion` | Dynamic suggestions |
+
+## Elevated
+
+Available on `assist`, `filter`, and `suggestion` variants. Ignored on `input`.
+
+```tsx
+<Chip variant="assist" elevated>Elevated Assist</Chip>
+```
+
+## Filter Chips
+
+Filter chips support a `selected` state. When selected, a checkmark icon appears automatically.
+
+```tsx
+<Chip variant="filter" selected onPress={() => {}}>Active</Chip>
+<Chip variant="filter" onPress={() => {}}>Inactive</Chip>
+```
+
+## Close / Remove
+
+Pass `onClose` to show a trailing close icon. Only renders on `input` and `filter` (when selected) variants.
+
+```tsx
+<Chip variant="input" onClose={() => {}}>Tag</Chip>
+<Chip variant="filter" selected onClose={() => {}}>Active</Chip>
+```
+
+## With Icons
+
+```tsx
+<Chip leadingIcon="calendar">Schedule</Chip>
+<Chip variant="input" leadingIcon="tag" onClose={() => {}}>Tagged</Chip>
+```
+
+## Avatar
+
+The `input` variant supports a custom `avatar` prop that takes precedence over `leadingIcon`.
+
+```tsx
+<Chip variant="input" avatar={<Image source={...} />} onClose={() => {}}>
+  John Doe
+</Chip>
+```
+
+## Disabled
+
+```tsx
+<Chip disabled>Disabled</Chip>
+```
+
+## Props
+
+<PropTable name="Chip" />

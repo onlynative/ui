@@ -1,0 +1,35 @@
+---
+sidebar_position: 3
+---
+
+# Column
+
+Lays children out vertically. Extends [Box](./box) with all spacing, alignment, and gap props.
+
+## Usage
+
+```tsx
+import { Column } from '@onlynative/components/layout'
+
+<Column gap="md" p="lg">
+  <Typography variant="headlineSmall">Title</Typography>
+  <Typography variant="bodyMedium">Description text</Typography>
+  <Button variant="filled">Action</Button>
+</Column>
+```
+
+## Inverted
+
+Reverse the layout direction with `inverted`:
+
+```tsx
+<Column inverted gap="sm">
+  <Typography>First</Typography>
+  <Typography>Second</Typography>
+  {/* Renders bottom-to-top: Second then First */}
+</Column>
+```
+
+## Props
+
+<PropTable name="Column" />

@@ -1,0 +1,80 @@
+---
+sidebar_position: 3
+---
+
+# List
+
+Lists are continuous, vertical indexes of text and images.
+Follows the [Material Design 3 Lists](https://m3.material.io/components/lists/overview) specification.
+
+## Usage
+
+```tsx
+import { List, ListItem, ListDivider } from '@onlynative/components/list'
+
+<List>
+  <ListItem headlineText="Photos" supportingText="Jan 9, 2024" />
+  <ListDivider />
+  <ListItem headlineText="Recipes" supportingText="Jan 17, 2024" />
+  <ListDivider />
+  <ListItem headlineText="Work" supportingText="Jan 28, 2024" />
+</List>
+```
+
+## List item templates
+
+List items auto-detect their height from the content provided:
+
+| Template | Props | Min height |
+|----------|-------|------------|
+| One-line | `headlineText` only | 56dp |
+| Two-line | + `supportingText` or `overlineText` | 72dp |
+| Three-line | + both, or multi-line `supportingText` | 88dp |
+
+## Leading and trailing content
+
+Pass any `ReactNode` as `leadingContent` or `trailingContent`:
+
+```tsx
+import { MaterialCommunityIcons } from '@expo/vector-icons'
+
+<ListItem
+  headlineText="Wi-Fi"
+  supportingText="Connected"
+  leadingContent={<MaterialCommunityIcons name="wifi" size={24} />}
+  trailingSupportingText="On"
+/>
+```
+
+## Interactive items
+
+When `onPress` is provided, the item renders as a `Pressable` with state-layer feedback:
+
+```tsx
+<ListItem
+  headlineText="Settings"
+  onPress={() => console.log('tapped')}
+/>
+```
+
+## Inset dividers
+
+Use `inset` to align the divider with text that follows a leading icon:
+
+```tsx
+<ListItem headlineText="Item 1" leadingContent={<Icon />} />
+<ListDivider inset />
+<ListItem headlineText="Item 2" leadingContent={<Icon />} />
+```
+
+## List Props
+
+<PropTable name="List" />
+
+## ListItem Props
+
+<PropTable name="ListItem" />
+
+## ListDivider Props
+
+<PropTable name="ListDivider" />

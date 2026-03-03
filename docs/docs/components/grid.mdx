@@ -1,0 +1,46 @@
+---
+sidebar_position: 4
+---
+
+# Grid
+
+A multi-column grid that wraps children into equal-width columns. Built on top of [Row](./row), so all Box spacing and alignment props are available.
+
+## Usage
+
+```tsx
+import { Grid } from '@onlynative/components/layout'
+
+<Grid columns={2} gap="sm">
+  <Card variant="outlined"><Typography>Item 1</Typography></Card>
+  <Card variant="outlined"><Typography>Item 2</Typography></Card>
+  <Card variant="outlined"><Typography>Item 3</Typography></Card>
+  <Card variant="outlined"><Typography>Item 4</Typography></Card>
+</Grid>
+```
+
+## How It Works
+
+Each child is wrapped in a cell with `flexBasis: ${100 / columns}%`, so all columns are equal width. The `gap` prop controls spacing between cells — cells shrink proportionally to account for it.
+
+## Different Column Counts
+
+```tsx
+{/* Two columns */}
+<Grid columns={2} gap="md">
+  <Button variant="filled">A</Button>
+  <Button variant="outlined">B</Button>
+</Grid>
+
+{/* Four columns */}
+<Grid columns={4} gap="sm">
+  <IconButton icon="heart" />
+  <IconButton icon="star" />
+  <IconButton icon="bell" />
+  <IconButton icon="cog" />
+</Grid>
+```
+
+## Props
+
+<PropTable name="Grid" />
