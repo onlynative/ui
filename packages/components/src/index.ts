@@ -26,3 +26,6 @@ export type { AppBarAction, AppBarProps, AppBarVariant } from './appbar'
 
 export { Card } from './card'
 export type { CardProps, CardVariant } from './card'
+
+export { Chip } from './chip'
+export type { ChipProps, ChipVariant } from './chip'

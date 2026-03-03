@@ -8,6 +8,7 @@ const components = [
   { label: 'Button', route: '/button' as const },
   { label: 'AppBar', route: '/appbar' as const },
   { label: 'Card', route: '/card' as const },
+  { label: 'Chip', route: '/chip' as const },
 ]
 
 export default function HomeScreen() {

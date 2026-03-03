@@ -43,6 +43,11 @@
       "types": "./dist/card/index.d.ts",
       "react-native": "./src/card/index.ts",
       "default": "./dist/card/index.js"
+    },
+    "./chip": {
+      "types": "./dist/chip/index.d.ts",
+      "react-native": "./src/chip/index.ts",
+      "default": "./dist/chip/index.js"
     }
   },
   "typesVersions": {
@@ -52,7 +57,8 @@
       "button": ["dist/button/index.d.ts"],
       "icon-button": ["dist/icon-button/index.d.ts"],
       "appbar": ["dist/appbar/index.d.ts"],
-      "card": ["dist/card/index.d.ts"]
+      "card": ["dist/card/index.d.ts"],
+      "chip": ["dist/chip/index.d.ts"]
     }
   },
   "publishConfig": {
@@ -63,7 +69,7 @@
     "src"
   ],
   "scripts": {
-    "build": "tsup src/index.ts src/typography/index.ts src/layout/index.ts src/button/index.ts src/icon-button/index.ts src/appbar/index.ts src/card/index.ts --dts --format cjs --outDir dist --clean",
+    "build": "tsup src/index.ts src/typography/index.ts src/layout/index.ts src/button/index.ts src/icon-button/index.ts src/appbar/index.ts src/card/index.ts src/chip/index.ts --dts --format cjs --outDir dist --clean",
     "typecheck": "tsc --noEmit",
     "test": "jest --passWithNoTests"
   },
