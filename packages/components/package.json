@@ -48,6 +48,21 @@
       "types": "./dist/chip/index.d.ts",
       "react-native": "./src/chip/index.ts",
       "default": "./dist/chip/index.js"
+    },
+    "./checkbox": {
+      "types": "./dist/checkbox/index.d.ts",
+      "react-native": "./src/checkbox/index.ts",
+      "default": "./dist/checkbox/index.js"
+    },
+    "./radio": {
+      "types": "./dist/radio/index.d.ts",
+      "react-native": "./src/radio/index.ts",
+      "default": "./dist/radio/index.js"
+    },
+    "./switch": {
+      "types": "./dist/switch/index.d.ts",
+      "react-native": "./src/switch/index.ts",
+      "default": "./dist/switch/index.js"
     }
   },
   "typesVersions": {
@@ -58,7 +73,10 @@
       "icon-button": ["dist/icon-button/index.d.ts"],
       "appbar": ["dist/appbar/index.d.ts"],
       "card": ["dist/card/index.d.ts"],
-      "chip": ["dist/chip/index.d.ts"]
+      "chip": ["dist/chip/index.d.ts"],
+      "checkbox": ["dist/checkbox/index.d.ts"],
+      "radio": ["dist/radio/index.d.ts"],
+      "switch": ["dist/switch/index.d.ts"]
     }
   },
   "publishConfig": {
@@ -69,7 +87,7 @@
     "src"
   ],
   "scripts": {
-    "build": "tsup src/index.ts src/typography/index.ts src/layout/index.ts src/button/index.ts src/icon-button/index.ts src/appbar/index.ts src/card/index.ts src/chip/index.ts --dts --format cjs --outDir dist --clean",
+    "build": "tsup src/index.ts src/typography/index.ts src/layout/index.ts src/button/index.ts src/icon-button/index.ts src/appbar/index.ts src/card/index.ts src/chip/index.ts src/checkbox/index.ts src/radio/index.ts src/switch/index.ts --dts --format cjs --outDir dist --clean",
     "typecheck": "tsc --noEmit",
     "test": "jest --passWithNoTests"
   },

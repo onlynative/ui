@@ -29,3 +29,12 @@ export type { CardProps, CardVariant } from './card'
 
 export { Chip } from './chip'
 export type { ChipProps, ChipVariant } from './chip'
+
+export { Checkbox } from './checkbox'
+export type { CheckboxProps } from './checkbox'
+
+export { Radio } from './radio'
+export type { RadioProps } from './radio'
+
+export { Switch } from './switch'
+export type { SwitchProps } from './switch'

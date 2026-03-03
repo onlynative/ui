@@ -1,0 +1,81 @@
+import { screen, fireEvent } from '@testing-library/react-native'
+import { StyleSheet } from 'react-native'
+
+import { Switch } from '../switch/Switch'
+import { renderWithTheme } from '../test-utils/render-with-theme'
+
+describe('Switch', () => {
+  it('renders without crashing', () => {
+    renderWithTheme(<Switch />)
+    expect(screen.getByRole('switch')).toBeTruthy()
+  })
+
+  it('has the switch accessibility role', () => {
+    renderWithTheme(<Switch />)
+    expect(screen.getByRole('switch')).toBeTruthy()
+  })
+
+  it('reports checked=false by default', () => {
+    renderWithTheme(<Switch />)
+    const sw = screen.getByRole('switch')
+    expect(sw.props.accessibilityState).toEqual(
+      expect.objectContaining({ checked: false }),
+    )
+  })
+
+  it('reports checked=true when value is true', () => {
+    renderWithTheme(<Switch value />)
+    const sw = screen.getByRole('switch')
+    expect(sw.props.accessibilityState).toEqual(
+      expect.objectContaining({ checked: true }),
+    )
+  })
+
+  it('calls onValueChange with toggled value when pressed', () => {
+    const onValueChange = jest.fn()
+    renderWithTheme(<Switch value={false} onValueChange={onValueChange} />)
+    fireEvent.press(screen.getByRole('switch'))
+    expect(onValueChange).toHaveBeenCalledWith(true)
+  })
+
+  it('calls onValueChange with false when toggled off', () => {
+    const onValueChange = jest.fn()
+    renderWithTheme(<Switch value onValueChange={onValueChange} />)
+    fireEvent.press(screen.getByRole('switch'))
+    expect(onValueChange).toHaveBeenCalledWith(false)
+  })
+
+  it('does not call onValueChange when disabled', () => {
+    const onValueChange = jest.fn()
+    renderWithTheme(<Switch onValueChange={onValueChange} disabled />)
+    fireEvent.press(screen.getByRole('switch'))
+    expect(onValueChange).not.toHaveBeenCalled()
+  })
+
+  it('reports disabled state', () => {
+    renderWithTheme(<Switch disabled />)
+    const sw = screen.getByRole('switch')
+    expect(sw.props.accessibilityState).toEqual(
+      expect.objectContaining({ disabled: true }),
+    )
+  })
+
+  it('renders selectedIcon when value is true', () => {
+    renderWithTheme(<Switch value selectedIcon="check" />)
+    expect(screen.getByText('check')).toBeTruthy()
+  })
+
+  it('renders unselectedIcon when value is false', () => {
+    renderWithTheme(<Switch value={false} unselectedIcon="close" />)
+    expect(screen.getByText('close')).toBeTruthy()
+  })
+
+  describe('overrides', () => {
+    it('applies containerColor to the track background', () => {
+      renderWithTheme(<Switch containerColor="#FF0000" />)
+      const sw = screen.getByRole('switch')
+      const flatStyle = StyleSheet.flatten(sw.props.style)
+      expect(flatStyle.backgroundColor).toBe('#FF0000')
+    })
+  })
+})
