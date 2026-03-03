@@ -13,6 +13,7 @@ const components = [
   { label: 'Radio', route: '/radio' as const },
   { label: 'Switch', route: '/switch' as const },
   { label: 'TextField', route: '/text-field' as const },
+  { label: 'List', route: '/list' as const },
 ]
 
 export default function HomeScreen() {

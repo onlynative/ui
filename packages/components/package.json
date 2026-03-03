@@ -68,6 +68,11 @@
       "types": "./dist/text-field/index.d.ts",
       "react-native": "./src/text-field/index.ts",
       "default": "./dist/text-field/index.js"
+    },
+    "./list": {
+      "types": "./dist/list/index.d.ts",
+      "react-native": "./src/list/index.ts",
+      "default": "./dist/list/index.js"
     }
   },
   "typesVersions": {
@@ -82,7 +87,8 @@
       "checkbox": ["dist/checkbox/index.d.ts"],
       "radio": ["dist/radio/index.d.ts"],
       "switch": ["dist/switch/index.d.ts"],
-      "text-field": ["dist/text-field/index.d.ts"]
+      "text-field": ["dist/text-field/index.d.ts"],
+      "list": ["dist/list/index.d.ts"]
     }
   },
   "publishConfig": {
@@ -93,7 +99,7 @@
     "src"
   ],
   "scripts": {
-    "build": "tsup src/index.ts src/typography/index.ts src/layout/index.ts src/button/index.ts src/icon-button/index.ts src/appbar/index.ts src/card/index.ts src/chip/index.ts src/checkbox/index.ts src/radio/index.ts src/switch/index.ts src/text-field/index.ts --dts --format cjs --outDir dist --clean",
+    "build": "tsup src/index.ts src/typography/index.ts src/layout/index.ts src/button/index.ts src/icon-button/index.ts src/appbar/index.ts src/card/index.ts src/chip/index.ts src/checkbox/index.ts src/radio/index.ts src/switch/index.ts src/text-field/index.ts src/list/index.ts --dts --format cjs --outDir dist --clean",
     "typecheck": "tsc --noEmit",
     "test": "jest --passWithNoTests"
   },
