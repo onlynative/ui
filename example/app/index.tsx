@@ -12,6 +12,7 @@ const components = [
   { label: 'Checkbox', route: '/checkbox' as const },
   { label: 'Radio', route: '/radio' as const },
   { label: 'Switch', route: '/switch' as const },
+  { label: 'TextField', route: '/text-field' as const },
 ]
 
 export default function HomeScreen() {

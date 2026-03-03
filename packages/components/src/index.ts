@@ -38,3 +38,6 @@ export type { RadioProps } from './radio'
 
 export { Switch } from './switch'
 export type { SwitchProps } from './switch'
+
+export { TextField } from './text-field'
+export type { TextFieldProps, TextFieldVariant } from './text-field'
