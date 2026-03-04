@@ -1,6 +1,7 @@
 {
   "name": "@onlynative/core",
-  "version": "0.0.0",
+  "version": "0.1.0-alpha.0",
+  "description": "Material Design 3 theme system for React Native — colors, typography, shape, spacing, and motion tokens.",
   "private": false,
   "sideEffects": false,
   "main": "dist/index.mjs",
@@ -21,7 +22,22 @@
   },
   "files": [
     "dist",
-    "src"
+    "src",
+    "!src/__tests__"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/onlynative/ui.git",
+    "directory": "packages/core"
+  },
+  "homepage": "https://github.com/onlynative/ui",
+  "keywords": [
+    "react-native",
+    "material-design-3",
+    "theme",
+    "ui",
+    "md3"
   ],
   "scripts": {
     "build": "tsup src/index.ts --dts --format esm --outDir dist --clean",
@@ -29,8 +45,8 @@
     "test": "jest"
   },
   "peerDependencies": {
-    "react": "19.1.0",
-    "react-native": "0.81.5"
+    "react": ">=18.0.0",
+    "react-native": ">=0.72.0"
   },
   "devDependencies": {
     "@react-native/babel-preset": "^0.81.5",

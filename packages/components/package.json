@@ -1,6 +1,7 @@
 {
   "name": "@onlynative/components",
-  "version": "0.0.0",
+  "version": "0.1.0-alpha.0",
+  "description": "Material Design 3 UI components for React Native — Button, Card, Chip, TextField, and more.",
   "private": false,
   "sideEffects": false,
   "main": "dist/index.js",
@@ -77,18 +78,42 @@
   },
   "typesVersions": {
     "*": {
-      "typography": ["dist/typography/index.d.ts"],
-      "layout": ["dist/layout/index.d.ts"],
-      "button": ["dist/button/index.d.ts"],
-      "icon-button": ["dist/icon-button/index.d.ts"],
-      "appbar": ["dist/appbar/index.d.ts"],
-      "card": ["dist/card/index.d.ts"],
-      "chip": ["dist/chip/index.d.ts"],
-      "checkbox": ["dist/checkbox/index.d.ts"],
-      "radio": ["dist/radio/index.d.ts"],
-      "switch": ["dist/switch/index.d.ts"],
-      "text-field": ["dist/text-field/index.d.ts"],
-      "list": ["dist/list/index.d.ts"]
+      "typography": [
+        "dist/typography/index.d.ts"
+      ],
+      "layout": [
+        "dist/layout/index.d.ts"
+      ],
+      "button": [
+        "dist/button/index.d.ts"
+      ],
+      "icon-button": [
+        "dist/icon-button/index.d.ts"
+      ],
+      "appbar": [
+        "dist/appbar/index.d.ts"
+      ],
+      "card": [
+        "dist/card/index.d.ts"
+      ],
+      "chip": [
+        "dist/chip/index.d.ts"
+      ],
+      "checkbox": [
+        "dist/checkbox/index.d.ts"
+      ],
+      "radio": [
+        "dist/radio/index.d.ts"
+      ],
+      "switch": [
+        "dist/switch/index.d.ts"
+      ],
+      "text-field": [
+        "dist/text-field/index.d.ts"
+      ],
+      "list": [
+        "dist/list/index.d.ts"
+      ]
     }
   },
   "publishConfig": {
@@ -96,7 +121,22 @@
   },
   "files": [
     "dist",
-    "src"
+    "src",
+    "!src/__tests__"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/onlynative/ui.git",
+    "directory": "packages/components"
+  },
+  "homepage": "https://github.com/onlynative/ui",
+  "keywords": [
+    "react-native",
+    "material-design-3",
+    "ui-components",
+    "md3",
+    "material-you"
   ],
   "scripts": {
     "build": "tsup src/index.ts src/typography/index.ts src/layout/index.ts src/button/index.ts src/icon-button/index.ts src/appbar/index.ts src/card/index.ts src/chip/index.ts src/checkbox/index.ts src/radio/index.ts src/switch/index.ts src/text-field/index.ts src/list/index.ts --dts --format cjs --outDir dist --clean",
@@ -104,11 +144,11 @@
     "test": "jest --passWithNoTests"
   },
   "peerDependencies": {
-    "@expo/vector-icons": ">=15.0.0",
-    "@onlynative/core": "0.0.0",
-    "react": "19.1.0",
-    "react-native": "0.81.5",
-    "react-native-safe-area-context": ">=5.0.0"
+    "@expo/vector-icons": ">=14.0.0",
+    "@onlynative/core": ">=0.1.0-alpha.0",
+    "react": ">=18.0.0",
+    "react-native": ">=0.72.0",
+    "react-native-safe-area-context": ">=4.0.0"
   },
   "devDependencies": {
     "@react-native/babel-preset": "^0.81.5",
