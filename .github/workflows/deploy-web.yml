@@ -49,17 +49,17 @@ jobs:
         working-directory: example
         run: npx expo export --platform web
 
-      - name: Add SPA fallback
-        run: cp example/dist/index.html example/dist/404.html
-
       - name: Build docs
         run: pnpm docs:build
+
+      - name: Add SPA fallback for example app
+        run: cp example/dist/index.html example/dist/404.html
 
       - name: Merge into single artifact
         run: |
           mkdir -p _site
-          cp -r example/dist/. _site/
-          cp -r docs/build/. _site/docs/
+          cp -r docs/build/. _site/
+          cp -r example/dist/. _site/demo/
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3

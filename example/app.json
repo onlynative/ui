@@ -33,7 +33,7 @@
       "favicon": "./assets/favicon.png"
     },
     "experiments": {
-      "baseUrl": "/ui"
+      "baseUrl": "/ui/demo"
     },
     "runtimeVersion": {
       "policy": "appVersion"

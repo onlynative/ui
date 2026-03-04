@@ -1,59 +1,72 @@
 # OnlyNative UI
 
-![Node >=18](https://img.shields.io/badge/node-%3E%3D18-339933?logo=node.js&logoColor=white)
-![pnpm 9](https://img.shields.io/badge/pnpm-9.x-F69220?logo=pnpm&logoColor=white)
-![Expo SDK 54](https://img.shields.io/badge/expo-54-000020?logo=expo&logoColor=white)
-![Monorepo](https://img.shields.io/badge/monorepo-turbo-EF4444)
+[![Node >=18](https://img.shields.io/badge/node-%3E%3D18-339933?logo=node.js&logoColor=white)](https://nodejs.org/)
+[![pnpm 9](https://img.shields.io/badge/pnpm-9.x-F69220?logo=pnpm&logoColor=white)](https://pnpm.io/)
+[![Expo SDK 54](https://img.shields.io/badge/expo-54-000020?logo=expo&logoColor=white)](https://expo.dev/)
+[![Turborepo](https://img.shields.io/badge/monorepo-turbo-EF4444)](https://turbo.build/)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
-Material Design 3 component library for React Native, built as a `pnpm` + `Turborepo` workspace.
+**Material Design 3 component library for React Native**, built as a pnpm + Turborepo monorepo.
 
-## Packages
+> [Documentation](https://onlynative.github.io/ui/) &nbsp;|&nbsp; [Live Demo](https://onlynative.github.io/ui/demo/) &nbsp;|&nbsp; [GitHub](https://github.com/onlynative/ui)
 
-| Package | Purpose |
+## Try it on your device
+
+Scan the QR code with the [Expo Go](https://expo.dev/go) app to preview components on your device:
+
+
+<img
+  src="https://qr.expo.dev/eas-update?projectId=9bc1e6dd-2f68-433d-813a-4e4bd167298b&runtimeVersion=0.0.0&channel=main"
+  alt="Expo Preview QR Code"
+  width="200"
+  height="200"
+/>
+
+## Features
+
+- Material Design 3 token system (colors, typography, shape, spacing, elevation, motion, state)
+- Light and dark themes out of the box
+- Responsive breakpoint utilities (`useBreakpoint`, `useBreakpointValue`)
+- Subpath exports for tree-shaking (`@onlynative/components/button`, etc.)
+- Accessible by default (`role`, `accessibilityLabel`, `accessibilityState`)
+- State-layer press/hover/focus feedback following MD3 spec
+- TypeScript-first with strict mode
+
+## Components
+
+| Category | Components |
 | --- | --- |
-| `@onlynative/core` | Theme contracts, theme values, context provider, `useTheme`. |
-| `@onlynative/components` | UI components and subpath exports. |
-| `example` | Demo app showing component behavior and API usage. |
+| **Actions** | Button, IconButton, Chip |
+| **Inputs** | TextField, Checkbox, Radio, Switch |
+| **Layout** | Layout, Box, Column, Row, Grid |
+| **Data Display** | Card, List (ListItem, ListDivider), Typography |
+| **Navigation** | AppBar |
 
-## Repository Layout
+## Installation
 
-```text
-.
-├─ example/                # Expo Router showcase app
-├─ packages/
-│  ├─ core/                # Theme + provider primitives
-│  └─ components/          # Reusable UI component package
-├─ turbo.json
-└─ pnpm-workspace.yaml
+```bash
+# Install the core theme package
+npm install @onlynative/core
+
+# Install the component library
+npm install @onlynative/components
 ```
 
-## Requirements
+**Peer dependencies** — make sure these are installed in your project:
 
-- Node.js `>=18`
-- `pnpm@9` (configured in `packageManager`)
+```bash
+npm install react react-native @expo/vector-icons react-native-safe-area-context
+```
 
 ## Quick Start
 
-```bash
-pnpm install
-pnpm run example
-```
-
-Run on a specific platform:
-
-```bash
-pnpm --filter example ios
-pnpm --filter example android
-pnpm --filter example web
-```
-
-## Usage Example
+Wrap your app with `MaterialProvider` and start using components:
 
 ```tsx
 import { MaterialProvider, lightTheme } from '@onlynative/core'
 import { Button, Typography } from '@onlynative/components'
 
-export function Screen() {
+export default function App() {
   return (
     <MaterialProvider theme={lightTheme}>
       <Typography variant="headlineSmall">Hello UI</Typography>
@@ -63,30 +76,87 @@ export function Screen() {
 }
 ```
 
-## Workspace Commands
+You can also import individual components via subpath exports:
+
+```tsx
+import { Button } from '@onlynative/components/button'
+import { Card } from '@onlynative/components/card'
+```
+
+## Packages
+
+| Package | Description |
+| --- | --- |
+| [`@onlynative/core`](packages/core) | Theme contracts, light/dark theme values, `MaterialProvider`, `useTheme` hook, responsive utilities. |
+| [`@onlynative/components`](packages/components) | UI components with subpath exports for tree-shaking. |
+| [`example`](example) | Expo Router showcase app for testing and previewing components. |
+| [`docs`](docs) | Docusaurus documentation site. |
+
+## Repository Layout
+
+```text
+.
+├── docs/                  # Docusaurus documentation site
+├── example/               # Expo Router showcase app
+├── packages/
+│   ├── core/              # Theme + provider primitives
+│   └── components/        # Reusable UI component library
+├── turbo.json
+└── pnpm-workspace.yaml
+```
+
+## Development
+
+### Requirements
+
+- Node.js `>=18`
+- pnpm `9.x`
+
+### Setup
+
+```bash
+pnpm install
+```
+
+### Commands
 
 | Command | Description |
 | --- | --- |
-| `pnpm run build` | Builds all packages with Turborepo. |
-| `pnpm run dev` | Runs package `dev` tasks via Turborepo (persistent, uncached). |
-| `pnpm run typecheck` | Type-checks all packages with `tsc --noEmit`. |
-| `pnpm run lint` | Lints `example` and `packages`. |
-| `pnpm run test` | Runs package `test` tasks if defined. |
-| `pnpm run format` | Formats the repository with Prettier. |
-| `pnpm run clean` | Cleans build outputs via Turborepo. |
-| `pnpm run example` | Starts the Expo example app. |
+| `pnpm run build` | Build all packages with Turborepo |
+| `pnpm run typecheck` | Type-check all packages (`tsc --noEmit`) |
+| `pnpm run lint` | ESLint across example and packages |
+| `pnpm run test` | Run tests across all packages |
+| `pnpm run format` | Format with Prettier |
+| `pnpm run example` | Start the Expo example app |
+| `pnpm run clean` | Clean build outputs |
+| `pnpm run docs:dev` | Start documentation dev server |
 
-Package-level build commands:
+### Running the Example App
 
 ```bash
-pnpm --filter @onlynative/core build
-pnpm --filter @onlynative/components build
+pnpm run example            # Start Expo dev server
+
+# Or target a specific platform
+pnpm --filter example ios
+pnpm --filter example android
+pnpm --filter example web
 ```
+
+## Tech Stack
+
+| Layer | Technology |
+| --- | --- |
+| Runtime | React 19.1, React Native 0.81.5, Expo SDK 54 |
+| Language | TypeScript 5 (strict mode) |
+| Build | tsup (package bundling), Turborepo (task orchestration) |
+| Package Manager | pnpm 9 (workspace protocol) |
+| Testing | Jest 29, @testing-library/react-native |
+| Documentation | Docusaurus 3 |
+
+## Contributing
+
+See [`CONTRIBUTING.md`](CONTRIBUTING.md) for guidelines.
 
 ## License
 
 This project is licensed under the [MIT License](LICENSE).
-
-## Contributing
-
-Contribution guide: [`CONTRIBUTING.md`](CONTRIBUTING.md)

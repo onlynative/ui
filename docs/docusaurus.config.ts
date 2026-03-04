@@ -6,7 +6,7 @@ const config: Config = {
   title: 'OnlyNative UI',
   tagline: 'Material Design 3 components for React Native',
   url: 'https://onlynative.github.io',
-  baseUrl: '/ui/docs/',
+  baseUrl: '/ui/',
   onBrokenLinks: 'throw',
 
   markdown: {
@@ -71,7 +71,7 @@ const config: Config = {
           position: 'left',
         },
         {
-          href: 'https://onlynative.github.io/ui/',
+          href: 'https://onlynative.github.io/ui/demo/',
           label: 'Demo',
           position: 'right',
         },
@@ -97,7 +97,7 @@ const config: Config = {
           items: [
             {
               label: 'Demo App',
-              href: 'https://onlynative.github.io/ui/',
+              href: 'https://onlynative.github.io/ui/demo/',
             },
             {
               label: 'GitHub',
