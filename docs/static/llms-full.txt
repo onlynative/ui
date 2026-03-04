@@ -3,7 +3,8 @@
 > Material Design 3 component library for React Native
 > Packages: `@onlynative/core`, `@onlynative/components`
 > Requirements: React Native 0.81+, React 19+, Expo SDK 54+
-> Peer deps: `@expo/vector-icons >=15`, `react-native-safe-area-context >=5`
+> Peer deps: `react-native-safe-area-context >=4`
+> Optional peer deps: `@expo/vector-icons >=14` (only needed for icon props)
 
 ---
 
@@ -131,10 +132,10 @@ Props:
 - `children: ReactNode` — Content to display
 - `variant?: TypographyVariant` — MD3 type scale role. Default: `'bodyMedium'`
   - Values: `'displayLarge' | 'displayMedium' | 'displaySmall' | 'headlineLarge' | 'headlineMedium' | 'headlineSmall' | 'titleLarge' | 'titleMedium' | 'titleSmall' | 'bodyLarge' | 'bodyMedium' | 'bodySmall' | 'labelLarge' | 'labelMedium' | 'labelSmall'`
-- `color?: string` — Text color override. Default: theme `onSurface`
-- `style?: StyleProp<TextStyle>` — Additional text styles
+- `color?: string` — Text color override. Takes priority over `style.color`. Default: theme `onSurface`
+- `style?: StyleProp<TextStyle>` — Additional text styles. Merged after typography tokens but before `color`.
 - `as?: ComponentType<TextProps>` — Override underlying component (e.g. Animated.Text). Default: `Text`
-- Inherits `TextProps` (except `children`, `style`)
+- Inherits all `TextProps` (except `children`, `style`) — e.g. `numberOfLines`, `adjustsFontSizeToFit`, `selectable`, `ellipsizeMode`
 
 ---
 
@@ -233,6 +234,7 @@ Props:
 - `onPress?: () => void` — Makes card interactive
 - `disabled?: boolean` — Default: `false`
 - `containerColor?: string` — Background color (state-layer auto-derived)
+- `style` is merged last — any `ViewStyle` property (e.g. `borderRadius`, `padding`) overrides the variant defaults
 - Inherits `ViewProps`
 
 ---
@@ -485,6 +487,8 @@ Props:
 ## Icons
 
 All icon props accept `MaterialCommunityIcons` names from `@expo/vector-icons`. Browse available icons at https://pictogrammers.com/library/mdi/.
+
+`@expo/vector-icons` is an optional peer dependency — only install it if you use icon props (`leadingIcon`, `trailingIcon`, `icon`).
 
 ---
 

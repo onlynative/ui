@@ -18,10 +18,16 @@ pnpm add @onlynative/core @onlynative/components
 
 ### Peer dependencies
 
-`@onlynative/components` requires these peer dependencies:
+`@onlynative/components` requires this peer dependency:
 
 ```bash
-pnpm add @expo/vector-icons react-native-safe-area-context
+pnpm add react-native-safe-area-context
+```
+
+If you use icon props (`leadingIcon`, `trailingIcon`, `icon` on Button, IconButton, Chip, etc.), also install:
+
+```bash
+pnpm add @expo/vector-icons
 ```
 
 ## Setup
