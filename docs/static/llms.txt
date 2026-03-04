@@ -1,0 +1,57 @@
+# OnlyNative UI
+
+> Material Design 3 component library for React Native
+
+OnlyNative UI (`@onlynative`) is a React Native component library implementing Material Design 3. It provides a theme system and pre-built UI components with MD3 tokens for colors, typography, shape, spacing, elevation, motion, and state layers.
+
+## Packages
+
+- `@onlynative/core`: Theme provider, light/dark themes, useTheme hook, responsive breakpoint hooks
+- `@onlynative/components`: UI components (Button, IconButton, AppBar, Card, Chip, Checkbox, Radio, Switch, TextField, Typography, Layout, List)
+
+## Quick start
+
+Install:
+```bash
+pnpm add @onlynative/core @onlynative/components @expo/vector-icons react-native-safe-area-context
+```
+
+Wrap root with provider:
+```tsx
+import { MaterialProvider } from '@onlynative/core'
+
+export default function App() {
+  return (
+    <MaterialProvider>
+      {/* Your app */}
+    </MaterialProvider>
+  )
+}
+```
+
+Import components via subpath exports (preferred for tree-shaking):
+```tsx
+import { Button } from '@onlynative/components/button'
+import { Card } from '@onlynative/components/card'
+```
+
+Or from root:
+```tsx
+import { Button, Card } from '@onlynative/components'
+```
+
+## Requirements
+
+- React Native 0.81+, React 19+, Expo SDK 54+
+- Peer deps: `@expo/vector-icons >=15`, `react-native-safe-area-context >=5`
+
+## Docs
+
+- Full docs: https://onlynative.github.io/ui/
+- Installation: https://onlynative.github.io/ui/installation
+- Theming: https://onlynative.github.io/ui/theming
+- Components: https://onlynative.github.io/ui/components/button
+
+## Full API reference
+
+- [llms-full.txt](https://onlynative.github.io/ui/llms-full.txt): Complete API reference with all component props, types, and usage examples in a single file optimized for LLM consumption.

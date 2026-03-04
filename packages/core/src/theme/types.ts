@@ -1,3 +1,9 @@
+/**
+ * Material Design 3 theme object containing all design tokens.
+ * Access via `useTheme()` hook or pass to `MaterialProvider`.
+ *
+ * @see https://m3.material.io/foundations/design-tokens
+ */
 export interface Theme {
   colors: Colors
   typography: Typography
@@ -9,6 +15,7 @@ export interface Theme {
   motion: Motion
 }
 
+/** Material Design 3 color roles. All values are CSS color strings (hex, rgb, etc.). */
 export interface Colors {
   primary: string
   onPrimary: string
@@ -61,6 +68,7 @@ export interface Colors {
   inversePrimary: string
 }
 
+/** Material Design 3 type scale with 15 roles across 5 categories (display, headline, title, body, label). */
 export interface Typography {
   displayLarge: TextStyle
   displayMedium: TextStyle
@@ -100,6 +108,7 @@ export interface TextStyle {
   letterSpacing: number
 }
 
+/** Corner radius tokens from none (0) to full (9999 for pill shapes). */
 export interface Shape {
   cornerNone: number
   cornerExtraSmall: number
@@ -110,6 +119,7 @@ export interface Shape {
   cornerFull: number
 }
 
+/** Spacing scale in density-independent pixels (dp). Use as `theme.spacing.md` or with layout components. */
 export interface Spacing {
   xs: number
   sm: number
@@ -131,6 +141,7 @@ export interface TopAppBarTokens {
   largeTitleBottomPadding: number
 }
 
+/** Opacity values for interactive state feedback (press, hover, focus, disabled). */
 export interface StateLayer {
   pressedOpacity: number
   focusedOpacity: number
@@ -138,6 +149,7 @@ export interface StateLayer {
   disabledOpacity: number
 }
 
+/** Shadow/elevation levels (0–3) for surface hierarchy. */
 export interface Elevation {
   level0: ElevationLevel
   level1: ElevationLevel
@@ -158,6 +170,7 @@ export interface ShadowOffset {
   height: number
 }
 
+/** Duration (in ms) and easing tokens for animations following MD3 motion guidelines. */
 export interface Motion {
   durationShort1: number
   durationShort2: number

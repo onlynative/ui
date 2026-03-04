@@ -1,0 +1,495 @@
+# OnlyNative UI — Full API Reference
+
+> Material Design 3 component library for React Native
+> Packages: `@onlynative/core`, `@onlynative/components`
+> Requirements: React Native 0.81+, React 19+, Expo SDK 54+
+> Peer deps: `@expo/vector-icons >=15`, `react-native-safe-area-context >=5`
+
+---
+
+## Installation
+
+```bash
+pnpm add @onlynative/core @onlynative/components @expo/vector-icons react-native-safe-area-context
+```
+
+---
+
+## @onlynative/core
+
+### MaterialProvider
+
+Wrap your app root to supply the theme to all components.
+
+```tsx
+import { MaterialProvider, darkTheme } from '@onlynative/core'
+
+// Light theme (default)
+<MaterialProvider>{children}</MaterialProvider>
+
+// Dark theme
+<MaterialProvider theme={darkTheme}>{children}</MaterialProvider>
+
+// Custom theme
+import { lightTheme } from '@onlynative/core'
+import type { Theme } from '@onlynative/core'
+
+const custom: Theme = {
+  ...lightTheme,
+  colors: { ...lightTheme.colors, primary: '#006A6A', onPrimary: '#FFFFFF' },
+}
+<MaterialProvider theme={custom}>{children}</MaterialProvider>
+```
+
+Props:
+- `theme?: Theme` — Theme object. Default: `lightTheme`
+- `children: ReactNode`
+
+### useTheme()
+
+Returns the current `Theme` from the nearest `MaterialProvider`.
+
+```tsx
+import { useTheme } from '@onlynative/core'
+
+const theme = useTheme()
+// theme.colors.primary, theme.typography.bodyMedium, theme.spacing.md, etc.
+```
+
+### Theme structure
+
+```
+Theme {
+  colors: Colors         — 47 MD3 color roles
+  typography: Typography — 15 type scale variants (displayLarge..labelSmall)
+  shape: Shape           — cornerNone, cornerExtraSmall, cornerSmall, cornerMedium, cornerLarge, cornerExtraLarge, cornerFull
+  spacing: Spacing       — xs, sm, md, lg, xl
+  elevation: Elevation   — level0..level3 (shadow properties)
+  stateLayer: StateLayer — pressedOpacity, focusedOpacity, hoveredOpacity, disabledOpacity
+  motion: Motion         — duration and easing tokens
+}
+```
+
+Colors: primary, onPrimary, primaryContainer, onPrimaryContainer, primaryFixed, onPrimaryFixed, primaryFixedDim, onPrimaryFixedVariant, secondary (same pattern), tertiary (same pattern), error, onError, errorContainer, onErrorContainer, background, onBackground, surface, surfaceDim, surfaceBright, surfaceContainerLowest, surfaceContainerLow, surfaceContainer, surfaceContainerHigh, surfaceContainerHighest, onSurface, surfaceVariant, onSurfaceVariant, outline, outlineVariant, surfaceTint, shadow, scrim, inverseSurface, inverseOnSurface, inversePrimary
+
+Typography variants: displayLarge, displayMedium, displaySmall, headlineLarge, headlineMedium, headlineSmall, titleLarge, titleMedium, titleSmall, bodyLarge, bodyMedium, bodySmall, labelLarge, labelMedium, labelSmall — each with fontFamily, fontSize, fontWeight, lineHeight, letterSpacing
+
+### useBreakpoint()
+
+Returns the current MD3 window size class. Reactively updates on resize.
+
+```tsx
+import { useBreakpoint } from '@onlynative/core'
+
+const bp = useBreakpoint()
+// 'compact' (0-599) | 'medium' (600-839) | 'expanded' (840-1199) | 'large' (1200-1599) | 'extraLarge' (1600+)
+```
+
+### useBreakpointValue(values)
+
+Returns a value based on the current breakpoint with cascade fallback.
+
+```tsx
+import { useBreakpointValue } from '@onlynative/core'
+
+const columns = useBreakpointValue({ compact: 1, medium: 2, expanded: 4 })
+// compact → 1, medium → 2, expanded/large/extraLarge → 4
+```
+
+Type: `useBreakpointValue<T>(values: Partial<Record<Breakpoint, T>> & Record<'compact', T>): T`
+
+---
+
+## @onlynative/components
+
+Import via subpath (preferred): `import { X } from '@onlynative/components/x'`
+Import via root: `import { X } from '@onlynative/components'`
+
+### Component override pattern
+
+All interactive components follow a 3-tier override system. Merge order: theme defaults → variant → semantic props → style props (last wins).
+
+Standard override props on interactive components:
+- `containerColor?: string` — Root container background. Hover/press state-layer colors auto-derived.
+- `contentColor?: string` — Content (label + icons) color. State-layer colors auto-derived.
+- `labelStyle?: StyleProp<TextStyle>` — Text-specific overrides (does not affect icons).
+- `style` — Root container style.
+
+Disabled state always uses standard MD3 disabled treatment (38% onSurface) regardless of overrides.
+
+---
+
+### Typography
+
+```tsx
+import { Typography } from '@onlynative/components/typography'
+
+<Typography variant="headlineMedium" color="#333">Hello</Typography>
+```
+
+Props:
+- `children: ReactNode` — Content to display
+- `variant?: TypographyVariant` — MD3 type scale role. Default: `'bodyMedium'`
+  - Values: `'displayLarge' | 'displayMedium' | 'displaySmall' | 'headlineLarge' | 'headlineMedium' | 'headlineSmall' | 'titleLarge' | 'titleMedium' | 'titleSmall' | 'bodyLarge' | 'bodyMedium' | 'bodySmall' | 'labelLarge' | 'labelMedium' | 'labelSmall'`
+- `color?: string` — Text color override. Default: theme `onSurface`
+- `style?: StyleProp<TextStyle>` — Additional text styles
+- `as?: ComponentType<TextProps>` — Override underlying component (e.g. Animated.Text). Default: `Text`
+- Inherits `TextProps` (except `children`, `style`)
+
+---
+
+### Button
+
+```tsx
+import { Button } from '@onlynative/components/button'
+
+<Button variant="filled" leadingIcon="plus" onPress={handlePress}>Create</Button>
+<Button variant="outlined">Cancel</Button>
+<Button variant="tonal" containerColor="#E8DEF8" contentColor="#1D192B">Custom</Button>
+```
+
+Props:
+- `children: string` — Button label text
+- `variant?: 'filled' | 'elevated' | 'outlined' | 'text' | 'tonal'` — Default: `'filled'`
+- `leadingIcon?: string` — MaterialCommunityIcons name before label
+- `trailingIcon?: string` — MaterialCommunityIcons name after label
+- `iconSize?: number` — Icon size in dp. Default: `18`
+- `containerColor?: string` — Background color override (state-layer auto-derived)
+- `contentColor?: string` — Label + icon color override
+- `labelStyle?: StyleProp<TextStyle>` — Label text style
+- `disabled?: boolean`
+- Inherits `PressableProps` (except `children`)
+
+---
+
+### IconButton
+
+```tsx
+import { IconButton } from '@onlynative/components/icon-button'
+
+<IconButton icon="heart" variant="filled" accessibilityLabel="Like" onPress={handleLike} />
+<IconButton icon="heart-outline" selectedIcon="heart" selected={liked} variant="tonal" accessibilityLabel="Like" onPress={toggle} />
+```
+
+Props:
+- `icon: string` — MaterialCommunityIcons name (required)
+- `selectedIcon?: string` — Icon when `selected` is true (toggle mode)
+- `iconColor?: string` — Icon color override
+- `contentColor?: string` — Content color (takes precedence over `iconColor`)
+- `containerColor?: string` — Background color (state-layer auto-derived)
+- `variant?: 'filled' | 'tonal' | 'outlined' | 'standard'` — Default: `'filled'`
+- `selected?: boolean` — Toggle state
+- `size?: 'small' | 'medium' | 'large'` — Default: `'medium'`
+- `disabled?: boolean` — Default: `false`
+- `accessibilityLabel: string` — Required for a11y
+- `onPress?: () => void`
+- `style?: PressableProps['style']`
+
+---
+
+### AppBar
+
+```tsx
+import { AppBar } from '@onlynative/components/appbar'
+
+<AppBar title="Home" variant="small" />
+<AppBar title="Details" canGoBack onBackPress={router.back} insetTop />
+<AppBar title="Settings" variant="center-aligned" actions={[
+  { icon: 'magnify', accessibilityLabel: 'Search', onPress: onSearch },
+  { icon: 'dots-vertical', accessibilityLabel: 'More', onPress: onMore },
+]} />
+```
+
+Props:
+- `title: string` — Title text
+- `variant?: 'small' | 'center-aligned' | 'medium' | 'large'` — Default: `'small'`
+- `canGoBack?: boolean` — Show back button. Default: `false`
+- `onBackPress?: () => void` — Back button handler
+- `insetTop?: boolean` — Wrap in SafeAreaView for top inset. Default: `false`
+- `elevated?: boolean` — Show elevation/shadow. Default: `false`
+- `leading?: ReactNode` — Custom leading content (overrides canGoBack)
+- `trailing?: ReactNode` — Custom trailing content (overrides actions)
+- `actions?: AppBarAction[]` — Trailing icon actions
+  - `AppBarAction: { icon: string, accessibilityLabel: string, onPress?: () => void, disabled?: boolean }`
+- `containerColor?: string` — Background color
+- `contentColor?: string` — Title + icon color
+- `titleStyle?: StyleProp<TextStyle>`
+- `style?: StyleProp<ViewStyle>`
+
+---
+
+### Card
+
+```tsx
+import { Card } from '@onlynative/components/card'
+
+<Card variant="elevated">{children}</Card>
+<Card variant="outlined" onPress={handlePress}>{children}</Card>
+```
+
+Props:
+- `children: ReactNode`
+- `variant?: 'elevated' | 'filled' | 'outlined'` — Default: `'elevated'`
+- `onPress?: () => void` — Makes card interactive
+- `disabled?: boolean` — Default: `false`
+- `containerColor?: string` — Background color (state-layer auto-derived)
+- Inherits `ViewProps`
+
+---
+
+### Chip
+
+```tsx
+import { Chip } from '@onlynative/components/chip'
+
+<Chip variant="assist" leadingIcon="calendar">Today</Chip>
+<Chip variant="filter" selected={isSelected} onPress={toggle}>Active</Chip>
+<Chip variant="input" avatar={<Avatar />} onClose={handleRemove}>John</Chip>
+<Chip variant="suggestion" onPress={handleSuggest}>Try this</Chip>
+```
+
+Props:
+- `children: string` — Chip label
+- `variant?: 'assist' | 'filter' | 'input' | 'suggestion'` — Default: `'assist'`
+- `elevated?: boolean` — Use elevated surface. Default: `false`. Ignored on `input`.
+- `selected?: boolean` — Selected state (meaningful for `filter` variant)
+- `leadingIcon?: string` — MaterialCommunityIcons name
+- `iconSize?: number` — Default: `18`
+- `avatar?: ReactNode` — Custom avatar (`input` variant only, overrides leadingIcon)
+- `onClose?: () => void` — Shows close icon (`input` and selected `filter` only)
+- `containerColor?: string` — Background color
+- `contentColor?: string` — Label + icon color
+- `labelStyle?: StyleProp<TextStyle>`
+- Inherits `PressableProps` (except `children`)
+
+---
+
+### Checkbox
+
+```tsx
+import { Checkbox } from '@onlynative/components/checkbox'
+
+<Checkbox value={checked} onValueChange={setChecked} />
+```
+
+Props:
+- `value?: boolean` — Checked state. Default: `false`
+- `onValueChange?: (value: boolean) => void`
+- `containerColor?: string` — Box color when checked
+- `contentColor?: string` — Checkmark color
+- `disabled?: boolean`
+- Inherits `PressableProps` (except `children`)
+
+---
+
+### Radio
+
+```tsx
+import { Radio } from '@onlynative/components/radio'
+
+<Radio value={selected} onValueChange={setSelected} />
+```
+
+Props:
+- `value?: boolean` — Selected state. Default: `false`
+- `onValueChange?: (value: boolean) => void`
+- `containerColor?: string` — Ring/dot color when selected
+- `contentColor?: string` — Ring color when unselected
+- `disabled?: boolean`
+- Inherits `PressableProps` (except `children`)
+
+---
+
+### Switch
+
+```tsx
+import { Switch } from '@onlynative/components/switch'
+
+<Switch value={on} onValueChange={setOn} />
+<Switch value={on} onValueChange={setOn} selectedIcon="check" unselectedIcon="close" />
+```
+
+Props:
+- `value?: boolean` — Toggle state. Default: `false`
+- `onValueChange?: (value: boolean) => void`
+- `selectedIcon?: string` — Thumb icon when on. Default: `'check'`
+- `unselectedIcon?: string` — Thumb icon when off (enables larger thumb)
+- `containerColor?: string` — Track color
+- `contentColor?: string` — Thumb + icon color
+- `disabled?: boolean`
+- Inherits `PressableProps` (except `children`)
+
+---
+
+### TextField
+
+```tsx
+import { TextField } from '@onlynative/components/text-field'
+
+<TextField label="Email" variant="outlined" value={email} onChangeText={setEmail} />
+<TextField label="Password" variant="filled" error errorText="Required" />
+<TextField label="Search" leadingIcon="magnify" trailingIcon="close" onTrailingIconPress={clear} />
+```
+
+Props:
+- `label?: string` — Floating label text
+- `variant?: 'filled' | 'outlined'` — Default: `'filled'`
+- `supportingText?: string` — Helper text below field
+- `errorText?: string` — Error message (replaces supportingText, sets error state)
+- `error?: boolean` — Error styling. Default: `false`
+- `disabled?: boolean` — Default: `false`
+- `leadingIcon?: string` — MaterialCommunityIcons name
+- `trailingIcon?: string` — MaterialCommunityIcons name
+- `onTrailingIconPress?: () => void`
+- `containerColor?: string` — Background color
+- `contentColor?: string` — Input text + icon color
+- `inputStyle?: StyleProp<TextStyle>` — Style for the text input element
+- Inherits `TextInputProps` (except `placeholderTextColor`, `editable`)
+
+---
+
+### Layout Components
+
+#### Layout
+
+Full-screen safe area wrapper.
+
+```tsx
+import { Layout } from '@onlynative/components/layout'
+
+<Layout>{children}</Layout>
+<Layout immersive>{/* No safe area insets */}</Layout>
+<Layout edges={['top', 'bottom']}>{children}</Layout>
+```
+
+Props:
+- `children: ReactNode`
+- `immersive?: boolean` — Remove all safe area insets. Default: `false`
+- `edges?: Edge[]` — Explicit safe-area edges (overrides immersive)
+- `style?: StyleProp<ViewStyle>`
+
+#### Box
+
+Base layout primitive with spacing shorthand props.
+
+```tsx
+import { Box } from '@onlynative/components/layout'
+
+<Box p="md" bg={theme.colors.surface}>{children}</Box>
+<Box px="lg" py="sm" gap="md">{children}</Box>
+```
+
+Props (SpacingValue = theme spacing key | number):
+- `p?, px?, py?, pt?, pb?, ps?, pe?` — Padding (all, horizontal, vertical, top, bottom, start, end)
+- `m?, mx?, my?, mt?, mb?, ms?, me?` — Margin (same pattern)
+- `gap?, rowGap?, columnGap?` — Gap between children
+- `flex?: number` — Flex value
+- `align?: FlexAlignType` — Cross-axis alignment
+- `justify?: 'flex-start' | 'flex-end' | 'center' | 'space-between' | 'space-around' | 'space-evenly'`
+- `bg?: string` — Background color
+- Inherits `ViewProps`
+
+#### Row
+
+Horizontal flex container (extends Box).
+
+```tsx
+import { Row } from '@onlynative/components/layout'
+
+<Row gap="sm" align="center">{children}</Row>
+<Row wrap>{/* Wraps to next line */}</Row>
+```
+
+Additional props:
+- `wrap?: boolean` — Default: `false`
+- `inverted?: boolean` — row-reverse. Default: `false`
+
+#### Column
+
+Vertical flex container (extends Box).
+
+```tsx
+import { Column } from '@onlynative/components/layout'
+
+<Column gap="md">{children}</Column>
+```
+
+Additional props:
+- `inverted?: boolean` — column-reverse. Default: `false`
+
+#### Grid
+
+Equal-width column grid (extends Row).
+
+```tsx
+import { Grid } from '@onlynative/components/layout'
+
+<Grid columns={3} gap="sm">{children}</Grid>
+```
+
+Additional props:
+- `columns: number` — Required. Number of equal-width columns.
+
+---
+
+### List
+
+```tsx
+import { List, ListItem, ListDivider } from '@onlynative/components/list'
+
+<List>
+  <ListItem headlineText="Title" supportingText="Subtitle" onPress={handlePress} />
+  <ListDivider />
+  <ListItem
+    headlineText="With Icon"
+    leadingContent={<Icon name="star" />}
+    trailingContent={<Switch value={on} onValueChange={setOn} />}
+  />
+</List>
+```
+
+#### List
+
+Container for list items.
+
+Props:
+- `children: ReactNode`
+- `style?: StyleProp<ViewStyle>`
+- Inherits `ViewProps`
+
+#### ListItem
+
+Props:
+- `headlineText: string` — Primary text (required)
+- `supportingText?: string` — Secondary text below headline
+- `overlineText?: string` — Text above headline
+- `trailingSupportingText?: string` — Trailing text (e.g. timestamp)
+- `leadingContent?: ReactNode` — Before text block (icon, avatar, checkbox)
+- `trailingContent?: ReactNode` — After text block (icon, switch)
+- `onPress?: () => void` — Makes item interactive
+- `disabled?: boolean` — Default: `false`
+- `containerColor?: string` — Background color (state-layer auto-derived)
+- `supportingTextNumberOfLines?: number` — Default: `1`
+- `style?: StyleProp<ViewStyle>`
+- Inherits `ViewProps`
+
+#### ListDivider
+
+Props:
+- `inset?: boolean` — Leading inset (56dp) to align with text after icons. Default: `false`
+- `style?: StyleProp<ViewStyle>`
+- Inherits `ViewProps`
+
+---
+
+## Icons
+
+All icon props accept `MaterialCommunityIcons` names from `@expo/vector-icons`. Browse available icons at https://pictogrammers.com/library/mdi/.
+
+---
+
+## Code style
+
+- No semicolons, single quotes, trailing commas
+- TypeScript strict mode
+- Subpath imports preferred: `@onlynative/components/button` over `@onlynative/components`

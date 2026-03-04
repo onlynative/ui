@@ -14,6 +14,17 @@ export interface MaterialProviderProps {
   children: React.ReactNode
 }
 
+/**
+ * Provides the Material Design 3 theme to all child components.
+ * Wrap your app root with this provider to enable theming.
+ *
+ * @example
+ * import { MaterialProvider, darkTheme } from '@onlynative/core'
+ *
+ * <MaterialProvider theme={darkTheme}>
+ *   <App />
+ * </MaterialProvider>
+ */
 export function MaterialProvider({ theme, children }: MaterialProviderProps) {
   return (
     <ThemeContext.Provider value={theme ?? lightTheme}>
