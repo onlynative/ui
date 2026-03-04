@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "onlynative/ui",
-    "slug": "onlynative-ui",
+    "slug": "ui",
     "scheme": "onlynative",
     "version": "0.0.0",
     "platforms": [
@@ -39,12 +39,12 @@
       "policy": "appVersion"
     },
     "updates": {
-      "url": "https://u.expo.dev/80a063aa-5b5e-4466-8c89-c869b3a5cb44"
+      "url": "https://u.expo.dev/9bc1e6dd-2f68-433d-813a-4e4bd167298b"
     },
     "extra": {
       "router": {},
       "eas": {
-        "projectId": "80a063aa-5b5e-4466-8c89-c869b3a5cb44"
+        "projectId": "9bc1e6dd-2f68-433d-813a-4e4bd167298b"
       }
     },
     "owner": "onlynative"
