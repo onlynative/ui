@@ -33,13 +33,22 @@ describe('Typography', () => {
       expect(flatStyle.color).toBe('#FF0000')
     })
 
-    it('style color overrides the color prop', () => {
+    it('color prop takes priority over style.color', () => {
       renderWithTheme(
         <Typography color="#FF0000" style={{ color: '#00FF00' }}>
-          Green wins
+          Red wins
         </Typography>,
       )
-      const text = screen.getByText('Green wins')
+      const text = screen.getByText('Red wins')
+      const flatStyle = StyleSheet.flatten(text.props.style)
+      expect(flatStyle.color).toBe('#FF0000')
+    })
+
+    it('style.color overrides the default theme color', () => {
+      renderWithTheme(
+        <Typography style={{ color: '#00FF00' }}>Green text</Typography>,
+      )
+      const text = screen.getByText('Green text')
       const flatStyle = StyleSheet.flatten(text.props.style)
       expect(flatStyle.color).toBe('#00FF00')
     })

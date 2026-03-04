@@ -1,4 +1,3 @@
-import { useMemo } from 'react'
 import type { ComponentType, ReactNode } from 'react'
 import type { StyleProp, TextProps, TextStyle } from 'react-native'
 import { Text } from 'react-native'
@@ -24,9 +23,9 @@ export interface TypographyProps extends Omit<TextProps, 'children' | 'style'> {
    * @default 'bodyMedium'
    */
   variant?: TypographyVariant
-  /** Override the text color. Defaults to the theme's `onSurface` color. */
+  /** Override the text color. Takes priority over `style.color`. Defaults to the theme's `onSurface` color. */
   color?: string
-  /** Additional text styles merged after the theme typography styles. */
+  /** Additional text styles. Can override the default theme color via `style.color` when no `color` prop is set. */
   style?: StyleProp<TextStyle>
   /**
    * Override the underlying text component (e.g. Animated.Text).
@@ -46,10 +45,6 @@ export function Typography({
 }: TypographyProps) {
   const theme = useTheme() as Theme
   const typographyStyle = theme.typography[variant]
-  const colorStyle = useMemo(
-    () => ({ color: color ?? theme.colors.onSurface }),
-    [color, theme.colors.onSurface],
-  )
   const resolvedRole =
     accessibilityRole ?? (HEADING_VARIANTS.has(variant) ? 'header' : undefined)
 
@@ -57,7 +52,12 @@ export function Typography({
     <Component
       {...textProps}
       accessibilityRole={resolvedRole}
-      style={[typographyStyle, colorStyle, style]}
+      style={[
+        { color: theme.colors.onSurface },
+        typographyStyle,
+        style,
+        color != null ? { color } : undefined,
+      ]}
     >
       {children}
     </Component>
