@@ -52,14 +52,16 @@ jobs:
       - name: Build docs
         run: pnpm docs:build
 
-      - name: Add SPA fallback for example app
-        run: cp example/dist/index.html example/dist/404.html
-
       - name: Merge into single artifact
         run: |
           mkdir -p _site
           cp -r docs/build/. _site/
           cp -r example/dist/. _site/demo/
+
+      - name: Add SPA fallback for demo routes
+        run: |
+          SCRIPT='<script>(function(){var p=window.location.pathname;if(p.startsWith("/ui/demo/")){var r=p.slice("/ui/demo/".length);sessionStorage.setItem("spa-redirect",r+window.location.search);window.location.replace("/ui/demo/")}})();</script>'
+          sed -i "s|</head>|${SCRIPT}</head>|" _site/404.html
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
