@@ -1,0 +1,132 @@
+name: Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version bump type'
+        required: true
+        type: choice
+        options:
+          - patch
+          - minor
+          - major
+          - prepatch
+          - preminor
+          - premajor
+          - prerelease
+      preid:
+        description: 'Pre-release identifier (e.g. alpha, beta, rc). Only used with pre* version types.'
+        required: false
+        default: 'alpha'
+        type: string
+      tag:
+        description: 'npm dist-tag'
+        required: true
+        type: choice
+        options:
+          - latest
+          - alpha
+          - beta
+          - rc
+
+jobs:
+  release:
+    name: Release
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      id-token: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          registry-url: https://registry.npmjs.org
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Ensure npm >= 11.5.1 (required for trusted publishing)
+        run: npm install -g npm@latest
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Lint
+        run: pnpm run lint
+
+      - name: Typecheck
+        run: pnpm run typecheck
+
+      - name: Test
+        run: pnpm run test
+
+      - name: Build
+        run: pnpm run build
+
+      - name: Configure git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Bump versions
+        id: version
+        run: |
+          VERSION_ARGS="${{ inputs.version }}"
+          if [[ "$VERSION_ARGS" == pre* ]]; then
+            VERSION_ARGS="$VERSION_ARGS --preid ${{ inputs.preid }}"
+          fi
+
+          # Bump core
+          cd packages/core
+          npm version $VERSION_ARGS --no-git-tag-version
+          NEW_VERSION=$(node -p "require('./package.json').version")
+          cd ../..
+
+          # Bump components with same version
+          cd packages/components
+          npm version $VERSION_ARGS --no-git-tag-version
+
+          # Update core peer dep range
+          node -e "
+            const pkg = require('./package.json');
+            pkg.peerDependencies['@onlynative/core'] = '>=$NEW_VERSION';
+            require('fs').writeFileSync('package.json', JSON.stringify(pkg, null, 2) + '\n');
+          "
+          cd ../..
+
+          # Update lockfile after version bumps
+          pnpm install --no-frozen-lockfile
+
+          echo "version=$NEW_VERSION" >> "$GITHUB_OUTPUT"
+
+      - name: Commit and tag
+        run: |
+          git add packages/core/package.json packages/components/package.json pnpm-lock.yaml
+          git commit -m "release: v${{ steps.version.outputs.version }}"
+          git tag "v${{ steps.version.outputs.version }}"
+
+      - name: Publish @onlynative/core
+        run: cd packages/core && npm publish --provenance --access public --tag ${{ inputs.tag }}
+
+      - name: Publish @onlynative/components
+        run: cd packages/components && npm publish --provenance --access public --tag ${{ inputs.tag }}
+
+      - name: Push to main
+        run: git push origin main --follow-tags
+
+      - name: Create GitHub Release
+        run: |
+          PRERELEASE_FLAG=""
+          if [[ "${{ inputs.tag }}" != "latest" ]]; then
+            PRERELEASE_FLAG="--prerelease"
+          fi
+          gh release create "v${{ steps.version.outputs.version }}" --generate-notes $PRERELEASE_FLAG
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
