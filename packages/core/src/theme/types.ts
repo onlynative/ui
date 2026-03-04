@@ -1,22 +1,40 @@
 /**
+ * Base theme interface that all design systems must implement.
+ * Provides a generic contract for colors, typography, and shared tokens.
+ * Extend this to create a custom design system theme.
+ *
+ * @example
+ * interface MyTheme extends BaseTheme {
+ *   colors: { brand: string; background: string; text: string }
+ *   typography: { heading: TextStyle; body: TextStyle }
+ * }
+ */
+export interface BaseTheme {
+  colors: Record<string, string>
+  typography: Record<string, TextStyle>
+  shape: Shape
+  spacing: Spacing
+  stateLayer: StateLayer
+  elevation: Elevation
+  motion: Motion
+  [key: string]: unknown
+}
+
+/**
  * Material Design 3 theme object containing all design tokens.
  * Access via `useTheme()` hook or pass to `MaterialProvider`.
  *
  * @see https://m3.material.io/foundations/design-tokens
  */
-export interface Theme {
+export interface Theme extends BaseTheme {
   colors: Colors
   typography: Typography
-  shape: Shape
-  spacing: Spacing
   topAppBar?: TopAppBarTokens
-  stateLayer: StateLayer
-  elevation: Elevation
-  motion: Motion
 }
 
 /** Material Design 3 color roles. All values are CSS color strings (hex, rgb, etc.). */
 export interface Colors {
+  [key: string]: string
   primary: string
   onPrimary: string
   primaryContainer: string
@@ -70,6 +88,7 @@ export interface Colors {
 
 /** Material Design 3 type scale with 15 roles across 5 categories (display, headline, title, body, label). */
 export interface Typography {
+  [key: string]: TextStyle
   displayLarge: TextStyle
   displayMedium: TextStyle
   displaySmall: TextStyle

@@ -2,6 +2,7 @@ import * as React from 'react'
 
 import type { Theme } from '../theme/types'
 import { lightTheme } from '../theme/light'
+
 import { ThemeContext } from './ThemeContext'
 
 export interface MaterialProviderProps {

@@ -1,4 +1,5 @@
 export type {
+  BaseTheme,
   Theme,
   Colors,
   Typography,
@@ -17,3 +18,4 @@ export type {
 export { lightTheme } from './light'
 export { darkTheme } from './dark'
 export { defaultTopAppBarTokens } from './topAppBar'
+export { defineTheme } from './defineTheme'

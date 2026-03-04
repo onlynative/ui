@@ -1,17 +1,23 @@
 import { useContext } from 'react'
 
-import type { Theme } from '../theme/types'
+import type { BaseTheme, Theme } from '../theme/types'
 import { ThemeContext } from './ThemeContext'
 
 /**
- * Returns the current Material Design 3 theme from the nearest `MaterialProvider`.
+ * Returns the current theme from the nearest `ThemeProvider` or `MaterialProvider`.
+ *
+ * Without a type parameter, returns the Material Design 3 `Theme`.
+ * Pass a custom theme type to get typed access to your design system's tokens.
  *
  * @example
+ * // Material Design 3 (default)
  * const theme = useTheme()
- * <View style={{ backgroundColor: theme.colors.surface }}>
- *   <Text style={theme.typography.bodyMedium}>Hello</Text>
- * </View>
+ * theme.colors.primary // ✓ typed
+ *
+ * // Custom design system
+ * const theme = useTheme<MyTheme>()
+ * theme.colors.brand // ✓ typed
  */
-export function useTheme(): Theme {
-  return useContext(ThemeContext)
+export function useTheme<T extends BaseTheme = Theme>(): T {
+  return useContext(ThemeContext) as T
 }

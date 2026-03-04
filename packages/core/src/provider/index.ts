@@ -1,2 +1,5 @@
 export { MaterialProvider } from './MaterialProvider'
+export type { MaterialProviderProps } from './MaterialProvider'
+export { ThemeProvider } from './ThemeProvider'
+export type { ThemeProviderProps } from './ThemeProvider'
 export { useTheme } from './useTheme'
