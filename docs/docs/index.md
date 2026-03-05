@@ -23,16 +23,16 @@ Design-system agnostic component library for React Native. Ships with Material D
 pnpm add @onlynative/core @onlynative/components
 ```
 
-Wrap your app with `MaterialProvider`:
+Wrap your app with `ThemeProvider`:
 
 ```tsx
-import { MaterialProvider } from '@onlynative/core'
+import { ThemeProvider } from '@onlynative/core'
 
 export default function App() {
   return (
-    <MaterialProvider>
+    <ThemeProvider>
       {/* Your app */}
-    </MaterialProvider>
+    </ThemeProvider>
   )
 }
 ```

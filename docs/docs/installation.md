@@ -32,16 +32,16 @@ pnpm add @expo/vector-icons
 
 ## Setup
 
-Wrap your root component with `MaterialProvider`:
+Wrap your root component with `ThemeProvider`:
 
 ```tsx
-import { MaterialProvider } from '@onlynative/core'
+import { ThemeProvider } from '@onlynative/core'
 
 export default function App() {
   return (
-    <MaterialProvider>
+    <ThemeProvider>
       {/* Your app */}
-    </MaterialProvider>
+    </ThemeProvider>
   )
 }
 ```
@@ -51,13 +51,13 @@ export default function App() {
 ```tsx
 // app/_layout.tsx
 import { Slot } from 'expo-router'
-import { MaterialProvider } from '@onlynative/core'
+import { ThemeProvider } from '@onlynative/core'
 
 export default function RootLayout() {
   return (
-    <MaterialProvider>
+    <ThemeProvider>
       <Slot />
-    </MaterialProvider>
+    </ThemeProvider>
   )
 }
 ```

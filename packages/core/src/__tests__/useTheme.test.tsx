@@ -1,7 +1,6 @@
 import { renderHook } from '@testing-library/react-native'
 import type { ReactNode } from 'react'
 
-import { MaterialProvider } from '../provider/MaterialProvider'
 import { ThemeProvider } from '../provider/ThemeProvider'
 import { useTheme } from '../provider/useTheme'
 import { darkTheme } from '../theme/dark'
@@ -10,7 +9,7 @@ import { lightTheme } from '../theme/light'
 import type { BaseTheme } from '../theme/types'
 
 function wrapper({ children }: { children: ReactNode }) {
-  return <MaterialProvider>{children}</MaterialProvider>
+  return <ThemeProvider>{children}</ThemeProvider>
 }
 
 describe('useTheme', () => {
@@ -21,7 +20,7 @@ describe('useTheme', () => {
 
   it('returns a custom theme when provided', () => {
     function darkWrapper({ children }: { children: ReactNode }) {
-      return <MaterialProvider theme={darkTheme}>{children}</MaterialProvider>
+      return <ThemeProvider theme={darkTheme}>{children}</ThemeProvider>
     }
 
     const { result } = renderHook(() => useTheme(), {

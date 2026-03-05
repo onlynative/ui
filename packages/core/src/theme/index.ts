@@ -21,3 +21,11 @@ export { darkTheme } from './dark'
 export { defaultTopAppBarTokens } from './topAppBar'
 export { defineTheme } from './defineTheme'
 export { createMaterialTheme } from './createMaterialTheme'
+
+export type { AppleColors, AppleTypography, AppleTheme } from './apple'
+export {
+  appleLightTheme,
+  appleDarkTheme,
+  appleTypography,
+  createAppleComponentTheme,
+} from './apple'

@@ -9,9 +9,9 @@ import { createMaterialTheme } from '../theme/createMaterialTheme'
  * @example
  * import { material } from '@onlynative/core'
  *
- * <MaterialProvider theme={material.darkTheme}>
+ * <ThemeProvider theme={material.darkTheme}>
  *   <App />
- * </MaterialProvider>
+ * </ThemeProvider>
  */
 export const material = {
   lightTheme,

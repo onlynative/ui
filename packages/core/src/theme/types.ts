@@ -22,7 +22,7 @@ export interface BaseTheme {
 
 /**
  * Material Design 3 theme object containing all design tokens.
- * Access via `useTheme()` hook or pass to `MaterialProvider`.
+ * Access via `useTheme()` hook or pass to `ThemeProvider`.
  *
  * @see https://m3.material.io/foundations/design-tokens
  */
