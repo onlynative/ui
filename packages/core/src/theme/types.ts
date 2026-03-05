@@ -32,6 +32,9 @@ export interface Theme extends BaseTheme {
   topAppBar?: TopAppBarTokens
 }
 
+/** Explicit alias for the Material Design 3 theme. Use when distinguishing between design systems. */
+export type MaterialTheme = Theme
+
 /** Material Design 3 color roles. All values are CSS color strings (hex, rgb, etc.). */
 export interface Colors {
   [key: string]: string

@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native'
-import type { Theme } from '@onlynative/core'
+import type { MaterialTheme } from '@onlynative/core'
 
 import { alphaColor, blendColor } from '../utils/color'
 
@@ -17,7 +17,7 @@ interface TrackColors {
   disabledBorderWidth: number
 }
 
-function getColors(theme: Theme, selected: boolean): TrackColors {
+function getColors(theme: MaterialTheme, selected: boolean): TrackColors {
   const disabledOnSurface12 = alphaColor(theme.colors.onSurface, 0.12)
   const disabledOnSurface38 = alphaColor(theme.colors.onSurface, 0.38)
 
@@ -69,7 +69,7 @@ function getColors(theme: Theme, selected: boolean): TrackColors {
 }
 
 function applyColorOverrides(
-  theme: Theme,
+  theme: MaterialTheme,
   colors: TrackColors,
   containerColor?: string,
   contentColor?: string,
@@ -106,7 +106,7 @@ function applyColorOverrides(
 }
 
 export function createStyles(
-  theme: Theme,
+  theme: MaterialTheme,
   selected: boolean,
   hasIcon: boolean,
   containerColor?: string,

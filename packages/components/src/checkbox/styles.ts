@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native'
-import type { Theme } from '@onlynative/core'
+import type { MaterialTheme } from '@onlynative/core'
 
 import { alphaColor, blendColor } from '../utils/color'
 
@@ -16,7 +16,7 @@ interface BoxColors {
   disabledIconColor: string
 }
 
-function getColors(theme: Theme, checked: boolean): BoxColors {
+function getColors(theme: MaterialTheme, checked: boolean): BoxColors {
   const disabledOnSurface38 = alphaColor(theme.colors.onSurface, 0.38)
 
   if (checked) {
@@ -63,7 +63,7 @@ function getColors(theme: Theme, checked: boolean): BoxColors {
 }
 
 function applyColorOverrides(
-  theme: Theme,
+  theme: MaterialTheme,
   colors: BoxColors,
   containerColor?: string,
   contentColor?: string,
@@ -96,7 +96,7 @@ function applyColorOverrides(
 }
 
 export function createStyles(
-  theme: Theme,
+  theme: MaterialTheme,
   checked: boolean,
   containerColor?: string,
   contentColor?: string,

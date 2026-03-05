@@ -1,8 +1,8 @@
 import type { FlexAlignType, ViewProps } from 'react-native'
-import type { Theme } from '@onlynative/core'
+import type { MaterialTheme } from '@onlynative/core'
 
 /** A theme spacing token name or a raw numeric value in dp. */
-export type SpacingValue = keyof Theme['spacing'] | number
+export type SpacingValue = keyof MaterialTheme['spacing'] | number
 
 export interface BoxProps extends ViewProps {
   /** Padding on all sides */

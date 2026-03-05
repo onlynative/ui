@@ -1,8 +1,8 @@
 import { StyleSheet } from 'react-native'
-import type { Theme } from '@onlynative/core'
+import type { MaterialTheme } from '@onlynative/core'
 import { alphaColor, blendColor } from '../utils/color'
 
-export function createStyles(theme: Theme) {
+export function createStyles(theme: MaterialTheme) {
   const disabledContainerColor = alphaColor(theme.colors.onSurface, 0.12)
   const disabledOutlineColor = alphaColor(theme.colors.onSurface, 0.12)
   const toggleUnselectedContainerColor = theme.colors.surfaceContainerHighest

@@ -1,8 +1,8 @@
 import { StyleSheet } from 'react-native'
 import { defaultTopAppBarTokens } from '@onlynative/core'
-import type { Theme } from '@onlynative/core'
+import type { MaterialTheme } from '@onlynative/core'
 
-export function createStyles(theme: Theme) {
+export function createStyles(theme: MaterialTheme) {
   const topAppBar = theme.topAppBar ?? defaultTopAppBarTokens
 
   return StyleSheet.create({

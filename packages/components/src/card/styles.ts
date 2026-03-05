@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native'
-import type { Theme } from '@onlynative/core'
+import type { MaterialTheme } from '@onlynative/core'
 
 import type { CardVariant } from './types'
 import { alphaColor, blendColor } from '../utils/color'
@@ -15,7 +15,7 @@ interface VariantColors {
   disabledBorderColor: string
 }
 
-function getVariantColors(theme: Theme, variant: CardVariant): VariantColors {
+function getVariantColors(theme: MaterialTheme, variant: CardVariant): VariantColors {
   const disabledContainerColor = alphaColor(theme.colors.onSurface, 0.12)
   const disabledOutlineColor = alphaColor(theme.colors.onSurface, 0.12)
 
@@ -78,7 +78,7 @@ function getVariantColors(theme: Theme, variant: CardVariant): VariantColors {
 }
 
 function applyColorOverrides(
-  theme: Theme,
+  theme: MaterialTheme,
   colors: VariantColors,
   containerColor?: string,
 ): VariantColors {
@@ -103,7 +103,7 @@ function applyColorOverrides(
 }
 
 export function createStyles(
-  theme: Theme,
+  theme: MaterialTheme,
   variant: CardVariant,
   containerColor?: string,
 ) {

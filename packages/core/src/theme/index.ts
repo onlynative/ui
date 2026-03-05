@@ -1,6 +1,7 @@
 export type {
   BaseTheme,
   Theme,
+  MaterialTheme,
   Colors,
   Typography,
   TextStyle,

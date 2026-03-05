@@ -1,7 +1,7 @@
 import { StyleSheet } from 'react-native'
-import type { Theme } from '@onlynative/core'
+import type { MaterialTheme } from '@onlynative/core'
 
-import { alphaColor, blendColor } from '../utils/color'
+import { alphaColor } from '../utils/color'
 
 interface RadioColors {
   borderColor: string
@@ -12,7 +12,7 @@ interface RadioColors {
   disabledDotColor: string
 }
 
-function getColors(theme: Theme, selected: boolean): RadioColors {
+function getColors(theme: MaterialTheme, selected: boolean): RadioColors {
   const disabledOnSurface38 = alphaColor(theme.colors.onSurface, 0.38)
 
   if (selected) {
@@ -49,7 +49,7 @@ function getColors(theme: Theme, selected: boolean): RadioColors {
 }
 
 function applyColorOverrides(
-  theme: Theme,
+  theme: MaterialTheme,
   colors: RadioColors,
   containerColor?: string,
   contentColor?: string,
@@ -79,7 +79,7 @@ function applyColorOverrides(
 }
 
 export function createStyles(
-  theme: Theme,
+  theme: MaterialTheme,
   selected: boolean,
   containerColor?: string,
   contentColor?: string,

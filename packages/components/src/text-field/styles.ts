@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native'
-import type { Theme } from '@onlynative/core'
+import type { MaterialTheme } from '@onlynative/core'
 
 import type { TextFieldVariant } from './types'
 import { alphaColor } from '../utils/color'
@@ -51,7 +51,7 @@ interface VariantColors {
 }
 
 function getVariantColors(
-  theme: Theme,
+  theme: MaterialTheme,
   variant: TextFieldVariant,
 ): VariantColors {
   const disabledOpacity = theme.stateLayer.disabledOpacity
@@ -92,7 +92,7 @@ function getVariantColors(
   }
 }
 
-export function createStyles(theme: Theme, variant: TextFieldVariant) {
+export function createStyles(theme: MaterialTheme, variant: TextFieldVariant) {
   const colors = getVariantColors(theme, variant)
   const bodyLarge = theme.typography.bodyLarge
   const bodySmall = theme.typography.bodySmall

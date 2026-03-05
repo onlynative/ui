@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native'
-import type { Theme } from '@onlynative/core'
+import type { MaterialTheme } from '@onlynative/core'
 
 import type { ListItemLines } from './types'
 import { alphaColor, blendColor } from '../utils/color'
@@ -13,7 +13,7 @@ const MIN_HEIGHT: Record<ListItemLines, number> = {
   3: 88,
 }
 
-export function createListStyles(theme: Theme) {
+export function createListStyles(theme: MaterialTheme) {
   return StyleSheet.create({
     container: {
       paddingVertical: theme.spacing.sm,
@@ -27,7 +27,7 @@ interface ItemColors {
   pressedBackgroundColor: string
 }
 
-function getItemColors(theme: Theme, containerColor?: string): ItemColors {
+function getItemColors(theme: MaterialTheme, containerColor?: string): ItemColors {
   const base = containerColor ?? 'transparent'
 
   if (containerColor) {
@@ -60,7 +60,7 @@ function getItemColors(theme: Theme, containerColor?: string): ItemColors {
 }
 
 export function createListItemStyles(
-  theme: Theme,
+  theme: MaterialTheme,
   lines: ListItemLines,
   containerColor?: string,
 ) {
@@ -121,7 +121,7 @@ export function createListItemStyles(
   })
 }
 
-export function createDividerStyles(theme: Theme, inset: boolean) {
+export function createDividerStyles(theme: MaterialTheme, inset: boolean) {
   return StyleSheet.create({
     divider: {
       height: 1,

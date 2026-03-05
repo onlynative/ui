@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native'
-import type { Theme } from '@onlynative/core'
+import type { MaterialTheme } from '@onlynative/core'
 
 import type { ButtonVariant } from './types'
 import { alphaColor, blendColor } from '../utils/color'
@@ -17,7 +17,7 @@ interface VariantColors {
   disabledBorderColor: string
 }
 
-function getVariantColors(theme: Theme, variant: ButtonVariant): VariantColors {
+function getVariantColors(theme: MaterialTheme, variant: ButtonVariant): VariantColors {
   const disabledContainerColor = alphaColor(theme.colors.onSurface, 0.12)
   const disabledLabelColor = alphaColor(theme.colors.onSurface, 0.38)
   const disabledOutlineColor = alphaColor(theme.colors.onSurface, 0.12)
@@ -129,7 +129,7 @@ function getVariantColors(theme: Theme, variant: ButtonVariant): VariantColors {
 }
 
 function getHorizontalPadding(
-  theme: Theme,
+  theme: MaterialTheme,
   variant: ButtonVariant,
   hasLeadingIcon: boolean,
   hasTrailingIcon: boolean,
@@ -154,7 +154,7 @@ function getHorizontalPadding(
 }
 
 function applyColorOverrides(
-  theme: Theme,
+  theme: MaterialTheme,
   colors: VariantColors,
   containerColor?: string,
   contentColor?: string,
@@ -209,7 +209,7 @@ function applyColorOverrides(
 }
 
 export function createStyles(
-  theme: Theme,
+  theme: MaterialTheme,
   variant: ButtonVariant,
   hasLeadingIcon: boolean,
   hasTrailingIcon: boolean,

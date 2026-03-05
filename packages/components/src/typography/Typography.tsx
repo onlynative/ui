@@ -2,7 +2,7 @@ import type { ComponentType, ReactNode } from 'react'
 import type { StyleProp, TextProps, TextStyle } from 'react-native'
 import { Text } from 'react-native'
 import { useTheme } from '@onlynative/core'
-import type { Theme } from '@onlynative/core'
+import type { MaterialTheme } from '@onlynative/core'
 
 import type { TypographyVariant } from './types'
 
@@ -43,7 +43,7 @@ export function Typography({
   accessibilityRole,
   ...textProps
 }: TypographyProps) {
-  const theme = useTheme() as Theme
+  const theme = useTheme() as MaterialTheme
   const typographyStyle = theme.typography[variant]
   const resolvedRole =
     accessibilityRole ?? (HEADING_VARIANTS.has(variant) ? 'header' : undefined)

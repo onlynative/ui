@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native'
-import type { Theme } from '@onlynative/core'
+import type { MaterialTheme } from '@onlynative/core'
 
 import type { ChipVariant } from './types'
 import { alphaColor, blendColor } from '../utils/color'
@@ -18,7 +18,7 @@ interface VariantColors {
 }
 
 function getVariantColors(
-  theme: Theme,
+  theme: MaterialTheme,
   variant: ChipVariant,
   elevated: boolean,
   selected: boolean,
@@ -106,7 +106,7 @@ function getVariantColors(
 }
 
 function applyColorOverrides(
-  theme: Theme,
+  theme: MaterialTheme,
   colors: VariantColors,
   containerColor?: string,
   contentColor?: string,
@@ -161,7 +161,7 @@ function applyColorOverrides(
 }
 
 export function createStyles(
-  theme: Theme,
+  theme: MaterialTheme,
   variant: ChipVariant,
   elevated: boolean,
   selected: boolean,

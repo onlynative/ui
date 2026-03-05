@@ -1,8 +1,8 @@
-import type { Theme } from '@onlynative/core'
+import type { MaterialTheme } from '@onlynative/core'
 import type { SpacingValue } from './types'
 
 export function resolveSpacing(
-  spacing: Theme['spacing'],
+  spacing: MaterialTheme['spacing'],
   value: SpacingValue | undefined,
 ): number | undefined {
   if (value === undefined) return undefined
