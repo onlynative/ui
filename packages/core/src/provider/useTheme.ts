@@ -4,7 +4,7 @@ import type { BaseTheme, Theme } from '../theme/types'
 import { ThemeContext } from './ThemeContext'
 
 /**
- * Returns the current theme from the nearest `ThemeProvider` or `MaterialProvider`.
+ * Returns the current theme from the nearest `ThemeProvider`.
  *
  * Without a type parameter, returns the Material Design 3 `Theme`.
  * Pass a custom theme type to get typed access to your design system's tokens.

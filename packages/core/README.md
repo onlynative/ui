@@ -12,38 +12,29 @@ Peer dependencies: `react >=19`, `react-native >=0.81`
 
 ## Quick start (Material Design 3)
 
-Wrap your app root with `MaterialProvider`:
+Wrap your app root with `ThemeProvider`:
 
 ```tsx
-import { MaterialProvider } from '@onlynative/core'
+import { ThemeProvider } from '@onlynative/core'
 
 export default function App() {
   return (
-    <MaterialProvider>
+    <ThemeProvider>
       {/* Your app */}
-    </MaterialProvider>
+    </ThemeProvider>
   )
 }
 ```
 
 ## API
 
-### MaterialProvider
-
-Provides the MD3 theme context to all child components.
-
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `theme` | `Theme` | `lightTheme` | MD3 theme object |
-| `children` | `ReactNode` | — | App content |
-
 ### ThemeProvider
 
-Generic provider for custom design systems. Accepts any theme extending `BaseTheme`.
+Provides the theme context to all child components. Works with any design system — Material Design 3, Apple HIG, or custom themes. Defaults to the MD3 light theme.
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `theme` | `BaseTheme` | — | Custom theme object (required) |
+| `theme` | `BaseTheme` | `lightTheme` (MD3) | Theme object |
 | `children` | `ReactNode` | — | App content |
 
 ### useTheme()
@@ -84,11 +75,11 @@ const myTheme = defineTheme({
 Generates a complete MD3 light and dark theme from a single seed color using Google's HCT color space:
 
 ```tsx
-import { createMaterialTheme, MaterialProvider } from '@onlynative/core'
+import { createMaterialTheme, ThemeProvider } from '@onlynative/core'
 
 const { lightTheme, darkTheme } = createMaterialTheme('#006A6A')
 
-<MaterialProvider theme={lightTheme}>{children}</MaterialProvider>
+<ThemeProvider theme={lightTheme}>{children}</ThemeProvider>
 ```
 
 ### material preset
@@ -170,15 +161,15 @@ const custom: Theme = {
   colors: { ...lightTheme.colors, primary: '#006A6A', onPrimary: '#FFFFFF' },
 }
 
-<MaterialProvider theme={custom}>{children}</MaterialProvider>
+<ThemeProvider theme={custom}>{children}</ThemeProvider>
 ```
 
 ### Dark theme
 
 ```tsx
-import { MaterialProvider, darkTheme } from '@onlynative/core'
+import { ThemeProvider, darkTheme } from '@onlynative/core'
 
-<MaterialProvider theme={darkTheme}>{children}</MaterialProvider>
+<ThemeProvider theme={darkTheme}>{children}</ThemeProvider>
 ```
 
 ### useBreakpoint()
@@ -195,8 +186,8 @@ const columns = useBreakpointValue({ compact: 1, medium: 2, expanded: 4 })
 
 ## Exports
 
-- `MaterialProvider` — MD3 theme context provider
-- `ThemeProvider` — Generic theme context provider
+- `ThemeProvider` — Theme context provider (works with any design system, defaults to MD3)
+- `MaterialProvider` — Deprecated alias for `ThemeProvider`
 - `useTheme` — Access current theme (generic)
 - `defineTheme` — Type-safe theme creation helper
 - `createMaterialTheme` — Generate MD3 themes from a seed color

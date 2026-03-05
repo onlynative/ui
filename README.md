@@ -60,18 +60,18 @@ npm install react react-native @expo/vector-icons react-native-safe-area-context
 
 ## Quick Start
 
-Wrap your app with `MaterialProvider` and start using components:
+Wrap your app with `ThemeProvider` and start using components:
 
 ```tsx
-import { MaterialProvider, lightTheme } from '@onlynative/core'
+import { ThemeProvider, lightTheme } from '@onlynative/core'
 import { Button, Typography } from '@onlynative/components'
 
 export default function App() {
   return (
-    <MaterialProvider theme={lightTheme}>
+    <ThemeProvider theme={lightTheme}>
       <Typography variant="headlineSmall">Hello UI</Typography>
       <Button variant="filled">Press me</Button>
-    </MaterialProvider>
+    </ThemeProvider>
   )
 }
 ```
@@ -87,7 +87,7 @@ import { Card } from '@onlynative/components/card'
 
 | Package | Description |
 | --- | --- |
-| [`@onlynative/core`](packages/core) | Theme contracts, light/dark theme values, `MaterialProvider`, `useTheme` hook, responsive utilities. |
+| [`@onlynative/core`](packages/core) | Theme contracts, light/dark theme values, `ThemeProvider`, `useTheme` hook, responsive utilities. |
 | [`@onlynative/components`](packages/components) | UI components with subpath exports for tree-shaking. |
 | [`example`](example) | Expo Router showcase app for testing and previewing components. |
 | [`docs`](docs) | Docusaurus documentation site. |

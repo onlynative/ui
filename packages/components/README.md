@@ -8,7 +8,7 @@ Material Design 3 UI components for React Native, part of [OnlyNative UI](https:
 pnpm add @onlynative/core @onlynative/components @expo/vector-icons react-native-safe-area-context
 ```
 
-Wrap your app with `MaterialProvider` from `@onlynative/core` (see [@onlynative/core](https://www.npmjs.com/package/@onlynative/core)).
+Wrap your app with `ThemeProvider` from `@onlynative/core` (see [@onlynative/core](https://www.npmjs.com/package/@onlynative/core)).
 
 ## Import
 

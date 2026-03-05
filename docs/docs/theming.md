@@ -8,18 +8,18 @@ OnlyNative UI ships with Material Design 3 out of the box, but the theme engine 
 
 ## Material Design 3 (default)
 
-### MaterialProvider
+### ThemeProvider
 
-Wrap your app with `MaterialProvider` to supply the MD3 theme:
+Wrap your app with `ThemeProvider` to supply the MD3 theme:
 
 ```tsx
-import { MaterialProvider } from '@onlynative/core'
+import { ThemeProvider } from '@onlynative/core'
 
 export default function App() {
   return (
-    <MaterialProvider>
+    <ThemeProvider>
       {/* All components use the default light theme */}
-    </MaterialProvider>
+    </ThemeProvider>
   )
 }
 ```
@@ -29,27 +29,27 @@ export default function App() {
 Pass the built-in dark theme:
 
 ```tsx
-import { MaterialProvider, darkTheme } from '@onlynative/core'
+import { ThemeProvider, darkTheme } from '@onlynative/core'
 
-<MaterialProvider theme={darkTheme}>
+<ThemeProvider theme={darkTheme}>
   {/* Dark mode */}
-</MaterialProvider>
+</ThemeProvider>
 ```
 
 Switch between light and dark based on system preference:
 
 ```tsx
 import { useColorScheme } from 'react-native'
-import { MaterialProvider, lightTheme, darkTheme } from '@onlynative/core'
+import { ThemeProvider, lightTheme, darkTheme } from '@onlynative/core'
 
 export default function App() {
   const colorScheme = useColorScheme()
   const theme = colorScheme === 'dark' ? darkTheme : lightTheme
 
   return (
-    <MaterialProvider theme={theme}>
+    <ThemeProvider theme={theme}>
       {/* Follows system theme */}
-    </MaterialProvider>
+    </ThemeProvider>
   )
 }
 ```
@@ -71,9 +71,9 @@ const brandTheme: Theme = {
   },
 }
 
-<MaterialProvider theme={brandTheme}>
+<ThemeProvider theme={brandTheme}>
   {/* Components use your custom primary color */}
-</MaterialProvider>
+</ThemeProvider>
 ```
 
 ### Generate a theme from a seed color
@@ -81,13 +81,13 @@ const brandTheme: Theme = {
 `createMaterialTheme` generates a complete MD3 light and dark theme from a single hex color using Google's HCT color space. All 69 color roles are derived automatically:
 
 ```tsx
-import { createMaterialTheme, MaterialProvider } from '@onlynative/core'
+import { createMaterialTheme, ThemeProvider } from '@onlynative/core'
 
 const { lightTheme, darkTheme } = createMaterialTheme('#006A6A')
 
-<MaterialProvider theme={lightTheme}>
+<ThemeProvider theme={lightTheme}>
   {/* Full MD3 palette generated from #006A6A */}
-</MaterialProvider>
+</ThemeProvider>
 ```
 
 This is the easiest way to create a branded theme — pick your brand color and the entire palette is generated for you.
@@ -208,7 +208,7 @@ const brandTheme = defineTheme<BrandTheme>({
 
 ### ThemeProvider
 
-Use `ThemeProvider` instead of `MaterialProvider` for custom design systems:
+Use `ThemeProvider` for custom design systems:
 
 ```tsx
 import { ThemeProvider } from '@onlynative/core'
@@ -347,8 +347,8 @@ The Apple theme includes semantic UI colors (`label`, `secondaryLabel`, `systemB
 
 | Goal | API |
 |------|-----|
-| Use MD3 defaults | `<MaterialProvider>` |
-| Dark mode | `<MaterialProvider theme={darkTheme}>` |
+| Use MD3 defaults | `<ThemeProvider>` |
+| Dark mode | `<ThemeProvider theme={darkTheme}>` |
 | Override a few MD3 colors | Spread `lightTheme` and override |
 | Branded MD3 theme from one color | `createMaterialTheme('#hex')` |
 | Apple HIG theme | `<ThemeProvider theme={appleLightTheme}>` + `useTheme<AppleTheme>()` |

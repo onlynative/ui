@@ -18,18 +18,18 @@ pnpm add @onlynative/core @onlynative/components @expo/vector-icons react-native
 
 ## @onlynative/core
 
-### MaterialProvider
+### ThemeProvider
 
-Wrap your app root to supply the theme to all components.
+Wrap your app root to supply the theme to all components. Works with any design system — Material Design 3, Apple HIG, or custom themes. Defaults to the MD3 light theme when no theme is provided.
 
 ```tsx
-import { MaterialProvider, darkTheme } from '@onlynative/core'
+import { ThemeProvider, darkTheme } from '@onlynative/core'
 
 // Light theme (default)
-<MaterialProvider>{children}</MaterialProvider>
+<ThemeProvider>{children}</ThemeProvider>
 
 // Dark theme
-<MaterialProvider theme={darkTheme}>{children}</MaterialProvider>
+<ThemeProvider theme={darkTheme}>{children}</ThemeProvider>
 
 // Custom theme
 import { lightTheme } from '@onlynative/core'
@@ -39,34 +39,16 @@ const custom: Theme = {
   ...lightTheme,
   colors: { ...lightTheme.colors, primary: '#006A6A', onPrimary: '#FFFFFF' },
 }
-<MaterialProvider theme={custom}>{children}</MaterialProvider>
+<ThemeProvider theme={custom}>{children}</ThemeProvider>
 ```
 
 Props:
-- `theme?: Theme` — Theme object. Default: `lightTheme`
-- `children: ReactNode`
-
-### ThemeProvider
-
-Generic theme provider for custom design systems. Accepts any theme extending `BaseTheme`.
-
-```tsx
-import { ThemeProvider, defineTheme } from '@onlynative/core'
-
-const myTheme = defineTheme({ ... })
-
-<ThemeProvider theme={myTheme}>
-  <App />
-</ThemeProvider>
-```
-
-Props:
-- `theme: BaseTheme` — Any theme object extending `BaseTheme` (required)
+- `theme?: BaseTheme` — Theme object. Default: `lightTheme` (MD3)
 - `children: ReactNode`
 
 ### useTheme()
 
-Returns the current theme from the nearest `ThemeProvider` or `MaterialProvider`.
+Returns the current theme from the nearest `ThemeProvider`.
 
 Without a type parameter, returns the Material Design 3 `Theme`. Pass a custom theme type for typed access to your design system's tokens.
 
@@ -113,15 +95,15 @@ const myTheme = defineTheme<MyTheme>({
 Generates a complete MD3 light and dark theme from a single seed color. Uses Google's HCT color space via `@material/material-color-utilities` for spec-compliant palette generation.
 
 ```tsx
-import { createMaterialTheme, MaterialProvider } from '@onlynative/core'
+import { createMaterialTheme, ThemeProvider } from '@onlynative/core'
 
 const { lightTheme, darkTheme } = createMaterialTheme('#006A6A')
 
 // Use in provider
-<MaterialProvider theme={lightTheme}>{children}</MaterialProvider>
+<ThemeProvider theme={lightTheme}>{children}</ThemeProvider>
 
 // Or with dark mode
-<MaterialProvider theme={isDark ? darkTheme : lightTheme}>{children}</MaterialProvider>
+<ThemeProvider theme={isDark ? darkTheme : lightTheme}>{children}</ThemeProvider>
 ```
 
 Returns: `{ lightTheme: Theme, darkTheme: Theme }`
