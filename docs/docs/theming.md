@@ -310,7 +310,24 @@ import { apple } from '@onlynative/core'
 apple.lightTheme
 apple.darkTheme
 apple.typography
+apple.createComponentTheme
 ```
+
+### Use Apple colors with MD3 components
+
+The built-in components (Button, Card, etc.) are designed for Material Design 3 color roles. To use them with Apple colors, use `createAppleComponentTheme` to create an MD3-compatible theme from your Apple theme:
+
+```tsx
+import { createAppleComponentTheme, appleLightTheme, ThemeProvider } from '@onlynative/core'
+
+const theme = createAppleComponentTheme(appleLightTheme)
+
+<ThemeProvider theme={theme}>
+  {/* Button, Card, etc. now use Apple-sourced colors */}
+</ThemeProvider>
+```
+
+This maps Apple roles to MD3 equivalents (e.g. `tint` becomes `primary`, `label` becomes `onSurface`, `systemRed` becomes `error`).
 
 ### Color roles
 

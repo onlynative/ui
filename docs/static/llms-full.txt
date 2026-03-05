@@ -151,6 +151,7 @@ import { apple } from '@onlynative/core'
 apple.lightTheme   // Apple HIG light theme
 apple.darkTheme    // Apple HIG dark theme
 apple.typography   // SF Pro typography scale
+apple.createComponentTheme  // maps Apple colors to MD3 for components
 ```
 
 Usage with ThemeProvider:
@@ -175,6 +176,23 @@ const theme = useTheme<AppleTheme>()
 AppleTheme colors (38 roles): tint, label, secondaryLabel, tertiaryLabel, quaternaryLabel, systemBackground, secondarySystemBackground, tertiarySystemBackground, systemGroupedBackground, secondarySystemGroupedBackground, tertiarySystemGroupedBackground, separator, opaqueSeparator, link, systemFill, secondarySystemFill, tertiarySystemFill, quaternarySystemFill, systemRed, systemOrange, systemYellow, systemGreen, systemMint, systemTeal, systemCyan, systemBlue, systemIndigo, systemPurple, systemPink, systemBrown, systemGray, systemGray2, systemGray3, systemGray4, systemGray5, systemGray6
 
 AppleTypography variants (11): largeTitle (34pt), title1 (28pt), title2 (22pt), title3 (20pt), headline (17pt semibold), body (17pt), callout (16pt), subheadline (15pt), footnote (13pt), caption1 (12pt), caption2 (11pt)
+
+### createAppleComponentTheme(appleTheme)
+
+Maps Apple HIG colors to MD3-compatible color roles so existing components (Button, Card, Chip, etc.) render correctly with Apple-sourced colors. Also maps Apple typography to the MD3 type scale.
+
+```tsx
+import { createAppleComponentTheme, appleLightTheme, appleDarkTheme, ThemeProvider } from '@onlynative/core'
+
+const lightTheme = createAppleComponentTheme(appleLightTheme)
+const darkTheme = createAppleComponentTheme(appleDarkTheme)
+
+<ThemeProvider theme={lightTheme}>{children}</ThemeProvider>
+```
+
+Key color mappings: tint -> primary, label -> onSurface, secondaryLabel -> onSurfaceVariant, systemBackground -> surface, secondarySystemBackground -> surfaceContainer, separator -> outline, systemRed -> error, systemIndigo -> tertiary, systemGray6 -> secondaryContainer/surfaceVariant.
+
+Returns: `Theme` (MD3-compatible, works with `ThemeProvider` and all `@onlynative/components`)
 
 ### Theme type hierarchy
 

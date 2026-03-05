@@ -23,4 +23,9 @@ export { defineTheme } from './defineTheme'
 export { createMaterialTheme } from './createMaterialTheme'
 
 export type { AppleColors, AppleTypography, AppleTheme } from './apple'
-export { appleLightTheme, appleDarkTheme, appleTypography } from './apple'
+export {
+  appleLightTheme,
+  appleDarkTheme,
+  appleTypography,
+  createAppleComponentTheme,
+} from './apple'
