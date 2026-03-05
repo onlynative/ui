@@ -4,7 +4,7 @@ import path from 'path'
 
 const config: Config = {
   title: 'OnlyNative UI',
-  tagline: 'Material Design 3 components for React Native',
+  tagline: 'Design-system agnostic components for React Native',
   url: 'https://onlynative.github.io',
   baseUrl: '/ui/',
   onBrokenLinks: 'throw',

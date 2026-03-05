@@ -5,12 +5,13 @@ sidebar_position: 1
 
 # OnlyNative UI
 
-Material Design 3 component library for React Native.
+Design-system agnostic component library for React Native. Ships with Material Design 3 out of the box.
 
 ## Features
 
-- Follows the [Material Design 3](https://m3.material.io/) specification
-- Built-in light and dark theme support
+- Design-system agnostic theme engine — use MD3, build your own, or mix both
+- [Material Design 3](https://m3.material.io/) built-in with light and dark themes
+- Generate branded MD3 themes from a single seed color
 - Full TypeScript support with strict types
 - Accessible by default — proper roles, labels, and states
 - Tree-shakeable with subpath exports

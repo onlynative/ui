@@ -7,6 +7,6 @@ module.exports = {
     '^@onlynative/core$': '<rootDir>/../core/src/index.ts',
   },
   transformIgnorePatterns: [
-    'node_modules/(?!((jest-)?react-native|@react-native(-community)?|@expo/vector-icons|react-native-safe-area-context)/)',
+    'node_modules/(?!((jest-)?react-native|@react-native(-community)?|@expo/vector-icons|react-native-safe-area-context|@material/material-color-utilities)/)',
   ],
 }

@@ -4,21 +4,29 @@ sidebar_position: 3
 
 # Theming
 
-OnlyNative UI follows the [Material Design 3 token structure](https://m3.material.io/foundations/design-tokens) for colors, typography, shape, spacing, elevation, motion, and state layers.
+OnlyNative UI ships with Material Design 3 out of the box, but the theme engine is design-system agnostic — you can customize MD3, generate branded themes from a seed color, or build an entirely custom design system.
 
-## MaterialProvider
+## Material Design 3 (default)
 
-Wrap your app with `MaterialProvider` to supply a theme to all components:
+### MaterialProvider
+
+Wrap your app with `MaterialProvider` to supply the MD3 theme:
 
 ```tsx
 import { MaterialProvider } from '@onlynative/core'
 
-<MaterialProvider>
-  {/* All components inside have access to the theme */}
-</MaterialProvider>
+export default function App() {
+  return (
+    <MaterialProvider>
+      {/* All components use the default light theme */}
+    </MaterialProvider>
+  )
+}
 ```
 
-Pass a custom theme to override the default light theme:
+### Dark mode
+
+Pass the built-in dark theme:
 
 ```tsx
 import { MaterialProvider, darkTheme } from '@onlynative/core'
@@ -28,9 +36,65 @@ import { MaterialProvider, darkTheme } from '@onlynative/core'
 </MaterialProvider>
 ```
 
-## useTheme
+Switch between light and dark based on system preference:
 
-Access the current theme in any component:
+```tsx
+import { useColorScheme } from 'react-native'
+import { MaterialProvider, lightTheme, darkTheme } from '@onlynative/core'
+
+export default function App() {
+  const colorScheme = useColorScheme()
+  const theme = colorScheme === 'dark' ? darkTheme : lightTheme
+
+  return (
+    <MaterialProvider theme={theme}>
+      {/* Follows system theme */}
+    </MaterialProvider>
+  )
+}
+```
+
+### Override specific tokens
+
+Spread the base theme and override individual tokens:
+
+```tsx
+import { lightTheme } from '@onlynative/core'
+import type { Theme } from '@onlynative/core'
+
+const brandTheme: Theme = {
+  ...lightTheme,
+  colors: {
+    ...lightTheme.colors,
+    primary: '#006A6A',
+    onPrimary: '#FFFFFF',
+  },
+}
+
+<MaterialProvider theme={brandTheme}>
+  {/* Components use your custom primary color */}
+</MaterialProvider>
+```
+
+### Generate a theme from a seed color
+
+`createMaterialTheme` generates a complete MD3 light and dark theme from a single hex color using Google's HCT color space. All 69 color roles are derived automatically:
+
+```tsx
+import { createMaterialTheme, MaterialProvider } from '@onlynative/core'
+
+const { lightTheme, darkTheme } = createMaterialTheme('#006A6A')
+
+<MaterialProvider theme={lightTheme}>
+  {/* Full MD3 palette generated from #006A6A */}
+</MaterialProvider>
+```
+
+This is the easiest way to create a branded theme — pick your brand color and the entire palette is generated for you.
+
+### Access theme values
+
+Use the `useTheme` hook in any component:
 
 ```tsx
 import { useTheme } from '@onlynative/core'
@@ -45,38 +109,158 @@ function MyComponent() {
 }
 ```
 
-## Theme Structure
+### Material preset
 
-The `Theme` interface contains these token groups:
-
-| Token Group | Description |
-|-------------|-------------|
-| `colors` | 47 MD3 color roles (primary, secondary, surface, error, etc.) |
-| `typography` | 15 type scale variants (display, headline, title, body, label) |
-| `shape` | Corner radius tokens (none through full) |
-| `spacing` | Spacing scale (xs, sm, md, lg, xl) |
-| `elevation` | Shadow levels 0–3 |
-| `stateLayer` | Opacity values for pressed, focused, hovered, disabled states |
-| `motion` | Duration and easing tokens for animations |
-
-## Custom Theme
-
-Create a custom theme by spreading the base theme and overriding tokens:
+All MD3 values are also available as a grouped object:
 
 ```tsx
-import { lightTheme } from '@onlynative/core'
-import type { Theme } from '@onlynative/core'
+import { material } from '@onlynative/core'
 
-const customTheme: Theme = {
-  ...lightTheme,
+material.lightTheme
+material.darkTheme
+material.defaultTopAppBarTokens
+material.createMaterialTheme
+```
+
+## Custom design systems
+
+The theme engine supports any design system, not just MD3. Use `BaseTheme`, `defineTheme`, and `ThemeProvider` to build your own.
+
+### BaseTheme
+
+All themes extend `BaseTheme`:
+
+```tsx
+interface BaseTheme {
+  colors: Record<string, string>
+  typography: Record<string, TextStyle>
+  shape: Shape
+  spacing: Spacing
+  stateLayer: StateLayer
+  elevation: Elevation
+  motion: Motion
+}
+```
+
+### Define a custom theme
+
+Use `defineTheme` for type-safe theme creation:
+
+```tsx
+import { defineTheme } from '@onlynative/core'
+import type { BaseTheme } from '@onlynative/core'
+
+interface BrandTheme extends BaseTheme {
   colors: {
-    ...lightTheme.colors,
-    primary: '#006A6A',
-    onPrimary: '#FFFFFF',
-  },
+    brand: string
+    brandMuted: string
+    background: string
+    surface: string
+    text: string
+    textSecondary: string
+    border: string
+    error: string
+    success: string
+    [key: string]: string
+  }
+  typography: {
+    heading: TextStyle
+    subheading: TextStyle
+    body: TextStyle
+    caption: TextStyle
+    [key: string]: TextStyle
+  }
 }
 
-<MaterialProvider theme={customTheme}>
-  {/* Components use your custom colors */}
-</MaterialProvider>
+const brandTheme = defineTheme<BrandTheme>({
+  colors: {
+    brand: '#FF6B00',
+    brandMuted: '#FFF3E0',
+    background: '#FFFFFF',
+    surface: '#F5F5F5',
+    text: '#1A1A1A',
+    textSecondary: '#757575',
+    border: '#E0E0E0',
+    error: '#D32F2F',
+    success: '#388E3C',
+  },
+  typography: {
+    heading: { fontSize: 24, fontWeight: '700', lineHeight: 32 },
+    subheading: { fontSize: 18, fontWeight: '600', lineHeight: 24 },
+    body: { fontSize: 16, fontWeight: '400', lineHeight: 22 },
+    caption: { fontSize: 12, fontWeight: '400', lineHeight: 16 },
+  },
+  shape: { none: 0, extraSmall: 4, small: 8, medium: 12, large: 16, extraLarge: 28, full: 9999 },
+  spacing: { xs: 4, sm: 8, md: 16, lg: 24, xl: 32 },
+  stateLayer: { pressed: 0.12, focused: 0.12, hovered: 0.08, disabled: 0.38 },
+  elevation: {
+    level0: {},
+    level1: { shadowColor: '#000', shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.1, shadowRadius: 3, elevation: 1 },
+    level2: { shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.15, shadowRadius: 6, elevation: 3 },
+    level3: { shadowColor: '#000', shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.2, shadowRadius: 8, elevation: 6 },
+  },
+  motion: {
+    duration: { short: 100, medium: 300, long: 500 },
+    easing: { standard: 'ease-in-out', accelerate: 'ease-in', decelerate: 'ease-out' },
+  },
+})
 ```
+
+### ThemeProvider
+
+Use `ThemeProvider` instead of `MaterialProvider` for custom design systems:
+
+```tsx
+import { ThemeProvider } from '@onlynative/core'
+
+<ThemeProvider theme={brandTheme}>
+  {/* Your app */}
+</ThemeProvider>
+```
+
+### Access custom theme values
+
+Pass your theme type as a generic to `useTheme`:
+
+```tsx
+import { useTheme } from '@onlynative/core'
+
+function MyComponent() {
+  const theme = useTheme<BrandTheme>()
+  // theme.colors.brand is typed as string
+  return (
+    <View style={{ backgroundColor: theme.colors.background }}>
+      <Text style={[theme.typography.body, { color: theme.colors.text }]}>
+        Hello
+      </Text>
+    </View>
+  )
+}
+```
+
+## Theme structure reference
+
+| Token group | Description |
+|-------------|-------------|
+| `colors` | Design-system specific color roles (`Record<string, string>`) |
+| `typography` | Type scale variants (`Record<string, TextStyle>`) |
+| `shape` | Corner radius tokens (none through full) |
+| `spacing` | Spacing scale (xs, sm, md, lg, xl) |
+| `elevation` | Shadow levels 0-3 |
+| `stateLayer` | Opacity values for pressed, focused, hovered, disabled |
+| `motion` | Duration and easing tokens |
+
+## Type hierarchy
+
+- **`BaseTheme`** — Generic base. Any design system extends this.
+- **`Theme` / `MaterialTheme`** — MD3 theme. Extends `BaseTheme` with 69 color roles, 15 typography variants, optional `topAppBar` tokens.
+
+## Summary
+
+| Goal | API |
+|------|-----|
+| Use MD3 defaults | `<MaterialProvider>` |
+| Dark mode | `<MaterialProvider theme={darkTheme}>` |
+| Override a few MD3 colors | Spread `lightTheme` and override |
+| Branded MD3 theme from one color | `createMaterialTheme('#hex')` |
+| Fully custom design system | `defineTheme` + `<ThemeProvider>` + `useTheme<T>()` |
