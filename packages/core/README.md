@@ -104,10 +104,35 @@ material.defaultTopAppBarTokens
 material.createMaterialTheme
 ```
 
+### apple preset
+
+Grouped object with all Apple HIG theme values:
+
+```tsx
+import { apple } from '@onlynative/core'
+
+apple.lightTheme
+apple.darkTheme
+apple.typography
+```
+
+Use with `ThemeProvider` and `useTheme<AppleTheme>()`:
+
+```tsx
+import { ThemeProvider, appleLightTheme } from '@onlynative/core'
+import type { AppleTheme } from '@onlynative/core'
+
+<ThemeProvider theme={appleLightTheme}>{children}</ThemeProvider>
+
+const theme = useTheme<AppleTheme>()
+// theme.colors.tint, theme.colors.systemBackground, theme.typography.body, etc.
+```
+
 ### Theme type hierarchy
 
 - `BaseTheme` — Generic base. Colors as `Record<string, string>`, typography as `Record<string, TextStyle>`, plus shape, spacing, stateLayer, elevation, motion.
 - `Theme` / `MaterialTheme` — MD3 theme. Extends `BaseTheme` with 69 color roles, 15 typography variants, optional `topAppBar` tokens.
+- `AppleTheme` — Apple HIG theme. Extends `BaseTheme` with 38 color roles (system colors, labels, backgrounds, fills, separators), 11 typography variants (SF Pro scale).
 
 ### Theme structure
 
@@ -163,10 +188,13 @@ const columns = useBreakpointValue({ compact: 1, medium: 2, expanded: 4 })
 - `defineTheme` — Type-safe theme creation helper
 - `createMaterialTheme` — Generate MD3 themes from a seed color
 - `material` — MD3 preset object (`lightTheme`, `darkTheme`, `defaultTopAppBarTokens`, `createMaterialTheme`)
+- `apple` — Apple HIG preset object (`lightTheme`, `darkTheme`, `typography`)
+- `appleLightTheme` / `appleDarkTheme` — Built-in Apple HIG themes
+- `appleTypography` — SF Pro typography scale
 - `useBreakpoint` — Current window size class
 - `useBreakpointValue` — Responsive values
 - `lightTheme` / `darkTheme` — Built-in MD3 themes
-- `BaseTheme`, `Theme`, `MaterialTheme`, `Colors`, `Typography`, `Shape`, `Spacing`, `Elevation`, `StateLayer`, `Motion` — Types
+- `BaseTheme`, `Theme`, `MaterialTheme`, `AppleTheme`, `AppleColors`, `AppleTypography`, `Colors`, `Typography`, `Shape`, `Spacing`, `Elevation`, `StateLayer`, `Motion` — Types
 
 ## Docs
 

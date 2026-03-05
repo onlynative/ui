@@ -250,10 +250,81 @@ function MyComponent() {
 | `stateLayer` | Opacity values for pressed, focused, hovered, disabled |
 | `motion` | Duration and easing tokens |
 
+## Apple HIG preset
+
+OnlyNative UI includes a built-in Apple Human Interface Guidelines theme with iOS/macOS system colors and SF Pro typography.
+
+### Setup
+
+```tsx
+import { ThemeProvider, appleLightTheme } from '@onlynative/core'
+
+<ThemeProvider theme={appleLightTheme}>
+  {/* Your app */}
+</ThemeProvider>
+```
+
+### Dark mode
+
+```tsx
+import { useColorScheme } from 'react-native'
+import { ThemeProvider, appleLightTheme, appleDarkTheme } from '@onlynative/core'
+
+export default function App() {
+  const colorScheme = useColorScheme()
+  const theme = colorScheme === 'dark' ? appleDarkTheme : appleLightTheme
+
+  return (
+    <ThemeProvider theme={theme}>
+      {/* Follows system theme */}
+    </ThemeProvider>
+  )
+}
+```
+
+### Access Apple theme values
+
+```tsx
+import { useTheme } from '@onlynative/core'
+import type { AppleTheme } from '@onlynative/core'
+
+function MyComponent() {
+  const theme = useTheme<AppleTheme>()
+  return (
+    <View style={{ backgroundColor: theme.colors.systemBackground }}>
+      <Text style={[theme.typography.body, { color: theme.colors.label }]}>
+        Hello
+      </Text>
+    </View>
+  )
+}
+```
+
+### Apple preset
+
+All Apple HIG values are available as a grouped object:
+
+```tsx
+import { apple } from '@onlynative/core'
+
+apple.lightTheme
+apple.darkTheme
+apple.typography
+```
+
+### Color roles
+
+The Apple theme includes semantic UI colors (`label`, `secondaryLabel`, `systemBackground`, `separator`, `systemFill`, etc.) and all 13 system colors (`systemRed`, `systemBlue`, `systemGreen`, etc.) plus 6 gray levels.
+
+### Typography scale
+
+11 text styles following SF Pro conventions: `largeTitle` (34pt), `title1` (28pt), `title2` (22pt), `title3` (20pt), `headline` (17pt semibold), `body` (17pt), `callout` (16pt), `subheadline` (15pt), `footnote` (13pt), `caption1` (12pt), `caption2` (11pt).
+
 ## Type hierarchy
 
 - **`BaseTheme`** — Generic base. Any design system extends this.
 - **`Theme` / `MaterialTheme`** — MD3 theme. Extends `BaseTheme` with 69 color roles, 15 typography variants, optional `topAppBar` tokens.
+- **`AppleTheme`** — Apple HIG theme. Extends `BaseTheme` with 38 color roles, 11 typography variants.
 
 ## Summary
 
@@ -263,4 +334,5 @@ function MyComponent() {
 | Dark mode | `<MaterialProvider theme={darkTheme}>` |
 | Override a few MD3 colors | Spread `lightTheme` and override |
 | Branded MD3 theme from one color | `createMaterialTheme('#hex')` |
+| Apple HIG theme | `<ThemeProvider theme={appleLightTheme}>` + `useTheme<AppleTheme>()` |
 | Fully custom design system | `defineTheme` + `<ThemeProvider>` + `useTheme<T>()` |

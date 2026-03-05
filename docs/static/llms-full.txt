@@ -1,6 +1,6 @@
 # OnlyNative UI — Full API Reference
 
-> Material Design 3 component library for React Native
+> Design-system agnostic component library for React Native — ships with Material Design 3 and Apple HIG
 > Packages: `@onlynative/core`, `@onlynative/components`
 > Requirements: React Native 0.81+, React 19+, Expo SDK 54+
 > Peer deps: `react-native-safe-area-context >=4`
@@ -141,10 +141,46 @@ material.defaultTopAppBarTokens
 material.createMaterialTheme  // seed-based theme generation
 ```
 
+### apple preset
+
+Grouped object containing all Apple HIG theme values.
+
+```tsx
+import { apple } from '@onlynative/core'
+
+apple.lightTheme   // Apple HIG light theme
+apple.darkTheme    // Apple HIG dark theme
+apple.typography   // SF Pro typography scale
+```
+
+Usage with ThemeProvider:
+
+```tsx
+import { ThemeProvider, appleLightTheme, appleDarkTheme } from '@onlynative/core'
+import type { AppleTheme } from '@onlynative/core'
+
+// Light
+<ThemeProvider theme={appleLightTheme}>{children}</ThemeProvider>
+
+// Dark
+<ThemeProvider theme={appleDarkTheme}>{children}</ThemeProvider>
+
+// Access in components
+const theme = useTheme<AppleTheme>()
+// theme.colors.tint, theme.colors.label, theme.colors.systemBackground
+// theme.colors.systemBlue, theme.colors.systemRed, etc.
+// theme.typography.body, theme.typography.headline, theme.typography.largeTitle
+```
+
+AppleTheme colors (38 roles): tint, label, secondaryLabel, tertiaryLabel, quaternaryLabel, systemBackground, secondarySystemBackground, tertiarySystemBackground, systemGroupedBackground, secondarySystemGroupedBackground, tertiarySystemGroupedBackground, separator, opaqueSeparator, link, systemFill, secondarySystemFill, tertiarySystemFill, quaternarySystemFill, systemRed, systemOrange, systemYellow, systemGreen, systemMint, systemTeal, systemCyan, systemBlue, systemIndigo, systemPurple, systemPink, systemBrown, systemGray, systemGray2, systemGray3, systemGray4, systemGray5, systemGray6
+
+AppleTypography variants (11): largeTitle (34pt), title1 (28pt), title2 (22pt), title3 (20pt), headline (17pt semibold), body (17pt), callout (16pt), subheadline (15pt), footnote (13pt), caption1 (12pt), caption2 (11pt)
+
 ### Theme type hierarchy
 
 - `BaseTheme` — Generic base interface. All design systems extend this. Has `colors: Record<string, string>`, `typography: Record<string, TextStyle>`, plus shape, spacing, stateLayer, elevation, motion.
 - `Theme` (alias: `MaterialTheme`) — Material Design 3 theme. Extends `BaseTheme` with 69 MD3 color roles, 15 typography variants, and optional `topAppBar` tokens.
+- `AppleTheme` — Apple HIG theme. Extends `BaseTheme` with 38 color roles (system colors, labels, backgrounds, fills, separators) and 11 typography variants (SF Pro scale).
 
 ### Theme structure
 
