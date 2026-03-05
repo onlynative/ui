@@ -1,6 +1,6 @@
 # @onlynative/core
 
-Theme system for [OnlyNative UI](https://github.com/onlynative/ui) — a Material Design 3 component library for React Native.
+Design-system agnostic theme engine for [OnlyNative UI](https://github.com/onlynative/ui) — a React Native component library. Ships with Material Design 3 out of the box.
 
 ## Install
 
@@ -10,7 +10,7 @@ pnpm add @onlynative/core
 
 Peer dependencies: `react >=19`, `react-native >=0.81`
 
-## Setup
+## Quick start (Material Design 3)
 
 Wrap your app root with `MaterialProvider`:
 
@@ -30,37 +30,85 @@ export default function App() {
 
 ### MaterialProvider
 
-Provides theme context to all child components.
+Provides the MD3 theme context to all child components.
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `theme` | `Theme` | `lightTheme` | Theme object |
+| `theme` | `Theme` | `lightTheme` | MD3 theme object |
+| `children` | `ReactNode` | — | App content |
+
+### ThemeProvider
+
+Generic provider for custom design systems. Accepts any theme extending `BaseTheme`.
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `theme` | `BaseTheme` | — | Custom theme object (required) |
 | `children` | `ReactNode` | — | App content |
 
 ### useTheme()
 
-Returns the current `Theme` from the nearest provider.
+Returns the current theme from the nearest provider.
 
 ```tsx
 import { useTheme } from '@onlynative/core'
 
+// MD3 (default)
 const theme = useTheme()
-// theme.colors, theme.typography, theme.spacing, theme.shape, etc.
+
+// Custom design system
+const theme = useTheme<MyTheme>()
 ```
+
+### defineTheme(theme)
+
+Type-safe helper for creating custom themes:
+
+```tsx
+import { defineTheme } from '@onlynative/core'
+import type { BaseTheme } from '@onlynative/core'
+
+const myTheme = defineTheme({
+  colors: { brand: '#FF6B00', background: '#FFF', text: '#1A1A1A' },
+  typography: { heading: { ... }, body: { ... } },
+  shape: { ... },
+  spacing: { xs: 4, sm: 8, md: 16, lg: 24, xl: 32 },
+  stateLayer: { ... },
+  elevation: { ... },
+  motion: { ... },
+})
+```
+
+### material preset
+
+Grouped object with all MD3 theme values:
+
+```tsx
+import { material } from '@onlynative/core'
+
+material.lightTheme
+material.darkTheme
+material.defaultTopAppBarTokens
+```
+
+### Theme type hierarchy
+
+- `BaseTheme` — Generic base. Colors as `Record<string, string>`, typography as `Record<string, TextStyle>`, plus shape, spacing, stateLayer, elevation, motion.
+- `Theme` / `MaterialTheme` — MD3 theme. Extends `BaseTheme` with 69 color roles, 15 typography variants, optional `topAppBar` tokens.
 
 ### Theme structure
 
 | Token group | Description |
 |-------------|-------------|
-| `colors` | 47 MD3 color roles (primary, secondary, surface, error, etc.) |
-| `typography` | 15 type scale variants (displayLarge through labelSmall) |
+| `colors` | Design-system specific color roles (`Record<string, string>`) |
+| `typography` | Type scale variants (`Record<string, TextStyle>`) |
 | `shape` | Corner radius tokens (none through full) |
 | `spacing` | Spacing scale (xs, sm, md, lg, xl) |
 | `elevation` | Shadow levels 0–3 |
 | `stateLayer` | Opacity values for pressed, focused, hovered, disabled |
 | `motion` | Duration and easing tokens |
 
-### Custom theme
+### Custom MD3 theme
 
 ```tsx
 import { lightTheme } from '@onlynative/core'
@@ -96,12 +144,15 @@ const columns = useBreakpointValue({ compact: 1, medium: 2, expanded: 4 })
 
 ## Exports
 
-- `MaterialProvider` — Theme context provider
-- `useTheme` — Access current theme
+- `MaterialProvider` — MD3 theme context provider
+- `ThemeProvider` — Generic theme context provider
+- `useTheme` — Access current theme (generic)
+- `defineTheme` — Type-safe theme creation helper
+- `material` — MD3 preset object (`lightTheme`, `darkTheme`, `defaultTopAppBarTokens`)
 - `useBreakpoint` — Current window size class
 - `useBreakpointValue` — Responsive values
-- `lightTheme` / `darkTheme` — Built-in themes
-- `Theme`, `Colors`, `Typography`, `Shape`, `Spacing`, `Elevation`, `StateLayer`, `Motion` — Types
+- `lightTheme` / `darkTheme` — Built-in MD3 themes
+- `BaseTheme`, `Theme`, `MaterialTheme`, `Colors`, `Typography`, `Shape`, `Spacing`, `Elevation`, `StateLayer`, `Motion` — Types
 
 ## Docs
 

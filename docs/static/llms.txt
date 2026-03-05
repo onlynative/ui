@@ -1,12 +1,12 @@
 # OnlyNative UI
 
-> Material Design 3 component library for React Native
+> Design-system agnostic component library for React Native — ships with Material Design 3 out of the box
 
-OnlyNative UI (`@onlynative`) is a React Native component library implementing Material Design 3. It provides a theme system and pre-built UI components with MD3 tokens for colors, typography, shape, spacing, elevation, motion, and state layers.
+OnlyNative UI (`@onlynative`) is a React Native component library with a pluggable theme engine. It ships with Material Design 3 as the default design system but supports custom design systems via `BaseTheme`, `ThemeProvider`, and `defineTheme`.
 
 ## Packages
 
-- `@onlynative/core`: Theme provider, light/dark themes, useTheme hook, responsive breakpoint hooks
+- `@onlynative/core`: Theme engine (`BaseTheme`, `ThemeProvider`, `defineTheme`, `useTheme`), MD3 preset (`material`, `MaterialProvider`, light/dark themes), responsive breakpoint hooks
 - `@onlynative/components`: UI components (Button, IconButton, AppBar, Card, Chip, Checkbox, Radio, Switch, TextField, Typography, Layout, List)
 
 ## Quick start

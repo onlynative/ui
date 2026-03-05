@@ -46,28 +46,102 @@ Props:
 - `theme?: Theme` — Theme object. Default: `lightTheme`
 - `children: ReactNode`
 
+### ThemeProvider
+
+Generic theme provider for custom design systems. Accepts any theme extending `BaseTheme`.
+
+```tsx
+import { ThemeProvider, defineTheme } from '@onlynative/core'
+
+const myTheme = defineTheme({ ... })
+
+<ThemeProvider theme={myTheme}>
+  <App />
+</ThemeProvider>
+```
+
+Props:
+- `theme: BaseTheme` — Any theme object extending `BaseTheme` (required)
+- `children: ReactNode`
+
 ### useTheme()
 
-Returns the current `Theme` from the nearest `MaterialProvider`.
+Returns the current theme from the nearest `ThemeProvider` or `MaterialProvider`.
+
+Without a type parameter, returns the Material Design 3 `Theme`. Pass a custom theme type for typed access to your design system's tokens.
 
 ```tsx
 import { useTheme } from '@onlynative/core'
 
+// Material Design 3 (default)
 const theme = useTheme()
 // theme.colors.primary, theme.typography.bodyMedium, theme.spacing.md, etc.
+
+// Custom design system
+const theme = useTheme<MyTheme>()
+// theme.colors.brand, theme.typography.heading, etc.
 ```
+
+### defineTheme(theme)
+
+Identity function that validates a custom theme object against `BaseTheme`. Provides type-checking and autocompletion.
+
+```tsx
+import { defineTheme } from '@onlynative/core'
+import type { BaseTheme, TextStyle } from '@onlynative/core'
+
+interface MyColors { [key: string]: string; brand: string; background: string; text: string }
+interface MyTypography { [key: string]: TextStyle; heading: TextStyle; body: TextStyle }
+interface MyTheme extends BaseTheme { colors: MyColors; typography: MyTypography }
+
+const myTheme = defineTheme<MyTheme>({
+  colors: { brand: '#FF6B00', background: '#FFFFFF', text: '#1A1A1A' },
+  typography: {
+    heading: { fontFamily: 'Inter', fontSize: 24, fontWeight: '700', lineHeight: 32, letterSpacing: 0 },
+    body: { fontFamily: 'Inter', fontSize: 16, fontWeight: '400', lineHeight: 24, letterSpacing: 0.5 },
+  },
+  shape: { cornerNone: 0, cornerExtraSmall: 4, cornerSmall: 8, cornerMedium: 12, cornerLarge: 16, cornerExtraLarge: 28, cornerFull: 9999 },
+  spacing: { xs: 4, sm: 8, md: 16, lg: 24, xl: 32 },
+  stateLayer: { pressedOpacity: 0.12, focusedOpacity: 0.12, hoveredOpacity: 0.08, disabledOpacity: 0.38 },
+  elevation: { ... },
+  motion: { ... },
+})
+```
+
+### material preset
+
+Grouped object containing all Material Design 3 theme values.
+
+```tsx
+import { material } from '@onlynative/core'
+
+material.lightTheme  // MD3 light theme
+material.darkTheme   // MD3 dark theme
+material.defaultTopAppBarTokens
+```
+
+### Theme type hierarchy
+
+- `BaseTheme` — Generic base interface. All design systems extend this. Has `colors: Record<string, string>`, `typography: Record<string, TextStyle>`, plus shape, spacing, stateLayer, elevation, motion.
+- `Theme` (alias: `MaterialTheme`) — Material Design 3 theme. Extends `BaseTheme` with 69 MD3 color roles, 15 typography variants, and optional `topAppBar` tokens.
 
 ### Theme structure
 
 ```
-Theme {
-  colors: Colors         — 47 MD3 color roles
-  typography: Typography — 15 type scale variants (displayLarge..labelSmall)
+BaseTheme {
+  colors: Record<string, string>
+  typography: Record<string, TextStyle>
   shape: Shape           — cornerNone, cornerExtraSmall, cornerSmall, cornerMedium, cornerLarge, cornerExtraLarge, cornerFull
   spacing: Spacing       — xs, sm, md, lg, xl
   elevation: Elevation   — level0..level3 (shadow properties)
   stateLayer: StateLayer — pressedOpacity, focusedOpacity, hoveredOpacity, disabledOpacity
   motion: Motion         — duration and easing tokens
+}
+
+Theme extends BaseTheme {
+  colors: Colors         — 69 MD3 color roles
+  typography: Typography — 15 type scale variants (displayLarge..labelSmall)
+  topAppBar?: TopAppBarTokens
 }
 ```
 
