@@ -1,6 +1,6 @@
 {
   "name": "@onlynative/components",
-  "version": "0.1.0-alpha.0",
+  "version": "0.1.0-alpha.1",
   "description": "Material Design 3 UI components for React Native — Button, Card, Chip, TextField, and more.",
   "private": false,
   "sideEffects": false,
