@@ -119,7 +119,9 @@ jobs:
         run: cd packages/components && npm publish --provenance --access public --tag ${{ inputs.tag }}
 
       - name: Push to main
-        run: git push origin main --follow-tags
+        run: |
+          git push origin main
+          git push origin "v${{ steps.version.outputs.version }}"
 
       - name: Create GitHub Release
         run: |
