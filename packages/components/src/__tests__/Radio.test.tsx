@@ -62,6 +62,7 @@ describe('Radio', () => {
   it('renders inner dot when selected', () => {
     renderWithTheme(<Radio value testID="radio-selected" />)
     const radio = screen.getByRole('radio')
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const outer = radio.children[0] as any
     expect(outer.children).not.toBeNull()
     expect(outer.children.length).toBeGreaterThanOrEqual(1)

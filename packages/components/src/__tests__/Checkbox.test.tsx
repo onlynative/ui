@@ -76,6 +76,7 @@ describe('Checkbox', () => {
     it('applies containerColor to the box when checked', () => {
       renderWithTheme(<Checkbox value containerColor="#FF0000" />)
       const cb = screen.getByRole('checkbox')
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const box = cb.children[0] as any
       const flatStyle = StyleSheet.flatten(box.props.style)
       expect(flatStyle.backgroundColor).toBe('#FF0000')
