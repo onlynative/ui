@@ -7,7 +7,7 @@ import {
 } from 'react-native'
 import { Slot, useRouter, useSegments } from 'expo-router'
 import { StatusBar } from 'expo-status-bar'
-import { MaterialProvider, darkTheme, lightTheme, useTheme } from '@onlynative/core'
+import { ThemeProvider, darkTheme, lightTheme, useTheme } from '@onlynative/core'
 import { AppBar, Layout } from '@onlynative/components'
 import type { AppBarAction } from '@onlynative/components'
 
@@ -152,11 +152,11 @@ export default function RootLayout() {
   }, [colorScheme])
 
   return (
-    <MaterialProvider theme={theme}>
+    <ThemeProvider theme={theme}>
       <RootLayoutContent
         isDarkTheme={isDarkTheme}
         onToggleTheme={toggleTheme}
       />
-    </MaterialProvider>
+    </ThemeProvider>
   )
 }

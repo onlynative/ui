@@ -6,7 +6,7 @@ OnlyNative UI (`@onlynative`) is a React Native component library with a pluggab
 
 ## Packages
 
-- `@onlynative/core`: Theme engine (`BaseTheme`, `ThemeProvider`, `defineTheme`, `useTheme`), MD3 preset (`material`, `MaterialProvider`, light/dark themes), responsive breakpoint hooks
+- `@onlynative/core`: Theme engine (`BaseTheme`, `ThemeProvider`, `defineTheme`, `useTheme`), MD3 preset (`material`, light/dark themes), responsive breakpoint hooks
 - `@onlynative/components`: UI components (Button, IconButton, AppBar, Card, Chip, Checkbox, Radio, Switch, TextField, Typography, Layout, List)
 
 ## Quick start
@@ -18,13 +18,13 @@ pnpm add @onlynative/core @onlynative/components @expo/vector-icons react-native
 
 Wrap root with provider:
 ```tsx
-import { MaterialProvider } from '@onlynative/core'
+import { ThemeProvider } from '@onlynative/core'
 
 export default function App() {
   return (
-    <MaterialProvider>
+    <ThemeProvider>
       {/* Your app */}
-    </MaterialProvider>
+    </ThemeProvider>
   )
 }
 ```
