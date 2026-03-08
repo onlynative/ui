@@ -1,4 +1,3 @@
-import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import {
   Animated,
@@ -11,6 +10,7 @@ import {
 import type { NativeSyntheticEvent, TargetedEvent } from 'react-native'
 import { useTheme } from '@onlynative/core'
 
+import { getMaterialCommunityIcons } from '../utils/icon'
 import { createStyles, labelPositions } from './styles'
 import type { TextFieldProps } from './types'
 
@@ -45,6 +45,9 @@ export function TextField({
   const isError = Boolean(error) || Boolean(errorText)
   const isFilled = variant === 'filled'
   const hasLeadingIcon = Boolean(leadingIcon)
+
+  const MaterialCommunityIcons =
+    leadingIcon || trailingIcon ? getMaterialCommunityIcons() : null
 
   const { colors, styles } = useMemo(
     () => createStyles(theme, variant),

@@ -1,4 +1,3 @@
-import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons'
 import { useMemo } from 'react'
 import { Platform, Pressable } from 'react-native'
 import { StyleSheet } from 'react-native'
@@ -6,6 +5,7 @@ import { Text } from 'react-native'
 import type { StyleProp, ViewStyle } from 'react-native'
 import { useTheme } from '@onlynative/core'
 
+import { getMaterialCommunityIcons } from '../utils/icon'
 import { createStyles } from './styles'
 import type { ButtonProps } from './types'
 
@@ -74,6 +74,9 @@ export function Button({
       ),
     [theme, variant, hasLeading, hasTrailing, containerColor, contentColor],
   )
+
+  const MaterialCommunityIcons =
+    leadingIcon || trailingIcon ? getMaterialCommunityIcons() : null
 
   const resolvedIconColor = useMemo(() => {
     const base = StyleSheet.flatten([

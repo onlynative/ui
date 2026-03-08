@@ -1,9 +1,9 @@
-import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons'
 import { useMemo } from 'react'
 import { Platform, Pressable, StyleSheet, View } from 'react-native'
 import type { StyleProp, ViewStyle } from 'react-native'
 import { useTheme } from '@onlynative/core'
 
+import { getMaterialCommunityIcons } from '../utils/icon'
 import { createStyles } from './styles'
 import type { CheckboxProps } from './types'
 
@@ -54,6 +54,10 @@ export function Checkbox({
 }: CheckboxProps) {
   const isDisabled = Boolean(disabled)
   const isChecked = Boolean(value)
+
+  const MaterialCommunityIcons = isChecked
+    ? getMaterialCommunityIcons()
+    : null
 
   const theme = useTheme()
   const styles = useMemo(

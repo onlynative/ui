@@ -1,9 +1,9 @@
-import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons'
 import { useMemo } from 'react'
 import { Platform, Pressable, StyleSheet, Text, View } from 'react-native'
 import type { StyleProp, ViewStyle } from 'react-native'
 import { useTheme } from '@onlynative/core'
 
+import { getMaterialCommunityIcons } from '../utils/icon'
 import { createStyles } from './styles'
 import type { ChipProps } from './types'
 
@@ -71,6 +71,12 @@ export function Chip({
       leadingIcon ||
       (variant === 'filter' && isSelected),
   )
+
+  const needsIcons =
+    Boolean(leadingIcon) || (variant === 'filter' && isSelected) || showCloseIcon
+  const MaterialCommunityIcons = needsIcons
+    ? getMaterialCommunityIcons()
+    : null
 
   const theme = useTheme()
   const styles = useMemo(

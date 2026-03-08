@@ -1,9 +1,9 @@
-import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons'
 import { useMemo } from 'react'
 import { Platform, Pressable, StyleSheet, View } from 'react-native'
 import type { StyleProp, ViewStyle } from 'react-native'
 import { useTheme } from '@onlynative/core'
 
+import { getMaterialCommunityIcons } from '../utils/icon'
 import { createStyles } from './styles'
 import type { SwitchProps } from './types'
 
@@ -80,6 +80,9 @@ export function Switch({
   }
 
   const iconName = isSelected ? selectedIcon : unselectedIcon
+  const MaterialCommunityIcons = iconName
+    ? getMaterialCommunityIcons()
+    : null
   const iconSize = 16
 
   return (

@@ -1,9 +1,9 @@
-import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons'
 import { useMemo } from 'react'
 import { Pressable } from 'react-native'
 import type { StyleProp, ViewStyle } from 'react-native'
 import { useTheme } from '@onlynative/core'
 
+import { getMaterialCommunityIcons } from '../utils/icon'
 import { createStyles } from './styles'
 import type {
   IconButtonProps,
@@ -263,6 +263,7 @@ export function IconButton({
   accessibilityLabel,
   ...props
 }: IconButtonProps) {
+  const MaterialCommunityIcons = getMaterialCommunityIcons()
   const theme = useTheme()
   const styles = useMemo(() => createStyles(theme), [theme])
   const isDisabled = Boolean(disabled)
