@@ -1,6 +1,7 @@
+import { useMemo } from 'react'
 import type { ComponentType, ReactNode } from 'react'
 import type { StyleProp, TextProps, TextStyle } from 'react-native'
-import { Text } from 'react-native'
+import { StyleSheet, Text } from 'react-native'
 import { useTheme } from '@onlynative/core'
 import type { MaterialTheme } from '@onlynative/core'
 
@@ -48,6 +49,16 @@ export function Typography({
   const resolvedRole =
     accessibilityRole ?? (HEADING_VARIANTS.has(variant) ? 'header' : undefined)
 
+  // When the consumer overrides fontSize via style, auto-adjust lineHeight
+  // proportionally so text isn't clipped inside overflow:hidden containers.
+  const lineHeightFix = useMemo(() => {
+    if (!style) return undefined
+    const flat = StyleSheet.flatten(style)
+    if (!flat?.fontSize || flat.lineHeight) return undefined
+    const ratio = typographyStyle.lineHeight / typographyStyle.fontSize
+    return { lineHeight: Math.ceil(flat.fontSize * ratio) }
+  }, [style, typographyStyle.fontSize, typographyStyle.lineHeight])
+
   return (
     <Component
       {...textProps}
@@ -56,6 +67,7 @@ export function Typography({
         { color: theme.colors.onSurface },
         typographyStyle,
         style,
+        lineHeightFix,
         color != null ? { color } : undefined,
       ]}
     >
