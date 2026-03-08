@@ -565,6 +565,40 @@ Props:
 
 ---
 
+### KeyboardAvoidingWrapper
+
+Zero-config keyboard-aware wrapper. Wraps children in a `KeyboardAvoidingView` + `ScrollView` with sensible defaults. Works out of the box — just wrap your form.
+
+```tsx
+import { KeyboardAvoidingWrapper } from '@onlynative/components/keyboard-avoiding-wrapper'
+// or
+import { KeyboardAvoidingWrapper } from '@onlynative/components'
+```
+
+#### Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `behavior` | `'padding' \| 'height' \| 'position'` | `'padding'` | Keyboard avoidance strategy |
+| `keyboardVerticalOffset` | `number` | `0` | Extra offset for headers / tab bars |
+| `enabled` | `boolean` | `true` | Enable / disable keyboard avoidance |
+| `scrollViewProps` | `ScrollViewProps` | — | Forwarded to the inner ScrollView |
+| `onKeyboardShow` | `(event: KeyboardEvent) => void` | — | Keyboard show callback |
+| `onKeyboardHide` | `(event: KeyboardEvent) => void` | — | Keyboard hide callback |
+| `style` | `StyleProp<ViewStyle>` | — | Outer container style |
+| `contentContainerStyle` | `StyleProp<ViewStyle>` | — | Inner ScrollView contentContainerStyle |
+
+#### Usage
+
+```tsx
+<KeyboardAvoidingWrapper>
+  <TextField label="Name" />
+  <TextField label="Email" />
+</KeyboardAvoidingWrapper>
+```
+
+---
+
 ## Icons
 
 All icon props accept `MaterialCommunityIcons` names from `@expo/vector-icons`. Browse available icons at https://pictogrammers.com/library/mdi/.

@@ -91,6 +91,13 @@ const components: ComponentEntry[] = [
     colorKey: 'primaryFixedDim',
     icon: 'radiobox-marked',
   },
+  {
+    label: 'Keyboard Wrapper',
+    route: '/keyboard-avoiding-wrapper',
+    description: 'Smart keyboard-aware wrapper with auto platform behavior',
+    colorKey: 'secondaryFixedDim',
+    icon: 'keyboard-outline',
+  },
 ]
 
 export default function HomeScreen() {

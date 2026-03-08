@@ -74,6 +74,11 @@
       "types": "./dist/list/index.d.ts",
       "react-native": "./src/list/index.ts",
       "default": "./dist/list/index.js"
+    },
+    "./keyboard-avoiding-wrapper": {
+      "types": "./dist/keyboard-avoiding-wrapper/index.d.ts",
+      "react-native": "./src/keyboard-avoiding-wrapper/index.ts",
+      "default": "./dist/keyboard-avoiding-wrapper/index.js"
     }
   },
   "typesVersions": {
@@ -113,6 +118,9 @@
       ],
       "list": [
         "dist/list/index.d.ts"
+      ],
+      "keyboard-avoiding-wrapper": [
+        "dist/keyboard-avoiding-wrapper/index.d.ts"
       ]
     }
   },
@@ -140,7 +148,7 @@
     "material-you"
   ],
   "scripts": {
-    "build": "tsup src/index.ts src/typography/index.ts src/layout/index.ts src/button/index.ts src/icon-button/index.ts src/appbar/index.ts src/card/index.ts src/chip/index.ts src/checkbox/index.ts src/radio/index.ts src/switch/index.ts src/text-field/index.ts src/list/index.ts --dts --format cjs --outDir dist --clean",
+    "build": "tsup src/index.ts src/typography/index.ts src/layout/index.ts src/button/index.ts src/icon-button/index.ts src/appbar/index.ts src/card/index.ts src/chip/index.ts src/checkbox/index.ts src/radio/index.ts src/switch/index.ts src/text-field/index.ts src/list/index.ts src/keyboard-avoiding-wrapper/index.ts --dts --format cjs --outDir dist --clean",
     "typecheck": "tsc --noEmit",
     "test": "jest --passWithNoTests"
   },

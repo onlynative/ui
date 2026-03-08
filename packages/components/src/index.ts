@@ -49,3 +49,6 @@ export type {
   ListItemProps,
   ListDividerProps,
 } from './list'
+
+export { KeyboardAvoidingWrapper } from './keyboard-avoiding-wrapper'
+export type { KeyboardAvoidingWrapperProps } from './keyboard-avoiding-wrapper'

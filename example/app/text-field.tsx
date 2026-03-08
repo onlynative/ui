@@ -1,13 +1,12 @@
 import { useState } from 'react'
+import { StyleSheet } from 'react-native'
 import {
-  KeyboardAvoidingView,
-  Platform,
-  ScrollView,
-  StyleSheet,
-} from 'react-native'
-import { useSafeAreaInsets } from 'react-native-safe-area-context'
-import { useTheme } from '@onlynative/core'
-import { TextField, Typography, Column } from '@onlynative/components'
+  KeyboardAvoidingWrapper,
+  TextField,
+  Typography,
+  Column,
+  Row,
+} from '@onlynative/components'
 
 export default function TextFieldScreen() {
   const [filledValue, setFilledValue] = useState('')
@@ -16,67 +15,58 @@ export default function TextFieldScreen() {
   const [passwordValue, setPasswordValue] = useState('')
   const [showPassword, setShowPassword] = useState(false)
   const [multilineValue, setMultilineValue] = useState('')
-  const insets = useSafeAreaInsets()
-  const theme = useTheme()
-  const appBarHeight = theme.topAppBar?.smallContainerHeight ?? 64
 
   return (
-    <KeyboardAvoidingView
-      style={styles.container}
-      behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-      keyboardVerticalOffset={insets.top + appBarHeight}
+    <KeyboardAvoidingWrapper
+      scrollViewProps={{ bounces: false }}
+      contentContainerStyle={styles.content}
     >
-      <ScrollView
-        contentContainerStyle={styles.content}
-        keyboardShouldPersistTaps="handled"
-        bounces={false}
-        showsVerticalScrollIndicator={false}
-      >
-        <Typography variant="headlineSmall">TextField Showcase</Typography>
+      <Typography variant="headlineSmall">TextField Showcase</Typography>
 
-        <Column gap="sm">
-          <Typography variant="titleSmall">Filled</Typography>
-          <TextField
-            label="Label"
-            value={filledValue}
-            onChangeText={setFilledValue}
-            supportingText="Supporting text"
-          />
-          <TextField
-            label="With icons"
-            leadingIcon="magnify"
-            trailingIcon="close-circle"
-            onTrailingIconPress={() => {}}
-          />
-          <TextField label="Disabled" disabled value="Disabled value" />
-        </Column>
+      <Column gap="lg">
+        <Typography variant="titleSmall">Filled Variant</Typography>
+        <TextField
+          label="Label"
+          value={filledValue}
+          onChangeText={setFilledValue}
+          supportingText="Supporting text"
+        />
+        <TextField
+          label="With icons"
+          leadingIcon="magnify"
+          trailingIcon="close-circle"
+          onTrailingIconPress={() => { }}
+        />
+        <TextField label="Disabled" disabled value="Disabled value" />
+      </Column>
 
-        <Column gap="sm">
-          <Typography variant="titleSmall">Outlined</Typography>
-          <TextField
-            variant="outlined"
-            label="Label"
-            value={outlinedValue}
-            onChangeText={setOutlinedValue}
-            supportingText="Supporting text"
-          />
-          <TextField
-            variant="outlined"
-            label="With icons"
-            leadingIcon="magnify"
-            trailingIcon="close-circle"
-            onTrailingIconPress={() => {}}
-          />
-          <TextField
-            variant="outlined"
-            label="Disabled"
-            disabled
-            value="Disabled value"
-          />
-        </Column>
+      <Column gap="lg">
+        <Typography variant="titleSmall">Outlined Variant</Typography>
+        <TextField
+          variant="outlined"
+          label="Label"
+          value={outlinedValue}
+          onChangeText={setOutlinedValue}
+          supportingText="Supporting text"
+        />
+        <TextField
+          variant="outlined"
+          label="With icons"
+          leadingIcon="magnify"
+          trailingIcon="close-circle"
+          onTrailingIconPress={() => { }}
+        />
+        <TextField
+          variant="outlined"
+          label="Disabled"
+          disabled
+          value="Disabled value"
+        />
+      </Column>
 
-        <Column gap="sm">
-          <Typography variant="titleSmall">Error States</Typography>
+      <Column gap="lg">
+        <Typography variant="titleSmall">Error States</Typography>
+        <Row gap="md">
           <TextField
             label="Filled error"
             value={errorValue}
@@ -84,6 +74,7 @@ export default function TextFieldScreen() {
             error
             errorText="Error message goes here"
             trailingIcon="alert-circle"
+            style={styles.flex}
           />
           <TextField
             variant="outlined"
@@ -93,42 +84,59 @@ export default function TextFieldScreen() {
             error
             errorText="Error message goes here"
             trailingIcon="alert-circle"
+            style={styles.flex}
           />
-        </Column>
+        </Row>
+      </Column>
 
-        <Column gap="sm">
-          <Typography variant="titleSmall">Password</Typography>
-          <TextField
-            label="Password"
-            value={passwordValue}
-            onChangeText={setPasswordValue}
-            secureTextEntry={!showPassword}
-            trailingIcon={showPassword ? 'eye-off' : 'eye'}
-            onTrailingIconPress={() => setShowPassword((prev) => !prev)}
-          />
-        </Column>
+      <Column gap="lg">
+        <Typography variant="titleSmall">Password</Typography>
+        <TextField
+          label="Password"
+          value={passwordValue}
+          onChangeText={setPasswordValue}
+          secureTextEntry={!showPassword}
+          trailingIcon={showPassword ? 'eye-off' : 'eye'}
+          onTrailingIconPress={() => setShowPassword((prev) => !prev)}
+        />
+      </Column>
 
-        <Column gap="sm">
-          <Typography variant="titleSmall">Multiline</Typography>
-          <TextField
-            label="Description"
-            value={multilineValue}
-            onChangeText={setMultilineValue}
-            multiline
-            numberOfLines={4}
-          />
-        </Column>
-      </ScrollView>
-    </KeyboardAvoidingView>
+      <Column gap="lg">
+        <Typography variant="titleSmall">Custom Colors</Typography>
+        <TextField
+          label="Custom container"
+          containerColor="#E8F5E9"
+          contentColor="#2E7D32"
+        />
+        <TextField
+          variant="outlined"
+          label="Custom outlined"
+          containerColor="#FFF3E0"
+          contentColor="#E65100"
+        />
+      </Column>
+
+      <Column gap="lg">
+        <Typography variant="titleSmall">Multiline</Typography>
+        <TextField
+          label="Description"
+          value={multilineValue}
+          onChangeText={setMultilineValue}
+          multiline
+          numberOfLines={4}
+        />
+      </Column>
+    </KeyboardAvoidingWrapper>
   )
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
   content: {
     padding: 24,
-    rowGap: 20,
+    paddingBottom: 120,
+    rowGap: 28,
+  },
+  flex: {
+    flex: 1,
   },
 })
