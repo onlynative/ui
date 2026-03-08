@@ -94,8 +94,11 @@ const myTheme = defineTheme<MyTheme>({
 
 Generates a complete MD3 light and dark theme from a single seed color. Uses Google's HCT color space via `@material/material-color-utilities` for spec-compliant palette generation.
 
+**Separate entry point** — keeps the ~60 kB dependency out of the main bundle:
+
 ```tsx
-import { createMaterialTheme, ThemeProvider } from '@onlynative/core'
+import { createMaterialTheme } from '@onlynative/core/create-theme'
+import { ThemeProvider } from '@onlynative/core'
 
 const { lightTheme, darkTheme } = createMaterialTheme('#006A6A')
 
@@ -110,6 +113,8 @@ Returns: `{ lightTheme: Theme, darkTheme: Theme }`
 
 The generated themes include all 69 MD3 color roles plus shared tokens (typography, shape, spacing, stateLayer, elevation, motion, topAppBar).
 
+Requires `@material/material-color-utilities` as a peer dependency: `npm install @material/material-color-utilities`
+
 ### material preset
 
 Grouped object containing all Material Design 3 theme values.
@@ -120,7 +125,6 @@ import { material } from '@onlynative/core'
 material.lightTheme  // MD3 light theme
 material.darkTheme   // MD3 dark theme
 material.defaultTopAppBarTokens
-material.createMaterialTheme  // seed-based theme generation
 ```
 
 ### Theme type hierarchy

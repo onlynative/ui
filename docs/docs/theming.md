@@ -81,7 +81,8 @@ const brandTheme: Theme = {
 `createMaterialTheme` generates a complete MD3 light and dark theme from a single hex color using Google's HCT color space. All 69 color roles are derived automatically:
 
 ```tsx
-import { createMaterialTheme, ThemeProvider } from '@onlynative/core'
+import { createMaterialTheme } from '@onlynative/core/create-theme'
+import { ThemeProvider } from '@onlynative/core'
 
 const { lightTheme, darkTheme } = createMaterialTheme('#006A6A')
 
@@ -119,7 +120,6 @@ import { material } from '@onlynative/core'
 material.lightTheme
 material.darkTheme
 material.defaultTopAppBarTokens
-material.createMaterialTheme
 ```
 
 ## Custom design systems
@@ -262,5 +262,5 @@ function MyComponent() {
 | Use MD3 defaults | `<ThemeProvider>` |
 | Dark mode | `<ThemeProvider theme={darkTheme}>` |
 | Override a few MD3 colors | Spread `lightTheme` and override |
-| Branded MD3 theme from one color | `createMaterialTheme('#hex')` |
+| Branded MD3 theme from one color | `import { createMaterialTheme } from '@onlynative/core/create-theme'` |
 | Fully custom design system | `defineTheme` + `<ThemeProvider>` + `useTheme<T>()` |

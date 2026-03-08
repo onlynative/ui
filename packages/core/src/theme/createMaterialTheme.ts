@@ -93,7 +93,7 @@ function extractColors(scheme: DynamicScheme): Colors {
  * @returns Object with `lightTheme` and `darkTheme`, both typed as `Theme`
  *
  * @example
- * import { createMaterialTheme, ThemeProvider } from '@onlynative/core'
+ * import { createMaterialTheme } from '@onlynative/core/create-theme'
  *
  * const { lightTheme, darkTheme } = createMaterialTheme('#006A6A')
  *

@@ -169,11 +169,10 @@ importers:
         version: 5.9.3
 
   packages/core:
-    dependencies:
+    devDependencies:
       '@material/material-color-utilities':
         specifier: ^0.4.0
         version: 0.4.0
-    devDependencies:
       '@react-native/babel-preset':
         specifier: ^0.81.5
         version: 0.81.6(@babel/core@7.29.0)

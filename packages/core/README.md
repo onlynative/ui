@@ -72,15 +72,18 @@ const myTheme = defineTheme({
 
 ### createMaterialTheme(seedColor)
 
-Generates a complete MD3 light and dark theme from a single seed color using Google's HCT color space:
+Generates a complete MD3 light and dark theme from a single seed color using Google's HCT color space.
 
 ```tsx
-import { createMaterialTheme, ThemeProvider } from '@onlynative/core'
+import { createMaterialTheme } from '@onlynative/core/create-theme'
+import { ThemeProvider } from '@onlynative/core'
 
 const { lightTheme, darkTheme } = createMaterialTheme('#006A6A')
 
 <ThemeProvider theme={lightTheme}>{children}</ThemeProvider>
 ```
+
+Requires: `npm install @material/material-color-utilities`
 
 ### material preset
 
@@ -92,7 +95,6 @@ import { material } from '@onlynative/core'
 material.lightTheme
 material.darkTheme
 material.defaultTopAppBarTokens
-material.createMaterialTheme
 ```
 
 ### Theme type hierarchy
@@ -151,8 +153,8 @@ const columns = useBreakpointValue({ compact: 1, medium: 2, expanded: 4 })
 - `ThemeProvider` — Theme context provider (works with any design system, defaults to MD3)
 - `useTheme` — Access current theme (generic)
 - `defineTheme` — Type-safe theme creation helper
-- `createMaterialTheme` — Generate MD3 themes from a seed color
-- `material` — MD3 preset object (`lightTheme`, `darkTheme`, `defaultTopAppBarTokens`, `createMaterialTheme`)
+- `createMaterialTheme` — Generate MD3 themes from a seed color (import from `@onlynative/core/create-theme`)
+- `material` — MD3 preset object (`lightTheme`, `darkTheme`, `defaultTopAppBarTokens`)
 - `useBreakpoint` — Current window size class
 - `useBreakpointValue` — Responsive values
 - `lightTheme` / `darkTheme` — Built-in MD3 themes

@@ -15,6 +15,19 @@
       "react-native": "./src/index.ts",
       "import": "./dist/index.mjs",
       "default": "./dist/index.mjs"
+    },
+    "./create-theme": {
+      "types": "./dist/create-theme/index.d.mts",
+      "react-native": "./src/create-theme/index.ts",
+      "import": "./dist/create-theme/index.mjs",
+      "default": "./dist/create-theme/index.mjs"
+    }
+  },
+  "typesVersions": {
+    "*": {
+      "create-theme": [
+        "dist/create-theme/index.d.mts"
+      ]
     }
   },
   "publishConfig": {
@@ -41,15 +54,22 @@
     "md3"
   ],
   "scripts": {
-    "build": "tsup src/index.ts --dts --format esm --outDir dist --clean",
+    "build": "tsup src/index.ts src/create-theme/index.ts --dts --format esm --outDir dist --clean",
     "typecheck": "tsc --noEmit",
     "test": "jest"
   },
   "peerDependencies": {
+    "@material/material-color-utilities": ">=0.4.0",
     "react": ">=18.0.0",
     "react-native": ">=0.72.0"
   },
+  "peerDependenciesMeta": {
+    "@material/material-color-utilities": {
+      "optional": true
+    }
+  },
   "devDependencies": {
+    "@material/material-color-utilities": "^0.4.0",
     "@react-native/babel-preset": "^0.81.5",
     "@testing-library/react-native": "^13.3.3",
     "@types/jest": "^29.5.14",
@@ -60,8 +80,5 @@
     "react-test-renderer": "19.1.0",
     "tsup": "^8.0.0",
     "typescript": "^5.0.0"
-  },
-  "dependencies": {
-    "@material/material-color-utilities": "^0.4.0"
   }
 }
