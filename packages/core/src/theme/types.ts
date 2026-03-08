@@ -32,7 +32,11 @@ export interface Theme extends BaseTheme {
   topAppBar?: TopAppBarTokens
 }
 
-/** Explicit alias for the Material Design 3 theme. Use when distinguishing between design systems. */
+/**
+ * Alias for {@link Theme}. Both reference the same MD3 type — use
+ * `MaterialTheme` when you need to distinguish from a custom `BaseTheme`
+ * in codebases that support multiple design systems.
+ */
 export type MaterialTheme = Theme
 
 /** Material Design 3 color roles. All values are CSS color strings (hex, rgb, etc.). */

@@ -6,7 +6,7 @@
 [![Turborepo](https://img.shields.io/badge/monorepo-turbo-EF4444)](https://turbo.build/)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
-**Material Design 3 component library for React Native**, built as a pnpm + Turborepo monorepo.
+**Design-system-agnostic component library for React Native**, built as a pnpm + Turborepo monorepo. Ships with a Material Design You theme out of the box — or bring your own design system using the pluggable theme engine.
 
 > [Documentation](https://onlynative.github.io/ui/) &nbsp;|&nbsp; [Live Demo](https://onlynative.github.io/ui/demo/) &nbsp;|&nbsp; [GitHub](https://github.com/onlynative/ui)
 
@@ -24,12 +24,13 @@ Scan the QR code with the [Expo Go](https://expo.dev/go) app to preview componen
 
 ## Features
 
-- Material Design 3 token system (colors, typography, shape, spacing, elevation, motion, state)
+- Pluggable theme engine — use the built-in Material Design You theme or create your own design system
+- Token-based theming (colors, typography, shape, spacing, elevation, motion, state)
 - Light and dark themes out of the box
 - Responsive breakpoint utilities (`useBreakpoint`, `useBreakpointValue`)
 - Subpath exports for tree-shaking (`@onlynative/components/button`, etc.)
 - Accessible by default (`role`, `accessibilityLabel`, `accessibilityState`)
-- State-layer press/hover/focus feedback following MD3 spec
+- State-layer press/hover/focus feedback
 - TypeScript-first with strict mode
 
 ## Components
@@ -87,7 +88,7 @@ import { Card } from '@onlynative/components/card'
 
 | Package | Description |
 | --- | --- |
-| [`@onlynative/core`](packages/core) | Theme contracts, light/dark theme values, `ThemeProvider`, `useTheme` hook, responsive utilities. |
+| [`@onlynative/core`](packages/core) | Theme engine, theme contracts, built-in Material Design You theme, `ThemeProvider`, `useTheme` hook, responsive utilities. |
 | [`@onlynative/components`](packages/components) | UI components with subpath exports for tree-shaking. |
 | [`example`](example) | Expo Router showcase app for testing and previewing components. |
 | [`docs`](docs) | Docusaurus documentation site. |

@@ -51,6 +51,8 @@ export function Typography({
 
   // When the consumer overrides fontSize via style, auto-adjust lineHeight
   // proportionally so text isn't clipped inside overflow:hidden containers.
+  // Skipped when: no style prop (theme lineHeight is already proportional),
+  // no fontSize override, or consumer explicitly sets lineHeight.
   const lineHeightFix = useMemo(() => {
     if (!style) return undefined
     const flat = StyleSheet.flatten(style)

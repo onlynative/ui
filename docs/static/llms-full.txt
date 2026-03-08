@@ -130,7 +130,7 @@ material.defaultTopAppBarTokens
 ### Theme type hierarchy
 
 - `BaseTheme` — Generic base interface. All design systems extend this. Has `colors: Record<string, string>`, `typography: Record<string, TextStyle>`, plus shape, spacing, stateLayer, elevation, motion.
-- `Theme` (alias: `MaterialTheme`) — Material Design 3 theme. Extends `BaseTheme` with 69 MD3 color roles, 15 typography variants, and optional `topAppBar` tokens.
+- `Theme` — Material Design 3 theme. Extends `BaseTheme` with 69 MD3 color roles, 15 typography variants, and optional `topAppBar` tokens. `MaterialTheme` is an identical alias (same type) — use it to disambiguate in multi-design-system codebases.
 
 ### Theme structure
 
