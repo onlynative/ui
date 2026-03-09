@@ -16,7 +16,7 @@ export default function KeyboardWrapper({
   children,
   keyboardVerticalOffset,
   ...rest
-}: Props): JSX.Element {
+}: Props): React.JSX.Element {
   return (
     <KeyboardAvoidingView
       style={{ flex: 1 }}
