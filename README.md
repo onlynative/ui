@@ -6,7 +6,7 @@
 [![Turborepo](https://img.shields.io/badge/monorepo-turbo-EF4444)](https://turbo.build/)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
-**Design-system-agnostic component library for React Native**, built as a pnpm + Turborepo monorepo. Ships with a Material Design You theme out of the box — or bring your own design system using the pluggable theme engine.
+**Design system agnostic component library for React Native**, built as a pnpm + Turborepo monorepo. Ships with a Material Design You theme out of the box — or bring your own design system using the pluggable theme engine.
 
 > [Documentation](https://onlynative.github.io/ui/) &nbsp;|&nbsp; [Live Demo](https://onlynative.github.io/ui/demo/) &nbsp;|&nbsp; [GitHub](https://github.com/onlynative/ui)
 
@@ -33,30 +33,20 @@ Scan the QR code with the [Expo Go](https://expo.dev/go) app to preview componen
 - State-layer press/hover/focus feedback
 - TypeScript-first with strict mode
 
-## Components
-
-| Category | Components |
-| --- | --- |
-| **Actions** | Button, IconButton, Chip |
-| **Inputs** | TextField, Checkbox, Radio, Switch |
-| **Layout** | Layout, Box, Column, Row, Grid |
-| **Data Display** | Card, List (ListItem, ListDivider), Typography |
-| **Navigation** | AppBar |
-
 ## Installation
 
 ```bash
 # Install the core theme package
-npm install @onlynative/core
+yarn add @onlynative/core
 
 # Install the component library
-npm install @onlynative/components
+yarn add @onlynative/components
 ```
 
 **Peer dependencies** — make sure these are installed in your project:
 
 ```bash
-npm install react react-native @expo/vector-icons react-native-safe-area-context
+npx expo install react react-native @expo/vector-icons react-native-safe-area-context
 ```
 
 ## Quick Start
@@ -86,12 +76,12 @@ import { Card } from '@onlynative/components/card'
 
 ## Packages
 
-| Package | Description |
-| --- | --- |
-| [`@onlynative/core`](packages/core) | Theme engine, theme contracts, built-in Material Design You theme, `ThemeProvider`, `useTheme` hook, responsive utilities. |
-| [`@onlynative/components`](packages/components) | UI components with subpath exports for tree-shaking. |
-| [`example`](example) | Expo Router showcase app for testing and previewing components. |
-| [`docs`](docs) | Docusaurus documentation site. |
+| Package | Size | Description |
+| --- | --- | --- |
+| [`@onlynative/core`](packages/core) | ![npm bundle size](https://img.shields.io/bundlephobia/min/@onlynative/core) | Theme engine, theme contracts, built-in Material Design You theme, `ThemeProvider`, `useTheme` hook, responsive utilities. |
+| [`@onlynative/components`](packages/components) | ![npm bundle size](https://img.shields.io/bundlephobia/min/@onlynative/components) | UI components with subpath exports for tree-shaking. |
+| [`example`](example) | — | Expo Router showcase app for testing and previewing components. |
+| [`docs`](docs) | — | Docusaurus documentation site. |
 
 ## Repository Layout
 
