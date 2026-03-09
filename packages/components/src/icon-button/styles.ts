@@ -1,6 +1,6 @@
 import { StyleSheet } from 'react-native'
 import type { MaterialTheme } from '@onlynative/core'
-import { alphaColor, blendColor } from '../utils/color'
+import { alphaColor, blendColor } from '@onlynative/utils'
 
 export function createStyles(theme: MaterialTheme) {
   const disabledContainerColor = alphaColor(theme.colors.onSurface, 0.12)

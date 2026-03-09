@@ -13,7 +13,7 @@ sidebar_position: 2
 ## Install packages
 
 ```bash
-pnpm add @onlynative/core @onlynative/components
+pnpm add @onlynative/core @onlynative/utils @onlynative/components
 ```
 
 ### Peer dependencies

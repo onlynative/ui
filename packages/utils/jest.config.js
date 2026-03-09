@@ -1,0 +1,11 @@
+/** @type {import('jest').Config} */
+module.exports = {
+  preset: 'react-native',
+  moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json'],
+  moduleNameMapper: {
+    '^@onlynative/core$': '<rootDir>/../core/src/index.ts',
+  },
+  transformIgnorePatterns: [
+    'node_modules/(?!((jest-)?react-native|@react-native(-community)?)/)',
+  ],
+}

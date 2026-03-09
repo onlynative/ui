@@ -10,7 +10,7 @@ import {
 import type { NativeSyntheticEvent, TargetedEvent } from 'react-native'
 import { useTheme } from '@onlynative/core'
 
-import { getMaterialCommunityIcons } from '../utils/icon'
+import { getMaterialCommunityIcons } from '@onlynative/utils'
 import { createStyles, labelPositions } from './styles'
 import type { TextFieldProps } from './types'
 

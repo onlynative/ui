@@ -2,7 +2,7 @@ import { screen, fireEvent } from '@testing-library/react-native'
 import { StyleSheet } from 'react-native'
 
 import { IconButton } from '../icon-button/IconButton'
-import { renderWithTheme } from '../test-utils/render-with-theme'
+import { renderWithTheme } from '@onlynative/utils/test'
 
 describe('IconButton', () => {
   it('renders with the button accessibility role', () => {

@@ -1,7 +1,7 @@
 import { StyleSheet } from 'react-native'
 import type { MaterialTheme } from '@onlynative/core'
 
-import { alphaColor } from '../utils/color'
+import { alphaColor } from '@onlynative/utils'
 
 interface RadioColors {
   borderColor: string

@@ -20,7 +20,7 @@ Design-system agnostic component library for React Native. Ships with Material D
 ## Quick Start
 
 ```bash
-pnpm add @onlynative/core @onlynative/components
+pnpm add @onlynative/core @onlynative/utils @onlynative/components
 ```
 
 Wrap your app with `ThemeProvider`:

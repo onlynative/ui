@@ -2,8 +2,7 @@ import { StyleSheet } from 'react-native'
 import type { MaterialTheme } from '@onlynative/core'
 
 import type { CardVariant } from './types'
-import { alphaColor, blendColor } from '../utils/color'
-import { elevationStyle } from '../utils/elevation'
+import { alphaColor, blendColor, elevationStyle } from '@onlynative/utils'
 
 interface VariantColors {
   backgroundColor: string

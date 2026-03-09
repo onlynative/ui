@@ -1,7 +1,7 @@
 import { screen, fireEvent } from '@testing-library/react-native'
 
 import { Radio } from '../radio/Radio'
-import { renderWithTheme } from '../test-utils/render-with-theme'
+import { renderWithTheme } from '@onlynative/utils/test'
 
 describe('Radio', () => {
   it('renders without crashing', () => {

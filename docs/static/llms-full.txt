@@ -1,7 +1,7 @@
 # OnlyNative UI — Full API Reference
 
 > Design-system agnostic component library for React Native — ships with Material Design 3 and Apple HIG
-> Packages: `@onlynative/core`, `@onlynative/components`
+> Packages: `@onlynative/core`, `@onlynative/utils`, `@onlynative/components`
 > Requirements: React Native 0.81+, React 19+, Expo SDK 54+
 > Peer deps: `react-native-safe-area-context >=4`
 > Optional peer deps: `@expo/vector-icons >=14` (only needed for icon props)
@@ -11,8 +11,44 @@
 ## Installation
 
 ```bash
-pnpm add @onlynative/core @onlynative/components @expo/vector-icons react-native-safe-area-context
+pnpm add @onlynative/core @onlynative/utils @onlynative/components @expo/vector-icons react-native-safe-area-context
 ```
+
+---
+
+## @onlynative/utils
+
+Shared utilities used by `@onlynative/components` and available for custom component development.
+
+```tsx
+import { alphaColor, blendColor, elevationStyle, getMaterialCommunityIcons, transformOrigin, selectRTL } from '@onlynative/utils'
+```
+
+### Color helpers
+
+- `alphaColor(color: string, alpha: number): string` — Converts hex color to `rgba(...)` with the given alpha (clamped 0–1). Returns the input unchanged if parsing fails.
+- `blendColor(base: string, overlay: string, overlayAlpha: number): string` — Blends two hex colors by mixing RGB channels at the given overlay opacity. Returns `rgb(...)`.
+
+### Elevation
+
+- `elevationStyle(level: ElevationLevel): ViewStyle` — Converts an MD3 elevation level into platform-appropriate shadow styles. Uses `boxShadow` on web, `shadow*` + `elevation` on native.
+
+### RTL support
+
+- `transformOrigin(vertical?: 'top' | 'center' | 'bottom'): string` — Returns `"left top"` or `"right top"` based on RTL layout direction. Used for label animations.
+- `selectRTL<T>(ltr: T, rtl: T): T` — Picks a value based on layout direction.
+
+### Icon resolver
+
+- `getMaterialCommunityIcons()` — Lazily resolves `MaterialCommunityIcons` from `@expo/vector-icons` at render time. Throws with install instructions if the package is missing.
+
+### Test helper (subpath export)
+
+```tsx
+import { renderWithTheme } from '@onlynative/utils/test'
+```
+
+- `renderWithTheme(ui: ReactElement, options?: RenderOptions)` — Wraps `@testing-library/react-native`'s `render` with `ThemeProvider`.
 
 ---
 

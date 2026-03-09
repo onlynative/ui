@@ -7,13 +7,14 @@ OnlyNative UI (`@onlynative`) is a React Native component library with a pluggab
 ## Packages
 
 - `@onlynative/core`: Theme engine (`BaseTheme`, `ThemeProvider`, `defineTheme`, `useTheme`), MD3 preset (`material`, light/dark themes), responsive breakpoint hooks
+- `@onlynative/utils`: Shared utilities — color helpers (`alphaColor`, `blendColor`), elevation styles, RTL support, icon resolver. Test helper via `@onlynative/utils/test`.
 - `@onlynative/components`: UI components (Button, IconButton, AppBar, Card, Chip, Checkbox, Radio, Switch, TextField, Typography, Layout, List)
 
 ## Quick start
 
 Install:
 ```bash
-pnpm add @onlynative/core @onlynative/components @expo/vector-icons react-native-safe-area-context
+pnpm add @onlynative/core @onlynative/utils @onlynative/components @expo/vector-icons react-native-safe-area-context
 ```
 
 Wrap root with provider:

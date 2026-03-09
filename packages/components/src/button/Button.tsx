@@ -5,7 +5,7 @@ import { Text } from 'react-native'
 import type { StyleProp, ViewStyle } from 'react-native'
 import { useTheme } from '@onlynative/core'
 
-import { getMaterialCommunityIcons } from '../utils/icon'
+import { getMaterialCommunityIcons } from '@onlynative/utils'
 import { createStyles } from './styles'
 import type { ButtonProps } from './types'
 

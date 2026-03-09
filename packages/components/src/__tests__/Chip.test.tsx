@@ -2,7 +2,7 @@ import { screen, fireEvent } from '@testing-library/react-native'
 import { StyleSheet, Text } from 'react-native'
 
 import { Chip } from '../chip/Chip'
-import { renderWithTheme } from '../test-utils/render-with-theme'
+import { renderWithTheme } from '@onlynative/utils/test'
 
 describe('Chip', () => {
   it('renders the label text', () => {

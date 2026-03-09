@@ -2,7 +2,7 @@ import { screen } from '@testing-library/react-native'
 import { Keyboard, Text } from 'react-native'
 
 import { KeyboardAvoidingWrapper } from '../keyboard-avoiding-wrapper/KeyboardAvoidingWrapper'
-import { renderWithTheme } from '../test-utils/render-with-theme'
+import { renderWithTheme } from '@onlynative/utils/test'
 
 describe('KeyboardAvoidingWrapper', () => {
   it('renders children', () => {

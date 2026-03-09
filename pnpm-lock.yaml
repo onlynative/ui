@@ -137,6 +137,9 @@ importers:
       '@onlynative/core':
         specifier: workspace:*
         version: link:../core
+      '@onlynative/utils':
+        specifier: workspace:*
+        version: link:../utils
       '@react-native/babel-preset':
         specifier: ^0.81.5
         version: 0.81.6(@babel/core@7.29.0)
@@ -173,6 +176,42 @@ importers:
       '@material/material-color-utilities':
         specifier: ^0.4.0
         version: 0.4.0
+      '@react-native/babel-preset':
+        specifier: ^0.81.5
+        version: 0.81.6(@babel/core@7.29.0)
+      '@testing-library/react-native':
+        specifier: ^13.3.3
+        version: 13.3.3(jest@29.7.0(@types/node@25.3.3))(react-native@0.81.5(@babel/core@7.29.0)(@types/react@19.2.14)(react@19.1.0))(react-test-renderer@19.1.0(react@19.1.0))(react@19.1.0)
+      '@types/jest':
+        specifier: ^29.5.14
+        version: 29.5.14
+      '@types/react':
+        specifier: ^19.0.0
+        version: 19.2.14
+      jest:
+        specifier: ^29.7.0
+        version: 29.7.0(@types/node@25.3.3)
+      react:
+        specifier: 19.1.0
+        version: 19.1.0
+      react-native:
+        specifier: 0.81.5
+        version: 0.81.5(@babel/core@7.29.0)(@types/react@19.2.14)(react@19.1.0)
+      react-test-renderer:
+        specifier: 19.1.0
+        version: 19.1.0(react@19.1.0)
+      tsup:
+        specifier: ^8.0.0
+        version: 8.5.1(jiti@1.21.7)(postcss@8.5.8)(typescript@5.9.3)(yaml@2.8.2)
+      typescript:
+        specifier: ^5.0.0
+        version: 5.9.3
+
+  packages/utils:
+    devDependencies:
+      '@onlynative/core':
+        specifier: workspace:*
+        version: link:../core
       '@react-native/babel-preset':
         specifier: ^0.81.5
         version: 0.81.6(@babel/core@7.29.0)

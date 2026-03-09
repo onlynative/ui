@@ -2,7 +2,7 @@ import { StyleSheet } from 'react-native'
 import type { MaterialTheme } from '@onlynative/core'
 
 import type { ListItemLines } from './types'
-import { alphaColor, blendColor } from '../utils/color'
+import { alphaColor, blendColor } from '@onlynative/utils'
 
 const ITEM_PADDING_VERTICAL = 12
 const INSET_START = 56

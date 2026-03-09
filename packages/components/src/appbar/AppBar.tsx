@@ -9,7 +9,7 @@ import { IconButton } from '../icon-button'
 import type { IconButtonProps } from '../icon-button'
 import { Typography } from '../typography'
 import type { TypographyVariant } from '../typography'
-import { selectRTL } from '../utils/rtl'
+import { selectRTL } from '@onlynative/utils'
 import { createStyles } from './styles'
 import type { AppBarProps } from './types'
 

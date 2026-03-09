@@ -4,7 +4,7 @@ import { StyleSheet, Text, View } from 'react-native'
 import { List } from '../list/List'
 import { ListItem } from '../list/ListItem'
 import { ListDivider } from '../list/ListDivider'
-import { renderWithTheme } from '../test-utils/render-with-theme'
+import { renderWithTheme } from '@onlynative/utils/test'
 
 describe('List', () => {
   it('renders children', () => {

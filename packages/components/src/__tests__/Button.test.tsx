@@ -2,7 +2,7 @@ import { screen, fireEvent } from '@testing-library/react-native'
 import { StyleSheet } from 'react-native'
 
 import { Button } from '../button/Button'
-import { renderWithTheme } from '../test-utils/render-with-theme'
+import { renderWithTheme } from '@onlynative/utils/test'
 
 describe('Button', () => {
   it('renders the label text', () => {

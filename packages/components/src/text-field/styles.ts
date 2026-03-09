@@ -2,8 +2,7 @@ import { StyleSheet } from 'react-native'
 import type { MaterialTheme } from '@onlynative/core'
 
 import type { TextFieldVariant } from './types'
-import { alphaColor } from '../utils/color'
-import { transformOrigin } from '../utils/rtl'
+import { alphaColor, transformOrigin } from '@onlynative/utils'
 
 const CONTAINER_HEIGHT = 56
 const ICON_SIZE = 24

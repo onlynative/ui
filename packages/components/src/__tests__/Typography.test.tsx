@@ -2,7 +2,7 @@ import { screen } from '@testing-library/react-native'
 import { StyleSheet } from 'react-native'
 
 import { Typography } from '../typography/Typography'
-import { renderWithTheme } from '../test-utils/render-with-theme'
+import { renderWithTheme } from '@onlynative/utils/test'
 
 describe('Typography', () => {
   it('renders children text', () => {

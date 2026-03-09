@@ -3,14 +3,17 @@ import { Pressable } from 'react-native'
 import type { StyleProp, ViewStyle } from 'react-native'
 import { useTheme } from '@onlynative/core'
 
-import { getMaterialCommunityIcons } from '../utils/icon'
+import {
+  alphaColor,
+  blendColor,
+  getMaterialCommunityIcons,
+} from '@onlynative/utils'
 import { createStyles } from './styles'
 import type {
   IconButtonProps,
   IconButtonSize,
   IconButtonVariant,
 } from './types'
-import { alphaColor, blendColor } from '../utils/color'
 
 function getIconColor(
   variant: IconButtonVariant,

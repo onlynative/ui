@@ -2,7 +2,7 @@ import { screen, fireEvent } from '@testing-library/react-native'
 import { StyleSheet } from 'react-native'
 
 import { Checkbox } from '../checkbox/Checkbox'
-import { renderWithTheme } from '../test-utils/render-with-theme'
+import { renderWithTheme } from '@onlynative/utils/test'
 
 describe('Checkbox', () => {
   it('renders without crashing', () => {
