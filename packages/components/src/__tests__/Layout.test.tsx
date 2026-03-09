@@ -316,6 +316,7 @@ describe('Grid', () => {
     const root = toJSON()
     // Grid is a Row (View) containing cell wrapper Views
     const cells = root.children.filter(
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (child: any) => child.type === 'View',
     )
     expect(cells.length).toBe(3)
@@ -334,6 +335,7 @@ describe('Grid', () => {
     )
     const root = toJSON()
     const cells = root.children.filter(
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (child: any) => child.type === 'View',
     )
     expect(cells.length).toBe(2)
