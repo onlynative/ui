@@ -118,7 +118,7 @@ const myTheme = defineTheme<MyTheme>({
     heading: { fontFamily: 'Inter', fontSize: 24, fontWeight: '700', lineHeight: 32, letterSpacing: 0 },
     body: { fontFamily: 'Inter', fontSize: 16, fontWeight: '400', lineHeight: 24, letterSpacing: 0.5 },
   },
-  shape: { cornerNone: 0, cornerExtraSmall: 4, cornerSmall: 8, cornerMedium: 12, cornerLarge: 16, cornerExtraLarge: 28, cornerFull: 9999 },
+  shape: { roundness: 1, cornerNone: 0, cornerExtraSmall: 4, cornerSmall: 8, cornerMedium: 12, cornerLarge: 16, cornerExtraLarge: 28, cornerFull: 9999 },
   spacing: { xs: 4, sm: 8, md: 16, lg: 24, xl: 32 },
   stateLayer: { pressedOpacity: 0.12, focusedOpacity: 0.12, hoveredOpacity: 0.08, disabledOpacity: 0.38 },
   elevation: { ... },
@@ -126,9 +126,12 @@ const myTheme = defineTheme<MyTheme>({
 })
 ```
 
-### createMaterialTheme(seedColor)
+### createMaterialTheme(seedColor, options?)
 
 Generates a complete MD3 light and dark theme from a single seed color. Uses Google's HCT color space via `@material/material-color-utilities` for spec-compliant palette generation.
+
+**Options:**
+- `roundness?: number` — Global corner-radius multiplier. `0` = sharp corners, `1` = default MD3 (default), `2` = double rounding. Does not affect `cornerNone` or `cornerFull`.
 
 **Separate entry point** — keeps the ~60 kB dependency out of the main bundle:
 
@@ -137,6 +140,9 @@ import { createMaterialTheme } from '@onlynative/core/create-theme'
 import { ThemeProvider } from '@onlynative/core'
 
 const { lightTheme, darkTheme } = createMaterialTheme('#006A6A')
+
+// Sharp corners
+const { lightTheme, darkTheme } = createMaterialTheme('#006A6A', { roundness: 0 })
 
 // Use in provider
 <ThemeProvider theme={lightTheme}>{children}</ThemeProvider>
@@ -150,6 +156,25 @@ Returns: `{ lightTheme: Theme, darkTheme: Theme }`
 The generated themes include all 69 MD3 color roles plus shared tokens (typography, shape, spacing, stateLayer, elevation, motion, topAppBar).
 
 Requires `@material/material-color-utilities` as a peer dependency: `npm install @material/material-color-utilities`
+
+### applyRoundness(roundness)
+
+Scales the MD3 corner radius tokens by a multiplier. Returns a complete `Shape` object. `cornerNone` (0) and `cornerFull` (999) are never affected.
+
+- `roundness: 0` — sharp corners (all intermediate tokens become 0)
+- `roundness: 1` — default MD3 values
+- `roundness: 2` — double the rounding
+
+```tsx
+import { applyRoundness, lightTheme } from '@onlynative/core'
+
+// Use with spread to override shape on an existing theme
+const sharpTheme = { ...lightTheme, shape: applyRoundness(0) }
+
+// Or with defineTheme
+import { defineTheme } from '@onlynative/core'
+const theme = defineTheme({ ...lightTheme, shape: applyRoundness(0.5) })
+```
 
 ### material preset
 
@@ -174,7 +199,7 @@ material.defaultTopAppBarTokens
 BaseTheme {
   colors: Record<string, string>
   typography: Record<string, TextStyle>
-  shape: Shape           — cornerNone, cornerExtraSmall, cornerSmall, cornerMedium, cornerLarge, cornerExtraLarge, cornerFull
+  shape: Shape           — roundness, cornerNone, cornerExtraSmall, cornerSmall, cornerMedium, cornerLarge, cornerExtraLarge, cornerFull
   spacing: Spacing       — xs, sm, md, lg, xl
   elevation: Elevation   — level0..level3 (shadow properties)
   stateLayer: StateLayer — pressedOpacity, focusedOpacity, hoveredOpacity, disabledOpacity
