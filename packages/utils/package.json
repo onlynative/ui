@@ -2,23 +2,19 @@
   "name": "@onlynative/utils",
   "version": "0.1.0-alpha.3",
   "description": "Shared utilities for OnlyNative — color helpers, elevation styles, RTL support, and more.",
-  "private": false,
+  "private": true,
   "sideEffects": false,
   "main": "dist/index.mjs",
   "module": "dist/index.mjs",
   "types": "dist/index.d.mts",
-  "react-native": "src/index.ts",
-  "source": "src/index.ts",
   "exports": {
     ".": {
       "types": "./dist/index.d.mts",
-      "react-native": "./src/index.ts",
       "import": "./dist/index.mjs",
       "default": "./dist/index.mjs"
     },
     "./test": {
       "types": "./dist/test-utils/index.d.mts",
-      "react-native": "./src/test-utils/index.ts",
       "import": "./dist/test-utils/index.mjs",
       "default": "./dist/test-utils/index.mjs"
     }
@@ -35,9 +31,7 @@
     "provenance": true
   },
   "files": [
-    "dist",
-    "src",
-    "!src/__tests__"
+    "dist"
   ],
   "license": "MIT",
   "repository": {

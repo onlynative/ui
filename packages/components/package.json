@@ -7,77 +7,61 @@
   "main": "dist/index.js",
   "module": "dist/index.js",
   "types": "dist/index.d.ts",
-  "react-native": "src/index.ts",
-  "source": "src/index.ts",
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "react-native": "./src/index.ts",
       "default": "./dist/index.js"
     },
     "./typography": {
       "types": "./dist/typography/index.d.ts",
-      "react-native": "./src/typography/index.ts",
       "default": "./dist/typography/index.js"
     },
     "./layout": {
       "types": "./dist/layout/index.d.ts",
-      "react-native": "./src/layout/index.ts",
       "default": "./dist/layout/index.js"
     },
     "./button": {
       "types": "./dist/button/index.d.ts",
-      "react-native": "./src/button/index.ts",
       "default": "./dist/button/index.js"
     },
     "./icon-button": {
       "types": "./dist/icon-button/index.d.ts",
-      "react-native": "./src/icon-button/index.ts",
       "default": "./dist/icon-button/index.js"
     },
     "./appbar": {
       "types": "./dist/appbar/index.d.ts",
-      "react-native": "./src/appbar/index.ts",
       "default": "./dist/appbar/index.js"
     },
     "./card": {
       "types": "./dist/card/index.d.ts",
-      "react-native": "./src/card/index.ts",
       "default": "./dist/card/index.js"
     },
     "./chip": {
       "types": "./dist/chip/index.d.ts",
-      "react-native": "./src/chip/index.ts",
       "default": "./dist/chip/index.js"
     },
     "./checkbox": {
       "types": "./dist/checkbox/index.d.ts",
-      "react-native": "./src/checkbox/index.ts",
       "default": "./dist/checkbox/index.js"
     },
     "./radio": {
       "types": "./dist/radio/index.d.ts",
-      "react-native": "./src/radio/index.ts",
       "default": "./dist/radio/index.js"
     },
     "./switch": {
       "types": "./dist/switch/index.d.ts",
-      "react-native": "./src/switch/index.ts",
       "default": "./dist/switch/index.js"
     },
     "./text-field": {
       "types": "./dist/text-field/index.d.ts",
-      "react-native": "./src/text-field/index.ts",
       "default": "./dist/text-field/index.js"
     },
     "./list": {
       "types": "./dist/list/index.d.ts",
-      "react-native": "./src/list/index.ts",
       "default": "./dist/list/index.js"
     },
     "./keyboard-avoiding-wrapper": {
       "types": "./dist/keyboard-avoiding-wrapper/index.d.ts",
-      "react-native": "./src/keyboard-avoiding-wrapper/index.ts",
       "default": "./dist/keyboard-avoiding-wrapper/index.js"
     }
   },
@@ -129,9 +113,7 @@
     "provenance": true
   },
   "files": [
-    "dist",
-    "src",
-    "!src/__tests__"
+    "dist"
   ],
   "license": "MIT",
   "repository": {
@@ -148,14 +130,13 @@
     "material-you"
   ],
   "scripts": {
-    "build": "tsup src/index.ts src/typography/index.ts src/layout/index.ts src/button/index.ts src/icon-button/index.ts src/appbar/index.ts src/card/index.ts src/chip/index.ts src/checkbox/index.ts src/radio/index.ts src/switch/index.ts src/text-field/index.ts src/list/index.ts src/keyboard-avoiding-wrapper/index.ts --dts --format cjs --outDir dist --clean",
+    "build": "tsup",
     "typecheck": "tsc --noEmit",
     "test": "jest --passWithNoTests"
   },
   "peerDependencies": {
     "@expo/vector-icons": ">=14.0.0",
     "@onlynative/core": ">=0.1.1-alpha.0",
-    "@onlynative/utils": ">=0.1.0-alpha.3",
     "react": ">=18.0.0",
     "react-native": ">=0.72.0",
     "react-native-safe-area-context": ">=4.0.0"

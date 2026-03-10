@@ -7,18 +7,14 @@
   "main": "dist/index.mjs",
   "module": "dist/index.mjs",
   "types": "dist/index.d.mts",
-  "react-native": "src/index.ts",
-  "source": "src/index.ts",
   "exports": {
     ".": {
       "types": "./dist/index.d.mts",
-      "react-native": "./src/index.ts",
       "import": "./dist/index.mjs",
       "default": "./dist/index.mjs"
     },
     "./create-theme": {
       "types": "./dist/create-theme/index.d.mts",
-      "react-native": "./src/create-theme/index.ts",
       "import": "./dist/create-theme/index.mjs",
       "default": "./dist/create-theme/index.mjs"
     }
@@ -35,9 +31,7 @@
     "provenance": true
   },
   "files": [
-    "dist",
-    "src",
-    "!src/__tests__"
+    "dist"
   ],
   "license": "MIT",
   "repository": {
