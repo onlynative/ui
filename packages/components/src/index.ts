@@ -22,7 +22,12 @@ export type {
 } from './icon-button'
 
 export { AppBar } from './appbar'
-export type { AppBarAction, AppBarProps, AppBarVariant } from './appbar'
+export type {
+  AppBarAction,
+  AppBarColorScheme,
+  AppBarProps,
+  AppBarVariant,
+} from './appbar'
 
 export { Card } from './card'
 export type { CardProps, CardVariant } from './card'

@@ -10,7 +10,7 @@ import type { IconButtonProps } from '../icon-button'
 import { Typography } from '../typography'
 import type { TypographyVariant } from '../typography'
 import { selectRTL } from '@onlynative/utils'
-import { createStyles } from './styles'
+import { createStyles, getColorSchemeColors } from './styles'
 import type { AppBarProps } from './types'
 
 type AppBarSize = 'small' | 'medium' | 'large'
@@ -75,6 +75,7 @@ function measureWidth(event: LayoutChangeEvent): number {
 export function AppBar({
   title,
   variant = 'small',
+  colorScheme = 'surface',
   canGoBack = false,
   onBackPress,
   insetTop = false,
@@ -89,12 +90,20 @@ export function AppBar({
 }: AppBarProps) {
   const theme = useTheme()
   const topAppBar = theme.topAppBar ?? defaultTopAppBarTokens
-  const styles = useMemo(() => createStyles(theme), [theme])
+  const schemeColors = useMemo(
+    () => getColorSchemeColors(theme, colorScheme),
+    [theme, colorScheme],
+  )
+  const resolvedContentColor = contentColor ?? schemeColors.contentColor
+  const styles = useMemo(
+    () => createStyles(theme, schemeColors),
+    [theme, schemeColors],
+  )
   const [leadingWidth, setLeadingWidth] = useState(0)
   const [actionsWidth, setActionsWidth] = useState(0)
   const titleColorStyle = useMemo(
-    () => ({ color: contentColor ?? theme.colors.onSurface }),
-    [contentColor, theme.colors.onSurface],
+    () => ({ color: resolvedContentColor }),
+    [resolvedContentColor],
   )
   const size = resolveSize(variant)
   const titleVariant = titleVariantBySize[size]
@@ -133,20 +142,13 @@ export function AppBar({
           icon={getBackIcon()}
           size="medium"
           variant="standard"
-          iconColor={contentColor ?? theme.colors.onSurface}
+          iconColor={resolvedContentColor}
           accessibilityLabel="Go back"
           onPress={onBackPress}
         />
       </View>
     )
-  }, [
-    canGoBack,
-    contentColor,
-    leading,
-    onBackPress,
-    styles.iconFrame,
-    theme.colors.onSurface,
-  ])
+  }, [canGoBack, resolvedContentColor, leading, onBackPress, styles.iconFrame])
 
   const actionsContent = useMemo(() => {
     if (trailing) {
@@ -168,7 +170,7 @@ export function AppBar({
               icon={action.icon}
               size="medium"
               variant="standard"
-              iconColor={contentColor}
+              iconColor={resolvedContentColor}
               accessibilityLabel={action.accessibilityLabel}
               onPress={action.onPress}
               disabled={action.disabled}
@@ -177,7 +179,7 @@ export function AppBar({
         ))}
       </View>
     )
-  }, [actions, contentColor, styles.actionsRow, styles.iconFrame, trailing])
+  }, [actions, resolvedContentColor, styles.actionsRow, styles.iconFrame, trailing])
 
   const onLeadingLayout = useCallback((event: LayoutChangeEvent) => {
     const nextWidth = measureWidth(event)

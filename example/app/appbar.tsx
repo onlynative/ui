@@ -2,7 +2,11 @@ import { useMemo } from 'react'
 import { useRouter } from 'expo-router'
 import { useTheme } from '@onlynative/core'
 import { AppBar, Box, Typography, Column } from '@onlynative/components'
-import type { AppBarAction, AppBarVariant } from '@onlynative/components'
+import type {
+  AppBarAction,
+  AppBarColorScheme,
+  AppBarVariant,
+} from '@onlynative/components'
 import { ScrollView, StyleSheet } from 'react-native'
 
 const variants: Array<{
@@ -35,6 +39,20 @@ const variants: Array<{
     variant: 'large',
     title: 'Large App Bar',
   },
+]
+
+const colorSchemes: Array<{
+  key: AppBarColorScheme
+  label: string
+}> = [
+  { key: 'surface', label: 'Surface (default)' },
+  { key: 'surfaceContainerLowest', label: 'Surface Container Lowest' },
+  { key: 'surfaceContainerLow', label: 'Surface Container Low' },
+  { key: 'surfaceContainer', label: 'Surface Container' },
+  { key: 'surfaceContainerHigh', label: 'Surface Container High' },
+  { key: 'surfaceContainerHighest', label: 'Surface Container Highest' },
+  { key: 'primary', label: 'Primary' },
+  { key: 'primaryContainer', label: 'Primary Container' },
 ]
 
 const longTitle = 'Very Long App Bar Title That Should Truncate Properly'
@@ -115,6 +133,26 @@ export default function AppBarScreen() {
                   title={item.title}
                   variant={item.variant}
                   elevated
+                  canGoBack
+                  actions={actions}
+                  onBackPress={() => router.back()}
+                />
+              </Box>
+            </Column>
+          ))}
+        </Column>
+      </Column>
+
+      <Column gap="sm">
+        <Typography variant="titleSmall">Color Schemes</Typography>
+        <Column gap="md">
+          {colorSchemes.map((scheme) => (
+            <Column key={scheme.key} gap="sm">
+              <Typography variant="labelMedium">{scheme.label}</Typography>
+              <Box style={previewStyle}>
+                <AppBar
+                  title={scheme.label}
+                  colorScheme={scheme.key}
                   canGoBack
                   actions={actions}
                   onBackPress={() => router.back()}

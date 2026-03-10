@@ -1,22 +1,89 @@
 import { StyleSheet } from 'react-native'
 import { defaultTopAppBarTokens } from '@onlynative/core'
 import type { MaterialTheme } from '@onlynative/core'
+import type { AppBarColorScheme } from './types'
 
-export function createStyles(theme: MaterialTheme) {
+export interface AppBarColorSchemeColors {
+  containerColor: string
+  elevatedContainerColor: string
+  contentColor: string
+}
+
+export function getColorSchemeColors(
+  theme: MaterialTheme,
+  colorScheme: AppBarColorScheme,
+): AppBarColorSchemeColors {
+  switch (colorScheme) {
+    case 'surfaceContainerLowest':
+      return {
+        containerColor: theme.colors.surfaceContainerLowest,
+        elevatedContainerColor: theme.colors.surfaceContainerLowest,
+        contentColor: theme.colors.onSurface,
+      }
+    case 'surfaceContainerLow':
+      return {
+        containerColor: theme.colors.surfaceContainerLow,
+        elevatedContainerColor: theme.colors.surfaceContainerLow,
+        contentColor: theme.colors.onSurface,
+      }
+    case 'surfaceContainer':
+      return {
+        containerColor: theme.colors.surfaceContainer,
+        elevatedContainerColor: theme.colors.surfaceContainer,
+        contentColor: theme.colors.onSurface,
+      }
+    case 'surfaceContainerHigh':
+      return {
+        containerColor: theme.colors.surfaceContainerHigh,
+        elevatedContainerColor: theme.colors.surfaceContainerHigh,
+        contentColor: theme.colors.onSurface,
+      }
+    case 'surfaceContainerHighest':
+      return {
+        containerColor: theme.colors.surfaceContainerHighest,
+        elevatedContainerColor: theme.colors.surfaceContainerHighest,
+        contentColor: theme.colors.onSurface,
+      }
+    case 'primary':
+      return {
+        containerColor: theme.colors.primary,
+        elevatedContainerColor: theme.colors.primary,
+        contentColor: theme.colors.onPrimary,
+      }
+    case 'primaryContainer':
+      return {
+        containerColor: theme.colors.primaryContainer,
+        elevatedContainerColor: theme.colors.primaryContainer,
+        contentColor: theme.colors.onPrimaryContainer,
+      }
+    case 'surface':
+    default:
+      return {
+        containerColor: theme.colors.surface,
+        elevatedContainerColor: theme.colors.surfaceContainer,
+        contentColor: theme.colors.onSurface,
+      }
+  }
+}
+
+export function createStyles(
+  theme: MaterialTheme,
+  schemeColors: AppBarColorSchemeColors,
+) {
   const topAppBar = theme.topAppBar ?? defaultTopAppBarTokens
 
   return StyleSheet.create({
     root: {
-      backgroundColor: theme.colors.surface,
+      backgroundColor: schemeColors.containerColor,
     },
     safeArea: {
-      backgroundColor: theme.colors.surface,
+      backgroundColor: schemeColors.containerColor,
     },
     elevatedRoot: {
-      backgroundColor: theme.colors.surfaceContainer,
+      backgroundColor: schemeColors.elevatedContainerColor,
     },
     elevatedSafeArea: {
-      backgroundColor: theme.colors.surfaceContainer,
+      backgroundColor: schemeColors.elevatedContainerColor,
     },
     smallContainer: {
       height: topAppBar.smallContainerHeight,

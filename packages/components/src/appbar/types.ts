@@ -5,6 +5,28 @@ import type { IconButtonProps } from '../icon-button'
 /** Size/layout variant of the AppBar. */
 export type AppBarVariant = 'small' | 'center-aligned' | 'medium' | 'large'
 
+/**
+ * Color scheme that determines the default container and content colors.
+ *
+ * - `'surface'` — `surface` / `onSurface` (default, elevated uses `surfaceContainer`)
+ * - `'surfaceContainerLowest'` — `surfaceContainerLowest` / `onSurface`
+ * - `'surfaceContainerLow'` — `surfaceContainerLow` / `onSurface`
+ * - `'surfaceContainer'` — `surfaceContainer` / `onSurface`
+ * - `'surfaceContainerHigh'` — `surfaceContainerHigh` / `onSurface`
+ * - `'surfaceContainerHighest'` — `surfaceContainerHighest` / `onSurface`
+ * - `'primary'` — `primary` / `onPrimary`
+ * - `'primaryContainer'` — `primaryContainer` / `onPrimaryContainer`
+ */
+export type AppBarColorScheme =
+  | 'surface'
+  | 'surfaceContainerLowest'
+  | 'surfaceContainerLow'
+  | 'surfaceContainer'
+  | 'surfaceContainerHigh'
+  | 'surfaceContainerHighest'
+  | 'primary'
+  | 'primaryContainer'
+
 /** A single action item rendered in the AppBar trailing slot. */
 export interface AppBarAction {
   /** MaterialCommunityIcons icon name to render. */
@@ -28,6 +50,12 @@ export interface AppBarProps {
    * @default 'small'
    */
   variant?: AppBarVariant
+  /**
+   * Color scheme that determines the default container and content colors.
+   * `containerColor` and `contentColor` props override these defaults.
+   * @default 'surface'
+   */
+  colorScheme?: AppBarColorScheme
   /**
    * When `true`, renders a back button in the leading slot.
    * @default false
