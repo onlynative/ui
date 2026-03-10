@@ -56,6 +56,7 @@ export const lightTheme: Theme = {
   },
   typography: defaultTypography,
   shape: {
+    roundness: 1,
     cornerNone: 0,
     cornerExtraSmall: 4,
     cornerSmall: 8,

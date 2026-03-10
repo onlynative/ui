@@ -136,6 +136,8 @@ export interface TextStyle {
 
 /** Corner radius tokens from none (0) to full (9999 for pill shapes). */
 export interface Shape {
+  /** Global multiplier for corner radii. `0` = sharp, `1` = default MD3, `2` = double rounding. Does not affect `cornerNone` or `cornerFull`. */
+  roundness: number
   cornerNone: number
   cornerExtraSmall: number
   cornerSmall: number

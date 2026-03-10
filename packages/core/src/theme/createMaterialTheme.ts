@@ -11,6 +11,12 @@ import type { Colors, Theme } from './types'
 import { defaultTypography } from './typography'
 import { defaultTopAppBarTokens } from './topAppBar'
 import { lightTheme } from './light'
+import { applyRoundness } from './applyRoundness'
+
+export interface CreateMaterialThemeOptions {
+  /** Global corner-radius multiplier. `0` = sharp, `1` = default MD3, `2` = double rounding. @default 1 */
+  roundness?: number
+}
 
 function extractColors(scheme: DynamicScheme): Colors {
   const c = new MaterialDynamicColors()
@@ -97,22 +103,32 @@ function extractColors(scheme: DynamicScheme): Colors {
  *
  * const { lightTheme, darkTheme } = createMaterialTheme('#006A6A')
  *
+ * // Sharp corners
+ * const { lightTheme, darkTheme } = createMaterialTheme('#006A6A', { roundness: 0 })
+ *
  * <ThemeProvider theme={lightTheme}>
  *   <App />
  * </ThemeProvider>
  */
-export function createMaterialTheme(seedColor: string): {
+export function createMaterialTheme(
+  seedColor: string,
+  options?: CreateMaterialThemeOptions,
+): {
   lightTheme: Theme
   darkTheme: Theme
 } {
   const sourceHct = Hct.fromInt(argbFromHex(seedColor))
+  const { roundness = 1 } = options ?? {}
 
   const lightScheme = new SchemeTonalSpot(sourceHct, false, 0)
   const darkScheme = new SchemeTonalSpot(sourceHct, true, 0)
 
+  const shape =
+    roundness === 1 ? lightTheme.shape : applyRoundness(roundness)
+
   const shared = {
     typography: defaultTypography,
-    shape: lightTheme.shape,
+    shape,
     spacing: lightTheme.spacing,
     topAppBar: defaultTopAppBarTokens,
     stateLayer: lightTheme.stateLayer,
