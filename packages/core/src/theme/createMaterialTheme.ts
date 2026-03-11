@@ -7,13 +7,15 @@ import {
 } from '@material/material-color-utilities'
 import type { DynamicScheme } from '@material/material-color-utilities'
 
-import type { Colors, Theme } from './types'
+import type { Colors, Theme, Typography } from './types'
 import { defaultTypography } from './typography'
 import { defaultTopAppBarTokens } from './topAppBar'
 import { lightTheme } from './light'
 import { applyRoundness } from './applyRoundness'
 
 export interface CreateMaterialThemeOptions {
+  /** Custom font family applied to all typography styles. When omitted, platform defaults are used (Roboto on Android, System on iOS). */
+  fontFamily?: string
   /** Global corner-radius multiplier. `0` = sharp, `1` = default MD3, `2` = double rounding. @default 1 */
   roundness?: number
 }
@@ -103,6 +105,9 @@ function extractColors(scheme: DynamicScheme): Colors {
  *
  * const { lightTheme, darkTheme } = createMaterialTheme('#006A6A')
  *
+ * // Custom font
+ * const { lightTheme, darkTheme } = createMaterialTheme('#006A6A', { fontFamily: 'Inter' })
+ *
  * // Sharp corners
  * const { lightTheme, darkTheme } = createMaterialTheme('#006A6A', { roundness: 0 })
  *
@@ -118,7 +123,7 @@ export function createMaterialTheme(
   darkTheme: Theme
 } {
   const sourceHct = Hct.fromInt(argbFromHex(seedColor))
-  const { roundness = 1 } = options ?? {}
+  const { fontFamily, roundness = 1 } = options ?? {}
 
   const lightScheme = new SchemeTonalSpot(sourceHct, false, 0)
   const darkScheme = new SchemeTonalSpot(sourceHct, true, 0)
@@ -126,8 +131,17 @@ export function createMaterialTheme(
   const shape =
     roundness === 1 ? lightTheme.shape : applyRoundness(roundness)
 
+  const typography = fontFamily
+    ? (Object.fromEntries(
+        Object.entries(defaultTypography).map(([key, style]) => [
+          key,
+          { ...style, fontFamily },
+        ]),
+      ) as Typography)
+    : defaultTypography
+
   const shared = {
-    typography: defaultTypography,
+    typography,
     shape,
     spacing: lightTheme.spacing,
     topAppBar: defaultTopAppBarTokens,

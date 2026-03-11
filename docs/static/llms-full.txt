@@ -131,6 +131,7 @@ const myTheme = defineTheme<MyTheme>({
 Generates a complete MD3 light and dark theme from a single seed color. Uses Google's HCT color space via `@material/material-color-utilities` for spec-compliant palette generation.
 
 **Options:**
+- `fontFamily?: string` — Custom font family applied to all 15 typography styles. When omitted, platform defaults are used (Roboto on Android, System on iOS).
 - `roundness?: number` — Global corner-radius multiplier. `0` = sharp corners, `1` = default MD3 (default), `2` = double rounding. Does not affect `cornerNone` or `cornerFull`.
 
 **Separate entry point** — keeps the ~60 kB dependency out of the main bundle:
@@ -140,6 +141,9 @@ import { createMaterialTheme } from '@onlynative/core/create-theme'
 import { ThemeProvider } from '@onlynative/core'
 
 const { lightTheme, darkTheme } = createMaterialTheme('#006A6A')
+
+// Custom font
+const { lightTheme, darkTheme } = createMaterialTheme('#006A6A', { fontFamily: 'Inter' })
 
 // Sharp corners
 const { lightTheme, darkTheme } = createMaterialTheme('#006A6A', { roundness: 0 })

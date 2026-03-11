@@ -93,6 +93,21 @@ describe('createMaterialTheme', () => {
     expect(result.lightTheme.stateLayer).toBeDefined()
   })
 
+  it('applies custom fontFamily to all typography styles', () => {
+    const custom = createMaterialTheme('#006A6A', { fontFamily: 'Inter' })
+    for (const style of Object.values(custom.lightTheme.typography)) {
+      expect(style.fontFamily).toBe('Inter')
+    }
+    for (const style of Object.values(custom.darkTheme.typography)) {
+      expect(style.fontFamily).toBe('Inter')
+    }
+  })
+
+  it('uses default fontFamily when not specified', () => {
+    const style = result.lightTheme.typography.bodyMedium
+    expect(style.fontFamily).not.toBe('Inter')
+  })
+
   it('generates different themes for different seed colors', () => {
     const teal = createMaterialTheme('#006A6A')
     const red = createMaterialTheme('#FF0000')

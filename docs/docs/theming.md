@@ -91,7 +91,15 @@ const { lightTheme, darkTheme } = createMaterialTheme('#006A6A')
 </ThemeProvider>
 ```
 
-This is the easiest way to create a branded theme — pick your brand color and the entire palette is generated for you.
+You can also pass a custom font family:
+
+```tsx
+const { lightTheme, darkTheme } = createMaterialTheme('#006A6A', {
+  fontFamily: 'Inter',
+})
+```
+
+This is the easiest way to create a branded theme — pick your brand color and the entire palette is generated for you. See the [Fonts](./fonts) guide for full details on loading and using custom fonts.
 
 ### Access theme values
 
@@ -263,4 +271,5 @@ function MyComponent() {
 | Dark mode | `<ThemeProvider theme={darkTheme}>` |
 | Override a few MD3 colors | Spread `lightTheme` and override |
 | Branded MD3 theme from one color | `import { createMaterialTheme } from '@onlynative/core/create-theme'` |
+| Custom font | `createMaterialTheme('#color', { fontFamily: 'Inter' })` — see [Fonts](./fonts) |
 | Fully custom design system | `defineTheme` + `<ThemeProvider>` + `useTheme<T>()` |
