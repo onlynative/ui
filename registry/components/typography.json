@@ -1,0 +1,15 @@
+{
+  "name": "typography",
+  "description": "Text component using MD3 type scale with 15 variants (displayLarge to labelSmall).",
+  "files": [
+    "packages/components/src/typography/Typography.tsx",
+    "packages/components/src/typography/index.ts",
+    "packages/components/src/typography/types.ts"
+  ],
+  "utils": [],
+  "componentDependencies": [],
+  "dependencies": {
+    "@onlynative/core": ">=0.1.1-alpha.1"
+  },
+  "optionalDependencies": {}
+}

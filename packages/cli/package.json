@@ -1,0 +1,54 @@
+{
+  "name": "onlynative",
+  "version": "0.1.1-alpha.1",
+  "description": "CLI for adding OnlyNative UI components to your React Native project",
+  "private": false,
+  "bin": {
+    "onlynative": "./dist/index.mjs"
+  },
+  "files": [
+    "dist"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/onlynative/ui.git",
+    "directory": "packages/cli"
+  },
+  "homepage": "https://github.com/onlynative/ui",
+  "keywords": [
+    "react-native",
+    "material-design-3",
+    "ui",
+    "cli",
+    "components",
+    "onlynative"
+  ],
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "chalk": "^5.4.1",
+    "commander": "^13.1.0",
+    "execa": "^9.5.2",
+    "fs-extra": "^11.3.0",
+    "ora": "^8.2.0",
+    "prompts": "^2.4.2"
+  },
+  "devDependencies": {
+    "@types/fs-extra": "^11.0.4",
+    "@types/node": "^22.0.0",
+    "@types/prompts": "^2.4.9",
+    "tsup": "^8.0.0",
+    "typescript": "^5.0.0"
+  }
+}

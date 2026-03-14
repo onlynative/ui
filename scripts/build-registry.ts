@@ -1,0 +1,296 @@
+/**
+ * Registry Build Script
+ *
+ * Scans packages/components/src/ and packages/utils/src/ to auto-generate
+ * all registry JSON files for the OnlyNative CLI.
+ *
+ * Usage: npx tsx scripts/build-registry.ts
+ */
+
+import fs from 'node:fs'
+import path from 'node:path'
+import { fileURLToPath } from 'node:url'
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url))
+const ROOT = path.resolve(__dirname, '..')
+const COMPONENTS_SRC = path.join(ROOT, 'packages/components/src')
+const UTILS_SRC = path.join(ROOT, 'packages/utils/src')
+const REGISTRY_DIR = path.join(ROOT, 'registry')
+const COMPONENTS_REGISTRY_DIR = path.join(REGISTRY_DIR, 'registry/components')
+
+// Read version from packages/components/package.json
+const componentsPkg = JSON.parse(
+  fs.readFileSync(
+    path.join(ROOT, 'packages/components/package.json'),
+    'utf-8',
+  ),
+)
+const VERSION = componentsPkg.version as string
+
+// Utility exports mapping (file stem → exported names)
+const UTIL_EXPORTS: Record<string, string[]> = {
+  color: ['alphaColor', 'blendColor'],
+  elevation: ['elevationStyle'],
+  icon: ['getMaterialCommunityIcons'],
+  rtl: ['transformOrigin', 'selectRTL'],
+}
+
+// Utility → npm dependencies
+const UTIL_DEPS: Record<string, Record<string, string>> = {
+  color: {},
+  elevation: {},
+  icon: { '@expo/vector-icons': '>=14.0.0' },
+  rtl: {},
+}
+
+// Map from util export name to util file stem
+const EXPORT_TO_UTIL: Record<string, string> = {}
+for (const [util, exports] of Object.entries(UTIL_EXPORTS)) {
+  for (const exp of exports) {
+    EXPORT_TO_UTIL[exp] = util
+  }
+}
+
+// Directories to skip
+const SKIP_DIRS = new Set(['__tests__'])
+
+interface ComponentEntry {
+  name: string
+  description: string
+  files: string[]
+  utils: string[]
+  componentDependencies: string[]
+  dependencies: Record<string, string>
+  optionalDependencies: Record<string, string>
+}
+
+function getComponentDirs(): string[] {
+  return fs
+    .readdirSync(COMPONENTS_SRC)
+    .filter((dir) => {
+      if (SKIP_DIRS.has(dir)) return false
+      const fullPath = path.join(COMPONENTS_SRC, dir)
+      return fs.statSync(fullPath).isDirectory()
+    })
+    .sort()
+}
+
+function getComponentFiles(componentDir: string): string[] {
+  const fullDir = path.join(COMPONENTS_SRC, componentDir)
+  return fs
+    .readdirSync(fullDir)
+    .filter((f) => f.endsWith('.ts') || f.endsWith('.tsx'))
+    .map((f) => `packages/components/src/${componentDir}/${f}`)
+}
+
+function analyzeImports(componentDir: string): {
+  utils: Set<string>
+  componentDeps: Set<string>
+  externalDeps: Set<string>
+} {
+  const fullDir = path.join(COMPONENTS_SRC, componentDir)
+  const files = fs
+    .readdirSync(fullDir)
+    .filter((f) => f.endsWith('.ts') || f.endsWith('.tsx'))
+
+  const utils = new Set<string>()
+  const componentDeps = new Set<string>()
+  const externalDeps = new Set<string>()
+
+  for (const file of files) {
+    const content = fs.readFileSync(
+      path.join(fullDir, file),
+      'utf-8',
+    )
+
+    // Check for @onlynative/utils imports
+    const utilImportMatch = content.match(
+      /from\s+['"]@onlynative\/utils['"]/g,
+    )
+    if (utilImportMatch) {
+      // Find which specific exports are used
+      const importLines = content.match(
+        /import\s+(?:type\s+)?{([^}]+)}\s+from\s+['"]@onlynative\/utils['"]/g,
+      )
+      if (importLines) {
+        for (const line of importLines) {
+          const match = line.match(/{([^}]+)}/)
+          if (match) {
+            const names = match[1].split(',').map((s) => s.trim())
+            for (const name of names) {
+              const utilFile = EXPORT_TO_UTIL[name]
+              if (utilFile) {
+                utils.add(utilFile)
+              }
+            }
+          }
+        }
+      }
+    }
+
+    // Check for inter-component imports (../<component-name>)
+    const componentImports = content.matchAll(
+      /from\s+['"]\.\.\/([^/'"]+)(?:\/[^'"]*)?['"]/g,
+    )
+    for (const match of componentImports) {
+      const dep = match[1]
+      // Only count as dep if it's a known component directory
+      const depDir = path.join(COMPONENTS_SRC, dep)
+      if (
+        fs.existsSync(depDir) &&
+        fs.statSync(depDir).isDirectory() &&
+        !SKIP_DIRS.has(dep)
+      ) {
+        componentDeps.add(dep)
+      }
+    }
+
+    // Check for external package imports
+    if (content.includes('react-native-safe-area-context')) {
+      externalDeps.add('react-native-safe-area-context')
+    }
+    if (
+      content.includes('@expo/vector-icons') ||
+      content.includes('getMaterialCommunityIcons')
+    ) {
+      externalDeps.add('@expo/vector-icons')
+    }
+  }
+
+  return { utils, componentDeps, externalDeps }
+}
+
+function buildComponentEntry(componentDir: string): ComponentEntry {
+  const files = getComponentFiles(componentDir)
+  const { utils, componentDeps, externalDeps } =
+    analyzeImports(componentDir)
+
+  const dependencies: Record<string, string> = {
+    '@onlynative/core': `>=${VERSION}`,
+  }
+  const optionalDependencies: Record<string, string> = {}
+
+  if (externalDeps.has('react-native-safe-area-context')) {
+    // If SafeAreaView is used directly, it's a required dep
+    // Check if it's used in a core component file (not just a sub-component)
+    dependencies['react-native-safe-area-context'] = '>=4.0.0'
+  }
+
+  if (externalDeps.has('@expo/vector-icons')) {
+    optionalDependencies['@expo/vector-icons'] = '>=14.0.0'
+  }
+
+  // Special case: layout uses safe-area-context only in Layout.tsx (optional)
+  if (
+    componentDir === 'layout' &&
+    dependencies['react-native-safe-area-context']
+  ) {
+    delete dependencies['react-native-safe-area-context']
+    optionalDependencies['react-native-safe-area-context'] =
+      '>=4.0.0'
+  }
+
+  return {
+    name: componentDir,
+    description: '', // Fill in manually or from docs
+    files,
+    utils: Array.from(utils).sort(),
+    componentDependencies: Array.from(componentDeps).sort(),
+    dependencies,
+    optionalDependencies,
+  }
+}
+
+function buildUtilsRegistry(): Record<
+  string,
+  { file: string; exports: string[]; dependencies: Record<string, string> }
+> {
+  const registry: Record<
+    string,
+    {
+      file: string
+      exports: string[]
+      dependencies: Record<string, string>
+    }
+  > = {}
+
+  for (const [name, exports] of Object.entries(UTIL_EXPORTS)) {
+    registry[name] = {
+      file: `packages/utils/src/${name}.ts`,
+      exports,
+      dependencies: UTIL_DEPS[name] || {},
+    }
+  }
+
+  return registry
+}
+
+// --- Main ---
+
+console.log('Building registry...\n')
+
+const componentDirs = getComponentDirs()
+console.log(
+  `Found ${componentDirs.length} components: ${componentDirs.join(', ')}\n`,
+)
+
+// Load existing descriptions from current registry files
+const descriptions: Record<string, string> = {}
+const existingRegistryDir = path.join(REGISTRY_DIR, 'components')
+if (fs.existsSync(existingRegistryDir)) {
+  for (const file of fs.readdirSync(existingRegistryDir)) {
+    if (file.endsWith('.json')) {
+      const data = JSON.parse(
+        fs.readFileSync(
+          path.join(existingRegistryDir, file),
+          'utf-8',
+        ),
+      )
+      if (data.name && data.description) {
+        descriptions[data.name] = data.description
+      }
+    }
+  }
+}
+
+// Build index
+const indexData = {
+  version: VERSION,
+  components: componentDirs,
+}
+fs.writeFileSync(
+  path.join(REGISTRY_DIR, 'index.json'),
+  JSON.stringify(indexData, null, 2) + '\n',
+)
+console.log('Wrote registry/index.json')
+
+// Build utils registry
+const utilsData = buildUtilsRegistry()
+fs.writeFileSync(
+  path.join(REGISTRY_DIR, 'utils.json'),
+  JSON.stringify(utilsData, null, 2) + '\n',
+)
+console.log('Wrote registry/utils.json')
+
+// Build per-component registry
+fs.mkdirSync(path.join(REGISTRY_DIR, 'components'), {
+  recursive: true,
+})
+
+for (const dir of componentDirs) {
+  const entry = buildComponentEntry(dir)
+  // Preserve existing description
+  if (descriptions[dir]) {
+    entry.description = descriptions[dir]
+  }
+
+  fs.writeFileSync(
+    path.join(REGISTRY_DIR, 'components', `${dir}.json`),
+    JSON.stringify(entry, null, 2) + '\n',
+  )
+  console.log(`Wrote registry/components/${dir}.json`)
+}
+
+console.log(
+  `\nRegistry build complete. ${componentDirs.length} components registered.`,
+)

@@ -1,0 +1,19 @@
+{
+  "name": "card",
+  "description": "Surface container with 3 variants (elevated, filled, outlined) and optional press handler.",
+  "files": [
+    "packages/components/src/card/Card.tsx",
+    "packages/components/src/card/index.ts",
+    "packages/components/src/card/styles.ts",
+    "packages/components/src/card/types.ts"
+  ],
+  "utils": [
+    "color",
+    "elevation"
+  ],
+  "componentDependencies": [],
+  "dependencies": {
+    "@onlynative/core": ">=0.1.1-alpha.1"
+  },
+  "optionalDependencies": {}
+}

@@ -1,0 +1,34 @@
+{
+  "color": {
+    "file": "packages/utils/src/color.ts",
+    "exports": [
+      "alphaColor",
+      "blendColor"
+    ],
+    "dependencies": {}
+  },
+  "elevation": {
+    "file": "packages/utils/src/elevation.ts",
+    "exports": [
+      "elevationStyle"
+    ],
+    "dependencies": {}
+  },
+  "icon": {
+    "file": "packages/utils/src/icon.ts",
+    "exports": [
+      "getMaterialCommunityIcons"
+    ],
+    "dependencies": {
+      "@expo/vector-icons": ">=14.0.0"
+    }
+  },
+  "rtl": {
+    "file": "packages/utils/src/rtl.ts",
+    "exports": [
+      "transformOrigin",
+      "selectRTL"
+    ],
+    "dependencies": {}
+  }
+}

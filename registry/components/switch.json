@@ -1,0 +1,21 @@
+{
+  "name": "switch",
+  "description": "Toggle control with optional icons and customizable thumb/track colors.",
+  "files": [
+    "packages/components/src/switch/Switch.tsx",
+    "packages/components/src/switch/index.ts",
+    "packages/components/src/switch/styles.ts",
+    "packages/components/src/switch/types.ts"
+  ],
+  "utils": [
+    "color",
+    "icon"
+  ],
+  "componentDependencies": [],
+  "dependencies": {
+    "@onlynative/core": ">=0.1.1-alpha.1"
+  },
+  "optionalDependencies": {
+    "@expo/vector-icons": ">=14.0.0"
+  }
+}

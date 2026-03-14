@@ -1,0 +1,22 @@
+{
+  "name": "chip",
+  "description": "Input chip with 4 variants (assist, filter, input, suggestion) and icon/avatar support.",
+  "files": [
+    "packages/components/src/chip/Chip.tsx",
+    "packages/components/src/chip/index.ts",
+    "packages/components/src/chip/styles.ts",
+    "packages/components/src/chip/types.ts"
+  ],
+  "utils": [
+    "color",
+    "elevation",
+    "icon"
+  ],
+  "componentDependencies": [],
+  "dependencies": {
+    "@onlynative/core": ">=0.1.1-alpha.1"
+  },
+  "optionalDependencies": {
+    "@expo/vector-icons": ">=14.0.0"
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "name": "checkbox",
+  "description": "Binary selection control with checked/unchecked states and customizable colors.",
+  "files": [
+    "packages/components/src/checkbox/Checkbox.tsx",
+    "packages/components/src/checkbox/index.ts",
+    "packages/components/src/checkbox/styles.ts",
+    "packages/components/src/checkbox/types.ts"
+  ],
+  "utils": [
+    "color",
+    "icon"
+  ],
+  "componentDependencies": [],
+  "dependencies": {
+    "@onlynative/core": ">=0.1.1-alpha.1"
+  },
+  "optionalDependencies": {
+    "@expo/vector-icons": ">=14.0.0"
+  }
+}

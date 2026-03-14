@@ -1,0 +1,18 @@
+{
+  "name": "radio",
+  "description": "Single-choice selection control with selected/unselected states.",
+  "files": [
+    "packages/components/src/radio/Radio.tsx",
+    "packages/components/src/radio/index.ts",
+    "packages/components/src/radio/styles.ts",
+    "packages/components/src/radio/types.ts"
+  ],
+  "utils": [
+    "color"
+  ],
+  "componentDependencies": [],
+  "dependencies": {
+    "@onlynative/core": ">=0.1.1-alpha.1"
+  },
+  "optionalDependencies": {}
+}

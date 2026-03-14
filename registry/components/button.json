@@ -1,0 +1,22 @@
+{
+  "name": "button",
+  "description": "MD3 button with 5 variants (filled, elevated, outlined, text, tonal) and icon support.",
+  "files": [
+    "packages/components/src/button/Button.tsx",
+    "packages/components/src/button/index.ts",
+    "packages/components/src/button/styles.ts",
+    "packages/components/src/button/types.ts"
+  ],
+  "utils": [
+    "color",
+    "elevation",
+    "icon"
+  ],
+  "componentDependencies": [],
+  "dependencies": {
+    "@onlynative/core": ">=0.1.1-alpha.1"
+  },
+  "optionalDependencies": {
+    "@expo/vector-icons": ">=14.0.0"
+  }
+}

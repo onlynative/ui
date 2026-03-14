@@ -1,0 +1,21 @@
+{
+  "name": "icon-button",
+  "description": "Icon-only button with 4 variants (filled, tonal, outlined, standard) and toggle support.",
+  "files": [
+    "packages/components/src/icon-button/IconButton.tsx",
+    "packages/components/src/icon-button/index.ts",
+    "packages/components/src/icon-button/styles.ts",
+    "packages/components/src/icon-button/types.ts"
+  ],
+  "utils": [
+    "color",
+    "icon"
+  ],
+  "componentDependencies": [],
+  "dependencies": {
+    "@onlynative/core": ">=0.1.1-alpha.1"
+  },
+  "optionalDependencies": {
+    "@expo/vector-icons": ">=14.0.0"
+  }
+}

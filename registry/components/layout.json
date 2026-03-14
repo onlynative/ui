@@ -1,0 +1,22 @@
+{
+  "name": "layout",
+  "description": "Layout primitives: Box, Row, Column, Grid (flexbox utilities), and Layout (SafeAreaView wrapper).",
+  "files": [
+    "packages/components/src/layout/Box.tsx",
+    "packages/components/src/layout/Column.tsx",
+    "packages/components/src/layout/Grid.tsx",
+    "packages/components/src/layout/Layout.tsx",
+    "packages/components/src/layout/Row.tsx",
+    "packages/components/src/layout/index.ts",
+    "packages/components/src/layout/resolveSpacing.ts",
+    "packages/components/src/layout/types.ts"
+  ],
+  "utils": [],
+  "componentDependencies": [],
+  "dependencies": {
+    "@onlynative/core": ">=0.1.1-alpha.1"
+  },
+  "optionalDependencies": {
+    "react-native-safe-area-context": ">=4.0.0"
+  }
+}

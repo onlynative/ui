@@ -1,0 +1,16 @@
+{
+  "name": "keyboard-avoiding-wrapper",
+  "description": "Zero-config keyboard-aware wrapper with platform-specific behavior for form layouts.",
+  "files": [
+    "packages/components/src/keyboard-avoiding-wrapper/KeyboardAvoidingWrapper.tsx",
+    "packages/components/src/keyboard-avoiding-wrapper/index.ts",
+    "packages/components/src/keyboard-avoiding-wrapper/styles.ts",
+    "packages/components/src/keyboard-avoiding-wrapper/types.ts"
+  ],
+  "utils": [],
+  "componentDependencies": [],
+  "dependencies": {
+    "@onlynative/core": ">=0.1.1-alpha.1"
+  },
+  "optionalDependencies": {}
+}
