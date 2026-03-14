@@ -253,10 +253,35 @@ if (fs.existsSync(existingRegistryDir)) {
   }
 }
 
-// Build index
+// Build per-component registry first (so we have descriptions for the index)
+fs.mkdirSync(path.join(REGISTRY_DIR, 'components'), {
+  recursive: true,
+})
+
+const componentEntries: ComponentEntry[] = []
+
+for (const dir of componentDirs) {
+  const entry = buildComponentEntry(dir)
+  // Preserve existing description
+  if (descriptions[dir]) {
+    entry.description = descriptions[dir]
+  }
+  componentEntries.push(entry)
+
+  fs.writeFileSync(
+    path.join(REGISTRY_DIR, 'components', `${dir}.json`),
+    JSON.stringify(entry, null, 2) + '\n',
+  )
+  console.log(`Wrote registry/components/${dir}.json`)
+}
+
+// Build index (with descriptions for fast list command)
 const indexData = {
   version: VERSION,
-  components: componentDirs,
+  components: componentEntries.map((e) => ({
+    name: e.name,
+    description: e.description,
+  })),
 }
 fs.writeFileSync(
   path.join(REGISTRY_DIR, 'index.json'),
@@ -271,25 +296,6 @@ fs.writeFileSync(
   JSON.stringify(utilsData, null, 2) + '\n',
 )
 console.log('Wrote registry/utils.json')
-
-// Build per-component registry
-fs.mkdirSync(path.join(REGISTRY_DIR, 'components'), {
-  recursive: true,
-})
-
-for (const dir of componentDirs) {
-  const entry = buildComponentEntry(dir)
-  // Preserve existing description
-  if (descriptions[dir]) {
-    entry.description = descriptions[dir]
-  }
-
-  fs.writeFileSync(
-    path.join(REGISTRY_DIR, 'components', `${dir}.json`),
-    JSON.stringify(entry, null, 2) + '\n',
-  )
-  console.log(`Wrote registry/components/${dir}.json`)
-}
 
 console.log(
   `\nRegistry build complete. ${componentDirs.length} components registered.`,

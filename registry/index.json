@@ -1,18 +1,57 @@
 {
   "version": "0.1.1-alpha.1",
   "components": [
-    "appbar",
-    "button",
-    "card",
-    "checkbox",
-    "chip",
-    "icon-button",
-    "keyboard-avoiding-wrapper",
-    "layout",
-    "list",
-    "radio",
-    "switch",
-    "text-field",
-    "typography"
+    {
+      "name": "appbar",
+      "description": "Top app bar with 4 variants (small, center-aligned, medium, large) and SafeAreaView support."
+    },
+    {
+      "name": "button",
+      "description": "MD3 button with 5 variants (filled, elevated, outlined, text, tonal) and icon support."
+    },
+    {
+      "name": "card",
+      "description": "Surface container with 3 variants (elevated, filled, outlined) and optional press handler."
+    },
+    {
+      "name": "checkbox",
+      "description": "Binary selection control with checked/unchecked states and customizable colors."
+    },
+    {
+      "name": "chip",
+      "description": "Input chip with 4 variants (assist, filter, input, suggestion) and icon/avatar support."
+    },
+    {
+      "name": "icon-button",
+      "description": "Icon-only button with 4 variants (filled, tonal, outlined, standard) and toggle support."
+    },
+    {
+      "name": "keyboard-avoiding-wrapper",
+      "description": "Zero-config keyboard-aware wrapper with platform-specific behavior for form layouts."
+    },
+    {
+      "name": "layout",
+      "description": "Layout primitives: Box, Row, Column, Grid (flexbox utilities), and Layout (SafeAreaView wrapper)."
+    },
+    {
+      "name": "list",
+      "description": "List container with interactive items, supporting headline/trailing text and dividers."
+    },
+    {
+      "name": "radio",
+      "description": "Single-choice selection control with selected/unselected states."
+    },
+    {
+      "name": "switch",
+      "description": "Toggle control with optional icons and customizable thumb/track colors."
+    },
+    {
+      "name": "text-field",
+      "description": "Text input with animated floating label, 2 variants (filled, outlined), and icon support."
+    },
+    {
+      "name": "typography",
+      "description": "Text component using MD3 type scale with 15 variants (displayLarge to labelSmall)."
+    }
   ]
 }

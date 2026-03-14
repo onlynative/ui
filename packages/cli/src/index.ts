@@ -1,6 +1,7 @@
 import { Command } from 'commander'
 import { initCommand } from './commands/init'
 import { addCommand } from './commands/add'
+import { updateCommand } from './commands/update'
 import { listCommand } from './commands/list'
 import { doctorCommand } from './commands/doctor'
 import { logger } from './lib/logger'
@@ -39,6 +40,31 @@ program
     try {
       await addCommand(components, process.cwd(), {
         force: options.force,
+        dryRun: options.dryRun,
+      })
+    } catch (error) {
+      handleError(error)
+    }
+  })
+
+program
+  .command('update')
+  .description('Update installed components to the latest version')
+  .argument('[components...]', 'Component names to update')
+  .option(
+    '-a, --all',
+    'Update all installed components',
+    false,
+  )
+  .option(
+    '-d, --dry-run',
+    'Show diff without applying changes',
+    false,
+  )
+  .action(async (components: string[], options) => {
+    try {
+      await updateCommand(components, process.cwd(), {
+        all: options.all,
         dryRun: options.dryRun,
       })
     } catch (error) {

@@ -3,7 +3,7 @@ import chalk from 'chalk'
 import fs from 'fs-extra'
 import { readConfig, resolveAliasPath } from '../lib/config'
 import { createSpinner, logger } from '../lib/logger'
-import { fetchRegistryIndex, fetchComponentEntry } from '../lib/registry'
+import { fetchRegistryIndex } from '../lib/registry'
 
 export async function listCommand(cwd: string): Promise<void> {
   logger.break()
@@ -36,27 +36,19 @@ export async function listCommand(cwd: string): Promise<void> {
     `  ${chalk.dim('-'.repeat(70))}`,
   )
 
-  for (const name of registryIndex.components) {
-    const componentDir = path.join(componentsDir, name)
+  for (const component of registryIndex.components) {
+    const componentDir = path.join(componentsDir, component.name)
     const installed = await fs.pathExists(componentDir)
-
-    let description = ''
-    try {
-      const entry = await fetchComponentEntry(config, name)
-      description = entry.description
-    } catch {
-      // Fallback if we can't fetch the entry
-    }
 
     const status = installed
       ? chalk.green('installed')
       : chalk.dim('-')
     const nameDisplay = installed
-      ? chalk.green(name)
-      : name
+      ? chalk.green(component.name)
+      : component.name
 
     console.log(
-      `  ${padEnd(nameDisplay, installed ? 28 + 10 : 28)}${padEnd(status, installed ? 14 + 10 : 14)}${chalk.dim(description)}`,
+      `  ${padEnd(nameDisplay, installed ? 28 + 10 : 28)}${padEnd(status, installed ? 14 + 10 : 14)}${chalk.dim(component.description)}`,
     )
   }
 

@@ -35,8 +35,11 @@ export async function addCommand(
   const registryIndex = await fetchRegistryIndex(config)
   spinner.succeed('Registry loaded')
 
+  const availableNames = registryIndex.components.map(
+    (c) => c.name,
+  )
   const invalid = componentNames.filter(
-    (name) => !registryIndex.components.includes(name),
+    (name) => !availableNames.includes(name),
   )
 
   if (invalid.length > 0) {
@@ -44,7 +47,7 @@ export async function addCommand(
       `Unknown component(s): ${invalid.map((n) => chalk.bold(n)).join(', ')}`,
     )
     logger.info(
-      `Available: ${registryIndex.components.join(', ')}`,
+      `Available: ${availableNames.join(', ')}`,
     )
     process.exit(1)
   }

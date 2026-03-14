@@ -20,9 +20,14 @@ export interface OnlyNativeConfig {
   registryVersion: string
 }
 
+export interface RegistryComponentSummary {
+  name: string
+  description: string
+}
+
 export interface RegistryIndex {
   version: string
-  components: string[]
+  components: RegistryComponentSummary[]
 }
 
 export interface ComponentRegistryEntry {
