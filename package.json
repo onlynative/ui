@@ -29,8 +29,8 @@
     "eslint-plugin-react-hooks": "^4.0.0",
     "eslint-plugin-react-native": "^4.0.0",
     "prettier": "^3.0.0",
-    "typescript-eslint": "^8.0.0",
-    "turbo": "^2.0.0"
+    "turbo": "^2.8.17",
+    "typescript-eslint": "^8.0.0"
   },
   "pnpm": {
     "overrides": {
