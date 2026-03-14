@@ -1,15 +1,24 @@
 import { useCallback, useMemo, useState } from 'react'
-import {
-  Alert,
-  I18nManager,
-  Platform,
-  useColorScheme,
-} from 'react-native'
+import { Alert, I18nManager, Platform, useColorScheme } from 'react-native'
 import { Slot, useRouter, useSegments } from 'expo-router'
 import { StatusBar } from 'expo-status-bar'
+import * as Updates from 'expo-updates'
 import { ThemeProvider, darkTheme, lightTheme, useTheme } from '@onlynative/core'
 import { AppBar, Layout } from '@onlynative/components'
 import type { AppBarAction } from '@onlynative/components'
+
+// Restore persisted RTL preference on web before first render
+if (Platform.OS === 'web' && typeof localStorage !== 'undefined') {
+  try {
+    const stored = localStorage.getItem('forceRTL')
+    if (stored === 'true') {
+      I18nManager.allowRTL(true)
+      I18nManager.forceRTL(true)
+    }
+  } catch {
+    // Ignore storage errors (SSR, private browsing, etc.)
+  }
+}
 
 function resolveRouteName(segments: string[]): string {
   const visibleSegments = segments.filter((segment) => !segment.startsWith('('))
@@ -53,18 +62,28 @@ function isDarkColor(color: string): boolean {
   return luminance < 0.5
 }
 
-function toggleRTL() {
+async function toggleRTL() {
   const nextIsRTL = !I18nManager.isRTL
   I18nManager.allowRTL(true)
   I18nManager.forceRTL(nextIsRTL)
 
   if (Platform.OS === 'web') {
+    try {
+      localStorage.setItem('forceRTL', String(nextIsRTL))
+    } catch {
+      // Ignore storage errors
+    }
     window.location.reload()
   } else {
-    Alert.alert(
-      'Restart Required',
-      `Layout direction set to ${nextIsRTL ? 'RTL' : 'LTR'}. Please restart the app to apply.`,
-    )
+    try {
+      await Updates.reloadAsync()
+    } catch {
+      // reloadAsync is unavailable in Expo Go / dev builds
+      Alert.alert(
+        'Restart Required',
+        `Layout direction set to ${nextIsRTL ? 'RTL' : 'LTR'}. Please restart the app to apply.`,
+      )
+    }
   }
 }
 
