@@ -1,4 +1,3 @@
-import path from 'node:path'
 import chalk from 'chalk'
 import prompts from 'prompts'
 import { execa } from 'execa'

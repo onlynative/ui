@@ -6,7 +6,6 @@ import { installComponents } from '../lib/installer'
 import { createSpinner, logger } from '../lib/logger'
 import { fetchRegistryIndex } from '../lib/registry'
 import {
-  getDependencyComponents,
   getComponentNames,
   resolveComponents,
 } from '../lib/resolver'
@@ -66,7 +65,6 @@ export async function addCommand(
 
   // Show plan
   const allNames = getComponentNames(resolution)
-  const deps = getDependencyComponents(resolution)
 
   logger.break()
   console.log(chalk.bold('Components to add:'))

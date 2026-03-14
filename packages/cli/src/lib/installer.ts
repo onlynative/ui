@@ -105,7 +105,7 @@ export async function installComponents(
     try {
       await execa(cmd, args, { cwd })
       depSpinner.succeed('Dependencies installed')
-    } catch (error) {
+    } catch {
       depSpinner.fail('Failed to install dependencies')
       logger.error(
         `Run manually: ${command}`,
