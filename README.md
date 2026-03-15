@@ -80,12 +80,24 @@ import { Button } from '@onlynative/components/button'
 import { Card } from '@onlynative/components/card'
 ```
 
+## CLI (copy-paste workflow)
+
+Prefer to own the source code? Use the CLI to scaffold components directly into your project
+
+```bash
+npx onlynative init          # Set up config + install @onlynative/core
+npx onlynative add button card text-field
+```
+
+Component files are copied into your project with imports rewritten to match your aliases. See the [CLI README](packages/cli) for the full command reference.
+
 ## Packages
 
 | Package | Size | Description |
 | --- | --- | --- |
 | [`@onlynative/core`](packages/core) | ![npm bundle size](https://img.shields.io/bundlephobia/min/@onlynative/core) | Theme engine, theme contracts, built-in Material Design You theme, `ThemeProvider`, `useTheme` hook, responsive utilities. |
 | [`@onlynative/components`](packages/components) | ![npm bundle size](https://img.shields.io/bundlephobia/min/@onlynative/components) | UI components with subpath exports for tree-shaking. |
+| [`@onlynative/cli`](packages/cli) | ![npm bundle size](https://img.shields.io/bundlephobia/min/@onlynative/cli) | CLI to scaffold components into your project (shadcn/ui-style). |
 | [`example`](example) | — | Expo Router showcase app for testing and previewing components. |
 | [`docs`](docs) | — | Docusaurus documentation site. |
 
@@ -97,7 +109,8 @@ import { Card } from '@onlynative/components/card'
 ├── example/               # Expo Router showcase app
 ├── packages/
 │   ├── core/              # Theme + provider primitives
-│   └── components/        # Reusable UI component library
+│   ├── components/        # Reusable UI component library
+│   └── cli/               # CLI for scaffolding components into projects
 ├── turbo.json
 └── pnpm-workspace.yaml
 ```
