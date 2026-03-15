@@ -44,7 +44,8 @@ import { Button, Card } from '@onlynative/components'
 ## Requirements
 
 - React Native 0.81+, React 19+, Expo SDK 54+
-- Peer deps: `@expo/vector-icons >=15`, `react-native-safe-area-context >=5`
+- Peer deps: `react-native-safe-area-context >=4`
+- Optional peer dep: `@expo/vector-icons >=14` (only needed if you plan to use icons)
 
 ## Docs
 

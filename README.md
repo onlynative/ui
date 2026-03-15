@@ -46,7 +46,13 @@ yarn add @onlynative/components
 **Peer dependencies** — make sure these are installed in your project:
 
 ```bash
-npx expo install react react-native @expo/vector-icons react-native-safe-area-context
+npx expo install react react-native react-native-safe-area-context
+```
+
+**Optional** — only needed if you plan to use icons in your app:
+
+```bash
+npx expo install @expo/vector-icons
 ```
 
 ## Quick Start

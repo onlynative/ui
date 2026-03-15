@@ -5,7 +5,13 @@ Material Design 3 UI components for React Native, part of [OnlyNative UI](https:
 ## Install
 
 ```bash
-pnpm add @onlynative/core @onlynative/components @expo/vector-icons react-native-safe-area-context
+pnpm add @onlynative/core @onlynative/components react-native-safe-area-context
+```
+
+**Optional** — only needed if you plan to use icons in your app:
+
+```bash
+pnpm add @expo/vector-icons
 ```
 
 Wrap your app with `ThemeProvider` from `@onlynative/core` (see [@onlynative/core](https://www.npmjs.com/package/@onlynative/core)).
