@@ -12,23 +12,17 @@ sidebar_position: 2
 
 ## Install packages
 
-```bash
-pnpm add @onlynative/core @onlynative/utils @onlynative/components
-```
+<PackageManagerTabs cmd="npm install @onlynative/core @onlynative/utils @onlynative/components" />
 
 ### Peer dependencies
 
 `@onlynative/components` requires this peer dependency:
 
-```bash
-pnpm add react-native-safe-area-context
-```
+<PackageManagerTabs cmd="npm install react-native-safe-area-context" />
 
 If you use icon props (`leadingIcon`, `trailingIcon`, `icon` on Button, IconButton, Chip, etc.), also install:
 
-```bash
-pnpm add @expo/vector-icons
-```
+<PackageManagerTabs cmd="npm install @expo/vector-icons" />
 
 ## Setup
 

@@ -37,6 +37,8 @@ const config: Config = {
     ],
   ],
 
+  clientModules: ['./src/clientModules/defaultPackageManager.js'],
+
   plugins: [
     [
       'docusaurus-plugin-react-docgen-typescript',
