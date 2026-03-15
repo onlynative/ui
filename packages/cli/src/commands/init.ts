@@ -10,22 +10,35 @@ import { detectProject, getInstallCommand } from '../lib/detector'
 import { createSpinner, logger } from '../lib/logger'
 import type { OnlyNativeConfig } from '../lib/types'
 
-export async function initCommand(cwd: string): Promise<void> {
+export interface InitOptions {
+  yes?: boolean
+  componentsAlias?: string
+  libAlias?: string
+}
+
+export async function initCommand(
+  cwd: string,
+  options: InitOptions = {},
+): Promise<void> {
   logger.break()
 
   // Check if already initialized
   if (await configExists(cwd)) {
-    const { overwrite } = await prompts({
-      type: 'confirm',
-      name: 'overwrite',
-      message:
-        'onlynative.json already exists. Overwrite?',
-      initial: false,
-    })
+    if (options.yes) {
+      logger.info('Overwriting existing onlynative.json')
+    } else {
+      const { overwrite } = await prompts({
+        type: 'confirm',
+        name: 'overwrite',
+        message:
+          'onlynative.json already exists. Overwrite?',
+        initial: false,
+      })
 
-    if (!overwrite) {
-      logger.info('Init cancelled.')
-      return
+      if (!overwrite) {
+        logger.info('Init cancelled.')
+        return
+      }
     }
   }
 
@@ -70,33 +83,50 @@ export async function initCommand(cwd: string): Promise<void> {
     defaultLibAlias = '~/lib'
   }
 
-  // Interactive prompts
-  const answers = await prompts([
-    {
-      type: 'text',
-      name: 'componentsAlias',
-      message: 'Where should components be installed?',
-      initial: defaultComponentsAlias,
-    },
-    {
-      type: 'text',
-      name: 'libAlias',
-      message: 'Where should utility files be placed?',
-      initial: defaultLibAlias,
-    },
-  ])
+  // Resolve aliases — use explicit flags, then defaults, skip prompts with --yes
+  let componentsAlias: string
+  let libAlias: string
 
-  if (!answers.componentsAlias || !answers.libAlias) {
-    logger.info('Init cancelled.')
-    return
+  if (options.yes) {
+    componentsAlias =
+      options.componentsAlias ?? defaultComponentsAlias
+    libAlias = options.libAlias ?? defaultLibAlias
+  } else {
+    const answers = await prompts([
+      {
+        type: 'text',
+        name: 'componentsAlias',
+        message:
+          'Where should components be installed?',
+        initial:
+          options.componentsAlias ??
+          defaultComponentsAlias,
+      },
+      {
+        type: 'text',
+        name: 'libAlias',
+        message:
+          'Where should utility files be placed?',
+        initial:
+          options.libAlias ?? defaultLibAlias,
+      },
+    ])
+
+    if (!answers.componentsAlias || !answers.libAlias) {
+      logger.info('Init cancelled.')
+      return
+    }
+
+    componentsAlias = answers.componentsAlias
+    libAlias = answers.libAlias
   }
 
   // Write config
   const config: OnlyNativeConfig = {
     ...DEFAULT_CONFIG,
     aliases: {
-      components: answers.componentsAlias,
-      lib: answers.libAlias,
+      components: componentsAlias,
+      lib: libAlias,
     },
   }
 
@@ -104,12 +134,17 @@ export async function initCommand(cwd: string): Promise<void> {
   logger.success('Created onlynative.json')
 
   // Install @onlynative/core
-  const { installCore } = await prompts({
-    type: 'confirm',
-    name: 'installCore',
-    message: 'Install @onlynative/core?',
-    initial: true,
-  })
+  let installCore = options.yes
+
+  if (!options.yes) {
+    const answer = await prompts({
+      type: 'confirm',
+      name: 'installCore',
+      message: 'Install @onlynative/core?',
+      initial: true,
+    })
+    installCore = answer.installCore
+  }
 
   if (installCore) {
     const installSpinner = createSpinner(

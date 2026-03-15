@@ -18,9 +18,26 @@ program
 program
   .command('init')
   .description('Initialize your project for OnlyNative UI')
-  .action(async () => {
+  .option(
+    '-y, --yes',
+    'Skip prompts and use defaults',
+    false,
+  )
+  .option(
+    '--components-alias <alias>',
+    'Components install path alias',
+  )
+  .option(
+    '--lib-alias <alias>',
+    'Utility files path alias',
+  )
+  .action(async (options) => {
     try {
-      await initCommand(process.cwd())
+      await initCommand(process.cwd(), {
+        yes: options.yes,
+        componentsAlias: options.componentsAlias,
+        libAlias: options.libAlias,
+      })
     } catch (error) {
       handleError(error)
     }

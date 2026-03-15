@@ -40,6 +40,24 @@ This will:
 5. Install `@onlynative/core`
 6. Create an `onlynative.json` config file
 
+Options:
+
+| Flag | Description |
+|------|-------------|
+| `-y, --yes` | Skip all prompts and use detected defaults |
+| `--components-alias <alias>` | Components install path (default: `@/components/ui`) |
+| `--lib-alias <alias>` | Utility files path (default: `@/lib`) |
+
+Non-interactive mode for CI/automation:
+
+```bash
+# Accept all defaults
+npx onlynative init -y
+
+# With custom paths
+npx onlynative init -y --components-alias "~/ui" --lib-alias "~/utils"
+```
+
 ### `onlynative add <components...>`
 
 Add one or more components to your project.

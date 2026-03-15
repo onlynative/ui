@@ -16,6 +16,69 @@ pnpm add @onlynative/core @onlynative/utils @onlynative/components @expo/vector-
 
 ---
 
+## CLI (`onlynative`)
+
+Copy-paste workflow — copies component source files into your project. The theme system (`@onlynative/core`) stays as an npm dependency.
+
+### Commands
+
+#### `onlynative init`
+
+Initialize project. Detects project type (Expo/RN), package manager, and tsconfig path aliases.
+
+```bash
+npx onlynative init            # Interactive
+npx onlynative init -y         # Non-interactive, accept defaults
+npx onlynative init -y --components-alias "~/ui" --lib-alias "~/utils"
+```
+
+Options:
+- `-y, --yes` — Skip all prompts, use detected defaults. Overwrites existing config. Auto-installs `@onlynative/core`.
+- `--components-alias <alias>` — Components install path. Default: `@/components/ui` (or `~/components/ui` if `~/*` alias detected in tsconfig)
+- `--lib-alias <alias>` — Utility files path. Default: `@/lib` (or `~/lib` if `~/*` alias detected)
+
+Creates `onlynative.json`:
+```json
+{
+  "$schema": "https://onlynative.dev/schema.json",
+  "aliases": { "components": "@/components/ui", "lib": "@/lib" },
+  "registryUrl": "https://raw.githubusercontent.com/onlynative/ui",
+  "registryVersion": "main"
+}
+```
+
+#### `onlynative add <components...>`
+
+Add components to your project. Resolves dependency graph, copies files with rewritten imports, installs npm deps.
+
+```bash
+npx onlynative add button
+npx onlynative add card chip text-field
+npx onlynative add appbar      # auto-adds icon-button + typography
+```
+
+Options:
+- `-f, --force` — Overwrite existing components
+- `-d, --dry-run` — Preview without writing files
+
+#### `onlynative update [components...]`
+
+Update installed components to latest registry version.
+
+Options:
+- `-a, --all` — Update all installed components
+- `-d, --dry-run` — Show diff without applying
+
+#### `onlynative list`
+
+Show available components with install status.
+
+#### `onlynative doctor`
+
+Check project health: config validity, core installation, RN version, file integrity, peer deps.
+
+---
+
 ## @onlynative/utils
 
 Shared utilities used by `@onlynative/components` and available for custom component development.

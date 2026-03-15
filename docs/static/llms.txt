@@ -54,6 +54,18 @@ import { Button, Card } from '@onlynative/components'
 - Theming: https://onlynative.github.io/ui/theming
 - Components: https://onlynative.github.io/ui/components/button
 
+## CLI (copy-paste workflow)
+
+Alternative to npm packages — copies component source into your project so you own the code.
+
+```bash
+npx onlynative init          # Interactive setup
+npx onlynative init -y       # Non-interactive (CI/automation)
+npx onlynative add button card
+npx onlynative list
+npx onlynative doctor
+```
+
 ## Full API reference
 
 - [llms-full.txt](https://onlynative.github.io/ui/llms-full.txt): Complete API reference with all component props, types, and usage examples in a single file optimized for LLM consumption.
