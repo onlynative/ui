@@ -229,7 +229,7 @@ export async function upgradeCommand(
     latest.peerDependenciesMeta ?? {}
 
   // Add new required peer deps that aren't in the project
-  for (const [pkg, range] of Object.entries(
+  for (const [pkg] of Object.entries(
     diff.added,
   )) {
     const isOptional =
