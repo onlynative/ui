@@ -19,7 +19,8 @@
     "format": "prettier . --write",
     "docs:dev": "pnpm --filter @onlynative/docs dev",
     "docs:build": "pnpm --filter @onlynative/docs build",
-    "docs:serve": "pnpm --filter @onlynative/docs serve"
+    "docs:serve": "pnpm --filter @onlynative/docs serve",
+    "prepare": "husky"
   },
   "devDependencies": {
     "@eslint/js": "^8.57.0",
@@ -28,9 +29,20 @@
     "eslint-plugin-react": "^7.0.0",
     "eslint-plugin-react-hooks": "^4.0.0",
     "eslint-plugin-react-native": "^4.0.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.4.0",
     "prettier": "^3.0.0",
     "turbo": "^2.8.17",
     "typescript-eslint": "^8.0.0"
+  },
+  "lint-staged": {
+    "*.{ts,tsx}": [
+      "eslint --max-warnings 0",
+      "prettier --check"
+    ],
+    "*.{js,json,css}": [
+      "prettier --check"
+    ]
   },
   "pnpm": {
     "overrides": {
