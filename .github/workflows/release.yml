@@ -75,6 +75,27 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
+      - name: Discover public packages
+        id: packages
+        run: |
+          # Find all non-private packages under packages/
+          PUBLIC_PKGS=$(node -e "
+            const fs = require('fs');
+            const path = require('path');
+            const dirs = fs.readdirSync('packages', { withFileTypes: true })
+              .filter(d => d.isDirectory())
+              .map(d => d.name)
+              .filter(name => {
+                const pkgPath = path.join('packages', name, 'package.json');
+                if (!fs.existsSync(pkgPath)) return false;
+                const pkg = JSON.parse(fs.readFileSync(pkgPath, 'utf8'));
+                return pkg.private !== true;
+              });
+            console.log(dirs.join(' '));
+          ")
+          echo "packages=$PUBLIC_PKGS" >> "$GITHUB_OUTPUT"
+          echo "Discovered public packages: $PUBLIC_PKGS"
+
       - name: Bump versions
         id: version
         run: |
@@ -83,23 +104,28 @@ jobs:
             VERSION_ARGS="$VERSION_ARGS --preid ${{ inputs.preid }}"
           fi
 
-          # Bump core
-          cd packages/core
-          npm version $VERSION_ARGS --no-git-tag-version
-          NEW_VERSION=$(node -p "require('./package.json').version")
-          cd ../..
+          NEW_VERSION=""
+          for PKG_DIR in ${{ steps.packages.outputs.packages }}; do
+            cd "packages/$PKG_DIR"
+            npm version $VERSION_ARGS --no-git-tag-version
+            if [ -z "$NEW_VERSION" ]; then
+              NEW_VERSION=$(node -p "require('./package.json').version")
+            fi
+            cd ../..
+          done
 
-          # Bump components with same version
-          cd packages/components
-          npm version $VERSION_ARGS --no-git-tag-version
-
-          # Update core peer dep range
-          node -e "
-            const pkg = require('./package.json');
-            pkg.peerDependencies['@onlynative/core'] = '>=$NEW_VERSION';
-            require('fs').writeFileSync('package.json', JSON.stringify(pkg, null, 2) + '\n');
-          "
-          cd ../..
+          # Update @onlynative/core peer dep in any package that references it
+          for PKG_DIR in ${{ steps.packages.outputs.packages }}; do
+            node -e "
+              const fs = require('fs');
+              const pkgPath = 'packages/$PKG_DIR/package.json';
+              const pkg = JSON.parse(fs.readFileSync(pkgPath, 'utf8'));
+              if (pkg.peerDependencies?.['@onlynative/core']) {
+                pkg.peerDependencies['@onlynative/core'] = '>=$NEW_VERSION';
+                fs.writeFileSync(pkgPath, JSON.stringify(pkg, null, 2) + '\n');
+              }
+            "
+          done
 
           # Update lockfile after version bumps
           pnpm install --no-frozen-lockfile
@@ -108,15 +134,28 @@ jobs:
 
       - name: Commit and tag
         run: |
-          git add packages/core/package.json packages/components/package.json pnpm-lock.yaml
+          git add pnpm-lock.yaml
+          for PKG_DIR in ${{ steps.packages.outputs.packages }}; do
+            git add "packages/$PKG_DIR/package.json"
+          done
           git commit -m "release: v${{ steps.version.outputs.version }}"
           git tag "v${{ steps.version.outputs.version }}"
 
-      - name: Publish @onlynative/core
-        run: cd packages/core && npm publish --provenance --access public --tag ${{ inputs.tag }}
+      - name: Publish packages
+        run: |
+          # Publish core first (other packages may depend on it)
+          if [ -d packages/core ]; then
+            echo "Publishing @onlynative/core..."
+            cd packages/core && npm publish --provenance --access public --tag ${{ inputs.tag }} && cd ../..
+          fi
 
-      - name: Publish @onlynative/components
-        run: cd packages/components && npm publish --provenance --access public --tag ${{ inputs.tag }}
+          # Publish remaining packages
+          for PKG_DIR in ${{ steps.packages.outputs.packages }}; do
+            if [ "$PKG_DIR" = "core" ]; then continue; fi
+            PKG_NAME=$(node -p "require('./packages/$PKG_DIR/package.json').name")
+            echo "Publishing $PKG_NAME..."
+            cd "packages/$PKG_DIR" && npm publish --provenance --access public --tag ${{ inputs.tag }} && cd ../..
+          done
 
       - name: Push to main
         run: |
