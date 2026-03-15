@@ -69,6 +69,27 @@ Options:
 - `-a, --all` — Update all installed components
 - `-d, --dry-run` — Show diff without applying
 
+#### `onlynative upgrade`
+
+Upgrade `@onlynative/core` to the latest published version and install any new peer dependencies.
+
+```bash
+npx onlynative upgrade         # Interactive — shows plan and prompts before installing
+npx onlynative upgrade -y      # Non-interactive — skip confirmation
+```
+
+Options:
+- `-y, --yes` — Skip confirmation prompt
+
+What it does:
+1. Reads the installed `@onlynative/core` version from `node_modules`
+2. Fetches the latest version from the npm registry
+3. Compares peer dependencies between the installed and latest versions
+4. Shows a plan: version bump, new required peer deps, changed version ranges, removed deps
+5. Upgrades `@onlynative/core` and installs any new required peer dependencies in one step
+6. Reports optional peer deps that aren't installed (does not auto-install optional deps)
+7. Lists peer deps that are no longer required so you can remove them manually
+
 #### `onlynative list`
 
 Show available components with install status.

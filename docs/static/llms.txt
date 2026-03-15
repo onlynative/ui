@@ -62,6 +62,8 @@ Alternative to npm packages — copies component source into your project so you
 npx onlynative init          # Interactive setup
 npx onlynative init -y       # Non-interactive (CI/automation)
 npx onlynative add button card
+npx onlynative upgrade         # Upgrade @onlynative/core + install new peer deps
+npx onlynative upgrade -y      # Non-interactive
 npx onlynative list
 npx onlynative doctor
 ```

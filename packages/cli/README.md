@@ -83,6 +83,36 @@ The `add` command:
 4. Generates a utility barrel file (`onlynative-utils.ts`)
 5. Installs required npm dependencies
 
+### `onlynative upgrade`
+
+Upgrade `@onlynative/core` to the latest published version and install any new peer dependencies.
+
+```bash
+npx onlynative upgrade
+```
+
+Options:
+
+| Flag | Description |
+|------|-------------|
+| `-y, --yes` | Skip confirmation prompt |
+
+The `upgrade` command:
+
+1. Detects the installed `@onlynative/core` version from `node_modules`
+2. Fetches the latest version from the npm registry
+3. Compares peer dependencies between the installed and latest versions
+4. Shows a plan with the version bump, new required peer deps, changed ranges, and removed deps
+5. Upgrades `@onlynative/core` and installs any new required peer dependencies
+6. Reports optional peer deps that aren't installed (does not auto-install them)
+7. Lists peer deps that are no longer required so you can remove them manually
+
+Non-interactive mode for CI/automation:
+
+```bash
+npx onlynative upgrade -y
+```
+
 ### `onlynative list`
 
 Show all available components with their install status.

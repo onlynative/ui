@@ -4,6 +4,7 @@ import { addCommand } from './commands/add'
 import { updateCommand } from './commands/update'
 import { listCommand } from './commands/list'
 import { doctorCommand } from './commands/doctor'
+import { upgradeCommand } from './commands/upgrade'
 import { logger } from './lib/logger'
 
 const program = new Command()
@@ -106,6 +107,26 @@ program
   .action(async () => {
     try {
       await doctorCommand(process.cwd())
+    } catch (error) {
+      handleError(error)
+    }
+  })
+
+program
+  .command('upgrade')
+  .description(
+    'Upgrade @onlynative/core and install new peer dependencies',
+  )
+  .option(
+    '-y, --yes',
+    'Skip confirmation prompt',
+    false,
+  )
+  .action(async (options) => {
+    try {
+      await upgradeCommand(process.cwd(), {
+        yes: options.yes,
+      })
     } catch (error) {
       handleError(error)
     }
