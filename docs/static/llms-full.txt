@@ -786,6 +786,87 @@ All icon props accept `MaterialCommunityIcons` names from `@expo/vector-icons`. 
 
 ---
 
+## Migration from other libraries
+
+### From React Native Paper
+
+Both libraries are MD3-based. Theme color tokens are largely portable.
+
+| Paper | OnlyNative | Notes |
+|---|---|---|
+| `PaperProvider` | `ThemeProvider` | Same MD3 color tokens |
+| `Button` | `Button` | `mode` → `variant` (`contained` → `filled`, `contained-tonal` → `tonal`) |
+| `IconButton` | `IconButton` | |
+| `Appbar` / `Appbar.Header` | `AppBar` | Single component, not compound |
+| `Card` / `Card.Content` | `Card` | Flat children, no subcomponents |
+| `Chip` | `Chip` | Same variant model |
+| `Checkbox` | `Checkbox` | `status` string → `value` boolean |
+| `RadioButton` | `Radio` | |
+| `Switch` | `Switch` | |
+| `TextInput` | `TextField` | `mode` → `variant` (`flat` → `filled`) |
+| `Text` | `Typography` | Same MD3 variant scale |
+| `Surface` | `Box` or `Card` | |
+| `List.Item` | `ListItem` | Flat import |
+
+Key prop renames: `buttonColor` → `containerColor`, `textColor` → `contentColor`, `icon` → `leadingIcon`.
+
+### From NativeBase / Gluestack UI
+
+No utility props — use `style` prop or Box spacing shortcuts (`p`, `m`, `gap` with theme keys).
+
+| NativeBase | OnlyNative | Notes |
+|---|---|---|
+| `NativeBaseProvider` | `ThemeProvider` | |
+| `Button` | `Button` | |
+| `Input` | `TextField` | |
+| `Checkbox` | `Checkbox` | `isChecked` → `value` |
+| `Switch` | `Switch` | `isChecked` → `value` |
+| `Text` | `Typography` | Use `variant` for sizing |
+| `Box` | `Box` | Theme spacing keys instead of utility props |
+| `HStack` | `Row` | |
+| `VStack` | `Column` | |
+| `Card` | `Card` | |
+
+Responsive: `{{ base: 1, md: 2 }}` → `useBreakpointValue({ compact: 1, medium: 2 })`.
+
+### From React Native Elements
+
+| RN Elements | OnlyNative | Notes |
+|---|---|---|
+| `Button` | `Button` | `type` → `variant` (`solid` → `filled`, `outline` → `outlined`, `clear` → `text`) |
+| `Input` | `TextField` | `errorMessage` → `errorText`, `leftIcon` → `leadingIcon` |
+| `CheckBox` | `Checkbox` | |
+| `Switch` | `Switch` | |
+| `Card` | `Card` | |
+| `ListItem` | `ListItem` | |
+| `Text` | `Typography` | |
+| `Header` | `AppBar` | |
+| `Chip` | `Chip` | |
+
+Key prop renames: `title` → children, `color` → `containerColor`, `titleStyle` → `labelStyle`.
+
+### From Tamagui
+
+No shorthand style props, no build-time compiler needed. Use `style` prop or Box spacing shortcuts.
+
+| Tamagui | OnlyNative | Notes |
+|---|---|---|
+| `Button` | `Button` | |
+| `Input` | `TextField` | Has floating label |
+| `Checkbox` | `Checkbox` | |
+| `RadioGroup.Item` | `Radio` | Single component |
+| `Switch` | `Switch` | |
+| `Card` | `Card` | |
+| `Text` / `H1`–`H6` | `Typography` | Use `variant` prop (e.g. `displaySmall`, `bodyLarge`) |
+| `XStack` | `Row` | |
+| `YStack` | `Column` | |
+| `Stack` | `Box` | |
+| `ListItem` | `ListItem` | |
+
+Tokens: `$color.primary` → `useTheme().colors.primary`. No `tamagui.config.ts` needed.
+
+---
+
 ## Code style
 
 - No semicolons, single quotes, trailing commas
