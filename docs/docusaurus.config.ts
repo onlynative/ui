@@ -86,29 +86,7 @@ const config: Config = {
     },
     footer: {
       style: 'dark',
-      links: [
-        {
-          title: 'Docs',
-          items: [
-            { label: 'Getting Started', to: '/' },
-            { label: 'Components', to: '/components/button' },
-          ],
-        },
-        {
-          title: 'More',
-          items: [
-            {
-              label: 'Demo App',
-              href: 'https://onlynative.github.io/ui/demo/',
-            },
-            {
-              label: 'GitHub',
-              href: 'https://github.com/onlynative/ui',
-            },
-          ],
-        },
-      ],
-      copyright: `Copyright © ${new Date().getFullYear()} OnlyNative. Built with Docusaurus.`,
+      copyright: `Copyright © ${new Date().getFullYear()} OnlyNative.`,
     },
     prism: {
       additionalLanguages: ['bash'],
