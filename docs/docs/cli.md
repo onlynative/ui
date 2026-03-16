@@ -1,5 +1,5 @@
 ---
-sidebar_position: 3
+sidebar_position: 4
 ---
 
 # CLI
@@ -73,6 +73,23 @@ export default function App() {
 ```
 
 ## Commands
+
+### `create`
+
+Create a new project with OnlyNative UI pre-configured. See [Quick Start](./quick-start) for a full walkthrough.
+
+```bash
+npx onlynative create
+npx onlynative create my-app
+```
+
+The CLI prompts for project name, display name, and package manager, then scaffolds a ready-to-run Expo project with `ThemeProvider` and example components.
+
+**Options:**
+
+| Flag | Description |
+|------|-------------|
+| `-y`, `--yes` | Skip prompts and use defaults |
 
 ### `init`
 

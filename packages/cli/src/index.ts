@@ -1,4 +1,5 @@
 import { Command } from 'commander'
+import { createCommand } from './commands/create'
 import { initCommand } from './commands/init'
 import { addCommand } from './commands/add'
 import { updateCommand } from './commands/update'
@@ -11,27 +12,30 @@ const program = new Command()
 
 program
   .name('onlynative')
-  .description(
-    'Add OnlyNative UI components to your React Native project',
-  )
+  .description('Add OnlyNative UI components to your React Native project')
   .version('0.1.0')
+
+program
+  .command('create')
+  .description('Create a new project with OnlyNative UI pre-configured')
+  .argument('[name]', 'Project name')
+  .option('-y, --yes', 'Skip prompts and use defaults', false)
+  .action(async (name: string | undefined, options) => {
+    try {
+      await createCommand(name, {
+        yes: options.yes,
+      })
+    } catch (error) {
+      handleError(error)
+    }
+  })
 
 program
   .command('init')
   .description('Initialize your project for OnlyNative UI')
-  .option(
-    '-y, --yes',
-    'Skip prompts and use defaults',
-    false,
-  )
-  .option(
-    '--components-alias <alias>',
-    'Components install path alias',
-  )
-  .option(
-    '--lib-alias <alias>',
-    'Utility files path alias',
-  )
+  .option('-y, --yes', 'Skip prompts and use defaults', false)
+  .option('--components-alias <alias>', 'Components install path alias')
+  .option('--lib-alias <alias>', 'Utility files path alias')
   .action(async (options) => {
     try {
       await initCommand(process.cwd(), {
@@ -69,16 +73,8 @@ program
   .command('update')
   .description('Update installed components to the latest version')
   .argument('[components...]', 'Component names to update')
-  .option(
-    '-a, --all',
-    'Update all installed components',
-    false,
-  )
-  .option(
-    '-d, --dry-run',
-    'Show diff without applying changes',
-    false,
-  )
+  .option('-a, --all', 'Update all installed components', false)
+  .option('-d, --dry-run', 'Show diff without applying changes', false)
   .action(async (components: string[], options) => {
     try {
       await updateCommand(components, process.cwd(), {
@@ -114,14 +110,8 @@ program
 
 program
   .command('upgrade')
-  .description(
-    'Upgrade @onlynative/core and install new peer dependencies',
-  )
-  .option(
-    '-y, --yes',
-    'Skip confirmation prompt',
-    false,
-  )
+  .description('Upgrade @onlynative/core and install new peer dependencies')
+  .option('-y, --yes', 'Skip confirmation prompt', false)
   .action(async (options) => {
     try {
       await upgradeCommand(process.cwd(), {

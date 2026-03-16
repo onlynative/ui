@@ -8,7 +8,24 @@
 
 ---
 
-## Installation
+## Quick Start (new project)
+
+```bash
+npx onlynative create my-app
+cd my-app
+npx expo start
+```
+
+The `create` command scaffolds a ready-to-run Expo project with `ThemeProvider`, example components (Button, Card), Expo Router, and all dependencies pre-configured.
+
+Interactive prompts: project name, display name (shown on home screen), package manager (npm/yarn/pnpm/bun), install dependencies.
+
+Options:
+- `-y, --yes` — Skip all prompts, use defaults (name: `my-app`, pm: `npm`, auto-install)
+
+Pass name directly: `npx onlynative create my-app`
+
+## Installation (existing project)
 
 ```bash
 pnpm add @onlynative/core @onlynative/utils @onlynative/components @expo/vector-icons react-native-safe-area-context
@@ -18,11 +35,24 @@ pnpm add @onlynative/core @onlynative/utils @onlynative/components @expo/vector-
 
 ## CLI (`onlynative`)
 
-Copy-paste workflow — copies component source files into your project. The theme system (`@onlynative/core`) stays as an npm dependency.
-
 ### Commands
 
+#### `onlynative create [name]`
+
+Create a new project with OnlyNative UI pre-configured. Fetches the quickstart template, applies your project name to `package.json` and `app.json`, and optionally installs dependencies.
+
+```bash
+npx onlynative create            # Interactive
+npx onlynative create my-app     # With name
+npx onlynative create my-app -y  # Non-interactive, accept defaults
+```
+
+Options:
+- `-y, --yes` — Skip prompts and use defaults
+
 #### `onlynative init`
+
+Copy-paste workflow — copies component source files into your project. The theme system (`@onlynative/core`) stays as an npm dependency.
 
 Initialize project. Detects project type (Expo/RN), package manager, and tsconfig path aliases.
 

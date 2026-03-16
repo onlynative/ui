@@ -108,13 +108,15 @@ function InstallSnippet() {
           <pre className={styles.codePre}>
             <code>
               <span className={styles.codeComment}>
-                # Initialize and add components with the CLI
+                # Create a new project in seconds
               </span>
               {'\n'}
-              <span className={styles.codePrompt}>$</span> npx onlynative init
+              <span className={styles.codePrompt}>$</span> npx onlynative create
+              my-app
               {'\n'}
-              <span className={styles.codePrompt}>$</span> npx onlynative add
-              button card
+              <span className={styles.codePrompt}>$</span> cd my-app
+              {'\n'}
+              <span className={styles.codePrompt}>$</span> npx expo start
             </code>
           </pre>
         </div>
@@ -226,11 +228,11 @@ function BottomCta() {
           directly.
         </p>
         <div className={styles.heroCtas}>
-          <Link className={styles.ctaPrimary} to="/installation">
-            Installation Guide
+          <Link className={styles.ctaPrimary} to="/quick-start">
+            Quick Start
           </Link>
-          <Link className={styles.ctaSecondary} to="/cli">
-            CLI Quickstart
+          <Link className={styles.ctaSecondary} to="/installation">
+            Installation Guide
           </Link>
         </div>
       </div>

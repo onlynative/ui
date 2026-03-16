@@ -12,7 +12,18 @@ OnlyNative UI (`@onlynative`) is a React Native component library with a pluggab
 
 ## Quick start
 
-Install:
+### New project
+
+```bash
+npx onlynative create my-app
+cd my-app
+npx expo start
+```
+
+The `create` command scaffolds a ready-to-run Expo project with `ThemeProvider` and example components pre-configured. It prompts for project name, display name, and package manager.
+
+### Existing project
+
 ```bash
 pnpm add @onlynative/core @onlynative/utils @onlynative/components @expo/vector-icons react-native-safe-area-context
 ```
@@ -54,19 +65,21 @@ import { Button, Card } from '@onlynative/components'
 - Theming: https://onlynative.github.io/ui/theming
 - Components: https://onlynative.github.io/ui/components/button
 
-## CLI (copy-paste workflow)
-
-Alternative to npm packages — copies component source into your project so you own the code.
+## CLI
 
 ```bash
-npx onlynative init          # Interactive setup
-npx onlynative init -y       # Non-interactive (CI/automation)
-npx onlynative add button card
-npx onlynative upgrade         # Upgrade @onlynative/core + install new peer deps
-npx onlynative upgrade -y      # Non-interactive
-npx onlynative list
-npx onlynative doctor
+npx onlynative create         # Scaffold a new project (interactive)
+npx onlynative create my-app  # Scaffold with name
+npx onlynative create -y      # Non-interactive (defaults)
+npx onlynative init           # Initialize existing project for CLI workflow
+npx onlynative add button card # Copy component source into your project
+npx onlynative update         # Update installed components
+npx onlynative upgrade        # Upgrade @onlynative/core + install new peer deps
+npx onlynative list           # List available components
+npx onlynative doctor         # Check project health
 ```
+
+The `create` command is the fastest way to start a new project. The `init` + `add` workflow is for adding components as source files to an existing project (copy-paste workflow, similar to shadcn/ui).
 
 ## Full API reference
 

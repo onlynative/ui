@@ -33,7 +33,19 @@ Scan the QR code with the [Expo Go](https://expo.dev/go) app to preview componen
 - State-layer press/hover/focus feedback
 - TypeScript-first with strict mode
 
-## Installation
+## Quick Start
+
+The fastest way to start a new project:
+
+```bash
+npx onlynative create my-app
+cd my-app
+npx expo start
+```
+
+The `create` command scaffolds a ready-to-run Expo project with `ThemeProvider` and example components pre-configured. It prompts for project name, display name, and package manager.
+
+### Add to an existing project
 
 ```bash
 # Install the core theme package
@@ -54,8 +66,6 @@ npx expo install react react-native react-native-safe-area-context
 ```bash
 npx expo install @expo/vector-icons
 ```
-
-## Quick Start
 
 Wrap your app with `ThemeProvider` and start using components:
 
@@ -80,16 +90,15 @@ import { Button } from '@onlynative/components/button'
 import { Card } from '@onlynative/components/card'
 ```
 
-## CLI (copy-paste workflow)
-
-Prefer to own the source code? Use the CLI to scaffold components directly into your project
+## CLI
 
 ```bash
-npx onlynative init          # Set up config + install @onlynative/core
+npx onlynative create         # Scaffold a new project (interactive)
+npx onlynative init           # Initialize existing project for CLI workflow
 npx onlynative add button card text-field
 ```
 
-Component files are copied into your project with imports rewritten to match your aliases. See the [CLI README](packages/cli) for the full command reference.
+The `init` + `add` workflow copies component source files directly into your project with imports rewritten to match your aliases — full ownership of the code. See the [CLI README](packages/cli) for the full command reference.
 
 ## Packages
 
@@ -111,6 +120,7 @@ Component files are copied into your project with imports rewritten to match you
 │   ├── core/              # Theme + provider primitives
 │   ├── components/        # Reusable UI component library
 │   └── cli/               # CLI for scaffolding components into projects
+├── template/              # Quick start template (used by `onlynative create`)
 ├── turbo.json
 └── pnpm-workspace.yaml
 ```

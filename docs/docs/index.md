@@ -19,6 +19,20 @@ Design-system agnostic component library for React Native. Ships with Material D
 
 ## Quick Start
 
+### New project
+
+Scaffold a new Expo project with OnlyNative UI pre-configured:
+
+```bash
+npx onlynative create
+```
+
+See the [Quick Start](./quick-start) guide for the full walkthrough.
+
+### Existing project
+
+Add OnlyNative UI to an existing React Native or Expo project:
+
 <PackageManagerTabs cmd="npm install @onlynative/core @onlynative/utils @onlynative/components" />
 
 Wrap your app with `ThemeProvider`:
