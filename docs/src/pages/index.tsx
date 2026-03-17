@@ -67,27 +67,41 @@ function Hero() {
           </div>
         </div>
         <div className={styles.heroVisual}>
-          <div className={styles.heroImagePlaceholder}>
-            <div className={styles.phoneMockup}>
-              <div className={styles.phoneMockupScreen}>
-                <div className={styles.mockAppBar}>
-                  <div className={styles.mockAppBarTitle} />
-                </div>
-                <div className={styles.mockContent}>
-                  <div className={styles.mockCard}>
-                    <div className={styles.mockCardMedia} />
-                    <div className={styles.mockCardBody}>
-                      <div className={styles.mockCardTitle} />
-                      <div className={styles.mockCardSubtitle} />
-                    </div>
-                  </div>
-                  <div className={styles.mockButton} />
-                </div>
-                <div className={styles.mockFab}>
-                  <div className={styles.mockFabIcon} />
-                </div>
-              </div>
+          <div className={styles.heroTerminal}>
+            <div className={styles.codeHeader}>
+              <span className={styles.codeDot} data-color="red" />
+              <span className={styles.codeDot} data-color="yellow" />
+              <span className={styles.codeDot} data-color="green" />
+              <span className={styles.codeFilename}>Terminal</span>
             </div>
+            <pre className={styles.codePre}>
+              <code>
+                <span className={styles.codeComment}>
+                  # Initialize OnlyNative in your project
+                </span>
+                {'\n'}
+                <span className={styles.codePrompt}>$</span> npx onlynative init
+                {'\n\n'}
+                <span className={styles.codeComment}>◆ Components alias</span>
+                {'\n'}
+                {'  @/components'}
+                {'\n\n'}
+                <span className={styles.codeComment}>◆ Lib alias</span>
+                {'\n'}
+                {'  @/lib'}
+                {'\n\n'}
+                <span className={styles.codeSuccess}>
+                  ✔ Configuration saved
+                </span>
+                {'\n\n'}
+                <span className={styles.codePrompt}>$</span> npx onlynative add
+                button card
+                {'\n'}
+                <span className={styles.codeSuccess}>✔ Added button</span>
+                {'\n'}
+                <span className={styles.codeSuccess}>✔ Added card</span>
+              </code>
+            </pre>
           </div>
         </div>
       </div>
@@ -95,30 +109,45 @@ function Hero() {
   )
 }
 
-function InstallSnippet() {
+const steps = [
+  {
+    number: '01',
+    title: 'Create',
+    description: 'Scaffold a new Expo project with everything pre-configured.',
+    command: 'npx onlynative create my-app',
+  },
+  {
+    number: '02',
+    title: 'Add',
+    description:
+      'Pick the components you need. They get copied into your project.',
+    command: 'npx onlynative add button card',
+  },
+  {
+    number: '03',
+    title: 'Build',
+    description: 'Own the code. Customize freely. Ship with confidence.',
+    command: 'npx expo start',
+  },
+]
+
+function HowItWorks() {
   return (
-    <section className={styles.install}>
-      <div className={styles.installInner}>
-        <div className={styles.installCode}>
-          <div className={styles.codeHeader}>
-            <span className={styles.codeDot} data-color="red" />
-            <span className={styles.codeDot} data-color="yellow" />
-            <span className={styles.codeDot} data-color="green" />
-          </div>
-          <pre className={styles.codePre}>
-            <code>
-              <span className={styles.codeComment}>
-                # Create a new project in seconds
-              </span>
-              {'\n'}
-              <span className={styles.codePrompt}>$</span> npx onlynative create
-              my-app
-              {'\n'}
-              <span className={styles.codePrompt}>$</span> cd my-app
-              {'\n'}
-              <span className={styles.codePrompt}>$</span> npx expo start
-            </code>
-          </pre>
+    <section className={styles.howItWorks}>
+      <div className={styles.howItWorksInner}>
+        <h2 className={styles.sectionTitle}>Get started in 3 steps</h2>
+        <p className={styles.sectionSubtitle}>
+          From zero to a running app in under a minute.
+        </p>
+        <div className={styles.stepsGrid}>
+          {steps.map((step) => (
+            <div key={step.number} className={styles.stepCard}>
+              <span className={styles.stepNumber}>{step.number}</span>
+              <h3 className={styles.stepTitle}>{step.title}</h3>
+              <p className={styles.stepDescription}>{step.description}</p>
+              <code className={styles.stepCommand}>{step.command}</code>
+            </div>
+          ))}
         </div>
       </div>
     </section>
@@ -247,7 +276,7 @@ export default function Home(): React.ReactNode {
     <Layout title={siteConfig.title} description={siteConfig.tagline}>
       <Hero />
       <main>
-        <InstallSnippet />
+        <HowItWorks />
         <Features />
 
         <CodePreview />

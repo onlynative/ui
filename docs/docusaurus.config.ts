@@ -86,7 +86,7 @@ const config: Config = {
     },
     footer: {
       style: 'dark',
-      copyright: `Copyright © ${new Date().getFullYear()} OnlyNative.`,
+      copyright: `Copyright © ${new Date().getFullYear()} OnlyNative`,
     },
     prism: {
       additionalLanguages: ['bash'],
