@@ -99,6 +99,13 @@ const components: ComponentEntry[] = [
     icon: 'keyboard-outline',
   },
   {
+    label: 'Avatar',
+    route: '/avatar',
+    description: 'Circular user representations with image, icon, or initials',
+    colorKey: 'primaryContainer',
+    icon: 'account-circle-outline',
+  },
+  {
     label: 'RTL',
     route: '/rtl',
     description:

@@ -57,3 +57,6 @@ export type {
 
 export { KeyboardAvoidingWrapper } from './keyboard-avoiding-wrapper'
 export type { KeyboardAvoidingWrapperProps } from './keyboard-avoiding-wrapper'
+
+export { Avatar } from './avatar'
+export type { AvatarProps, AvatarSize } from './avatar'

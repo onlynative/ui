@@ -93,6 +93,12 @@
       "react-native": "./src/keyboard-avoiding-wrapper/index.ts",
       "browser": "./src/keyboard-avoiding-wrapper/index.ts",
       "default": "./dist/keyboard-avoiding-wrapper/index.js"
+    },
+    "./avatar": {
+      "types": "./dist/avatar/index.d.ts",
+      "react-native": "./src/avatar/index.ts",
+      "browser": "./src/avatar/index.ts",
+      "default": "./dist/avatar/index.js"
     }
   },
   "typesVersions": {
@@ -135,6 +141,9 @@
       ],
       "keyboard-avoiding-wrapper": [
         "dist/keyboard-avoiding-wrapper/index.d.ts"
+      ],
+      "avatar": [
+        "dist/avatar/index.d.ts"
       ]
     }
   },
