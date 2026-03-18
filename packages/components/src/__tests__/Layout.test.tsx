@@ -24,9 +24,7 @@ describe('Box', () => {
         <Text>Content</Text>
       </Box>,
     )
-    const flatStyle = StyleSheet.flatten(
-      screen.getByTestId('box').props.style,
-    )
+    const flatStyle = StyleSheet.flatten(screen.getByTestId('box').props.style)
     expect(flatStyle.padding).toBe(16)
   })
 
@@ -36,9 +34,7 @@ describe('Box', () => {
         <Text>Content</Text>
       </Box>,
     )
-    const flatStyle = StyleSheet.flatten(
-      screen.getByTestId('box').props.style,
-    )
+    const flatStyle = StyleSheet.flatten(screen.getByTestId('box').props.style)
     expect(flatStyle.padding).toBe(10)
   })
 
@@ -48,9 +44,7 @@ describe('Box', () => {
         <Text>Content</Text>
       </Box>,
     )
-    const flatStyle = StyleSheet.flatten(
-      screen.getByTestId('box').props.style,
-    )
+    const flatStyle = StyleSheet.flatten(screen.getByTestId('box').props.style)
     expect(flatStyle.paddingStart).toBe(8)
     expect(flatStyle.paddingEnd).toBe(8)
   })
@@ -61,9 +55,7 @@ describe('Box', () => {
         <Text>Content</Text>
       </Box>,
     )
-    const flatStyle = StyleSheet.flatten(
-      screen.getByTestId('box').props.style,
-    )
+    const flatStyle = StyleSheet.flatten(screen.getByTestId('box').props.style)
     expect(flatStyle.paddingTop).toBe(24)
     expect(flatStyle.paddingBottom).toBe(24)
   })
@@ -74,9 +66,7 @@ describe('Box', () => {
         <Text>Content</Text>
       </Box>,
     )
-    const flatStyle = StyleSheet.flatten(
-      screen.getByTestId('box').props.style,
-    )
+    const flatStyle = StyleSheet.flatten(screen.getByTestId('box').props.style)
     expect(flatStyle.paddingTop).toBe(4)
     expect(flatStyle.paddingBottom).toBe(8)
     expect(flatStyle.paddingStart).toBe(16)
@@ -89,9 +79,7 @@ describe('Box', () => {
         <Text>Content</Text>
       </Box>,
     )
-    const flatStyle = StyleSheet.flatten(
-      screen.getByTestId('box').props.style,
-    )
+    const flatStyle = StyleSheet.flatten(screen.getByTestId('box').props.style)
     expect(flatStyle.margin).toBe(16)
   })
 
@@ -101,9 +89,7 @@ describe('Box', () => {
         <Text>Content</Text>
       </Box>,
     )
-    const flatStyle = StyleSheet.flatten(
-      screen.getByTestId('box').props.style,
-    )
+    const flatStyle = StyleSheet.flatten(screen.getByTestId('box').props.style)
     expect(flatStyle.marginStart).toBe(8)
     expect(flatStyle.marginEnd).toBe(8)
   })
@@ -114,9 +100,7 @@ describe('Box', () => {
         <Text>Content</Text>
       </Box>,
     )
-    const flatStyle = StyleSheet.flatten(
-      screen.getByTestId('box').props.style,
-    )
+    const flatStyle = StyleSheet.flatten(screen.getByTestId('box').props.style)
     expect(flatStyle.marginTop).toBe(24)
     expect(flatStyle.marginBottom).toBe(24)
   })
@@ -127,9 +111,7 @@ describe('Box', () => {
         <Text>Content</Text>
       </Box>,
     )
-    const flatStyle = StyleSheet.flatten(
-      screen.getByTestId('box').props.style,
-    )
+    const flatStyle = StyleSheet.flatten(screen.getByTestId('box').props.style)
     expect(flatStyle.marginTop).toBe(4)
     expect(flatStyle.marginBottom).toBe(8)
     expect(flatStyle.marginStart).toBe(16)
@@ -143,9 +125,7 @@ describe('Box', () => {
         <Text>B</Text>
       </Box>,
     )
-    const flatStyle = StyleSheet.flatten(
-      screen.getByTestId('box').props.style,
-    )
+    const flatStyle = StyleSheet.flatten(screen.getByTestId('box').props.style)
     expect(flatStyle.gap).toBe(16)
   })
 
@@ -155,22 +135,24 @@ describe('Box', () => {
         <Text>A</Text>
       </Box>,
     )
-    const flatStyle = StyleSheet.flatten(
-      screen.getByTestId('box').props.style,
-    )
+    const flatStyle = StyleSheet.flatten(screen.getByTestId('box').props.style)
     expect(flatStyle.rowGap).toBe(8)
     expect(flatStyle.columnGap).toBe(24)
   })
 
   it('applies flex, align, justify, and bg', () => {
     renderWithTheme(
-      <Box testID="box" flex={1} align="center" justify="space-between" bg="#FF0000">
+      <Box
+        testID="box"
+        flex={1}
+        align="center"
+        justify="space-between"
+        bg="#FF0000"
+      >
         <Text>A</Text>
       </Box>,
     )
-    const flatStyle = StyleSheet.flatten(
-      screen.getByTestId('box').props.style,
-    )
+    const flatStyle = StyleSheet.flatten(screen.getByTestId('box').props.style)
     expect(flatStyle.flex).toBe(1)
     expect(flatStyle.alignItems).toBe('center')
     expect(flatStyle.justifyContent).toBe('space-between')
@@ -179,13 +161,11 @@ describe('Box', () => {
 
   it('merges the style prop with layout props', () => {
     renderWithTheme(
-      <Box testID="box" p="md" style={{ borderWidth: 1 }}>
+      <Box testID="box" p="md" style={styles.border}>
         <Text>Content</Text>
       </Box>,
     )
-    const flatStyle = StyleSheet.flatten(
-      screen.getByTestId('box').props.style,
-    )
+    const flatStyle = StyleSheet.flatten(screen.getByTestId('box').props.style)
     expect(flatStyle.padding).toBe(16)
     expect(flatStyle.borderWidth).toBe(1)
   })
@@ -198,9 +178,7 @@ describe('Row', () => {
         <Text>A</Text>
       </Row>,
     )
-    const flatStyle = StyleSheet.flatten(
-      screen.getByTestId('row').props.style,
-    )
+    const flatStyle = StyleSheet.flatten(screen.getByTestId('row').props.style)
     expect(flatStyle.flexDirection).toBe('row')
   })
 
@@ -210,9 +188,7 @@ describe('Row', () => {
         <Text>A</Text>
       </Row>,
     )
-    const flatStyle = StyleSheet.flatten(
-      screen.getByTestId('row').props.style,
-    )
+    const flatStyle = StyleSheet.flatten(screen.getByTestId('row').props.style)
     expect(flatStyle.flexDirection).toBe('row-reverse')
   })
 
@@ -222,9 +198,7 @@ describe('Row', () => {
         <Text>A</Text>
       </Row>,
     )
-    const flatStyle = StyleSheet.flatten(
-      screen.getByTestId('row').props.style,
-    )
+    const flatStyle = StyleSheet.flatten(screen.getByTestId('row').props.style)
     expect(flatStyle.flexWrap).toBe('wrap')
   })
 
@@ -234,9 +208,7 @@ describe('Row', () => {
         <Text>A</Text>
       </Row>,
     )
-    const flatStyle = StyleSheet.flatten(
-      screen.getByTestId('row').props.style,
-    )
+    const flatStyle = StyleSheet.flatten(screen.getByTestId('row').props.style)
     expect(flatStyle.flexWrap).toBeUndefined()
   })
 
@@ -246,9 +218,7 @@ describe('Row', () => {
         <Text>A</Text>
       </Row>,
     )
-    const flatStyle = StyleSheet.flatten(
-      screen.getByTestId('row').props.style,
-    )
+    const flatStyle = StyleSheet.flatten(screen.getByTestId('row').props.style)
     expect(flatStyle.padding).toBe(16)
     expect(flatStyle.gap).toBe(8)
   })
@@ -261,9 +231,7 @@ describe('Column', () => {
         <Text>A</Text>
       </Column>,
     )
-    const flatStyle = StyleSheet.flatten(
-      screen.getByTestId('col').props.style,
-    )
+    const flatStyle = StyleSheet.flatten(screen.getByTestId('col').props.style)
     expect(flatStyle.flexDirection).toBe('column')
   })
 
@@ -273,9 +241,7 @@ describe('Column', () => {
         <Text>A</Text>
       </Column>,
     )
-    const flatStyle = StyleSheet.flatten(
-      screen.getByTestId('col').props.style,
-    )
+    const flatStyle = StyleSheet.flatten(screen.getByTestId('col').props.style)
     expect(flatStyle.flexDirection).toBe('column-reverse')
   })
 
@@ -285,9 +251,7 @@ describe('Column', () => {
         <Text>A</Text>
       </Column>,
     )
-    const flatStyle = StyleSheet.flatten(
-      screen.getByTestId('col').props.style,
-    )
+    const flatStyle = StyleSheet.flatten(screen.getByTestId('col').props.style)
     expect(flatStyle.padding).toBe(24)
     expect(flatStyle.gap).toBe(4)
   })
@@ -323,6 +287,92 @@ describe('Grid', () => {
     const cellStyle = StyleSheet.flatten(cells[0].props.style)
     // 100 / 3 ≈ 33.333...%
     expect(cellStyle.flexBasis).toMatch(/^33\.3/)
+  })
+
+  it('uses paddingStart/paddingEnd (not paddingLeft/paddingRight) for RTL-safe cell gaps', () => {
+    const { toJSON } = renderWithTheme(
+      <Grid columns={2} gap="md">
+        <Text>A</Text>
+        <Text>B</Text>
+      </Grid>,
+    )
+    const root = toJSON()
+    const cells = root.children.filter(
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      (child: any) => child.type === 'View',
+    )
+    const cellStyle = StyleSheet.flatten(cells[0].props.style)
+    expect(cellStyle.paddingStart).toBeDefined()
+    expect(cellStyle.paddingEnd).toBeDefined()
+    expect(cellStyle.paddingLeft).toBeUndefined()
+    expect(cellStyle.paddingRight).toBeUndefined()
+  })
+
+  it('uses marginStart/marginEnd (not marginLeft/marginRight) for RTL-safe row offset', () => {
+    const { toJSON } = renderWithTheme(
+      <Grid columns={2} gap="md">
+        <Text>A</Text>
+        <Text>B</Text>
+      </Grid>,
+    )
+    const root = toJSON()
+    const rowStyle = StyleSheet.flatten(root.props.style)
+    expect(rowStyle.marginStart).toBeDefined()
+    expect(rowStyle.marginEnd).toBeDefined()
+    expect(rowStyle.marginLeft).toBeUndefined()
+    expect(rowStyle.marginRight).toBeUndefined()
+  })
+
+  it('cell paddingStart equals half of the resolved column gap', () => {
+    const { toJSON } = renderWithTheme(
+      <Grid columns={2} gap="md">
+        <Text>A</Text>
+        <Text>B</Text>
+      </Grid>,
+    )
+    const root = toJSON()
+    const cells = root.children.filter(
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      (child: any) => child.type === 'View',
+    )
+    const cellStyle = StyleSheet.flatten(cells[0].props.style)
+    // "md" spacing token = 16, half = 8
+    expect(cellStyle.paddingStart).toBe(8)
+    expect(cellStyle.paddingEnd).toBe(8)
+  })
+
+  it('row marginStart is negative half of the resolved column gap', () => {
+    const { toJSON } = renderWithTheme(
+      <Grid columns={2} gap="md">
+        <Text>A</Text>
+        <Text>B</Text>
+      </Grid>,
+    )
+    const root = toJSON()
+    const rowStyle = StyleSheet.flatten(root.props.style)
+    // "md" spacing token = 16, half = 8, negative = -8
+    expect(rowStyle.marginStart).toBe(-8)
+    expect(rowStyle.marginEnd).toBe(-8)
+  })
+
+  it('applies no padding or margin offset when gap is not set', () => {
+    const { toJSON } = renderWithTheme(
+      <Grid columns={2}>
+        <Text>A</Text>
+        <Text>B</Text>
+      </Grid>,
+    )
+    const root = toJSON()
+    const cells = root.children.filter(
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      (child: any) => child.type === 'View',
+    )
+    const cellStyle = StyleSheet.flatten(cells[0].props.style)
+    const rowStyle = StyleSheet.flatten(root.props.style)
+    expect(cellStyle.paddingStart).toBe(0)
+    expect(cellStyle.paddingEnd).toBe(0)
+    expect(rowStyle.marginStart).toBe(-0)
+    expect(rowStyle.marginEnd).toBe(-0)
   })
 
   it('skips null children', () => {
@@ -376,7 +426,7 @@ describe('Layout', () => {
 
   it('merges the style prop', () => {
     const { toJSON } = renderWithTheme(
-      <Layout style={{ borderWidth: 1 }}>
+      <Layout style={styles.border}>
         <Text>Content</Text>
       </Layout>,
     )
@@ -387,7 +437,7 @@ describe('Layout', () => {
 
   it('strips backgroundColor from the style prop', () => {
     const { toJSON } = renderWithTheme(
-      <Layout style={{ backgroundColor: '#FF0000', borderWidth: 1 }}>
+      <Layout style={styles.borderWithBackground}>
         <Text>Content</Text>
       </Layout>,
     )
@@ -397,4 +447,9 @@ describe('Layout', () => {
     expect(flatStyle.backgroundColor).not.toBe('#FF0000')
     expect(flatStyle.borderWidth).toBe(1)
   })
+})
+
+const styles = StyleSheet.create({
+  border: { borderWidth: 1 },
+  borderWithBackground: { backgroundColor: '#FF0000', borderWidth: 1 },
 })

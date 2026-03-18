@@ -25,16 +25,16 @@ export function Grid({
     () => ({
       flexBasis: `${100 / columns}%` as unknown as number,
       flexShrink: 1,
-      paddingLeft: halfGap,
-      paddingRight: halfGap,
+      paddingStart: halfGap,
+      paddingEnd: halfGap,
     }),
     [columns, halfGap],
   )
 
   const rowStyle = useMemo<ViewStyle>(
     () => ({
-      marginLeft: -halfGap,
-      marginRight: -halfGap,
+      marginStart: -halfGap,
+      marginEnd: -halfGap,
     }),
     [halfGap],
   )

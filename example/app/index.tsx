@@ -98,6 +98,14 @@ const components: ComponentEntry[] = [
     colorKey: 'secondaryFixedDim',
     icon: 'keyboard-outline',
   },
+  {
+    label: 'RTL',
+    route: '/rtl',
+    description:
+      'Right-to-left layout showcase — toggle direction from the AppBar',
+    colorKey: 'tertiaryContainer',
+    icon: 'format-pilcrow-arrow-left',
+  },
 ]
 
 export default function HomeScreen() {
@@ -158,9 +166,7 @@ export default function HomeScreen() {
                 />
               </Box>
               <Column px="md" py="sm" gap="xs">
-                <Typography variant="titleMedium">
-                  {item.label}
-                </Typography>
+                <Typography variant="titleMedium">{item.label}</Typography>
                 <Typography
                   variant="bodySmall"
                   style={{ color: theme.colors.onSurfaceVariant }}
