@@ -20,10 +20,12 @@ program
   .description('Create a new project with OnlyNative UI pre-configured')
   .argument('[name]', 'Project name')
   .option('-y, --yes', 'Skip prompts and use defaults', false)
+  .option('-t, --template <name>', 'Template to use (blank, with-router)')
   .action(async (name: string | undefined, options) => {
     try {
       await createCommand(name, {
         yes: options.yes,
+        template: options.template,
       })
     } catch (error) {
       handleError(error)

@@ -2,7 +2,7 @@
   "name": "onlynative-quickstart",
   "version": "1.0.0",
   "private": true,
-  "main": "expo-router/entry",
+  "main": "index.js",
   "scripts": {
     "start": "expo start",
     "android": "expo start --android",
@@ -13,17 +13,13 @@
     "@expo/vector-icons": "^15.0.3",
     "@onlynative/components": "latest",
     "@onlynative/core": "latest",
-    "expo": "~54.0.0",
-    "expo-router": "~6.0.0",
-    "expo-status-bar": "~3.0.0",
+    "expo": "~54.0.33",
+    "expo-status-bar": "~3.0.9",
     "react": "19.1.0",
-    "react-native": "0.81.5",
-    "react-native-safe-area-context": "^5.6.2",
-    "react-native-screens": "~4.11.0",
-    "react-native-web": "^0.21.0"
+    "react-native": "0.81.5"
   },
   "devDependencies": {
-    "@types/react": "^19.1.17",
-    "typescript": "^5.4.0"
+    "@types/react": "~19.1.0",
+    "typescript": "~5.9.2"
   }
 }

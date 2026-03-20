@@ -1,13 +1,13 @@
 # OnlyNative Quickstart
 
-A ready-to-use Expo project with [OnlyNative UI](https://github.com/onlynative/ui) pre-configured.
+A ready-to-use Expo project with [OnlyNative UI](https://github.com/onlynative/ui) and Expo Router pre-configured.
 
 ## Getting Started
 
 The recommended way to create this project is via the CLI:
 
 ```bash
-npx onlynative create
+npx onlynative create --template with-router
 ```
 
 Or if you cloned this template directly:

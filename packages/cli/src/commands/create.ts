@@ -9,19 +9,42 @@ import type { PackageManager } from '../lib/types'
 
 export interface CreateOptions {
   yes?: boolean
+  template?: string
 }
 
-const TEMPLATE_BASE_URL = `${DEFAULT_CONFIG.registryUrl}/${DEFAULT_CONFIG.registryVersion}/template`
+type TemplateName = 'blank' | 'with-router'
 
-const TEMPLATE_TEXT_FILES = [
-  'package.json',
-  'app.json',
-  'tsconfig.json',
-  'babel.config.js',
-  '.gitignore',
-  'app/_layout.tsx',
-  'app/index.tsx',
-]
+const TEMPLATES_BASE_URL = `${DEFAULT_CONFIG.registryUrl}/${DEFAULT_CONFIG.registryVersion}/templates`
+
+const TEMPLATE_CONFIGS: Record<
+  TemplateName,
+  { textFiles: string[]; dirs: string[] }
+> = {
+  blank: {
+    textFiles: [
+      'package.json',
+      'app.json',
+      'tsconfig.json',
+      'babel.config.js',
+      '.gitignore',
+      'index.js',
+      'App.tsx',
+    ],
+    dirs: ['assets'],
+  },
+  'with-router': {
+    textFiles: [
+      'package.json',
+      'app.json',
+      'tsconfig.json',
+      'babel.config.js',
+      '.gitignore',
+      'app/_layout.tsx',
+      'app/index.tsx',
+    ],
+    dirs: ['assets', 'app'],
+  },
+}
 
 const TEMPLATE_BINARY_FILES = [
   'assets/icon.png',
@@ -29,6 +52,10 @@ const TEMPLATE_BINARY_FILES = [
   'assets/adaptive-icon.png',
   'assets/favicon.png',
 ]
+
+function isValidTemplate(value: string): value is TemplateName {
+  return value in TEMPLATE_CONFIGS
+}
 
 function slugify(input: string): string {
   return input
@@ -76,6 +103,41 @@ export async function createCommand(
   options: CreateOptions = {},
 ): Promise<void> {
   logger.break()
+
+  // --- Template ---
+  let templateName: TemplateName
+
+  if (options.template) {
+    if (!isValidTemplate(options.template)) {
+      logger.error(
+        `Unknown template "${options.template}". Available: blank, with-router`,
+      )
+      process.exit(1)
+    }
+    templateName = options.template
+  } else if (options.yes) {
+    templateName = 'blank'
+  } else {
+    const { value } = await prompts({
+      type: 'select',
+      name: 'value',
+      message: 'Template:',
+      choices: [
+        { title: 'Blank', description: 'Minimal setup', value: 'blank' },
+        {
+          title: 'With Router',
+          description: 'Includes Expo Router',
+          value: 'with-router',
+        },
+      ],
+      initial: 0,
+    })
+    if (value === undefined) {
+      logger.info('Create cancelled.')
+      return
+    }
+    templateName = value
+  }
 
   // --- Project name ---
   let projectName: string
@@ -167,16 +229,19 @@ export async function createCommand(
   }
 
   // --- Fetch and write template ---
+  const templateConfig = TEMPLATE_CONFIGS[templateName]
+  const templateBaseUrl = `${TEMPLATES_BASE_URL}/${templateName}`
   const spinner = createSpinner('Creating project...')
   spinner.start()
 
   try {
-    await fs.ensureDir(path.join(targetDir, 'app'))
-    await fs.ensureDir(path.join(targetDir, 'assets'))
+    for (const dir of templateConfig.dirs) {
+      await fs.ensureDir(path.join(targetDir, dir))
+    }
 
     // Text files — fetch, apply substitutions, write
-    for (const file of TEMPLATE_TEXT_FILES) {
-      let content = await fetchText(`${TEMPLATE_BASE_URL}/${file}`)
+    for (const file of templateConfig.textFiles) {
+      let content = await fetchText(`${templateBaseUrl}/${file}`)
 
       if (file === 'package.json') {
         const pkg = JSON.parse(content)
@@ -188,7 +253,9 @@ export async function createCommand(
         const appJson = JSON.parse(content)
         appJson.expo.name = displayName
         appJson.expo.slug = projectName
-        appJson.expo.scheme = projectName
+        if (appJson.expo.scheme) {
+          appJson.expo.scheme = projectName
+        }
         content = JSON.stringify(appJson, null, 2) + '\n'
       }
 
@@ -197,7 +264,7 @@ export async function createCommand(
 
     // Binary files (assets) — optional, skip on failure
     for (const file of TEMPLATE_BINARY_FILES) {
-      const buffer = await fetchBinary(`${TEMPLATE_BASE_URL}/${file}`)
+      const buffer = await fetchBinary(`${templateBaseUrl}/${file}`)
       if (buffer) {
         await fs.outputFile(path.join(targetDir, file), buffer)
       }
