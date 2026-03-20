@@ -1,6 +1,6 @@
 {
   "name": "@onlynative/core",
-  "version": "0.1.1-alpha.3",
+  "version": "0.0.0-alpha.0",
   "description": "Material Design 3 theme system for React Native — colors, typography, shape, spacing, and motion tokens.",
   "private": false,
   "sideEffects": false,
