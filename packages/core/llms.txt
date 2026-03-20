@@ -1,0 +1,213 @@
+# @onlynative/core — Theme System for React Native
+
+> Version: 0.1.1-alpha.3
+> Peer deps: react >=18, react-native >=0.72
+> Optional: @material/material-color-utilities >=0.4.0 (for createMaterialTheme)
+
+## Quick Start
+
+```tsx
+import { ThemeProvider } from '@onlynative/core'
+
+export default function App() {
+  return (
+    <ThemeProvider>
+      {/* Your app */}
+    </ThemeProvider>
+  )
+}
+```
+
+## API
+
+### ThemeProvider
+
+Wrap your app root to supply the theme to all components. Works with any design system — Material Design 3, Apple HIG, or custom themes. Defaults to the MD3 light theme when no theme is provided.
+
+```tsx
+import { ThemeProvider, darkTheme } from '@onlynative/core'
+
+// Light theme (default)
+<ThemeProvider>{children}</ThemeProvider>
+
+// Dark theme
+<ThemeProvider theme={darkTheme}>{children}</ThemeProvider>
+
+// Custom theme
+import { lightTheme } from '@onlynative/core'
+import type { Theme } from '@onlynative/core'
+
+const custom: Theme = {
+  ...lightTheme,
+  colors: { ...lightTheme.colors, primary: '#006A6A', onPrimary: '#FFFFFF' },
+}
+<ThemeProvider theme={custom}>{children}</ThemeProvider>
+```
+
+Props:
+- `theme?: BaseTheme` — Theme object. Default: `lightTheme` (MD3)
+- `children: ReactNode`
+
+### useTheme()
+
+Returns the current theme from the nearest `ThemeProvider`.
+
+Without a type parameter, returns the Material Design 3 `Theme`. Pass a custom theme type for typed access to your design system's tokens.
+
+```tsx
+import { useTheme } from '@onlynative/core'
+
+// Material Design 3 (default)
+const theme = useTheme()
+// theme.colors.primary, theme.typography.bodyMedium, theme.spacing.md, etc.
+
+// Custom design system
+const theme = useTheme<MyTheme>()
+// theme.colors.brand, theme.typography.heading, etc.
+```
+
+### defineTheme(theme)
+
+Identity function that validates a custom theme object against `BaseTheme`. Provides type-checking and autocompletion.
+
+```tsx
+import { defineTheme } from '@onlynative/core'
+import type { BaseTheme, TextStyle } from '@onlynative/core'
+
+interface MyColors { [key: string]: string; brand: string; background: string; text: string }
+interface MyTypography { [key: string]: TextStyle; heading: TextStyle; body: TextStyle }
+interface MyTheme extends BaseTheme { colors: MyColors; typography: MyTypography }
+
+const myTheme = defineTheme<MyTheme>({
+  colors: { brand: '#FF6B00', background: '#FFFFFF', text: '#1A1A1A' },
+  typography: {
+    heading: { fontFamily: 'Inter', fontSize: 24, fontWeight: '700', lineHeight: 32, letterSpacing: 0 },
+    body: { fontFamily: 'Inter', fontSize: 16, fontWeight: '400', lineHeight: 24, letterSpacing: 0.5 },
+  },
+  shape: { roundness: 1, cornerNone: 0, cornerExtraSmall: 4, cornerSmall: 8, cornerMedium: 12, cornerLarge: 16, cornerExtraLarge: 28, cornerFull: 9999 },
+  spacing: { xs: 4, sm: 8, md: 16, lg: 24, xl: 32 },
+  stateLayer: { pressedOpacity: 0.12, focusedOpacity: 0.12, hoveredOpacity: 0.08, disabledOpacity: 0.38 },
+  elevation: { ... },
+  motion: { ... },
+})
+```
+
+### createMaterialTheme(seedColor, options?)
+
+Generates a complete MD3 light and dark theme from a single seed color. Uses Google's HCT color space via `@material/material-color-utilities` for spec-compliant palette generation.
+
+**Options:**
+- `fontFamily?: string` — Custom font family applied to all 15 typography styles. When omitted, platform defaults are used (Roboto on Android, System on iOS).
+- `roundness?: number` — Global corner-radius multiplier. `0` = sharp corners, `1` = default MD3 (default), `2` = double rounding. Does not affect `cornerNone` or `cornerFull`.
+
+**Separate entry point** — keeps the ~60 kB dependency out of the main bundle:
+
+```tsx
+import { createMaterialTheme } from '@onlynative/core/create-theme'
+import { ThemeProvider } from '@onlynative/core'
+
+const { lightTheme, darkTheme } = createMaterialTheme('#006A6A')
+
+// Custom font
+const { lightTheme, darkTheme } = createMaterialTheme('#006A6A', { fontFamily: 'Inter' })
+
+// Sharp corners
+const { lightTheme, darkTheme } = createMaterialTheme('#006A6A', { roundness: 0 })
+
+// Use in provider
+<ThemeProvider theme={lightTheme}>{children}</ThemeProvider>
+
+// Or with dark mode
+<ThemeProvider theme={isDark ? darkTheme : lightTheme}>{children}</ThemeProvider>
+```
+
+Returns: `{ lightTheme: Theme, darkTheme: Theme }`
+
+The generated themes include all 69 MD3 color roles plus shared tokens (typography, shape, spacing, stateLayer, elevation, motion, topAppBar).
+
+Requires `@material/material-color-utilities` as a peer dependency: `npm install @material/material-color-utilities`
+
+### applyRoundness(roundness)
+
+Scales the MD3 corner radius tokens by a multiplier. Returns a complete `Shape` object. `cornerNone` (0) and `cornerFull` (999) are never affected.
+
+- `roundness: 0` — sharp corners (all intermediate tokens become 0)
+- `roundness: 1` — default MD3 values
+- `roundness: 2` — double the rounding
+
+```tsx
+import { applyRoundness, lightTheme } from '@onlynative/core'
+
+// Use with spread to override shape on an existing theme
+const sharpTheme = { ...lightTheme, shape: applyRoundness(0) }
+
+// Or with defineTheme
+import { defineTheme } from '@onlynative/core'
+const theme = defineTheme({ ...lightTheme, shape: applyRoundness(0.5) })
+```
+
+### material preset
+
+Grouped object containing all Material Design 3 theme values.
+
+```tsx
+import { material } from '@onlynative/core'
+
+material.lightTheme  // MD3 light theme
+material.darkTheme   // MD3 dark theme
+material.defaultTopAppBarTokens
+```
+
+### Theme type hierarchy
+
+- `BaseTheme` — Generic base interface. All design systems extend this. Has `colors: Record<string, string>`, `typography: Record<string, TextStyle>`, plus shape, spacing, stateLayer, elevation, motion.
+- `Theme` — Material Design 3 theme. Extends `BaseTheme` with 69 MD3 color roles, 15 typography variants, and optional `topAppBar` tokens. `MaterialTheme` is an identical alias (same type) — use it to disambiguate in multi-design-system codebases.
+
+### Theme structure
+
+```
+BaseTheme {
+  colors: Record<string, string>
+  typography: Record<string, TextStyle>
+  shape: Shape           — roundness, cornerNone, cornerExtraSmall, cornerSmall, cornerMedium, cornerLarge, cornerExtraLarge, cornerFull
+  spacing: Spacing       — xs, sm, md, lg, xl
+  elevation: Elevation   — level0..level3 (shadow properties)
+  stateLayer: StateLayer — pressedOpacity, focusedOpacity, hoveredOpacity, disabledOpacity
+  motion: Motion         — duration and easing tokens
+}
+
+Theme extends BaseTheme {
+  colors: Colors         — 69 MD3 color roles
+  typography: Typography — 15 type scale variants (displayLarge..labelSmall)
+  topAppBar?: TopAppBarTokens
+}
+```
+
+Colors: primary, onPrimary, primaryContainer, onPrimaryContainer, primaryFixed, onPrimaryFixed, primaryFixedDim, onPrimaryFixedVariant, secondary (same pattern), tertiary (same pattern), error, onError, errorContainer, onErrorContainer, background, onBackground, surface, surfaceDim, surfaceBright, surfaceContainerLowest, surfaceContainerLow, surfaceContainer, surfaceContainerHigh, surfaceContainerHighest, onSurface, surfaceVariant, onSurfaceVariant, outline, outlineVariant, surfaceTint, shadow, scrim, inverseSurface, inverseOnSurface, inversePrimary
+
+Typography variants: displayLarge, displayMedium, displaySmall, headlineLarge, headlineMedium, headlineSmall, titleLarge, titleMedium, titleSmall, bodyLarge, bodyMedium, bodySmall, labelLarge, labelMedium, labelSmall — each with fontFamily, fontSize, fontWeight, lineHeight, letterSpacing
+
+### useBreakpoint()
+
+Returns the current MD3 window size class. Reactively updates on resize.
+
+```tsx
+import { useBreakpoint } from '@onlynative/core'
+
+const bp = useBreakpoint()
+// 'compact' (0-599) | 'medium' (600-839) | 'expanded' (840-1199) | 'large' (1200-1599) | 'extraLarge' (1600+)
+```
+
+### useBreakpointValue(values)
+
+Returns a value based on the current breakpoint with cascade fallback.
+
+```tsx
+import { useBreakpointValue } from '@onlynative/core'
+
+const columns = useBreakpointValue({ compact: 1, medium: 2, expanded: 4 })
+// compact → 1, medium → 2, expanded/large/extraLarge → 4
+```
+
+Type: `useBreakpointValue<T>(values: Partial<Record<Breakpoint, T>> & Record<'compact', T>): T`
+

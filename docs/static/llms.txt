@@ -84,3 +84,11 @@ The `create` command is the fastest way to start a new project. The `init` + `ad
 ## Full API reference
 
 - [llms-full.txt](https://onlynative.github.io/ui/llms-full.txt): Complete API reference with all component props, types, and usage examples in a single file optimized for LLM consumption.
+
+## Per-package LLM docs
+
+Each published npm package ships its own `llms.txt` for AI tools to read from `node_modules`:
+
+- `@onlynative/core` → `node_modules/@onlynative/core/llms.txt` (theme system API + types)
+- `@onlynative/components` → `node_modules/@onlynative/components/llms.txt` (all component props)
+- `@onlynative/cli` → `node_modules/@onlynative/cli/llms.txt` (CLI commands)

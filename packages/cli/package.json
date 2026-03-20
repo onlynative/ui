@@ -7,7 +7,8 @@
     "onlynative": "dist/index.mjs"
   },
   "files": [
-    "dist"
+    "dist",
+    "llms.txt"
   ],
   "license": "MIT",
   "repository": {

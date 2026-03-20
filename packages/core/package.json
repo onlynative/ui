@@ -36,7 +36,8 @@
     "access": "public"
   },
   "files": [
-    "dist"
+    "dist",
+    "llms.txt"
   ],
   "license": "MIT",
   "repository": {

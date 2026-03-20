@@ -1,0 +1,100 @@
+# @onlynative/cli — CLI for OnlyNative UI
+
+> Version: 0.1.1-alpha.3
+> Binary: `onlynative`
+> Requirements: Node >=18
+
+## CLI (`onlynative`)
+
+### Commands
+
+#### `onlynative create [name]`
+
+Create a new project with OnlyNative UI pre-configured. Fetches the quickstart template, applies your project name to `package.json` and `app.json`, and optionally installs dependencies.
+
+```bash
+npx onlynative create            # Interactive
+npx onlynative create my-app     # With name
+npx onlynative create my-app -y  # Non-interactive, accept defaults
+```
+
+Options:
+- `-y, --yes` — Skip prompts and use defaults
+
+#### `onlynative init`
+
+Copy-paste workflow — copies component source files into your project. The theme system (`@onlynative/core`) stays as an npm dependency.
+
+Initialize project. Detects project type (Expo/RN), package manager, and tsconfig path aliases.
+
+```bash
+npx onlynative init            # Interactive
+npx onlynative init -y         # Non-interactive, accept defaults
+npx onlynative init -y --components-alias "~/ui" --lib-alias "~/utils"
+```
+
+Options:
+- `-y, --yes` — Skip all prompts, use detected defaults. Overwrites existing config. Auto-installs `@onlynative/core`.
+- `--components-alias <alias>` — Components install path. Default: `@/components/ui` (or `~/components/ui` if `~/*` alias detected in tsconfig)
+- `--lib-alias <alias>` — Utility files path. Default: `@/lib` (or `~/lib` if `~/*` alias detected)
+
+Creates `onlynative.json`:
+```json
+{
+  "$schema": "https://onlynative.dev/schema.json",
+  "aliases": { "components": "@/components/ui", "lib": "@/lib" },
+  "registryUrl": "https://raw.githubusercontent.com/onlynative/ui",
+  "registryVersion": "main"
+}
+```
+
+#### `onlynative add <components...>`
+
+Add components to your project. Resolves dependency graph, copies files with rewritten imports, installs npm deps.
+
+```bash
+npx onlynative add button
+npx onlynative add card chip text-field
+npx onlynative add appbar      # auto-adds icon-button + typography
+```
+
+Options:
+- `-f, --force` — Overwrite existing components
+- `-d, --dry-run` — Preview without writing files
+
+#### `onlynative update [components...]`
+
+Update installed components to latest registry version.
+
+Options:
+- `-a, --all` — Update all installed components
+- `-d, --dry-run` — Show diff without applying
+
+#### `onlynative upgrade`
+
+Upgrade `@onlynative/core` to the latest published version and install any new peer dependencies.
+
+```bash
+npx onlynative upgrade         # Interactive — shows plan and prompts before installing
+npx onlynative upgrade -y      # Non-interactive — skip confirmation
+```
+
+Options:
+- `-y, --yes` — Skip confirmation prompt
+
+What it does:
+1. Reads the installed `@onlynative/core` version from `node_modules`
+2. Fetches the latest version from the npm registry
+3. Compares peer dependencies between the installed and latest versions
+4. Shows a plan: version bump, new required peer deps, changed version ranges, removed deps
+5. Upgrades `@onlynative/core` and installs any new required peer dependencies in one step
+6. Reports optional peer deps that aren't installed (does not auto-install optional deps)
+7. Lists peer deps that are no longer required so you can remove them manually
+
+#### `onlynative list`
+
+Show available components with install status.
+
+#### `onlynative doctor`
+
+Check project health: config validity, core installation, RN version, file integrity, peer deps.
