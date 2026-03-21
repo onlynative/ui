@@ -7,6 +7,7 @@ import { listCommand } from './commands/list'
 import { doctorCommand } from './commands/doctor'
 import { upgradeCommand } from './commands/upgrade'
 import { logger } from './lib/logger'
+import { isValidPackageManager, PACKAGE_MANAGERS } from './lib/types'
 
 const program = new Command()
 
@@ -21,11 +22,19 @@ program
   .argument('[name]', 'Project name')
   .option('-y, --yes', 'Skip prompts and use defaults', false)
   .option('-t, --template <name>', 'Template to use (blank, with-router)')
+  .option(
+    '--package-manager <pm>',
+    `Package manager to use (${PACKAGE_MANAGERS.join(', ')})`,
+  )
   .action(async (name: string | undefined, options) => {
     try {
+      if (options.packageManager) {
+        validatePackageManager(options.packageManager)
+      }
       await createCommand(name, {
         yes: options.yes,
         template: options.template,
+        packageManager: options.packageManager,
       })
     } catch (error) {
       handleError(error)
@@ -38,12 +47,20 @@ program
   .option('-y, --yes', 'Skip prompts and use defaults', false)
   .option('--components-alias <alias>', 'Components install path alias')
   .option('--lib-alias <alias>', 'Utility files path alias')
+  .option(
+    '--package-manager <pm>',
+    `Package manager to use (${PACKAGE_MANAGERS.join(', ')})`,
+  )
   .action(async (options) => {
     try {
+      if (options.packageManager) {
+        validatePackageManager(options.packageManager)
+      }
       await initCommand(process.cwd(), {
         yes: options.yes,
         componentsAlias: options.componentsAlias,
         libAlias: options.libAlias,
+        packageManager: options.packageManager,
       })
     } catch (error) {
       handleError(error)
@@ -60,11 +77,19 @@ program
     'Show what would be installed without making changes',
     false,
   )
+  .option(
+    '--package-manager <pm>',
+    `Package manager to use (${PACKAGE_MANAGERS.join(', ')})`,
+  )
   .action(async (components: string[], options) => {
     try {
+      if (options.packageManager) {
+        validatePackageManager(options.packageManager)
+      }
       await addCommand(components, process.cwd(), {
         force: options.force,
         dryRun: options.dryRun,
+        packageManager: options.packageManager,
       })
     } catch (error) {
       handleError(error)
@@ -114,15 +139,32 @@ program
   .command('upgrade')
   .description('Upgrade @onlynative/core and install new peer dependencies')
   .option('-y, --yes', 'Skip confirmation prompt', false)
+  .option(
+    '--package-manager <pm>',
+    `Package manager to use (${PACKAGE_MANAGERS.join(', ')})`,
+  )
   .action(async (options) => {
     try {
+      if (options.packageManager) {
+        validatePackageManager(options.packageManager)
+      }
       await upgradeCommand(process.cwd(), {
         yes: options.yes,
+        packageManager: options.packageManager,
       })
     } catch (error) {
       handleError(error)
     }
   })
+
+function validatePackageManager(value: string): void {
+  if (!isValidPackageManager(value)) {
+    logger.error(
+      `Unknown package manager "${value}". Available: ${PACKAGE_MANAGERS.join(', ')}`,
+    )
+    process.exit(1)
+  }
+}
 
 function handleError(error: unknown): void {
   if (error instanceof Error) {

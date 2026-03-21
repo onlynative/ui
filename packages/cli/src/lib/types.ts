@@ -1,4 +1,10 @@
-export type PackageManager = 'npm' | 'yarn' | 'pnpm' | 'bun'
+export const PACKAGE_MANAGERS = ['npm', 'yarn', 'pnpm', 'bun'] as const
+
+export type PackageManager = (typeof PACKAGE_MANAGERS)[number]
+
+export function isValidPackageManager(value: string): value is PackageManager {
+  return (PACKAGE_MANAGERS as readonly string[]).includes(value)
+}
 
 export type ProjectType = 'expo' | 'react-native' | 'unknown'
 

@@ -10,6 +10,7 @@ import type { PackageManager } from '../lib/types'
 export interface CreateOptions {
   yes?: boolean
   template?: string
+  packageManager?: PackageManager
 }
 
 type TemplateName = 'blank' | 'with-router'
@@ -182,7 +183,9 @@ export async function createCommand(
   // --- Package manager ---
   let packageManager: PackageManager
 
-  if (options.yes) {
+  if (options.packageManager) {
+    packageManager = options.packageManager
+  } else if (options.yes) {
     packageManager = 'npm'
   } else {
     const { value } = await prompts({

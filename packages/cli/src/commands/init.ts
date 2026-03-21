@@ -1,19 +1,16 @@
 import chalk from 'chalk'
 import prompts from 'prompts'
 import { execa } from 'execa'
-import {
-  configExists,
-  DEFAULT_CONFIG,
-  writeConfig,
-} from '../lib/config'
+import { configExists, DEFAULT_CONFIG, writeConfig } from '../lib/config'
 import { detectProject, getInstallCommand } from '../lib/detector'
 import { createSpinner, logger } from '../lib/logger'
-import type { OnlyNativeConfig } from '../lib/types'
+import type { OnlyNativeConfig, PackageManager } from '../lib/types'
 
 export interface InitOptions {
   yes?: boolean
   componentsAlias?: string
   libAlias?: string
+  packageManager?: PackageManager
 }
 
 export async function initCommand(
@@ -30,8 +27,7 @@ export async function initCommand(
       const { overwrite } = await prompts({
         type: 'confirm',
         name: 'overwrite',
-        message:
-          'onlynative.json already exists. Overwrite?',
+        message: 'onlynative.json already exists. Overwrite?',
         initial: false,
       })
 
@@ -49,9 +45,7 @@ export async function initCommand(
   spinner.stop()
 
   if (project.type === 'unknown') {
-    logger.error(
-      'No React Native or Expo project detected.',
-    )
+    logger.error('No React Native or Expo project detected.')
     logger.info(
       'Make sure you are in a project with react-native or expo in package.json.',
     )
@@ -69,8 +63,7 @@ export async function initCommand(
   }
 
   // Determine default alias based on detected tsconfig paths
-  let defaultComponentsAlias =
-    DEFAULT_CONFIG.aliases.components
+  let defaultComponentsAlias = DEFAULT_CONFIG.aliases.components
   let defaultLibAlias = DEFAULT_CONFIG.aliases.lib
 
   if (project.aliases?.['@']) {
@@ -88,27 +81,21 @@ export async function initCommand(
   let libAlias: string
 
   if (options.yes) {
-    componentsAlias =
-      options.componentsAlias ?? defaultComponentsAlias
+    componentsAlias = options.componentsAlias ?? defaultComponentsAlias
     libAlias = options.libAlias ?? defaultLibAlias
   } else {
     const answers = await prompts([
       {
         type: 'text',
         name: 'componentsAlias',
-        message:
-          'Where should components be installed?',
-        initial:
-          options.componentsAlias ??
-          defaultComponentsAlias,
+        message: 'Where should components be installed?',
+        initial: options.componentsAlias ?? defaultComponentsAlias,
       },
       {
         type: 'text',
         name: 'libAlias',
-        message:
-          'Where should utility files be placed?',
-        initial:
-          options.libAlias ?? defaultLibAlias,
+        message: 'Where should utility files be placed?',
+        initial: options.libAlias ?? defaultLibAlias,
       },
     ])
 
@@ -147,24 +134,18 @@ export async function initCommand(
   }
 
   if (installCore) {
-    const installSpinner = createSpinner(
-      'Installing @onlynative/core...',
-    )
+    const installSpinner = createSpinner('Installing @onlynative/core...')
     installSpinner.start()
 
-    const command = getInstallCommand(
-      project.packageManager,
-      ['@onlynative/core'],
-    )
+    const pm = options.packageManager ?? project.packageManager
+    const command = getInstallCommand(pm, ['@onlynative/core'])
     const [cmd, ...args] = command.split(' ')
 
     try {
       await execa(cmd, args, { cwd })
       installSpinner.succeed('Installed @onlynative/core')
     } catch {
-      installSpinner.fail(
-        'Failed to install @onlynative/core',
-      )
+      installSpinner.fail('Failed to install @onlynative/core')
       logger.info(`Run manually: ${chalk.bold(command)}`)
     }
   }

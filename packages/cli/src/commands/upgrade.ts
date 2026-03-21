@@ -6,27 +6,23 @@ import { execa } from 'execa'
 import { readConfig } from '../lib/config'
 import { detectProject, getInstallCommand } from '../lib/detector'
 import { createSpinner, logger } from '../lib/logger'
+import type { PackageManager } from '../lib/types'
 
 interface NpmPackageInfo {
   version: string
   peerDependencies?: Record<string, string>
-  peerDependenciesMeta?: Record<
-    string,
-    { optional?: boolean }
-  >
+  peerDependenciesMeta?: Record<string, { optional?: boolean }>
 }
 
 interface PeerDepDiff {
   added: Record<string, string>
-  changed: Record<
-    string,
-    { from: string; to: string }
-  >
+  changed: Record<string, { from: string; to: string }>
   removed: string[]
 }
 
 export interface UpgradeOptions {
   yes?: boolean
+  packageManager?: PackageManager
 }
 
 async function fetchLatestFromNpm(
@@ -75,16 +71,11 @@ function diffPeerDeps(
   const latestDeps = latest ?? {}
 
   const added: Record<string, string> = {}
-  const changed: Record<
-    string,
-    { from: string; to: string }
-  > = {}
+  const changed: Record<string, { from: string; to: string }> = {}
   const removed: string[] = []
 
   // Find added and changed
-  for (const [pkg, range] of Object.entries(
-    latestDeps,
-  )) {
+  for (const [pkg, range] of Object.entries(latestDeps)) {
     if (!(pkg in currentDeps)) {
       added[pkg] = range
     } else if (currentDeps[pkg] !== range) {
@@ -105,9 +96,7 @@ function diffPeerDeps(
   return { added, changed, removed }
 }
 
-function getProjectDeps(
-  cwd: string,
-): Record<string, string> {
+function getProjectDeps(cwd: string): Record<string, string> {
   const pkgPath = path.resolve(cwd, 'package.json')
 
   try {
@@ -143,17 +132,12 @@ export async function upgradeCommand(
   spinner.stop()
 
   if (project.type === 'unknown') {
-    logger.error(
-      'No React Native or Expo project detected.',
-    )
+    logger.error('No React Native or Expo project detected.')
     process.exit(1)
   }
 
   // 2. Check installed @onlynative/core version
-  const installed = getInstalledPackageInfo(
-    cwd,
-    '@onlynative/core',
-  )
+  const installed = getInstalledPackageInfo(cwd, '@onlynative/core')
 
   if (!installed) {
     logger.error(
@@ -163,13 +147,9 @@ export async function upgradeCommand(
   }
 
   // 3. Fetch latest from npm
-  const fetchSpinner = createSpinner(
-    'Checking for updates...',
-  )
+  const fetchSpinner = createSpinner('Checking for updates...')
   fetchSpinner.start()
-  const latest = await fetchLatestFromNpm(
-    '@onlynative/core',
-  )
+  const latest = await fetchLatestFromNpm('@onlynative/core')
   fetchSpinner.succeed('Checked npm registry')
 
   // 4. Compare versions
@@ -183,35 +163,22 @@ export async function upgradeCommand(
   }
 
   logger.break()
-  logger.info(
-    `Installed: ${chalk.bold(`v${installed.version}`)}`,
-  )
-  logger.info(
-    `Latest:    ${chalk.bold(chalk.green(`v${latest.version}`))}`,
-  )
+  logger.info(`Installed: ${chalk.bold(`v${installed.version}`)}`)
+  logger.info(`Latest:    ${chalk.bold(chalk.green(`v${latest.version}`))}`)
 
   // 5. Diff peer dependencies
-  const diff = diffPeerDeps(
-    installed.peerDependencies,
-    latest.peerDependencies,
-  )
+  const diff = diffPeerDeps(installed.peerDependencies, latest.peerDependencies)
 
   if (hasDiffChanges(diff)) {
     logger.break()
     console.log(chalk.bold('Peer dependency changes:'))
     logger.break()
 
-    for (const [pkg, range] of Object.entries(
-      diff.added,
-    )) {
-      console.log(
-        `  ${chalk.green('+')} ${pkg} ${chalk.dim(range)}`,
-      )
+    for (const [pkg, range] of Object.entries(diff.added)) {
+      console.log(`  ${chalk.green('+')} ${pkg} ${chalk.dim(range)}`)
     }
 
-    for (const [pkg, { from, to }] of Object.entries(
-      diff.changed,
-    )) {
+    for (const [pkg, { from, to }] of Object.entries(diff.changed)) {
       console.log(
         `  ${chalk.yellow('~')} ${pkg} ${chalk.dim(from)} → ${chalk.dim(to)}`,
       )
@@ -225,15 +192,11 @@ export async function upgradeCommand(
   // 6. Determine what needs to be installed
   const projectDeps = getProjectDeps(cwd)
   const toInstall: string[] = ['@onlynative/core']
-  const optionalMeta =
-    latest.peerDependenciesMeta ?? {}
+  const optionalMeta = latest.peerDependenciesMeta ?? {}
 
   // Add new required peer deps that aren't in the project
-  for (const [pkg] of Object.entries(
-    diff.added,
-  )) {
-    const isOptional =
-      optionalMeta[pkg]?.optional === true
+  for (const [pkg] of Object.entries(diff.added)) {
+    const isOptional = optionalMeta[pkg]?.optional === true
     if (!isOptional && !projectDeps[pkg]) {
       toInstall.push(pkg)
     }
@@ -242,13 +205,8 @@ export async function upgradeCommand(
   // Also check all latest peer deps — user might be missing some
   const latestPeers = latest.peerDependencies ?? {}
   for (const [pkg] of Object.entries(latestPeers)) {
-    const isOptional =
-      optionalMeta[pkg]?.optional === true
-    if (
-      !isOptional &&
-      !projectDeps[pkg] &&
-      !toInstall.includes(pkg)
-    ) {
+    const isOptional = optionalMeta[pkg]?.optional === true
+    if (!isOptional && !projectDeps[pkg] && !toInstall.includes(pkg)) {
       toInstall.push(pkg)
     }
   }
@@ -261,9 +219,7 @@ export async function upgradeCommand(
     `  ${chalk.cyan('upgrade')} @onlynative/core ${chalk.dim(`v${installed.version}`)} → ${chalk.green(`v${latest.version}`)}`,
   )
 
-  const newDeps = toInstall.filter(
-    (p) => p !== '@onlynative/core',
-  )
+  const newDeps = toInstall.filter((p) => p !== '@onlynative/core')
   if (newDeps.length > 0) {
     for (const pkg of newDeps) {
       console.log(
@@ -275,8 +231,7 @@ export async function upgradeCommand(
   // Show optional deps that aren't installed
   const missingOptional: string[] = []
   for (const [pkg] of Object.entries(latestPeers)) {
-    const isOptional =
-      optionalMeta[pkg]?.optional === true
+    const isOptional = optionalMeta[pkg]?.optional === true
     if (isOptional && !projectDeps[pkg]) {
       missingOptional.push(pkg)
     }
@@ -307,15 +262,11 @@ export async function upgradeCommand(
   }
 
   // 9. Run install
-  const installSpinner = createSpinner(
-    'Upgrading @onlynative/core...',
-  )
+  const installSpinner = createSpinner('Upgrading @onlynative/core...')
   installSpinner.start()
 
-  const command = getInstallCommand(
-    project.packageManager,
-    toInstall,
-  )
+  const pm = options.packageManager ?? project.packageManager
+  const command = getInstallCommand(pm, toInstall)
   const [cmd, ...args] = command.split(' ')
 
   try {
@@ -328,10 +279,7 @@ export async function upgradeCommand(
   }
 
   // 10. Verify new version
-  const updated = getInstalledPackageInfo(
-    cwd,
-    '@onlynative/core',
-  )
+  const updated = getInstalledPackageInfo(cwd, '@onlynative/core')
 
   logger.break()
   if (updated) {
@@ -341,9 +289,7 @@ export async function upgradeCommand(
   }
 
   if (newDeps.length > 0) {
-    logger.success(
-      `Installed ${newDeps.length} new peer dependency(s)`,
-    )
+    logger.success(`Installed ${newDeps.length} new peer dependency(s)`)
   }
 
   if (diff.removed.length > 0) {
