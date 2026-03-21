@@ -13,14 +13,12 @@
     ".": {
       "types": "./dist/index.d.mts",
       "react-native": "./src/index.ts",
-      "browser": "./src/index.ts",
       "import": "./dist/index.mjs",
       "default": "./dist/index.mjs"
     },
     "./test": {
       "types": "./dist/test-utils/index.d.mts",
       "react-native": "./src/test-utils/index.ts",
-      "browser": "./src/test-utils/index.ts",
       "import": "./dist/test-utils/index.mjs",
       "default": "./dist/test-utils/index.mjs"
     }
