@@ -134,18 +134,21 @@ export async function initCommand(
   }
 
   if (installCore) {
-    const installSpinner = createSpinner('Installing @onlynative/core...')
-    installSpinner.start()
-
     const pm = options.packageManager ?? project.packageManager
     const command = getInstallCommand(pm, ['@onlynative/core'])
     const [cmd, ...args] = command.split(' ')
 
+    logger.break()
+    logger.info('Installing @onlynative/core...')
+    logger.break()
+
     try {
-      await execa(cmd, args, { cwd })
-      installSpinner.succeed('Installed @onlynative/core')
+      await execa(cmd, args, { cwd, stdio: 'inherit' })
+      logger.break()
+      logger.success('Installed @onlynative/core')
     } catch {
-      installSpinner.fail('Failed to install @onlynative/core')
+      logger.break()
+      logger.error('Failed to install @onlynative/core')
       logger.info(`Run manually: ${chalk.bold(command)}`)
     }
   }

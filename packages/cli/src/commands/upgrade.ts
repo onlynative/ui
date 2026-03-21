@@ -262,18 +262,21 @@ export async function upgradeCommand(
   }
 
   // 9. Run install
-  const installSpinner = createSpinner('Upgrading @onlynative/core...')
-  installSpinner.start()
-
   const pm = options.packageManager ?? project.packageManager
   const command = getInstallCommand(pm, toInstall)
   const [cmd, ...args] = command.split(' ')
 
+  logger.break()
+  logger.info('Upgrading @onlynative/core...')
+  logger.break()
+
   try {
-    await execa(cmd, args, { cwd })
-    installSpinner.succeed('Upgrade complete')
+    await execa(cmd, args, { cwd, stdio: 'inherit' })
+    logger.break()
+    logger.success('Upgrade complete')
   } catch {
-    installSpinner.fail('Failed to upgrade')
+    logger.break()
+    logger.error('Failed to upgrade')
     logger.error(`Run manually: ${chalk.bold(command)}`)
     process.exit(1)
   }

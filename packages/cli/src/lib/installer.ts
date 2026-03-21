@@ -25,13 +25,9 @@ interface InstallOptions {
 export async function installComponents(
   options: InstallOptions,
 ): Promise<void> {
-  const { config, cwd, resolution, packageManager, force } =
-    options
+  const { config, cwd, resolution, packageManager, force } = options
 
-  const componentsDir = resolveAliasPath(
-    config.aliases.components,
-    cwd,
-  )
+  const componentsDir = resolveAliasPath(config.aliases.components, cwd)
   const libDir = resolveAliasPath(config.aliases.lib, cwd)
   const allComponentNames = getComponentNames(resolution)
 
@@ -57,9 +53,7 @@ export async function installComponents(
       continue
     }
 
-    const compSpinner = createSpinner(
-      `Adding ${entry.name}...`,
-    )
+    const compSpinner = createSpinner(`Adding ${entry.name}...`)
     compSpinner.start()
 
     await fs.ensureDir(componentDir)
@@ -85,31 +79,24 @@ export async function installComponents(
   }
 
   // 3. Install npm dependencies
-  const depsToInstall = collectDepsToInstall(
-    resolution,
-    cwd,
-  )
+  const depsToInstall = collectDepsToInstall(resolution, cwd)
 
   if (depsToInstall.length > 0) {
-    const depSpinner = createSpinner(
-      'Installing dependencies...',
-    )
-    depSpinner.start()
-
-    const command = getInstallCommand(
-      packageManager,
-      depsToInstall,
-    )
+    const command = getInstallCommand(packageManager, depsToInstall)
     const [cmd, ...args] = command.split(' ')
 
+    logger.break()
+    logger.info('Installing dependencies...')
+    logger.break()
+
     try {
-      await execa(cmd, args, { cwd })
-      depSpinner.succeed('Dependencies installed')
+      await execa(cmd, args, { cwd, stdio: 'inherit' })
+      logger.break()
+      logger.success('Dependencies installed')
     } catch {
-      depSpinner.fail('Failed to install dependencies')
-      logger.error(
-        `Run manually: ${command}`,
-      )
+      logger.break()
+      logger.error('Failed to install dependencies')
+      logger.error(`Run manually: ${command}`)
     }
   }
 }
@@ -126,17 +113,10 @@ async function copyUtilFiles(
     const utilEntry = utilsRegistry[utilName]
     if (!utilEntry) continue
 
-    const content = await fetchFileContent(
-      config,
-      utilEntry.file,
-    )
+    const content = await fetchFileContent(config, utilEntry.file)
     const fileName = path.basename(utilEntry.file)
 
-    await fs.writeFile(
-      path.join(libDir, fileName),
-      content,
-      'utf-8',
-    )
+    await fs.writeFile(path.join(libDir, fileName), content, 'utf-8')
   }
 }
 
@@ -154,10 +134,7 @@ async function generateBarrel(
     }
   }
 
-  const barrelContent = generateUtilsBarrel(
-    resolution.utils,
-    utilExports,
-  )
+  const barrelContent = generateUtilsBarrel(resolution.utils, utilExports)
 
   await fs.writeFile(
     path.join(libDir, 'onlynative-utils.ts'),
@@ -186,9 +163,7 @@ function collectDepsToInstall(
     // No package.json, install everything
   }
 
-  for (const [pkg] of Object.entries(
-    resolution.npmDependencies,
-  )) {
+  for (const [pkg] of Object.entries(resolution.npmDependencies)) {
     if (!existingDeps[pkg]) {
       deps.push(pkg)
     }

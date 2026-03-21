@@ -294,16 +294,19 @@ export async function createCommand(
 
   if (shouldInstall) {
     const installCmd = getInstallCommand(packageManager)
-    const installSpinner = createSpinner('Installing dependencies...')
-    installSpinner.start()
-
     const [cmd, ...args] = installCmd.split(' ')
 
+    logger.break()
+    logger.info('Installing dependencies...')
+    logger.break()
+
     try {
-      await execa(cmd, args, { cwd: targetDir })
-      installSpinner.succeed('Dependencies installed')
+      await execa(cmd, args, { cwd: targetDir, stdio: 'inherit' })
+      logger.break()
+      logger.success('Dependencies installed')
     } catch {
-      installSpinner.fail('Failed to install dependencies')
+      logger.break()
+      logger.error('Failed to install dependencies')
       logger.info(
         `Run manually: ${chalk.bold(`cd ${projectName} && ${installCmd}`)}`,
       )
