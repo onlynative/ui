@@ -7,6 +7,7 @@
  * Usage: npx tsx scripts/build-registry.ts
  */
 
+import { execSync } from 'node:child_process'
 import fs from 'node:fs'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
@@ -14,16 +15,11 @@ import { fileURLToPath } from 'node:url'
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const ROOT = path.resolve(__dirname, '..')
 const COMPONENTS_SRC = path.join(ROOT, 'packages/components/src')
-const UTILS_SRC = path.join(ROOT, 'packages/utils/src')
 const REGISTRY_DIR = path.join(ROOT, 'registry')
-const COMPONENTS_REGISTRY_DIR = path.join(REGISTRY_DIR, 'registry/components')
 
 // Read version from packages/components/package.json
 const componentsPkg = JSON.parse(
-  fs.readFileSync(
-    path.join(ROOT, 'packages/components/package.json'),
-    'utf-8',
-  ),
+  fs.readFileSync(path.join(ROOT, 'packages/components/package.json'), 'utf-8'),
 )
 const VERSION = componentsPkg.version as string
 
@@ -98,15 +94,10 @@ function analyzeImports(componentDir: string): {
   const externalDeps = new Set<string>()
 
   for (const file of files) {
-    const content = fs.readFileSync(
-      path.join(fullDir, file),
-      'utf-8',
-    )
+    const content = fs.readFileSync(path.join(fullDir, file), 'utf-8')
 
     // Check for @onlynative/utils imports
-    const utilImportMatch = content.match(
-      /from\s+['"]@onlynative\/utils['"]/g,
-    )
+    const utilImportMatch = content.match(/from\s+['"]@onlynative\/utils['"]/g)
     if (utilImportMatch) {
       // Find which specific exports are used
       const importLines = content.match(
@@ -162,8 +153,7 @@ function analyzeImports(componentDir: string): {
 
 function buildComponentEntry(componentDir: string): ComponentEntry {
   const files = getComponentFiles(componentDir)
-  const { utils, componentDeps, externalDeps } =
-    analyzeImports(componentDir)
+  const { utils, componentDeps, externalDeps } = analyzeImports(componentDir)
 
   const dependencies: Record<string, string> = {
     '@onlynative/core': `>=${VERSION}`,
@@ -186,8 +176,7 @@ function buildComponentEntry(componentDir: string): ComponentEntry {
     dependencies['react-native-safe-area-context']
   ) {
     delete dependencies['react-native-safe-area-context']
-    optionalDependencies['react-native-safe-area-context'] =
-      '>=4.0.0'
+    optionalDependencies['react-native-safe-area-context'] = '>=4.0.0'
   }
 
   return {
@@ -241,10 +230,7 @@ if (fs.existsSync(existingRegistryDir)) {
   for (const file of fs.readdirSync(existingRegistryDir)) {
     if (file.endsWith('.json')) {
       const data = JSON.parse(
-        fs.readFileSync(
-          path.join(existingRegistryDir, file),
-          'utf-8',
-        ),
+        fs.readFileSync(path.join(existingRegistryDir, file), 'utf-8'),
       )
       if (data.name && data.description) {
         descriptions[data.name] = data.description
@@ -296,6 +282,9 @@ fs.writeFileSync(
   JSON.stringify(utilsData, null, 2) + '\n',
 )
 console.log('Wrote registry/utils.json')
+
+// Format generated JSON files with Prettier
+execSync('npx prettier --write registry/', { stdio: 'inherit' })
 
 console.log(
   `\nRegistry build complete. ${componentDirs.length} components registered.`,

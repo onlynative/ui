@@ -1,0 +1,18 @@
+{
+  "name": "avatar",
+  "description": "Circular avatar with image, icon, or text initials and 5 sizes (xSmall to xLarge).",
+  "files": [
+    "packages/components/src/avatar/Avatar.tsx",
+    "packages/components/src/avatar/index.ts",
+    "packages/components/src/avatar/styles.ts",
+    "packages/components/src/avatar/types.ts"
+  ],
+  "utils": ["color", "icon"],
+  "componentDependencies": [],
+  "dependencies": {
+    "@onlynative/core": ">=0.0.0-alpha.0"
+  },
+  "optionalDependencies": {
+    "@expo/vector-icons": ">=14.0.0"
+  }
+}

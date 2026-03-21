@@ -8,7 +8,7 @@ OnlyNative UI (`@onlynative`) is a React Native component library with a pluggab
 
 - `@onlynative/core`: Theme engine (`BaseTheme`, `ThemeProvider`, `defineTheme`, `useTheme`), MD3 preset (`material`, light/dark themes), responsive breakpoint hooks
 - `@onlynative/utils`: Shared utilities — color helpers (`alphaColor`, `blendColor`), elevation styles, RTL support, icon resolver. Test helper via `@onlynative/utils/test`.
-- `@onlynative/components`: UI components (Button, IconButton, AppBar, Card, Chip, Checkbox, Radio, Switch, TextField, Typography, Layout, List)
+- `@onlynative/components`: UI components (Avatar, Button, IconButton, AppBar, Card, Chip, Checkbox, Radio, Switch, TextField, Typography, Layout, List)
 
 ## Quick start
 
@@ -68,16 +68,19 @@ import { Button, Card } from '@onlynative/components'
 ## CLI
 
 ```bash
-npx onlynative create         # Scaffold a new project (interactive)
-npx onlynative create my-app  # Scaffold with name
-npx onlynative create -y      # Non-interactive (defaults)
-npx onlynative init           # Initialize existing project for CLI workflow
-npx onlynative add button card # Copy component source into your project
-npx onlynative update         # Update installed components
-npx onlynative upgrade        # Upgrade @onlynative/core + install new peer deps
-npx onlynative list           # List available components
-npx onlynative doctor         # Check project health
+npx onlynative create                    # Scaffold a new project (interactive)
+npx onlynative create my-app             # Scaffold with name
+npx onlynative create my-app -y          # Non-interactive (defaults)
+npx onlynative create -t with-router     # Use router template
+npx onlynative init                      # Initialize existing project for CLI workflow
+npx onlynative add button card           # Copy component source into your project
+npx onlynative update                    # Update installed components
+npx onlynative upgrade                   # Upgrade @onlynative/core + install new peer deps
+npx onlynative list                      # List available components
+npx onlynative doctor                    # Check project health
 ```
+
+All commands that install packages accept `--package-manager <pm>` to override auto-detection (`npm`, `yarn`, `pnpm`, `bun`).
 
 The `create` command is the fastest way to start a new project. The `init` + `add` workflow is for adding components as source files to an existing project (copy-paste workflow, similar to shadcn/ui).
 

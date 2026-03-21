@@ -49,6 +49,8 @@ npx onlynative create my-app -y  # Non-interactive, accept defaults
 
 Options:
 - `-y, --yes` — Skip prompts and use defaults
+- `-t, --template <name>` — Template to use (`blank`, `with-router`)
+- `--package-manager <pm>` — Package manager to use (`npm`, `yarn`, `pnpm`, `bun`)
 
 #### `onlynative init`
 
@@ -66,6 +68,7 @@ Options:
 - `-y, --yes` — Skip all prompts, use detected defaults. Overwrites existing config. Auto-installs `@onlynative/core`.
 - `--components-alias <alias>` — Components install path. Default: `@/components/ui` (or `~/components/ui` if `~/*` alias detected in tsconfig)
 - `--lib-alias <alias>` — Utility files path. Default: `@/lib` (or `~/lib` if `~/*` alias detected)
+- `--package-manager <pm>` — Package manager to use (`npm`, `yarn`, `pnpm`, `bun`)
 
 Creates `onlynative.json`:
 ```json
@@ -90,6 +93,7 @@ npx onlynative add appbar      # auto-adds icon-button + typography
 Options:
 - `-f, --force` — Overwrite existing components
 - `-d, --dry-run` — Preview without writing files
+- `--package-manager <pm>` — Package manager to use (`npm`, `yarn`, `pnpm`, `bun`)
 
 #### `onlynative update [components...]`
 
@@ -110,6 +114,7 @@ npx onlynative upgrade -y      # Non-interactive — skip confirmation
 
 Options:
 - `-y, --yes` — Skip confirmation prompt
+- `--package-manager <pm>` — Package manager to use (`npm`, `yarn`, `pnpm`, `bun`)
 
 What it does:
 1. Reads the installed `@onlynative/core` version from `node_modules`

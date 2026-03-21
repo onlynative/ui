@@ -7,13 +7,10 @@
     "packages/components/src/checkbox/styles.ts",
     "packages/components/src/checkbox/types.ts"
   ],
-  "utils": [
-    "color",
-    "icon"
-  ],
+  "utils": ["color", "icon"],
   "componentDependencies": [],
   "dependencies": {
-    "@onlynative/core": ">=0.1.1-alpha.1"
+    "@onlynative/core": ">=0.0.0-alpha.0"
   },
   "optionalDependencies": {
     "@expo/vector-icons": ">=14.0.0"

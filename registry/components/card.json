@@ -7,13 +7,10 @@
     "packages/components/src/card/styles.ts",
     "packages/components/src/card/types.ts"
   ],
-  "utils": [
-    "color",
-    "elevation"
-  ],
+  "utils": ["color", "elevation"],
   "componentDependencies": [],
   "dependencies": {
-    "@onlynative/core": ">=0.1.1-alpha.1"
+    "@onlynative/core": ">=0.0.0-alpha.0"
   },
   "optionalDependencies": {}
 }

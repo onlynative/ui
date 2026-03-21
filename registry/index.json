@@ -1,9 +1,13 @@
 {
-  "version": "0.1.1-alpha.1",
+  "version": "0.0.0-alpha.0",
   "components": [
     {
       "name": "appbar",
       "description": "Top app bar with 4 variants (small, center-aligned, medium, large) and SafeAreaView support."
+    },
+    {
+      "name": "avatar",
+      "description": "Circular avatar with image, icon, or text initials and 5 sizes (xSmall to xLarge)."
     },
     {
       "name": "button",
