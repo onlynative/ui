@@ -1,7 +1,7 @@
 {
   "name": "@onlynative/core",
   "version": "0.0.0-alpha.0",
-  "description": "Material Design 3 theme system for React Native — colors, typography, shape, spacing, and motion tokens.",
+  "description": "Design-system agnostic theme engine for OnlyNative UI — a React Native component library. Ships with Material Design 3 out of the box.",
   "private": false,
   "sideEffects": false,
   "main": "dist/index.mjs",
