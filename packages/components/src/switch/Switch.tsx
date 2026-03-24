@@ -1,47 +1,14 @@
 import { useMemo } from 'react'
-import { Platform, Pressable, StyleSheet, View } from 'react-native'
-import type { StyleProp, ViewStyle } from 'react-native'
+import { Platform, Pressable, View } from 'react-native'
 import { useTheme } from '@onlynative/core'
 
-import { getMaterialCommunityIcons } from '@onlynative/utils'
+import {
+  getMaterialCommunityIcons,
+  resolveColorFromStyle,
+  resolvePressableStyle,
+} from '@onlynative/utils'
 import { createStyles } from './styles'
 import type { SwitchProps } from './types'
-
-interface PressableState {
-  pressed: boolean
-  hovered?: boolean
-}
-
-function resolveStyle(
-  trackStyle: StyleProp<ViewStyle>,
-  hoveredTrackStyle: StyleProp<ViewStyle>,
-  pressedTrackStyle: StyleProp<ViewStyle>,
-  disabledTrackStyle: StyleProp<ViewStyle>,
-  disabled: boolean,
-  style: SwitchProps['style'],
-): (state: PressableState) => StyleProp<ViewStyle> {
-  if (typeof style === 'function') {
-    return (state) => [
-      trackStyle,
-      state.hovered && !state.pressed && !disabled
-        ? hoveredTrackStyle
-        : undefined,
-      state.pressed && !disabled ? pressedTrackStyle : undefined,
-      disabled ? disabledTrackStyle : undefined,
-      style(state),
-    ]
-  }
-
-  return (state) => [
-    trackStyle,
-    state.hovered && !state.pressed && !disabled
-      ? hoveredTrackStyle
-      : undefined,
-    state.pressed && !disabled ? pressedTrackStyle : undefined,
-    disabled ? disabledTrackStyle : undefined,
-    style,
-  ]
-}
 
 export function Switch({
   style,
@@ -65,13 +32,14 @@ export function Switch({
     [theme, isSelected, hasIcon, containerColor, contentColor],
   )
 
-  const resolvedIconColor = useMemo(() => {
-    const base = StyleSheet.flatten([
-      styles.iconColor,
-      isDisabled ? styles.disabledIconColor : undefined,
-    ])
-    return typeof base?.color === 'string' ? base.color : undefined
-  }, [styles.iconColor, styles.disabledIconColor, isDisabled])
+  const resolvedIconColor = useMemo(
+    () =>
+      resolveColorFromStyle(
+        styles.iconColor,
+        isDisabled ? styles.disabledIconColor : undefined,
+      ),
+    [styles.iconColor, styles.disabledIconColor, isDisabled],
+  )
 
   const handlePress = () => {
     if (!isDisabled) {
@@ -80,9 +48,7 @@ export function Switch({
   }
 
   const iconName = isSelected ? selectedIcon : unselectedIcon
-  const MaterialCommunityIcons = iconName
-    ? getMaterialCommunityIcons()
-    : null
+  const MaterialCommunityIcons = iconName ? getMaterialCommunityIcons() : null
   const iconSize = 16
 
   return (
@@ -96,7 +62,7 @@ export function Switch({
       hitSlop={Platform.OS === 'web' ? undefined : 4}
       disabled={isDisabled}
       onPress={handlePress}
-      style={resolveStyle(
+      style={resolvePressableStyle(
         styles.track,
         styles.hoveredTrack,
         styles.pressedTrack,

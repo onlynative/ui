@@ -1,4 +1,6 @@
 export { alphaColor, blendColor } from './color'
 export { elevationStyle } from './elevation'
 export { getMaterialCommunityIcons } from './icon'
+export { resolvePressableStyle, resolveColorFromStyle } from './pressable'
+export type { PressableState, PressableStyleProp } from './pressable'
 export { transformOrigin, selectRTL } from './rtl'

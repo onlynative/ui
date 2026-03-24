@@ -1,47 +1,14 @@
 import { useMemo } from 'react'
-import { Platform, Pressable, StyleSheet, Text, View } from 'react-native'
-import type { StyleProp, ViewStyle } from 'react-native'
+import { Platform, Pressable, Text, View } from 'react-native'
 import { useTheme } from '@onlynative/core'
 
-import { getMaterialCommunityIcons } from '@onlynative/utils'
+import {
+  getMaterialCommunityIcons,
+  resolveColorFromStyle,
+  resolvePressableStyle,
+} from '@onlynative/utils'
 import { createStyles } from './styles'
 import type { ChipProps } from './types'
-
-interface PressableState {
-  pressed: boolean
-  hovered?: boolean
-}
-
-function resolveStyle(
-  containerStyle: StyleProp<ViewStyle>,
-  hoveredContainerStyle: StyleProp<ViewStyle>,
-  pressedContainerStyle: StyleProp<ViewStyle>,
-  disabledContainerStyle: StyleProp<ViewStyle>,
-  disabled: boolean,
-  style: ChipProps['style'],
-): (state: PressableState) => StyleProp<ViewStyle> {
-  if (typeof style === 'function') {
-    return (state) => [
-      containerStyle,
-      state.hovered && !state.pressed && !disabled
-        ? hoveredContainerStyle
-        : undefined,
-      state.pressed && !disabled ? pressedContainerStyle : undefined,
-      disabled ? disabledContainerStyle : undefined,
-      style(state),
-    ]
-  }
-
-  return (state) => [
-    containerStyle,
-    state.hovered && !state.pressed && !disabled
-      ? hoveredContainerStyle
-      : undefined,
-    state.pressed && !disabled ? pressedContainerStyle : undefined,
-    disabled ? disabledContainerStyle : undefined,
-    style,
-  ]
-}
 
 export function Chip({
   children,
@@ -68,15 +35,15 @@ export function Chip({
 
   const hasLeadingContent = Boolean(
     (variant === 'input' && avatar) ||
-      leadingIcon ||
-      (variant === 'filter' && isSelected),
+    leadingIcon ||
+    (variant === 'filter' && isSelected),
   )
 
   const needsIcons =
-    Boolean(leadingIcon) || (variant === 'filter' && isSelected) || showCloseIcon
-  const MaterialCommunityIcons = needsIcons
-    ? getMaterialCommunityIcons()
-    : null
+    Boolean(leadingIcon) ||
+    (variant === 'filter' && isSelected) ||
+    showCloseIcon
+  const MaterialCommunityIcons = needsIcons ? getMaterialCommunityIcons() : null
 
   const theme = useTheme()
   const styles = useMemo(
@@ -103,13 +70,14 @@ export function Chip({
     ],
   )
 
-  const resolvedIconColor = useMemo(() => {
-    const base = StyleSheet.flatten([
-      styles.label,
-      isDisabled ? styles.disabledLabel : undefined,
-    ])
-    return typeof base?.color === 'string' ? base.color : undefined
-  }, [styles.label, styles.disabledLabel, isDisabled])
+  const resolvedIconColor = useMemo(
+    () =>
+      resolveColorFromStyle(
+        styles.label,
+        isDisabled ? styles.disabledLabel : undefined,
+      ),
+    [styles.label, styles.disabledLabel, isDisabled],
+  )
 
   const computedLabelStyle = useMemo(
     () => [
@@ -157,7 +125,7 @@ export function Chip({
       }}
       hitSlop={Platform.OS === 'web' ? undefined : 4}
       disabled={isDisabled}
-      style={resolveStyle(
+      style={resolvePressableStyle(
         styles.container,
         styles.hoveredContainer,
         styles.pressedContainer,

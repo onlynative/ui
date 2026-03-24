@@ -1,49 +1,14 @@
 import { useMemo } from 'react'
-import { Platform, Pressable } from 'react-native'
-import { StyleSheet } from 'react-native'
-import { Text } from 'react-native'
-import type { StyleProp, ViewStyle } from 'react-native'
+import { Platform, Pressable, Text } from 'react-native'
 import { useTheme } from '@onlynative/core'
 
-import { getMaterialCommunityIcons } from '@onlynative/utils'
+import {
+  getMaterialCommunityIcons,
+  resolveColorFromStyle,
+  resolvePressableStyle,
+} from '@onlynative/utils'
 import { createStyles } from './styles'
 import type { ButtonProps } from './types'
-
-interface PressableState {
-  pressed: boolean
-  hovered?: boolean
-}
-
-function resolveStyle(
-  containerStyle: StyleProp<ViewStyle>,
-  hoveredContainerStyle: StyleProp<ViewStyle>,
-  pressedContainerStyle: StyleProp<ViewStyle>,
-  disabledContainerStyle: StyleProp<ViewStyle>,
-  disabled: boolean,
-  style: ButtonProps['style'],
-): (state: PressableState) => StyleProp<ViewStyle> {
-  if (typeof style === 'function') {
-    return (state) => [
-      containerStyle,
-      state.hovered && !state.pressed && !disabled
-        ? hoveredContainerStyle
-        : undefined,
-      state.pressed && !disabled ? pressedContainerStyle : undefined,
-      disabled ? disabledContainerStyle : undefined,
-      style(state),
-    ]
-  }
-
-  return (state) => [
-    containerStyle,
-    state.hovered && !state.pressed && !disabled
-      ? hoveredContainerStyle
-      : undefined,
-    state.pressed && !disabled ? pressedContainerStyle : undefined,
-    disabled ? disabledContainerStyle : undefined,
-    style,
-  ]
-}
 
 export function Button({
   children,
@@ -78,13 +43,14 @@ export function Button({
   const MaterialCommunityIcons =
     leadingIcon || trailingIcon ? getMaterialCommunityIcons() : null
 
-  const resolvedIconColor = useMemo(() => {
-    const base = StyleSheet.flatten([
-      styles.label,
-      isDisabled ? styles.disabledLabel : undefined,
-    ])
-    return typeof base?.color === 'string' ? base.color : undefined
-  }, [styles.label, styles.disabledLabel, isDisabled])
+  const resolvedIconColor = useMemo(
+    () =>
+      resolveColorFromStyle(
+        styles.label,
+        isDisabled ? styles.disabledLabel : undefined,
+      ),
+    [styles.label, styles.disabledLabel, isDisabled],
+  )
 
   const computedLabelStyle = useMemo(
     () => [
@@ -102,7 +68,7 @@ export function Button({
       accessibilityState={{ disabled: isDisabled }}
       hitSlop={Platform.OS === 'web' ? undefined : 4}
       disabled={isDisabled}
-      style={resolveStyle(
+      style={resolvePressableStyle(
         styles.container,
         styles.hoveredContainer,
         styles.pressedContainer,

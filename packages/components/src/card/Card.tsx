@@ -1,15 +1,10 @@
 import { useMemo } from 'react'
 import { Platform, Pressable, View } from 'react-native'
-import type { StyleProp, ViewStyle } from 'react-native'
 import { useTheme } from '@onlynative/core'
 
+import { resolvePressableStyle } from '@onlynative/utils'
 import { createStyles } from './styles'
 import type { CardProps } from './types'
-
-interface PressableState {
-  pressed: boolean
-  hovered?: boolean
-}
 
 export function Card({
   children,
@@ -36,19 +31,6 @@ export function Card({
     )
   }
 
-  const resolvedStyle = (state: PressableState): StyleProp<ViewStyle> => [
-    styles.container,
-    styles.interactiveContainer,
-    state.hovered && !state.pressed && !isDisabled
-      ? styles.hoveredContainer
-      : undefined,
-    state.pressed && !isDisabled ? styles.pressedContainer : undefined,
-    isDisabled ? styles.disabledContainer : undefined,
-    typeof style === 'function'
-      ? (style as (state: PressableState) => ViewStyle)(state)
-      : style,
-  ]
-
   return (
     <Pressable
       {...props}
@@ -57,7 +39,14 @@ export function Card({
       hitSlop={Platform.OS === 'web' ? undefined : 4}
       disabled={isDisabled}
       onPress={onPress}
-      style={resolvedStyle}
+      style={resolvePressableStyle(
+        [styles.container, styles.interactiveContainer],
+        styles.hoveredContainer,
+        styles.pressedContainer,
+        styles.disabledContainer,
+        isDisabled,
+        style,
+      )}
     >
       {isDisabled ? (
         <View style={styles.disabledContent}>{children}</View>

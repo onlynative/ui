@@ -1,46 +1,10 @@
 import { useMemo } from 'react'
 import { Platform, Pressable, View } from 'react-native'
-import type { StyleProp, ViewStyle } from 'react-native'
 import { useTheme } from '@onlynative/core'
 
+import { resolvePressableStyle } from '@onlynative/utils'
 import { createStyles } from './styles'
 import type { RadioProps } from './types'
-
-interface PressableState {
-  pressed: boolean
-  hovered?: boolean
-}
-
-function resolveStyle(
-  containerStyle: StyleProp<ViewStyle>,
-  hoveredContainerStyle: StyleProp<ViewStyle>,
-  pressedContainerStyle: StyleProp<ViewStyle>,
-  disabledContainerStyle: StyleProp<ViewStyle>,
-  disabled: boolean,
-  style: RadioProps['style'],
-): (state: PressableState) => StyleProp<ViewStyle> {
-  if (typeof style === 'function') {
-    return (state) => [
-      containerStyle,
-      state.hovered && !state.pressed && !disabled
-        ? hoveredContainerStyle
-        : undefined,
-      state.pressed && !disabled ? pressedContainerStyle : undefined,
-      disabled ? disabledContainerStyle : undefined,
-      style(state),
-    ]
-  }
-
-  return (state) => [
-    containerStyle,
-    state.hovered && !state.pressed && !disabled
-      ? hoveredContainerStyle
-      : undefined,
-    state.pressed && !disabled ? pressedContainerStyle : undefined,
-    disabled ? disabledContainerStyle : undefined,
-    style,
-  ]
-}
 
 export function Radio({
   style,
@@ -77,7 +41,7 @@ export function Radio({
       hitSlop={Platform.OS === 'web' ? undefined : 4}
       disabled={isDisabled}
       onPress={handlePress}
-      style={resolveStyle(
+      style={resolvePressableStyle(
         styles.container,
         styles.hoveredContainer,
         styles.pressedContainer,

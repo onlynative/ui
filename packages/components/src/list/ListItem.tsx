@@ -1,15 +1,10 @@
 import { useMemo } from 'react'
 import { Platform, Pressable, Text, View } from 'react-native'
-import type { StyleProp, ViewStyle } from 'react-native'
 import { useTheme } from '@onlynative/core'
 
+import { resolvePressableStyle } from '@onlynative/utils'
 import { createListItemStyles } from './styles'
 import type { ListItemLines, ListItemProps } from './types'
-
-interface PressableState {
-  pressed: boolean
-  hovered?: boolean
-}
 
 function getLines(
   supportingText?: string,
@@ -18,7 +13,9 @@ function getLines(
 ): ListItemLines {
   if (
     (supportingText && overlineText) ||
-    (supportingText && supportingTextNumberOfLines && supportingTextNumberOfLines > 1)
+    (supportingText &&
+      supportingTextNumberOfLines &&
+      supportingTextNumberOfLines > 1)
   ) {
     return 3
   }
@@ -43,7 +40,11 @@ export function ListItem({
   const isDisabled = Boolean(disabled)
   const isInteractive = onPress !== undefined
   const theme = useTheme()
-  const lines = getLines(supportingText, overlineText, supportingTextNumberOfLines)
+  const lines = getLines(
+    supportingText,
+    overlineText,
+    supportingTextNumberOfLines,
+  )
   const styles = useMemo(
     () => createListItemStyles(theme, lines, containerColor),
     [theme, lines, containerColor],
@@ -93,19 +94,6 @@ export function ListItem({
     )
   }
 
-  const resolvedStyle = (state: PressableState): StyleProp<ViewStyle> => [
-    styles.container,
-    styles.interactiveContainer,
-    state.hovered && !state.pressed && !isDisabled
-      ? styles.hoveredContainer
-      : undefined,
-    state.pressed && !isDisabled ? styles.pressedContainer : undefined,
-    isDisabled ? styles.disabledContainer : undefined,
-    typeof style === 'function'
-      ? (style as (state: PressableState) => ViewStyle)(state)
-      : style,
-  ]
-
   return (
     <Pressable
       {...props}
@@ -114,12 +102,17 @@ export function ListItem({
       hitSlop={Platform.OS === 'web' ? undefined : 4}
       disabled={isDisabled}
       onPress={onPress}
-      style={resolvedStyle}
+      style={resolvePressableStyle(
+        [styles.container, styles.interactiveContainer],
+        styles.hoveredContainer,
+        styles.pressedContainer,
+        styles.disabledContainer,
+        isDisabled,
+        style,
+      )}
     >
       {isDisabled ? (
-        <View style={styles.disabledContentWrapper}>
-          {content}
-        </View>
+        <View style={styles.disabledContentWrapper}>{content}</View>
       ) : (
         content
       )}
