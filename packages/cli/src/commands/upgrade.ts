@@ -7,6 +7,7 @@ import { readConfig } from '../lib/config'
 import { detectProject, getInstallCommand } from '../lib/detector'
 import { createSpinner, logger } from '../lib/logger'
 import type { PackageManager } from '../lib/types'
+import { updateCommand } from './update'
 
 interface NpmPackageInfo {
   version: string
@@ -22,6 +23,7 @@ interface PeerDepDiff {
 
 export interface UpgradeOptions {
   yes?: boolean
+  all?: boolean
   packageManager?: PackageManager
 }
 
@@ -159,6 +161,12 @@ export async function upgradeCommand(
       `Already on the latest version ${chalk.bold(`v${installed.version}`)}`,
     )
     logger.break()
+
+    if (options.all) {
+      logger.info('Updating installed components...')
+      await updateCommand([], cwd, { all: true, dryRun: false })
+    }
+
     return
   }
 
@@ -306,4 +314,10 @@ export async function upgradeCommand(
   }
 
   logger.break()
+
+  // 11. Optionally update all installed component files
+  if (options.all) {
+    logger.info('Updating installed components...')
+    await updateCommand([], cwd, { all: true, dryRun: false })
+  }
 }

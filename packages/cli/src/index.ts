@@ -139,6 +139,7 @@ program
   .command('upgrade')
   .description('Upgrade @onlynative/core and install new peer dependencies')
   .option('-y, --yes', 'Skip confirmation prompt', false)
+  .option('-a, --all', 'Also update all installed component files', false)
   .option(
     '--package-manager <pm>',
     `Package manager to use (${PACKAGE_MANAGERS.join(', ')})`,
@@ -150,6 +151,7 @@ program
       }
       await upgradeCommand(process.cwd(), {
         yes: options.yes,
+        all: options.all,
         packageManager: options.packageManager,
       })
     } catch (error) {
