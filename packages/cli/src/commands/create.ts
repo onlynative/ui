@@ -15,7 +15,50 @@ export interface CreateOptions {
 
 type TemplateName = 'blank' | 'with-router'
 
-const TEMPLATES_BASE_URL = `${DEFAULT_CONFIG.registryUrl}/${DEFAULT_CONFIG.registryVersion}/templates`
+interface TemplateSource {
+  baseUrl: string
+  pinnedVersion: string | null
+}
+
+const NPM_REGISTRY = 'https://registry.npmjs.org'
+const ONLYNATIVE_PACKAGES = ['@onlynative/core', '@onlynative/components']
+
+/**
+ * Resolves the template source by checking the latest published npm version.
+ * Fetches templates from the matching git tag to ensure template code is
+ * compatible with the installed packages. Falls back to `main` if the tag
+ * doesn't include templates yet or npm is unreachable.
+ */
+async function resolveTemplateSource(): Promise<TemplateSource> {
+  const fallback: TemplateSource = {
+    baseUrl: `${DEFAULT_CONFIG.registryUrl}/${DEFAULT_CONFIG.registryVersion}/templates`,
+    pinnedVersion: null,
+  }
+
+  try {
+    const res = await fetch(`${NPM_REGISTRY}/@onlynative/core`)
+    if (!res.ok) return fallback
+
+    const data = (await res.json()) as {
+      'dist-tags'?: Record<string, string>
+    }
+    const version = data['dist-tags']?.latest
+    if (!version) return fallback
+
+    // Check if the release tag has templates
+    const tagBaseUrl = `${DEFAULT_CONFIG.registryUrl}/v${version}/templates`
+    const probe = await fetch(`${tagBaseUrl}/blank/package.json`)
+
+    if (probe.ok) {
+      return { baseUrl: tagBaseUrl, pinnedVersion: version }
+    }
+
+    // Tag exists but has no templates yet — use main with pinned version
+    return { baseUrl: fallback.baseUrl, pinnedVersion: version }
+  } catch {
+    return fallback
+  }
+}
 
 const TEMPLATE_CONFIGS: Record<
   TemplateName,
@@ -231,9 +274,10 @@ export async function createCommand(
     await fs.remove(targetDir)
   }
 
-  // --- Fetch and write template ---
+  // --- Resolve template source ---
   const templateConfig = TEMPLATE_CONFIGS[templateName]
-  const templateBaseUrl = `${TEMPLATES_BASE_URL}/${templateName}`
+  const { baseUrl, pinnedVersion } = await resolveTemplateSource()
+  const templateBaseUrl = `${baseUrl}/${templateName}`
   const spinner = createSpinner('Creating project...')
   spinner.start()
 
@@ -249,6 +293,16 @@ export async function createCommand(
       if (file === 'package.json') {
         const pkg = JSON.parse(content)
         pkg.name = projectName
+
+        // Pin @onlynative/* versions to the published version
+        if (pinnedVersion) {
+          for (const pkgName of ONLYNATIVE_PACKAGES) {
+            if (pkg.dependencies?.[pkgName]) {
+              pkg.dependencies[pkgName] = pinnedVersion
+            }
+          }
+        }
+
         content = JSON.stringify(pkg, null, 2) + '\n'
       }
 
