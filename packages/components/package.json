@@ -7,82 +7,82 @@
   "main": "dist/index.js",
   "module": "dist/index.js",
   "types": "dist/index.d.ts",
-  "react-native": "src/index.ts",
+  "react-native": "dist/index.js",
   "source": "src/index.ts",
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "react-native": "./src/index.ts",
+      "react-native": "./dist/index.js",
       "default": "./dist/index.js"
     },
     "./typography": {
       "types": "./dist/typography/index.d.ts",
-      "react-native": "./src/typography/index.ts",
+      "react-native": "./dist/typography/index.js",
       "default": "./dist/typography/index.js"
     },
     "./layout": {
       "types": "./dist/layout/index.d.ts",
-      "react-native": "./src/layout/index.ts",
+      "react-native": "./dist/layout/index.js",
       "default": "./dist/layout/index.js"
     },
     "./button": {
       "types": "./dist/button/index.d.ts",
-      "react-native": "./src/button/index.ts",
+      "react-native": "./dist/button/index.js",
       "default": "./dist/button/index.js"
     },
     "./icon-button": {
       "types": "./dist/icon-button/index.d.ts",
-      "react-native": "./src/icon-button/index.ts",
+      "react-native": "./dist/icon-button/index.js",
       "default": "./dist/icon-button/index.js"
     },
     "./appbar": {
       "types": "./dist/appbar/index.d.ts",
-      "react-native": "./src/appbar/index.ts",
+      "react-native": "./dist/appbar/index.js",
       "default": "./dist/appbar/index.js"
     },
     "./card": {
       "types": "./dist/card/index.d.ts",
-      "react-native": "./src/card/index.ts",
+      "react-native": "./dist/card/index.js",
       "default": "./dist/card/index.js"
     },
     "./chip": {
       "types": "./dist/chip/index.d.ts",
-      "react-native": "./src/chip/index.ts",
+      "react-native": "./dist/chip/index.js",
       "default": "./dist/chip/index.js"
     },
     "./checkbox": {
       "types": "./dist/checkbox/index.d.ts",
-      "react-native": "./src/checkbox/index.ts",
+      "react-native": "./dist/checkbox/index.js",
       "default": "./dist/checkbox/index.js"
     },
     "./radio": {
       "types": "./dist/radio/index.d.ts",
-      "react-native": "./src/radio/index.ts",
+      "react-native": "./dist/radio/index.js",
       "default": "./dist/radio/index.js"
     },
     "./switch": {
       "types": "./dist/switch/index.d.ts",
-      "react-native": "./src/switch/index.ts",
+      "react-native": "./dist/switch/index.js",
       "default": "./dist/switch/index.js"
     },
     "./text-field": {
       "types": "./dist/text-field/index.d.ts",
-      "react-native": "./src/text-field/index.ts",
+      "react-native": "./dist/text-field/index.js",
       "default": "./dist/text-field/index.js"
     },
     "./list": {
       "types": "./dist/list/index.d.ts",
-      "react-native": "./src/list/index.ts",
+      "react-native": "./dist/list/index.js",
       "default": "./dist/list/index.js"
     },
     "./keyboard-avoiding-wrapper": {
       "types": "./dist/keyboard-avoiding-wrapper/index.d.ts",
-      "react-native": "./src/keyboard-avoiding-wrapper/index.ts",
+      "react-native": "./dist/keyboard-avoiding-wrapper/index.js",
       "default": "./dist/keyboard-avoiding-wrapper/index.js"
     },
     "./avatar": {
       "types": "./dist/avatar/index.d.ts",
-      "react-native": "./src/avatar/index.ts",
+      "react-native": "./dist/avatar/index.js",
       "default": "./dist/avatar/index.js"
     }
   },

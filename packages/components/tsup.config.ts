@@ -1,3 +1,4 @@
+import path from 'path'
 import { defineConfig } from 'tsup'
 
 export default defineConfig({
@@ -23,4 +24,10 @@ export default defineConfig({
   outDir: 'dist',
   clean: true,
   noExternal: ['@onlynative/utils'],
+  external: ['@expo/vector-icons'],
+  esbuildOptions(options) {
+    options.alias = {
+      '@onlynative/utils': path.resolve(__dirname, '../utils/src/index.ts'),
+    }
+  },
 })

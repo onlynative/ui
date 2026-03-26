@@ -7,18 +7,18 @@
   "main": "dist/index.mjs",
   "module": "dist/index.mjs",
   "types": "dist/index.d.mts",
-  "react-native": "src/index.ts",
+  "react-native": "dist/index.mjs",
   "source": "src/index.ts",
   "exports": {
     ".": {
       "types": "./dist/index.d.mts",
-      "react-native": "./src/index.ts",
+      "react-native": "./dist/index.mjs",
       "import": "./dist/index.mjs",
       "default": "./dist/index.mjs"
     },
     "./test": {
       "types": "./dist/test-utils/index.d.mts",
-      "react-native": "./src/test-utils/index.ts",
+      "react-native": "./dist/test-utils/index.mjs",
       "import": "./dist/test-utils/index.mjs",
       "default": "./dist/test-utils/index.mjs"
     }
