@@ -6,12 +6,11 @@ import {
   MaterialDynamicColors,
 } from '@material/material-color-utilities'
 import type { DynamicScheme } from '@material/material-color-utilities'
-
+import { applyRoundness } from './applyRoundness'
+import { lightTheme } from './light'
+import { defaultTopAppBarTokens } from './topAppBar'
 import type { Colors, Theme, Typography } from './types'
 import { defaultTypography } from './typography'
-import { defaultTopAppBarTokens } from './topAppBar'
-import { lightTheme } from './light'
-import { applyRoundness } from './applyRoundness'
 
 export interface CreateMaterialThemeOptions {
   /** Custom font family applied to all typography styles. When omitted, platform defaults are used (Roboto on Android, System on iOS). */
@@ -36,9 +35,7 @@ function extractColors(scheme: DynamicScheme): Colors {
     secondary: hexFromArgb(c.secondary().getArgb(scheme)),
     onSecondary: hexFromArgb(c.onSecondary().getArgb(scheme)),
     secondaryContainer: hexFromArgb(c.secondaryContainer().getArgb(scheme)),
-    onSecondaryContainer: hexFromArgb(
-      c.onSecondaryContainer().getArgb(scheme),
-    ),
+    onSecondaryContainer: hexFromArgb(c.onSecondaryContainer().getArgb(scheme)),
     secondaryFixed: hexFromArgb(c.secondaryFixed().getArgb(scheme)),
     onSecondaryFixed: hexFromArgb(c.onSecondaryFixed().getArgb(scheme)),
     secondaryFixedDim: hexFromArgb(c.secondaryFixedDim().getArgb(scheme)),
@@ -48,9 +45,7 @@ function extractColors(scheme: DynamicScheme): Colors {
     tertiary: hexFromArgb(c.tertiary().getArgb(scheme)),
     onTertiary: hexFromArgb(c.onTertiary().getArgb(scheme)),
     tertiaryContainer: hexFromArgb(c.tertiaryContainer().getArgb(scheme)),
-    onTertiaryContainer: hexFromArgb(
-      c.onTertiaryContainer().getArgb(scheme),
-    ),
+    onTertiaryContainer: hexFromArgb(c.onTertiaryContainer().getArgb(scheme)),
     tertiaryFixed: hexFromArgb(c.tertiaryFixed().getArgb(scheme)),
     onTertiaryFixed: hexFromArgb(c.onTertiaryFixed().getArgb(scheme)),
     tertiaryFixedDim: hexFromArgb(c.tertiaryFixedDim().getArgb(scheme)),
@@ -69,13 +64,9 @@ function extractColors(scheme: DynamicScheme): Colors {
     surfaceContainerLowest: hexFromArgb(
       c.surfaceContainerLowest().getArgb(scheme),
     ),
-    surfaceContainerLow: hexFromArgb(
-      c.surfaceContainerLow().getArgb(scheme),
-    ),
+    surfaceContainerLow: hexFromArgb(c.surfaceContainerLow().getArgb(scheme)),
     surfaceContainer: hexFromArgb(c.surfaceContainer().getArgb(scheme)),
-    surfaceContainerHigh: hexFromArgb(
-      c.surfaceContainerHigh().getArgb(scheme),
-    ),
+    surfaceContainerHigh: hexFromArgb(c.surfaceContainerHigh().getArgb(scheme)),
     surfaceContainerHighest: hexFromArgb(
       c.surfaceContainerHighest().getArgb(scheme),
     ),
@@ -128,8 +119,7 @@ export function createMaterialTheme(
   const lightScheme = new SchemeTonalSpot(sourceHct, false, 0)
   const darkScheme = new SchemeTonalSpot(sourceHct, true, 0)
 
-  const shape =
-    roundness === 1 ? lightTheme.shape : applyRoundness(roundness)
+  const shape = roundness === 1 ? lightTheme.shape : applyRoundness(roundness)
 
   const typography = fontFamily
     ? (Object.fromEntries(

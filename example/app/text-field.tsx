@@ -1,5 +1,3 @@
-import { useState } from 'react'
-import { StyleSheet } from 'react-native'
 import {
   KeyboardAvoidingWrapper,
   TextField,
@@ -7,6 +5,8 @@ import {
   Column,
   Row,
 } from '@onlynative/components'
+import { useState } from 'react'
+import { StyleSheet } from 'react-native'
 
 export default function TextFieldScreen() {
   const [filledValue, setFilledValue] = useState('')
@@ -35,7 +35,7 @@ export default function TextFieldScreen() {
           label="With icons"
           leadingIcon="magnify"
           trailingIcon="close-circle"
-          onTrailingIconPress={() => { }}
+          onTrailingIconPress={() => {}}
         />
         <TextField label="Disabled" disabled value="Disabled value" />
       </Column>
@@ -54,7 +54,7 @@ export default function TextFieldScreen() {
           label="With icons"
           leadingIcon="magnify"
           trailingIcon="close-circle"
-          onTrailingIconPress={() => { }}
+          onTrailingIconPress={() => {}}
         />
         <TextField
           variant="outlined"

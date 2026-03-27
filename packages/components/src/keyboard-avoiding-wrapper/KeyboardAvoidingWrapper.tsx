@@ -5,9 +5,8 @@ import {
   Platform,
   ScrollView,
 } from 'react-native'
-
-import type { KeyboardAvoidingWrapperProps } from './types'
 import { styles } from './styles'
+import type { KeyboardAvoidingWrapperProps } from './types'
 
 const isIOS = Platform.OS === 'ios'
 
@@ -26,21 +25,13 @@ export function KeyboardAvoidingWrapper({
     const subscriptions: ReturnType<typeof Keyboard.addListener>[] = []
 
     if (onKeyboardShow) {
-      const showEvent = isIOS
-        ? 'keyboardWillShow'
-        : 'keyboardDidShow'
-      subscriptions.push(
-        Keyboard.addListener(showEvent, onKeyboardShow),
-      )
+      const showEvent = isIOS ? 'keyboardWillShow' : 'keyboardDidShow'
+      subscriptions.push(Keyboard.addListener(showEvent, onKeyboardShow))
     }
 
     if (onKeyboardHide) {
-      const hideEvent = isIOS
-        ? 'keyboardWillHide'
-        : 'keyboardDidHide'
-      subscriptions.push(
-        Keyboard.addListener(hideEvent, onKeyboardHide),
-      )
+      const hideEvent = isIOS ? 'keyboardWillHide' : 'keyboardDidHide'
+      subscriptions.push(Keyboard.addListener(hideEvent, onKeyboardHide))
     }
 
     return () => {

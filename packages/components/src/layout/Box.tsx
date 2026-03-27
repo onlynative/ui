@@ -1,10 +1,9 @@
+import { useTheme } from '@onlynative/core'
 import { useMemo } from 'react'
 import type { ViewStyle } from 'react-native'
 import { View } from 'react-native'
-import { useTheme } from '@onlynative/core'
-
-import type { BoxProps, SpacingValue } from './types'
 import { resolveSpacing } from './resolveSpacing'
+import type { BoxProps, SpacingValue } from './types'
 
 export function Box({
   p,

@@ -1,7 +1,6 @@
+import { useTheme } from '@onlynative/core'
 import { useMemo } from 'react'
 import { View } from 'react-native'
-import { useTheme } from '@onlynative/core'
-
 import { createListStyles } from './styles'
 import type { ListProps } from './types'
 

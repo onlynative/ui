@@ -1,5 +1,5 @@
-import { lightTheme } from '../theme/light'
 import { darkTheme } from '../theme/dark'
+import { lightTheme } from '../theme/light'
 import { defaultTopAppBarTokens } from '../theme/topAppBar'
 
 /**

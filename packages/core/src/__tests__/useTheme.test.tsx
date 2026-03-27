@@ -1,6 +1,5 @@
 import { renderHook } from '@testing-library/react-native'
 import type { ReactNode } from 'react'
-
 import { ThemeProvider } from '../provider/ThemeProvider'
 import { useTheme } from '../provider/useTheme'
 import { darkTheme } from '../theme/dark'

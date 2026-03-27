@@ -1,18 +1,18 @@
 import path from 'node:path'
-import fs from 'fs-extra'
 import { execa } from 'execa'
+import fs from 'fs-extra'
+import { resolveAliasPath } from './config'
+import { getInstallCommand } from './detector'
+import { createSpinner, logger } from './logger'
+import { fetchFileContent, fetchUtilsRegistry } from './registry'
+import { getComponentNames } from './resolver'
+import { generateUtilsBarrel, transformImports } from './transform'
 import type {
   OnlyNativeConfig,
   PackageManager,
   ResolutionResult,
   UtilsRegistry,
 } from './types'
-import { fetchFileContent, fetchUtilsRegistry } from './registry'
-import { generateUtilsBarrel, transformImports } from './transform'
-import { getComponentNames } from './resolver'
-import { resolveAliasPath } from './config'
-import { getInstallCommand } from './detector'
-import { createSpinner, logger } from './logger'
 
 interface InstallOptions {
   config: OnlyNativeConfig

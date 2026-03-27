@@ -1,8 +1,7 @@
+import { renderWithTheme } from '@onlynative/utils/test'
 import { screen, fireEvent } from '@testing-library/react-native'
 import { StyleSheet, Text } from 'react-native'
-
 import { Chip } from '../chip/Chip'
-import { renderWithTheme } from '@onlynative/utils/test'
 
 describe('Chip', () => {
   it('renders the label text', () => {
@@ -150,9 +149,7 @@ describe('Chip', () => {
     })
 
     it('applies labelStyle to the label text', () => {
-      renderWithTheme(
-        <Chip labelStyle={{ fontWeight: '900' }}>Styled</Chip>,
-      )
+      renderWithTheme(<Chip labelStyle={{ fontWeight: '900' }}>Styled</Chip>)
       const label = screen.getByText('Styled')
       const flatStyle = StyleSheet.flatten(label.props.style)
       expect(flatStyle.fontWeight).toBe('900')

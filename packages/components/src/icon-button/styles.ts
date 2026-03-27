@@ -1,6 +1,6 @@
-import { StyleSheet } from 'react-native'
 import type { MaterialTheme } from '@onlynative/core'
 import { alphaColor, blendColor } from '@onlynative/utils'
+import { StyleSheet } from 'react-native'
 
 export function createStyles(theme: MaterialTheme) {
   const disabledContainerColor = alphaColor(theme.colors.onSurface, 0.12)
@@ -245,11 +245,13 @@ export function createStyles(theme: MaterialTheme) {
       borderColor: disabledContainerColor,
       cursor: 'auto',
     },
+    // eslint-disable-next-line react-native/no-color-literals
     disabledOutlined: {
       backgroundColor: 'transparent',
       borderColor: disabledOutlineColor,
       cursor: 'auto',
     },
+    // eslint-disable-next-line react-native/no-color-literals
     disabledStandard: {
       backgroundColor: 'transparent',
       borderColor: 'transparent',

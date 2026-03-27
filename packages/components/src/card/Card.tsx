@@ -1,8 +1,7 @@
+import { useTheme } from '@onlynative/core'
+import { resolvePressableStyle } from '@onlynative/utils'
 import { useMemo } from 'react'
 import { Platform, Pressable, View } from 'react-native'
-import { useTheme } from '@onlynative/core'
-
-import { resolvePressableStyle } from '@onlynative/utils'
 import { createStyles } from './styles'
 import type { CardProps } from './types'
 

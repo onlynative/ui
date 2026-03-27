@@ -1,8 +1,7 @@
-import { StyleSheet } from 'react-native'
 import type { MaterialTheme } from '@onlynative/core'
-
-import type { ChipVariant } from './types'
 import { alphaColor, blendColor, elevationStyle } from '@onlynative/utils'
+import { StyleSheet } from 'react-native'
+import type { ChipVariant } from './types'
 
 interface VariantColors {
   backgroundColor: string

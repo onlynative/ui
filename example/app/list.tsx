@@ -1,6 +1,4 @@
-import { Alert, ScrollView, StyleSheet, View } from 'react-native'
 import { MaterialCommunityIcons } from '@expo/vector-icons'
-import { useTheme } from '@onlynative/core'
 import {
   List,
   ListItem,
@@ -8,6 +6,8 @@ import {
   Typography,
   Column,
 } from '@onlynative/components'
+import { useTheme } from '@onlynative/core'
+import { Alert, ScrollView, StyleSheet, View } from 'react-native'
 
 function Icon({ name }: { name: string }) {
   const theme = useTheme()
@@ -23,7 +23,12 @@ function Icon({ name }: { name: string }) {
 function Avatar({ label }: { label: string }) {
   const theme = useTheme()
   return (
-    <View style={[styles.avatar, { backgroundColor: theme.colors.primaryContainer }]}>
+    <View
+      style={[
+        styles.avatar,
+        { backgroundColor: theme.colors.primaryContainer },
+      ]}
+    >
       <Typography variant="titleSmall" color={theme.colors.onPrimaryContainer}>
         {label}
       </Typography>
@@ -48,20 +53,11 @@ export default function ListScreen() {
       <Column gap="sm">
         <Typography variant="titleSmall">Two-line items</Typography>
         <List>
-          <ListItem
-            headlineText="Photos"
-            supportingText="Jan 9, 2024"
-          />
+          <ListItem headlineText="Photos" supportingText="Jan 9, 2024" />
           <ListDivider />
-          <ListItem
-            headlineText="Recipes"
-            supportingText="Jan 17, 2024"
-          />
+          <ListItem headlineText="Recipes" supportingText="Jan 17, 2024" />
           <ListDivider />
-          <ListItem
-            headlineText="Work"
-            supportingText="Jan 28, 2024"
-          />
+          <ListItem headlineText="Work" supportingText="Jan 28, 2024" />
         </List>
       </Column>
 
@@ -106,7 +102,9 @@ export default function ListScreen() {
       </Column>
 
       <Column gap="sm">
-        <Typography variant="titleSmall">With avatars and trailing text</Typography>
+        <Typography variant="titleSmall">
+          With avatars and trailing text
+        </Typography>
         <List>
           <ListItem
             headlineText="Alice"

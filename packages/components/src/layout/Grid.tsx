@@ -1,10 +1,9 @@
+import { useTheme } from '@onlynative/core'
 import React, { useMemo } from 'react'
 import type { ViewStyle } from 'react-native'
 import { View } from 'react-native'
-import { useTheme } from '@onlynative/core'
-
-import { Row } from './Row'
 import { resolveSpacing } from './resolveSpacing'
+import { Row } from './Row'
 import type { GridProps } from './types'
 
 export function Grid({

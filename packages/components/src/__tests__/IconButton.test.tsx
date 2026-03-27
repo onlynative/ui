@@ -1,25 +1,18 @@
+import { renderWithTheme } from '@onlynative/utils/test'
 import { screen, fireEvent } from '@testing-library/react-native'
 import { StyleSheet } from 'react-native'
-
 import { IconButton } from '../icon-button/IconButton'
-import { renderWithTheme } from '@onlynative/utils/test'
 
 describe('IconButton', () => {
   it('renders with the button accessibility role', () => {
-    renderWithTheme(
-      <IconButton icon="heart" accessibilityLabel="Like" />,
-    )
+    renderWithTheme(<IconButton icon="heart" accessibilityLabel="Like" />)
     expect(screen.getByRole('button')).toBeTruthy()
   })
 
   it('calls onPress when pressed', () => {
     const onPress = jest.fn()
     renderWithTheme(
-      <IconButton
-        icon="heart"
-        accessibilityLabel="Like"
-        onPress={onPress}
-      />,
+      <IconButton icon="heart" accessibilityLabel="Like" onPress={onPress} />,
     )
     fireEvent.press(screen.getByRole('button'))
     expect(onPress).toHaveBeenCalledTimes(1)

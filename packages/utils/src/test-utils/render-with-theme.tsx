@@ -1,6 +1,6 @@
+import { ThemeProvider } from '@onlynative/core'
 import { render, type RenderOptions } from '@testing-library/react-native'
 import type { ReactElement } from 'react'
-import { ThemeProvider } from '@onlynative/core'
 
 export function renderWithTheme(
   ui: ReactElement,

@@ -1,11 +1,16 @@
-import { useCallback, useMemo, useState } from 'react'
-import { Alert, I18nManager, Platform, useColorScheme } from 'react-native'
+import { AppBar, Layout } from '@onlynative/components'
+import type { AppBarAction } from '@onlynative/components'
+import {
+  ThemeProvider,
+  darkTheme,
+  lightTheme,
+  useTheme,
+} from '@onlynative/core'
 import { Slot, useRouter, useSegments } from 'expo-router'
 import { StatusBar } from 'expo-status-bar'
 import * as Updates from 'expo-updates'
-import { ThemeProvider, darkTheme, lightTheme, useTheme } from '@onlynative/core'
-import { AppBar, Layout } from '@onlynative/components'
-import type { AppBarAction } from '@onlynative/components'
+import { useCallback, useMemo, useState } from 'react'
+import { Alert, I18nManager, Platform, useColorScheme } from 'react-native'
 
 // Restore persisted RTL preference on web before first render
 if (Platform.OS === 'web' && typeof localStorage !== 'undefined') {

@@ -1,6 +1,6 @@
+import { Column, Row, Switch, Typography } from '@onlynative/components'
 import { useState } from 'react'
 import { ScrollView, StyleSheet } from 'react-native'
-import { Column, Row, Switch, Typography } from '@onlynative/components'
 
 export default function SwitchScreen() {
   const [basic, setBasic] = useState(false)
@@ -16,9 +16,7 @@ export default function SwitchScreen() {
         <Typography variant="titleSmall">Basic</Typography>
         <Row gap="md" align="center">
           <Switch value={basic} onValueChange={setBasic} />
-          <Typography variant="bodyMedium">
-            {basic ? 'On' : 'Off'}
-          </Typography>
+          <Typography variant="bodyMedium">{basic ? 'On' : 'Off'}</Typography>
         </Row>
         <Row gap="md" align="center">
           <Switch value={withIcon} onValueChange={setWithIcon} />

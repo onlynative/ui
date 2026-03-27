@@ -1,8 +1,7 @@
+import { renderWithTheme } from '@onlynative/utils/test'
 import { screen, fireEvent } from '@testing-library/react-native'
 import { StyleSheet } from 'react-native'
-
 import { TextField } from '../text-field/TextField'
-import { renderWithTheme } from '@onlynative/utils/test'
 
 describe('TextField', () => {
   it('renders the label text', () => {
@@ -28,9 +27,7 @@ describe('TextField', () => {
 
     it('calls onChangeText when typing', () => {
       const onChangeText = jest.fn()
-      renderWithTheme(
-        <TextField label="Name" onChangeText={onChangeText} />,
-      )
+      renderWithTheme(<TextField label="Name" onChangeText={onChangeText} />)
       fireEvent.changeText(screen.getByLabelText('Name'), 'Bob')
       expect(onChangeText).toHaveBeenCalledWith('Bob')
     })
@@ -69,9 +66,7 @@ describe('TextField', () => {
 
   describe('error state', () => {
     it('displays errorText', () => {
-      renderWithTheme(
-        <TextField label="Email" errorText="Invalid email" />,
-      )
+      renderWithTheme(<TextField label="Email" errorText="Invalid email" />)
       expect(screen.getByText('Invalid email')).toBeTruthy()
     })
 
@@ -88,9 +83,7 @@ describe('TextField', () => {
     })
 
     it('sets accessibilityHint to errorText when in error state', () => {
-      renderWithTheme(
-        <TextField label="Email" errorText="Invalid email" />,
-      )
+      renderWithTheme(<TextField label="Email" errorText="Invalid email" />)
       const input = screen.getByLabelText('Email')
       expect(input.props.accessibilityHint).toBe('Invalid email')
     })
@@ -164,9 +157,7 @@ describe('TextField', () => {
     })
 
     it('applies contentColor to the input text', () => {
-      renderWithTheme(
-        <TextField label="Name" contentColor="#00FF00" />,
-      )
+      renderWithTheme(<TextField label="Name" contentColor="#00FF00" />)
       const input = screen.getByLabelText('Name')
       const flatStyle = StyleSheet.flatten(input.props.style)
       expect(flatStyle.color).toBe('#00FF00')
@@ -174,10 +165,7 @@ describe('TextField', () => {
 
     it('applies inputStyle to the input element', () => {
       renderWithTheme(
-        <TextField
-          label="Name"
-          inputStyle={{ fontWeight: '900' }}
-        />,
+        <TextField label="Name" inputStyle={{ fontWeight: '900' }} />,
       )
       const input = screen.getByLabelText('Name')
       const flatStyle = StyleSheet.flatten(input.props.style)

@@ -1,8 +1,7 @@
+import { renderWithTheme } from '@onlynative/utils/test'
 import { fireEvent, screen } from '@testing-library/react-native'
 import { StyleSheet } from 'react-native'
-
 import { Avatar } from '../avatar/Avatar'
-import { renderWithTheme } from '@onlynative/utils/test'
 
 describe('Avatar', () => {
   describe('content', () => {

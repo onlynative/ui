@@ -1,12 +1,12 @@
-import { useMemo } from 'react'
-import { useRouter } from 'expo-router'
-import { useTheme } from '@onlynative/core'
 import { AppBar, Box, Typography, Column } from '@onlynative/components'
 import type {
   AppBarAction,
   AppBarColorScheme,
   AppBarVariant,
 } from '@onlynative/components'
+import { useTheme } from '@onlynative/core'
+import { useRouter } from 'expo-router'
+import { useMemo } from 'react'
 import { ScrollView, StyleSheet } from 'react-native'
 
 const variants: Array<{

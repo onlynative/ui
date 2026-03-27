@@ -1,6 +1,6 @@
+import { Column, Radio, Row, Typography } from '@onlynative/components'
 import { useState } from 'react'
 import { ScrollView, StyleSheet } from 'react-native'
-import { Column, Radio, Row, Typography } from '@onlynative/components'
 
 export default function RadioScreen() {
   const [radioValue, setRadioValue] = useState<string>('option1')

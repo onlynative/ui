@@ -1,7 +1,6 @@
-import { StyleSheet } from 'react-native'
 import type { MaterialTheme } from '@onlynative/core'
-
 import { alphaColor, blendColor } from '@onlynative/utils'
+import { StyleSheet } from 'react-native'
 
 interface BoxColors {
   backgroundColor: string

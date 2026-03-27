@@ -1,5 +1,4 @@
 import { Platform } from 'react-native'
-
 import type { Typography } from './types'
 
 const defaultFontFamily = Platform.select({

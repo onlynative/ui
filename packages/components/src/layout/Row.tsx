@@ -1,6 +1,5 @@
 import { useMemo } from 'react'
 import type { ViewStyle } from 'react-native'
-
 import { Box } from './Box'
 import type { RowProps } from './types'
 

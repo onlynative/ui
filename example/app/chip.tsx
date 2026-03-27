@@ -1,10 +1,12 @@
+import { Chip, Column, Row, Typography } from '@onlynative/components'
+import { useTheme } from '@onlynative/core'
 import { useState } from 'react'
 import { Alert, ScrollView, StyleSheet, View } from 'react-native'
-import { Chip, Column, Row, Typography } from '@onlynative/components'
 
 const variants = ['assist', 'filter', 'input', 'suggestion'] as const
 
 export default function ChipScreen() {
+  const theme = useTheme()
   const [filters, setFilters] = useState<Record<string, boolean>>({
     Recent: true,
     Popular: false,
@@ -98,7 +100,12 @@ export default function ChipScreen() {
           <Chip
             variant="input"
             avatar={
-              <View style={styles.avatar}>
+              <View
+                style={[
+                  styles.avatar,
+                  { backgroundColor: theme.colors.secondaryContainer },
+                ]}
+              >
                 <Typography variant="labelSmall">JD</Typography>
               </View>
             }
@@ -151,7 +158,6 @@ const styles = StyleSheet.create({
     width: 24,
     height: 24,
     borderRadius: 12,
-    backgroundColor: '#E8DEF8',
     alignItems: 'center',
     justifyContent: 'center',
   },

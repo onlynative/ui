@@ -1,21 +1,16 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
+// Mock the registry module
+vi.mock('../lib/registry', () => ({
+  fetchComponentEntry: vi.fn(),
+  fetchUtilsRegistry: vi.fn(),
+}))
+import { fetchComponentEntry, fetchUtilsRegistry } from '../lib/registry'
 import {
   resolveComponents,
   getComponentNames,
   getDependencyComponents,
 } from '../lib/resolver'
 import type { OnlyNativeConfig } from '../lib/types'
-
-// Mock the registry module
-vi.mock('../lib/registry', () => ({
-  fetchComponentEntry: vi.fn(),
-  fetchUtilsRegistry: vi.fn(),
-}))
-
-import {
-  fetchComponentEntry,
-  fetchUtilsRegistry,
-} from '../lib/registry'
 
 const config: OnlyNativeConfig = {
   aliases: {
@@ -71,9 +66,7 @@ const mockComponents = {
   'icon-button': {
     name: 'icon-button',
     description: 'Icon button',
-    files: [
-      'packages/components/src/icon-button/IconButton.tsx',
-    ],
+    files: ['packages/components/src/icon-button/IconButton.tsx'],
     utils: ['color', 'icon'],
     componentDependencies: [],
     dependencies: { '@onlynative/core': '>=0.1.1-alpha.1' },
@@ -103,18 +96,12 @@ const mockComponents = {
 }
 
 beforeEach(() => {
-  vi.mocked(fetchUtilsRegistry).mockResolvedValue(
-    mockUtilsRegistry,
-  )
-  vi.mocked(fetchComponentEntry).mockImplementation(
-    async (_config, name) => {
-      const entry =
-        mockComponents[name as keyof typeof mockComponents]
-      if (!entry)
-        throw new Error(`Unknown component: ${name}`)
-      return entry
-    },
-  )
+  vi.mocked(fetchUtilsRegistry).mockResolvedValue(mockUtilsRegistry)
+  vi.mocked(fetchComponentEntry).mockImplementation(async (_config, name) => {
+    const entry = mockComponents[name as keyof typeof mockComponents]
+    if (!entry) throw new Error(`Unknown component: ${name}`)
+    return entry
+  })
 })
 
 describe('resolveComponents', () => {
@@ -129,11 +116,7 @@ describe('resolveComponents', () => {
   it('resolves utils for a component', async () => {
     const result = await resolveComponents(config, ['button'])
 
-    expect(result.utils).toEqual([
-      'color',
-      'elevation',
-      'icon',
-    ])
+    expect(result.utils).toEqual(['color', 'elevation', 'icon'])
   })
 
   it('collects npm dependencies', async () => {
@@ -147,9 +130,7 @@ describe('resolveComponents', () => {
   it('collects optional npm dependencies', async () => {
     const result = await resolveComponents(config, ['button'])
 
-    expect(result.optionalNpmDependencies).toHaveProperty(
-      '@expo/vector-icons',
-    )
+    expect(result.optionalNpmDependencies).toHaveProperty('@expo/vector-icons')
   })
 
   it('resolves transitive component dependencies', async () => {
@@ -165,9 +146,7 @@ describe('resolveComponents', () => {
   it('marks transitive deps as not direct requests', async () => {
     const result = await resolveComponents(config, ['appbar'])
 
-    const appbar = result.components.find(
-      (c) => c.entry.name === 'appbar',
-    )
+    const appbar = result.components.find((c) => c.entry.name === 'appbar')
     const iconButton = result.components.find(
       (c) => c.entry.name === 'icon-button',
     )
@@ -195,16 +174,11 @@ describe('resolveComponents', () => {
     expect(result.npmDependencies).toHaveProperty(
       'react-native-safe-area-context',
     )
-    expect(result.npmDependencies).toHaveProperty(
-      '@onlynative/core',
-    )
+    expect(result.npmDependencies).toHaveProperty('@onlynative/core')
   })
 
   it('resolves multiple components at once', async () => {
-    const result = await resolveComponents(config, [
-      'button',
-      'card',
-    ])
+    const result = await resolveComponents(config, ['button', 'card'])
 
     const names = getComponentNames(result)
     expect(names).toContain('button')
@@ -214,24 +188,14 @@ describe('resolveComponents', () => {
 
   it('deduplicates shared dependencies', async () => {
     // Both button and card use color+elevation
-    const result = await resolveComponents(config, [
-      'button',
-      'card',
-    ])
+    const result = await resolveComponents(config, ['button', 'card'])
 
-    expect(result.utils).toEqual([
-      'color',
-      'elevation',
-      'icon',
-    ])
+    expect(result.utils).toEqual(['color', 'elevation', 'icon'])
   })
 
   it('deduplicates components when requested and also a dep', async () => {
     // Request icon-button directly + appbar which depends on icon-button
-    const result = await resolveComponents(config, [
-      'icon-button',
-      'appbar',
-    ])
+    const result = await resolveComponents(config, ['icon-button', 'appbar'])
 
     const iconButtons = result.components.filter(
       (c) => c.entry.name === 'icon-button',
@@ -242,9 +206,7 @@ describe('resolveComponents', () => {
   })
 
   it('handles component with no utils or deps', async () => {
-    const result = await resolveComponents(config, [
-      'typography',
-    ])
+    const result = await resolveComponents(config, ['typography'])
 
     expect(result.components).toHaveLength(1)
     expect(result.utils).toEqual([])
@@ -261,11 +223,7 @@ describe('getComponentNames', () => {
     const names = getComponentNames(result)
 
     expect(names).toEqual(
-      expect.arrayContaining([
-        'appbar',
-        'icon-button',
-        'typography',
-      ]),
+      expect.arrayContaining(['appbar', 'icon-button', 'typography']),
     )
   })
 })

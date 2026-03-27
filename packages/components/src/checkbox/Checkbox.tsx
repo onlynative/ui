@@ -1,12 +1,11 @@
-import { useMemo } from 'react'
-import { Platform, Pressable, View } from 'react-native'
 import { useTheme } from '@onlynative/core'
-
 import {
   getMaterialCommunityIcons,
   resolveColorFromStyle,
   resolvePressableStyle,
 } from '@onlynative/utils'
+import { useMemo } from 'react'
+import { Platform, Pressable, View } from 'react-native'
 import { createStyles } from './styles'
 import type { CheckboxProps } from './types'
 

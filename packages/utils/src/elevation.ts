@@ -1,6 +1,6 @@
+import type { ElevationLevel } from '@onlynative/core'
 import { Platform } from 'react-native'
 import type { ViewStyle } from 'react-native'
-import type { ElevationLevel } from '@onlynative/core'
 
 /**
  * Converts a theme elevation level into platform-appropriate shadow styles.

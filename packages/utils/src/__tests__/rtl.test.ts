@@ -1,5 +1,4 @@
 import { I18nManager } from 'react-native'
-
 import { selectRTL, transformOrigin } from '../rtl'
 
 function withRTL(isRTL: boolean, fn: () => void) {

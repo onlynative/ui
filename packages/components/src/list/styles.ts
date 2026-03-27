@@ -1,8 +1,7 @@
-import { StyleSheet } from 'react-native'
 import type { MaterialTheme } from '@onlynative/core'
-
-import type { ListItemLines } from './types'
 import { alphaColor, blendColor } from '@onlynative/utils'
+import { StyleSheet } from 'react-native'
+import type { ListItemLines } from './types'
 
 const ITEM_PADDING_VERTICAL = 12
 const INSET_START = 56
@@ -27,7 +26,10 @@ interface ItemColors {
   pressedBackgroundColor: string
 }
 
-function getItemColors(theme: MaterialTheme, containerColor?: string): ItemColors {
+function getItemColors(
+  theme: MaterialTheme,
+  containerColor?: string,
+): ItemColors {
   const base = containerColor ?? 'transparent'
 
   if (containerColor) {

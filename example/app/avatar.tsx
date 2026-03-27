@@ -1,6 +1,6 @@
-import { Alert, ScrollView, StyleSheet, View } from 'react-native'
-import { useTheme } from '@onlynative/core'
 import { Avatar, Column, Row, Typography } from '@onlynative/components'
+import { useTheme } from '@onlynative/core'
+import { Alert, ScrollView, StyleSheet, View } from 'react-native'
 
 export default function AvatarScreen() {
   const theme = useTheme()

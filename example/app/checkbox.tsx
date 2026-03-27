@@ -1,6 +1,6 @@
+import { Checkbox, Column, Row, Typography } from '@onlynative/components'
 import { useState } from 'react'
 import { ScrollView, StyleSheet } from 'react-native'
-import { Checkbox, Column, Row, Typography } from '@onlynative/components'
 
 export default function CheckboxScreen() {
   const [checkA, setCheckA] = useState(true)

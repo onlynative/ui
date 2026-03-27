@@ -1,7 +1,6 @@
 import * as React from 'react'
-
-import type { BaseTheme } from '../theme/types'
 import { lightTheme } from '../theme/light'
+import type { BaseTheme } from '../theme/types'
 import { ThemeContext } from './ThemeContext'
 
 export interface ThemeProviderProps {

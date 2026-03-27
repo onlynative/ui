@@ -1,8 +1,7 @@
+import { renderWithTheme } from '@onlynative/utils/test'
 import { screen, fireEvent } from '@testing-library/react-native'
 import { StyleSheet, Text } from 'react-native'
-
 import { AppBar } from '../appbar/AppBar'
-import { renderWithTheme } from '@onlynative/utils/test'
 
 describe('AppBar', () => {
   it('renders the title text', () => {
@@ -71,7 +70,11 @@ describe('AppBar', () => {
         <AppBar
           title="Home"
           actions={[
-            { icon: 'magnify', accessibilityLabel: 'Search', onPress: onSearch },
+            {
+              icon: 'magnify',
+              accessibilityLabel: 'Search',
+              onPress: onSearch,
+            },
           ]}
         />,
       )

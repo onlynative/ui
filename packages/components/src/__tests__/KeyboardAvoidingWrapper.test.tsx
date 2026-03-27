@@ -1,8 +1,7 @@
+import { renderWithTheme } from '@onlynative/utils/test'
 import { screen } from '@testing-library/react-native'
 import { Keyboard, Text } from 'react-native'
-
 import { KeyboardAvoidingWrapper } from '../keyboard-avoiding-wrapper/KeyboardAvoidingWrapper'
-import { renderWithTheme } from '@onlynative/utils/test'
 
 describe('KeyboardAvoidingWrapper', () => {
   it('renders children', () => {
@@ -29,12 +28,10 @@ describe('KeyboardAvoidingWrapper', () => {
 
     const events = addListenerSpy.mock.calls.map(([event]) => event)
     expect(
-      events.includes('keyboardWillShow') ||
-        events.includes('keyboardDidShow'),
+      events.includes('keyboardWillShow') || events.includes('keyboardDidShow'),
     ).toBe(true)
     expect(
-      events.includes('keyboardWillHide') ||
-        events.includes('keyboardDidHide'),
+      events.includes('keyboardWillHide') || events.includes('keyboardDidHide'),
     ).toBe(true)
     unmount()
     addListenerSpy.mockRestore()

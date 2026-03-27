@@ -1,14 +1,14 @@
 import path from 'node:path'
 import chalk from 'chalk'
-import prompts from 'prompts'
 import fs from 'fs-extra'
+import prompts from 'prompts'
 import { readConfig, resolveAliasPath } from '../lib/config'
+import { computeDiff, formatDiff, formatDiffSummary } from '../lib/diff'
+import type { FileDiff } from '../lib/diff'
 import { createSpinner, logger } from '../lib/logger'
 import { fetchFileContent, fetchUtilsRegistry } from '../lib/registry'
 import { getComponentNames, resolveComponents } from '../lib/resolver'
 import { generateUtilsBarrel, transformImports } from '../lib/transform'
-import { computeDiff, formatDiff, formatDiffSummary } from '../lib/diff'
-import type { FileDiff } from '../lib/diff'
 
 interface UpdateOptions {
   dryRun: boolean

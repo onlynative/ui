@@ -1,9 +1,8 @@
+import { useTheme } from '@onlynative/core'
+import { blendColor, getMaterialCommunityIcons } from '@onlynative/utils'
 import { useMemo } from 'react'
 import { Image, Pressable, Text, View } from 'react-native'
 import type { ViewStyle } from 'react-native'
-import { useTheme } from '@onlynative/core'
-
-import { blendColor, getMaterialCommunityIcons } from '@onlynative/utils'
 import { createStyles } from './styles'
 import type { AvatarProps, AvatarSize } from './types'
 

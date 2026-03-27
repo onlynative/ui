@@ -1,6 +1,6 @@
-import { StyleSheet } from 'react-native'
 import { defaultTopAppBarTokens } from '@onlynative/core'
 import type { MaterialTheme } from '@onlynative/core'
+import { StyleSheet } from 'react-native'
 import type { AppBarColorScheme } from './types'
 
 export interface AppBarColorSchemeColors {

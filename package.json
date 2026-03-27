@@ -27,6 +27,7 @@
     "@eslint/js": "^8.57.0",
     "eslint": "^8.57.0",
     "eslint-config-prettier": "^9.0.0",
+    "eslint-plugin-import": "^2.32.0",
     "eslint-plugin-react": "^7.0.0",
     "eslint-plugin-react-hooks": "^4.0.0",
     "eslint-plugin-react-native": "^4.0.0",
@@ -38,8 +39,8 @@
   },
   "lint-staged": {
     "*.{ts,tsx}": [
-      "eslint --max-warnings 0",
-      "prettier --check"
+      "eslint --fix --max-warnings 0",
+      "prettier --write"
     ],
     "*.{js,json,css}": [
       "prettier --check"

@@ -1,7 +1,4 @@
-import { I18nManager } from 'react-native'
-import { ScrollView, StyleSheet } from 'react-native'
 import { MaterialCommunityIcons } from '@expo/vector-icons'
-import { useTheme } from '@onlynative/core'
 import {
   Box,
   Button,
@@ -16,6 +13,8 @@ import {
   TextField,
   Typography,
 } from '@onlynative/components'
+import { useTheme } from '@onlynative/core'
+import { I18nManager, ScrollView, StyleSheet } from 'react-native'
 
 function SectionTitle({ children }: { children: string }) {
   const { colors } = useTheme()

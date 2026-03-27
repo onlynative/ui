@@ -1,6 +1,6 @@
 import chalk from 'chalk'
-import prompts from 'prompts'
 import { execa } from 'execa'
+import prompts from 'prompts'
 import { configExists, DEFAULT_CONFIG, writeConfig } from '../lib/config'
 import { detectProject, getInstallCommand } from '../lib/detector'
 import { createSpinner, logger } from '../lib/logger'

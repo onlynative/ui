@@ -1,10 +1,9 @@
+import { renderWithTheme } from '@onlynative/utils/test'
 import { screen, fireEvent } from '@testing-library/react-native'
 import { StyleSheet, Text, View } from 'react-native'
-
 import { List } from '../list/List'
-import { ListItem } from '../list/ListItem'
 import { ListDivider } from '../list/ListDivider'
-import { renderWithTheme } from '@onlynative/utils/test'
+import { ListItem } from '../list/ListItem'
 
 describe('List', () => {
   it('renders children', () => {
@@ -24,16 +23,12 @@ describe('ListItem', () => {
   })
 
   it('renders supporting text when provided', () => {
-    renderWithTheme(
-      <ListItem headlineText="Title" supportingText="Subtitle" />,
-    )
+    renderWithTheme(<ListItem headlineText="Title" supportingText="Subtitle" />)
     expect(screen.getByText('Subtitle')).toBeTruthy()
   })
 
   it('renders overline text when provided', () => {
-    renderWithTheme(
-      <ListItem headlineText="Title" overlineText="OVERLINE" />,
-    )
+    renderWithTheme(<ListItem headlineText="Title" overlineText="OVERLINE" />)
     expect(screen.getByText('OVERLINE')).toBeTruthy()
   })
 
@@ -101,7 +96,11 @@ describe('ListItem', () => {
   describe('overrides', () => {
     it('applies containerColor to a non-interactive item', () => {
       renderWithTheme(
-        <ListItem testID="item" headlineText="Title" containerColor="#FF0000" />,
+        <ListItem
+          testID="item"
+          headlineText="Title"
+          containerColor="#FF0000"
+        />,
       )
       const item = screen.getByTestId('item')
       const flatStyle = StyleSheet.flatten(item.props.style)

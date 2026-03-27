@@ -1,8 +1,7 @@
-import { StyleSheet } from 'react-native'
 import type { MaterialTheme } from '@onlynative/core'
-
-import type { ButtonVariant } from './types'
 import { alphaColor, blendColor, elevationStyle } from '@onlynative/utils'
+import { StyleSheet } from 'react-native'
+import type { ButtonVariant } from './types'
 
 interface VariantColors {
   backgroundColor: string
@@ -16,7 +15,10 @@ interface VariantColors {
   disabledBorderColor: string
 }
 
-function getVariantColors(theme: MaterialTheme, variant: ButtonVariant): VariantColors {
+function getVariantColors(
+  theme: MaterialTheme,
+  variant: ButtonVariant,
+): VariantColors {
   const disabledContainerColor = alphaColor(theme.colors.onSurface, 0.12)
   const disabledLabelColor = alphaColor(theme.colors.onSurface, 0.38)
   const disabledOutlineColor = alphaColor(theme.colors.onSurface, 0.12)

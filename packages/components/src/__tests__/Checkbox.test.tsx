@@ -1,8 +1,7 @@
+import { renderWithTheme } from '@onlynative/utils/test'
 import { screen, fireEvent } from '@testing-library/react-native'
 import { StyleSheet } from 'react-native'
-
 import { Checkbox } from '../checkbox/Checkbox'
-import { renderWithTheme } from '@onlynative/utils/test'
 
 describe('Checkbox', () => {
   it('renders without crashing', () => {
@@ -33,9 +32,7 @@ describe('Checkbox', () => {
 
   it('calls onValueChange with toggled value when pressed', () => {
     const onValueChange = jest.fn()
-    renderWithTheme(
-      <Checkbox value={false} onValueChange={onValueChange} />,
-    )
+    renderWithTheme(<Checkbox value={false} onValueChange={onValueChange} />)
     fireEvent.press(screen.getByRole('checkbox'))
     expect(onValueChange).toHaveBeenCalledWith(true)
   })

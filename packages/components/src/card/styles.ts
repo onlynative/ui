@@ -1,8 +1,7 @@
-import { StyleSheet } from 'react-native'
 import type { MaterialTheme } from '@onlynative/core'
-
-import type { CardVariant } from './types'
 import { alphaColor, blendColor, elevationStyle } from '@onlynative/utils'
+import { StyleSheet } from 'react-native'
+import type { CardVariant } from './types'
 
 interface VariantColors {
   backgroundColor: string
@@ -14,7 +13,10 @@ interface VariantColors {
   disabledBorderColor: string
 }
 
-function getVariantColors(theme: MaterialTheme, variant: CardVariant): VariantColors {
+function getVariantColors(
+  theme: MaterialTheme,
+  variant: CardVariant,
+): VariantColors {
   const disabledContainerColor = alphaColor(theme.colors.onSurface, 0.12)
   const disabledOutlineColor = alphaColor(theme.colors.onSurface, 0.12)
 

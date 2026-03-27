@@ -1,12 +1,11 @@
+import { renderWithTheme } from '@onlynative/utils/test'
 import { screen } from '@testing-library/react-native'
 import { StyleSheet, Text } from 'react-native'
-
 import { Box } from '../layout/Box'
 import { Column } from '../layout/Column'
 import { Grid } from '../layout/Grid'
 import { Layout } from '../layout/Layout'
 import { Row } from '../layout/Row'
-import { renderWithTheme } from '@onlynative/utils/test'
 
 describe('Box', () => {
   it('renders children', () => {

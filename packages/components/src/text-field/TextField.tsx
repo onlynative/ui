@@ -1,3 +1,5 @@
+import { useTheme } from '@onlynative/core'
+import { getMaterialCommunityIcons } from '@onlynative/utils'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import {
   Animated,
@@ -8,9 +10,6 @@ import {
   View,
 } from 'react-native'
 import type { NativeSyntheticEvent, TargetedEvent } from 'react-native'
-import { useTheme } from '@onlynative/core'
-
-import { getMaterialCommunityIcons } from '@onlynative/utils'
 import { createStyles, labelPositions } from './styles'
 import type { TextFieldProps } from './types'
 
@@ -165,7 +164,7 @@ export function TextField({
     ? colors.disabledIconColor
     : isError
       ? colors.errorIconColor
-      : contentColor ?? colors.iconColor
+      : (contentColor ?? colors.iconColor)
 
   const containerStyle = useMemo(
     () => [

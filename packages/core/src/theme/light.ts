@@ -1,5 +1,5 @@
-import type { Theme } from './types'
 import { defaultTopAppBarTokens } from './topAppBar'
+import type { Theme } from './types'
 import { defaultTypography } from './typography'
 
 export const lightTheme: Theme = {

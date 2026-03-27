@@ -1,10 +1,10 @@
 import path from 'node:path'
 import chalk from 'chalk'
-import prompts from 'prompts'
 import { execa } from 'execa'
 import fs from 'fs-extra'
-import { createSpinner, logger } from '../lib/logger'
+import prompts from 'prompts'
 import { DEFAULT_CONFIG } from '../lib/config'
+import { createSpinner, logger } from '../lib/logger'
 import type { PackageManager } from '../lib/types'
 
 export interface CreateOptions {

@@ -1,8 +1,7 @@
+import { useTheme } from '@onlynative/core'
+import { resolvePressableStyle } from '@onlynative/utils'
 import { useMemo } from 'react'
 import { Platform, Pressable, Text, View } from 'react-native'
-import { useTheme } from '@onlynative/core'
-
-import { resolvePressableStyle } from '@onlynative/utils'
 import { createListItemStyles } from './styles'
 import type { ListItemLines, ListItemProps } from './types'
 

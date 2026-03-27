@@ -1,3 +1,4 @@
+import { fetchComponentEntry, fetchUtilsRegistry } from './registry'
 import type {
   ComponentRegistryEntry,
   OnlyNativeConfig,
@@ -5,7 +6,6 @@ import type {
   ResolvedComponent,
   UtilsRegistry,
 } from './types'
-import { fetchComponentEntry, fetchUtilsRegistry } from './registry'
 
 export async function resolveComponents(
   config: OnlyNativeConfig,
@@ -57,9 +57,7 @@ function buildResult(
     }
 
     // Collect optional npm dependencies
-    for (const [pkg, version] of Object.entries(
-      entry.optionalDependencies,
-    )) {
+    for (const [pkg, version] of Object.entries(entry.optionalDependencies)) {
       optionalDeps[pkg] = version
     }
   }
@@ -68,9 +66,7 @@ function buildResult(
   for (const utilName of utilSet) {
     const utilEntry = utilsRegistry[utilName]
     if (utilEntry) {
-      for (const [pkg, version] of Object.entries(
-        utilEntry.dependencies,
-      )) {
+      for (const [pkg, version] of Object.entries(utilEntry.dependencies)) {
         optionalDeps[pkg] = version
       }
     }
@@ -84,16 +80,12 @@ function buildResult(
   }
 }
 
-export function getComponentNames(
-  result: ResolutionResult,
-): string[] {
+export function getComponentNames(result: ResolutionResult): string[] {
   return result.components.map((c) => c.entry.name)
 }
 
 export function getDependencyComponents(
   result: ResolutionResult,
 ): ComponentRegistryEntry[] {
-  return result.components
-    .filter((c) => !c.isDirectRequest)
-    .map((c) => c.entry)
+  return result.components.filter((c) => !c.isDirectRequest).map((c) => c.entry)
 }

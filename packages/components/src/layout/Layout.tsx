@@ -1,10 +1,10 @@
+import { useTheme } from '@onlynative/core'
 import { useMemo } from 'react'
 import type { PropsWithChildren } from 'react'
 import type { StyleProp, ViewStyle } from 'react-native'
 import { StyleSheet } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import type { Edge } from 'react-native-safe-area-context'
-import { useTheme } from '@onlynative/core'
 
 export interface LayoutProps extends PropsWithChildren {
   /**

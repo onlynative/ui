@@ -1,15 +1,14 @@
+import { defaultTopAppBarTokens, useTheme } from '@onlynative/core'
+import { selectRTL } from '@onlynative/utils'
 import { useCallback, useMemo, useState } from 'react'
 import type { ReactNode } from 'react'
 import type { LayoutChangeEvent, StyleProp, ViewStyle } from 'react-native'
 import { Platform, View } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import { defaultTopAppBarTokens, useTheme } from '@onlynative/core'
-
 import { IconButton } from '../icon-button'
 import type { IconButtonProps } from '../icon-button'
 import { Typography } from '../typography'
 import type { TypographyVariant } from '../typography'
-import { selectRTL } from '@onlynative/utils'
 import { createStyles, getColorSchemeColors } from './styles'
 import type { AppBarProps } from './types'
 
@@ -179,7 +178,13 @@ export function AppBar({
         ))}
       </View>
     )
-  }, [actions, resolvedContentColor, styles.actionsRow, styles.iconFrame, trailing])
+  }, [
+    actions,
+    resolvedContentColor,
+    styles.actionsRow,
+    styles.iconFrame,
+    trailing,
+  ])
 
   const onLeadingLayout = useCallback((event: LayoutChangeEvent) => {
     const nextWidth = measureWidth(event)

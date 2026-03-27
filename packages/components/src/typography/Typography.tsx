@@ -1,10 +1,9 @@
+import { useTheme } from '@onlynative/core'
+import type { MaterialTheme } from '@onlynative/core'
 import { useMemo } from 'react'
 import type { ComponentType, ReactNode } from 'react'
 import type { StyleProp, TextProps, TextStyle } from 'react-native'
 import { StyleSheet, Text } from 'react-native'
-import { useTheme } from '@onlynative/core'
-import type { MaterialTheme } from '@onlynative/core'
-
 import type { TypographyVariant } from './types'
 
 const HEADING_VARIANTS: ReadonlySet<TypographyVariant> = new Set([

@@ -1,6 +1,3 @@
-import { useState } from 'react'
-import { StyleSheet } from 'react-native'
-import { useTheme } from '@onlynative/core'
 import {
   KeyboardAvoidingWrapper,
   TextField,
@@ -10,6 +7,9 @@ import {
   Switch,
   Box,
 } from '@onlynative/components'
+import { useTheme } from '@onlynative/core'
+import { useState } from 'react'
+import { StyleSheet } from 'react-native'
 
 export default function KeyboardAvoidingWrapperScreen() {
   const [enabled, setEnabled] = useState(true)
@@ -33,9 +33,7 @@ export default function KeyboardAvoidingWrapperScreen() {
       scrollViewProps={{ bounces: false }}
       contentContainerStyle={styles.content}
     >
-      <Typography variant="headlineSmall">
-        KeyboardAvoidingWrapper
-      </Typography>
+      <Typography variant="headlineSmall">KeyboardAvoidingWrapper</Typography>
 
       <Column gap="lg">
         <Typography variant="titleSmall">Settings</Typography>
@@ -91,11 +89,7 @@ export default function KeyboardAvoidingWrapperScreen() {
           onChangeText={setPhone}
           keyboardType="phone-pad"
         />
-        <TextField
-          label="Address"
-          value={address}
-          onChangeText={setAddress}
-        />
+        <TextField label="Address" value={address} onChangeText={setAddress} />
         <TextField label="City" value={city} onChangeText={setCity} />
         <TextField
           label="Notes"

@@ -1,7 +1,6 @@
+import { useTheme } from '@onlynative/core'
 import { useMemo } from 'react'
 import { View } from 'react-native'
-import { useTheme } from '@onlynative/core'
-
 import { createDividerStyles } from './styles'
 import type { ListDividerProps } from './types'
 

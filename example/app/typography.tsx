@@ -71,16 +71,13 @@ export default function TypographyScreen() {
 
       <View style={styles.section}>
         <Typography variant="headlineSmall">Custom Styles</Typography>
-        <Typography variant="bodyMedium" style={{ fontStyle: 'italic' }}>
+        <Typography variant="bodyMedium" style={styles.italic}>
           Italic text using custom style
         </Typography>
-        <Typography
-          variant="bodyMedium"
-          style={{ textDecorationLine: 'underline' }}
-        >
+        <Typography variant="bodyMedium" style={styles.underline}>
           Underlined text
         </Typography>
-        <Typography variant="bodyMedium" style={{ textTransform: 'uppercase' }}>
+        <Typography variant="bodyMedium" style={styles.uppercase}>
           Uppercase text
         </Typography>
       </View>
@@ -95,5 +92,14 @@ const styles = StyleSheet.create({
   },
   section: {
     rowGap: 8,
+  },
+  italic: {
+    fontStyle: 'italic',
+  },
+  underline: {
+    textDecorationLine: 'underline',
+  },
+  uppercase: {
+    textTransform: 'uppercase',
   },
 })
