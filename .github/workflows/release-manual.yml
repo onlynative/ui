@@ -110,19 +110,17 @@ jobs:
           NEW_VERSION=""
 
           for PKG_DIR in ${{ steps.packages.outputs.packages }}; do
-            cd "packages/$PKG_DIR"
             if [ -n "$CUSTOM_VERSION" ]; then
-              npm version "$CUSTOM_VERSION" --no-git-tag-version
+              (cd "packages/$PKG_DIR" && npm version "$CUSTOM_VERSION" --no-git-tag-version)
               NEW_VERSION="$CUSTOM_VERSION"
             else
               VERSION_ARGS="${{ inputs.version }}"
               if [[ "$VERSION_ARGS" == pre* ]]; then
                 VERSION_ARGS="$VERSION_ARGS --preid ${{ inputs.preid }}"
               fi
-              npm version $VERSION_ARGS --no-git-tag-version
-              NEW_VERSION=$(node -p "require('./package.json').version")
+              (cd "packages/$PKG_DIR" && npm version $VERSION_ARGS --no-git-tag-version)
+              NEW_VERSION=$(node -p "require('./packages/$PKG_DIR/package.json').version")
             fi
-            cd ../..
           done
 
           # Update @onlynative/core peer dep in selected packages if core was bumped
@@ -176,7 +174,7 @@ jobs:
           for PKG_DIR in ${{ steps.packages.outputs.packages }}; do
             if [ "$PKG_DIR" = "core" ]; then
               echo "Publishing @onlynative/core..."
-              cd packages/core && pnpm publish --provenance --access public --tag ${{ inputs.tag }} --no-git-checks && cd ../..
+              (cd packages/core && pnpm publish --provenance --access public --tag ${{ inputs.tag }} --no-git-checks)
               break
             fi
           done
@@ -186,7 +184,7 @@ jobs:
             if [ "$PKG_DIR" = "core" ]; then continue; fi
             PKG_NAME=$(node -p "require('./packages/$PKG_DIR/package.json').name")
             echo "Publishing $PKG_NAME..."
-            cd "packages/$PKG_DIR" && pnpm publish --provenance --access public --tag ${{ inputs.tag }} --no-git-checks && cd ../..
+            (cd "packages/$PKG_DIR" && pnpm publish --provenance --access public --tag ${{ inputs.tag }} --no-git-checks)
           done
 
       - name: Push to main
