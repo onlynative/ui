@@ -62,9 +62,6 @@ jobs:
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
 
-      - name: Ensure npm >= 11.5.1 (required for trusted publishing)
-        run: npm install -g npm@latest
-
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
@@ -179,7 +176,7 @@ jobs:
           for PKG_DIR in ${{ steps.packages.outputs.packages }}; do
             if [ "$PKG_DIR" = "core" ]; then
               echo "Publishing @onlynative/core..."
-              cd packages/core && npm publish --provenance --access public --tag ${{ inputs.tag }} && cd ../..
+              cd packages/core && pnpm publish --provenance --access public --tag ${{ inputs.tag }} --no-git-checks && cd ../..
               break
             fi
           done
@@ -189,7 +186,7 @@ jobs:
             if [ "$PKG_DIR" = "core" ]; then continue; fi
             PKG_NAME=$(node -p "require('./packages/$PKG_DIR/package.json').name")
             echo "Publishing $PKG_NAME..."
-            cd "packages/$PKG_DIR" && npm publish --provenance --access public --tag ${{ inputs.tag }} && cd ../..
+            cd "packages/$PKG_DIR" && pnpm publish --provenance --access public --tag ${{ inputs.tag }} --no-git-checks && cd ../..
           done
 
       - name: Push to main
