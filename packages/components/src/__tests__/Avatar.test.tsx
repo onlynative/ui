@@ -122,7 +122,7 @@ describe('Avatar', () => {
       renderWithTheme(<Avatar testID="avatar" />)
       const avatar = screen.getByTestId('avatar')
       const flatStyle = StyleSheet.flatten(avatar.props.style)
-      expect(flatStyle.borderRadius).toBe(9999)
+      expect(flatStyle.borderRadius).toBe(999)
     })
   })
 })
