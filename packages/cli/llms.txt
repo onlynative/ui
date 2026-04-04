@@ -1,6 +1,6 @@
 # @onlynative/cli — CLI for OnlyNative UI
 
-> Version: 0.0.0-alpha.1
+> Version: 0.0.0-alpha.2
 > Binary: `onlynative`
 > Requirements: Node >=18
 
