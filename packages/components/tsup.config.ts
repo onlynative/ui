@@ -24,7 +24,7 @@ export default defineConfig({
   outDir: 'dist',
   clean: true,
   noExternal: ['@onlynative/utils'],
-  external: ['@expo/vector-icons'],
+  external: ['@expo/vector-icons', 'react-native-safe-area-context'],
   esbuildOptions(options) {
     options.alias = {
       '@onlynative/utils': path.resolve(__dirname, '../utils/src/index.ts'),
