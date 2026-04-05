@@ -6,6 +6,7 @@
   "bin": {
     "onlynative": "dist/index.mjs"
   },
+  "exports": "./dist/index.mjs",
   "files": [
     "dist",
     "llms.txt"

@@ -262,6 +262,12 @@ importers:
         specifier: ^5.0.0
         version: 5.9.3
 
+  packages/onlynative:
+    dependencies:
+      '@onlynative/cli':
+        specifier: workspace:*
+        version: link:../cli
+
   packages/utils:
     devDependencies:
       '@onlynative/core':
