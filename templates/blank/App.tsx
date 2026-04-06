@@ -1,15 +1,17 @@
-import { StyleSheet, ScrollView, Alert } from 'react-native'
-import { StatusBar } from 'expo-status-bar'
+import { Box, Column, Typography, Card } from '@onlynative/components'
 import { ThemeProvider, useTheme } from '@onlynative/core'
-import { Box, Column, Typography, Button, Card } from '@onlynative/components'
+import { StatusBar } from 'expo-status-bar'
+import { StyleSheet } from 'react-native'
 
 function HomeScreen() {
   const theme = useTheme()
 
   return (
-    <ScrollView
+    <Box
+      flex={1}
+      align="center"
+      justify="center"
       style={{ backgroundColor: theme.colors.surface }}
-      contentContainerStyle={styles.container}
     >
       <Column gap="lg" style={styles.content}>
         <Column gap="sm">
@@ -24,57 +26,19 @@ function HomeScreen() {
           </Typography>
         </Column>
 
-        <Card variant="filled" style={styles.card}>
+        <Card variant="filled">
           <Column px="lg" py="lg" gap="md">
             <Typography variant="titleMedium">Get Started</Typography>
             <Typography
               variant="bodyMedium"
               style={{ color: theme.colors.onSurfaceVariant }}
             >
-              Edit App.tsx to start building your app. Check out the docs for
-              the full component API.
+              Edit App.tsx to start building your app.
             </Typography>
           </Column>
         </Card>
-
-        <Column gap="sm">
-          <Typography variant="titleMedium">Buttons</Typography>
-          <Box direction="row" gap="sm" wrap>
-            <Button variant="filled" onPress={() => Alert.alert('Filled')}>
-              Filled
-            </Button>
-            <Button variant="outlined" onPress={() => Alert.alert('Outlined')}>
-              Outlined
-            </Button>
-            <Button variant="tonal" onPress={() => Alert.alert('Tonal')}>
-              Tonal
-            </Button>
-            <Button variant="text" onPress={() => Alert.alert('Text')}>
-              Text
-            </Button>
-          </Box>
-        </Column>
-
-        <Column gap="sm">
-          <Typography variant="titleMedium">Cards</Typography>
-          {(['elevated', 'filled', 'outlined'] as const).map((variant) => (
-            <Card key={variant} variant={variant}>
-              <Column px="lg" py="md">
-                <Typography variant="titleSmall">
-                  {variant.charAt(0).toUpperCase() + variant.slice(1)} Card
-                </Typography>
-                <Typography
-                  variant="bodySmall"
-                  style={{ color: theme.colors.onSurfaceVariant }}
-                >
-                  A {variant} card variant
-                </Typography>
-              </Column>
-            </Card>
-          ))}
-        </Column>
       </Column>
-    </ScrollView>
+    </Box>
   )
 }
 
@@ -88,18 +52,9 @@ export default function App() {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flexGrow: 1,
-    alignItems: 'center',
-    paddingTop: 64,
-    paddingBottom: 32,
-  },
   content: {
     width: '100%',
     maxWidth: 600,
     paddingHorizontal: 16,
-  },
-  card: {
-    overflow: 'hidden',
   },
 })
