@@ -1,0 +1,47 @@
+---
+sidebar_position: 2
+---
+
+# KeyboardAvoidingWrapper
+
+Zero-config wrapper that keeps form content visible when the keyboard opens. Uses `automaticallyAdjustKeyboardInsets` on iOS and `KeyboardAvoidingView` on Android.
+
+## Usage
+
+```tsx
+import { KeyboardAvoidingWrapper } from '@onlynative/components/keyboard-avoiding-wrapper'
+import { TextField } from '@onlynative/components/text-field'
+
+<KeyboardAvoidingWrapper>
+  <TextField label="Name" />
+  <TextField label="Email" />
+</KeyboardAvoidingWrapper>
+```
+
+## How it works
+
+| Platform | Strategy |
+|----------|----------|
+| iOS | `ScrollView` with `automaticallyAdjustKeyboardInsets` |
+| Android | `KeyboardAvoidingView` with configurable `behavior` |
+
+The inner `ScrollView` uses `keyboardShouldPersistTaps="handled"` so taps on buttons still work while the keyboard is open.
+
+## Keyboard events
+
+Listen to keyboard show/hide events:
+
+```tsx
+<KeyboardAvoidingWrapper
+  onKeyboardShow={(e) => console.log('height', e.endCoordinates.height)}
+  onKeyboardHide={() => console.log('hidden')}
+>
+  {/* ... */}
+</KeyboardAvoidingWrapper>
+```
+
+On iOS these fire on `keyboardWillShow` / `keyboardWillHide`; on Android they fire on `keyboardDidShow` / `keyboardDidHide`.
+
+## Props
+
+<PropTable name="KeyboardAvoidingWrapper" />

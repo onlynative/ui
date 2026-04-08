@@ -131,6 +131,38 @@ npx onlynative add appbar
 7. A barrel file (`onlynative-utils.ts`) is generated that re-exports only the utilities your installed components need
 8. Any required npm packages are installed via your package manager
 
+### `update`
+
+Update installed components to the latest version from the registry.
+
+```bash
+npx onlynative update button
+npx onlynative update --all
+```
+
+**Options:**
+
+| Flag | Description |
+|------|-------------|
+| `-a`, `--all` | Update all installed components |
+| `-d`, `--dry-run` | Show diff without applying changes |
+
+### `upgrade`
+
+Upgrade `@onlynative/core` to the latest version and install any new peer dependencies.
+
+```bash
+npx onlynative upgrade
+```
+
+**Options:**
+
+| Flag | Description |
+|------|-------------|
+| `-y`, `--yes` | Skip confirmation prompt |
+| `-a`, `--all` | Also update all installed component files |
+| `--package-manager <pm>` | Package manager to use (npm, yarn, pnpm, bun) |
+
 ### `list`
 
 Show all available components with their install status.
@@ -289,6 +321,7 @@ The CLI rewrites imports in copied component files so they work in your project:
 | `text-field` | — | Animated floating label, 2 variants (filled, outlined) |
 | `layout` | — | Box, Row, Column, Grid, and SafeAreaView wrapper |
 | `list` | — | List container with interactive items and dividers |
+| `avatar` | — | Image, icon, or initials avatar with 5 sizes |
 | `keyboard-avoiding-wrapper` | — | Zero-config keyboard-aware wrapper for forms |
 
 ## Comparison with npm packages

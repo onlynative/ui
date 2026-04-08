@@ -1,0 +1,64 @@
+---
+sidebar_position: 1
+---
+
+# Avatar
+
+Avatars represent a user or entity with an image, icon, or text initials.
+
+## Usage
+
+```tsx
+import { Avatar } from '@onlynative/components/avatar'
+
+<Avatar imageUri="https://example.com/photo.jpg" />
+<Avatar icon="account" />
+<Avatar label="JD" />
+```
+
+## Content priority
+
+The avatar renders the first available content in this order:
+
+1. `imageUri` — displays the image
+2. `icon` — displays a MaterialCommunityIcons icon (defaults to `account`)
+3. `label` — displays up to 2 uppercase initials
+
+## Sizes
+
+| Size | Use case |
+|------|----------|
+| `xSmall` | Inline mentions, dense lists |
+| `small` | List items, compact layouts |
+| `medium` | Default — profile cards, headers |
+| `large` | Profile screens, detail views |
+| `xLarge` | Hero sections, onboarding |
+
+```tsx
+<Avatar label="AB" size="small" />
+<Avatar label="AB" size="large" />
+```
+
+## Interactive Avatar
+
+When `onPress` is provided, the avatar renders as a `Pressable` with automatic state-layer feedback (hover and press):
+
+```tsx
+<Avatar
+  imageUri="https://example.com/photo.jpg"
+  onPress={() => console.log('tapped')}
+  accessibilityLabel="Open profile"
+/>
+```
+
+## Custom colors
+
+Override the container and content colors:
+
+```tsx
+<Avatar label="AB" containerColor="#E8DEF8" contentColor="#1D1B20" />
+```
+
+## Props
+
+<PropTable name="Avatar" />

@@ -12,7 +12,7 @@ sidebar_position: 3
 
 ## Install packages
 
-<PackageManagerTabs cmd="npm install @onlynative/core @onlynative/utils @onlynative/components" />
+<PackageManagerTabs cmd="npm install @onlynative/core @onlynative/components" />
 
 ### Peer dependencies
 

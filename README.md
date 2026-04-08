@@ -107,6 +107,8 @@ The `init` + `add` workflow copies component source files directly into your pro
 | [`@onlynative/core`](packages/core) | ![npm bundle size](https://img.shields.io/bundlephobia/min/@onlynative/core) | Theme engine, theme contracts, built-in Material Design You theme, `ThemeProvider`, `useTheme` hook, responsive utilities. |
 | [`@onlynative/components`](packages/components) | ![npm bundle size](https://img.shields.io/bundlephobia/min/@onlynative/components) | UI components with subpath exports for tree-shaking. |
 | [`@onlynative/cli`](packages/cli) | ![npm bundle size](https://img.shields.io/bundlephobia/min/@onlynative/cli) | CLI to scaffold components into your project (shadcn/ui-style). |
+| [`onlynative`](packages/onlynative) | — | Shorthand wrapper for `@onlynative/cli`. |
+| [`@onlynative/utils`](packages/utils) | — | Internal utilities used by components (not published). |
 | [`example`](example) | — | Expo Router showcase app for testing and previewing components. |
 | [`docs`](docs) | — | Docusaurus documentation site. |
 
@@ -119,7 +121,9 @@ The `init` + `add` workflow copies component source files directly into your pro
 ├── packages/
 │   ├── core/              # Theme + provider primitives
 │   ├── components/        # Reusable UI component library
-│   └── cli/               # CLI for scaffolding components into projects
+│   ├── cli/               # CLI for scaffolding components into projects
+│   ├── onlynative/        # Shorthand CLI wrapper
+│   └── utils/             # Internal utilities (not published)
 ├── template/              # Quick start template (used by `onlynative create`)
 ├── turbo.json
 └── pnpm-workspace.yaml
