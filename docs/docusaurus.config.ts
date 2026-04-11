@@ -1,6 +1,6 @@
-import type { Config } from '@docusaurus/types'
-import type * as Preset from '@docusaurus/preset-classic'
 import path from 'path'
+import type * as Preset from '@docusaurus/preset-classic'
+import type { Config } from '@docusaurus/types'
 
 const config: Config = {
   title: 'OnlyNative UI',
@@ -58,6 +58,16 @@ const config: Config = {
             return true
           },
         },
+      },
+    ],
+  ],
+
+  themes: [
+    [
+      '@easyops-cn/docusaurus-search-local',
+      {
+        hashed: true,
+        docsRouteBasePath: '/',
       },
     ],
   ],
