@@ -9,11 +9,26 @@ Follows the [Material Design 3 Top App Bar](https://m3.material.io/components/to
 
 ## Usage
 
-```tsx
-import { AppBar } from '@onlynative/components/appbar'
+<SnackExample
+  name="OnlyNative AppBar — Usage"
+  code={`import { AppBar } from '@onlynative/components'
+import { ThemeProvider } from '@onlynative/core'
+import { SafeAreaProvider } from 'react-native-safe-area-context'
+import { View } from 'react-native'
 
-<AppBar title="Home" />
-```
+export default function App() {
+  return (
+    <SafeAreaProvider>
+      <ThemeProvider>
+        <View style={{ flex: 1 }}>
+          <AppBar title="Home" />
+        </View>
+      </ThemeProvider>
+    </SafeAreaProvider>
+  )
+}
+`}
+/>
 
 ## Variants
 
@@ -26,25 +41,59 @@ import { AppBar } from '@onlynative/components/appbar'
 
 ## With Back Button
 
-```tsx
-<AppBar
-  title="Details"
-  canGoBack
-  onBackPress={() => navigation.goBack()}
+<SnackExample
+  name="OnlyNative AppBar — Back Button"
+  code={`import { AppBar } from '@onlynative/components'
+import { ThemeProvider } from '@onlynative/core'
+import { SafeAreaProvider } from 'react-native-safe-area-context'
+import { Alert, View } from 'react-native'
+
+export default function App() {
+  return (
+    <SafeAreaProvider>
+      <ThemeProvider>
+        <View style={{ flex: 1 }}>
+          <AppBar
+            title="Details"
+            canGoBack
+            onBackPress={() => Alert.alert('Back pressed')}
+          />
+        </View>
+      </ThemeProvider>
+    </SafeAreaProvider>
+  )
+}
+`}
 />
-```
 
 ## With Actions
 
-```tsx
-<AppBar
-  title="Inbox"
-  actions={[
-    { icon: 'magnify', accessibilityLabel: 'Search', onPress: () => {} },
-    { icon: 'dots-vertical', accessibilityLabel: 'More', onPress: () => {} },
-  ]}
+<SnackExample
+  name="OnlyNative AppBar — Actions"
+  code={`import { AppBar } from '@onlynative/components'
+import { ThemeProvider } from '@onlynative/core'
+import { SafeAreaProvider } from 'react-native-safe-area-context'
+import { Alert, View } from 'react-native'
+
+export default function App() {
+  return (
+    <SafeAreaProvider>
+      <ThemeProvider>
+        <View style={{ flex: 1 }}>
+          <AppBar
+            title="Inbox"
+            actions={[
+              { icon: 'magnify', accessibilityLabel: 'Search', onPress: () => Alert.alert('Search') },
+              { icon: 'dots-vertical', accessibilityLabel: 'More', onPress: () => Alert.alert('More') },
+            ]}
+          />
+        </View>
+      </ThemeProvider>
+    </SafeAreaProvider>
+  )
+}
+`}
 />
-```
 
 ## Props
 

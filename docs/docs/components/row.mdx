@@ -8,38 +8,88 @@ Lays children out horizontally. Extends [Box](./box) with all spacing, alignment
 
 ## Usage
 
-```tsx
-import { Row } from '@onlynative/components/layout'
+<SnackExample
+  name="OnlyNative Row — Usage"
+  code={`import { Button, Row } from '@onlynative/components'
+import { ThemeProvider } from '@onlynative/core'
+import { SafeAreaProvider } from 'react-native-safe-area-context'
+import { View } from 'react-native'
 
-<Row gap="sm" align="center">
-  <Button variant="filled">Save</Button>
-  <Button variant="outlined">Cancel</Button>
-</Row>
-```
+export default function App() {
+  return (
+    <SafeAreaProvider>
+      <ThemeProvider>
+        <View style={{ flex: 1, justifyContent: 'center', padding: 16 }}>
+          <Row gap="sm" align="center">
+            <Button variant="filled" onPress={() => {}}>Save</Button>
+            <Button variant="outlined" onPress={() => {}}>Cancel</Button>
+          </Row>
+        </View>
+      </ThemeProvider>
+    </SafeAreaProvider>
+  )
+}
+`}
+/>
 
 ## Wrapping
 
 Enable `wrap` to let children flow onto the next line when they overflow:
 
-```tsx
-<Row wrap gap="sm">
-  {tags.map((tag) => (
-    <Chip key={tag}>{tag}</Chip>
-  ))}
-</Row>
-```
+<SnackExample
+  name="OnlyNative Row — Wrapping"
+  code={`import { Chip, Row } from '@onlynative/components'
+import { ThemeProvider } from '@onlynative/core'
+import { SafeAreaProvider } from 'react-native-safe-area-context'
+import { View } from 'react-native'
+
+const tags = ['React', 'TypeScript', 'Expo', 'Material', 'Native', 'Components', 'Design']
+
+export default function App() {
+  return (
+    <SafeAreaProvider>
+      <ThemeProvider>
+        <View style={{ flex: 1, justifyContent: 'center', padding: 16 }}>
+          <Row wrap gap="sm">
+            {tags.map((tag) => (
+              <Chip key={tag} onPress={() => {}}>{tag}</Chip>
+            ))}
+          </Row>
+        </View>
+      </ThemeProvider>
+    </SafeAreaProvider>
+  )
+}
+`}
+/>
 
 ## Inverted
 
 Reverse the layout direction with `inverted`:
 
-```tsx
-<Row inverted gap="sm">
-  <Typography>First</Typography>
-  <Typography>Second</Typography>
-  {/* Renders: Second  First */}
-</Row>
-```
+<SnackExample
+  name="OnlyNative Row — Inverted"
+  code={`import { Row, Typography } from '@onlynative/components'
+import { ThemeProvider } from '@onlynative/core'
+import { SafeAreaProvider } from 'react-native-safe-area-context'
+import { View } from 'react-native'
+
+export default function App() {
+  return (
+    <SafeAreaProvider>
+      <ThemeProvider>
+        <View style={{ flex: 1, justifyContent: 'center', padding: 16 }}>
+          <Row inverted gap="sm">
+            <Typography>First</Typography>
+            <Typography>Second</Typography>
+          </Row>
+        </View>
+      </ThemeProvider>
+    </SafeAreaProvider>
+  )
+}
+`}
+/>
 
 ## Props
 

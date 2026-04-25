@@ -9,15 +9,29 @@ Follows the [Material Design 3 Card](https://m3.material.io/components/cards/ove
 
 ## Usage
 
-```tsx
-import { Card } from '@onlynative/components/card'
-import { Typography } from '@onlynative/components/typography'
+<SnackExample
+  name="OnlyNative Card — Usage"
+  code={`import { Card, Typography } from '@onlynative/components'
+import { ThemeProvider } from '@onlynative/core'
+import { SafeAreaProvider } from 'react-native-safe-area-context'
+import { View } from 'react-native'
 
-<Card variant="elevated">
-  <Typography variant="titleMedium">Card Title</Typography>
-  <Typography variant="bodyMedium">Card content goes here.</Typography>
-</Card>
-```
+export default function App() {
+  return (
+    <SafeAreaProvider>
+      <ThemeProvider>
+        <View style={{ flex: 1, justifyContent: 'center', padding: 16 }}>
+          <Card variant="elevated">
+            <Typography variant="titleMedium">Card Title</Typography>
+            <Typography variant="bodyMedium">Card content goes here.</Typography>
+          </Card>
+        </View>
+      </ThemeProvider>
+    </SafeAreaProvider>
+  )
+}
+`}
+/>
 
 ## Variants
 
@@ -31,11 +45,28 @@ import { Typography } from '@onlynative/components/typography'
 
 When `onPress` is provided, the card renders as a `Pressable` with state-layer feedback:
 
-```tsx
-<Card variant="filled" onPress={() => console.log('tapped')}>
-  <Typography>Tap me</Typography>
-</Card>
-```
+<SnackExample
+  name="OnlyNative Card — Interactive"
+  code={`import { Card, Typography } from '@onlynative/components'
+import { ThemeProvider } from '@onlynative/core'
+import { SafeAreaProvider } from 'react-native-safe-area-context'
+import { Alert, View } from 'react-native'
+
+export default function App() {
+  return (
+    <SafeAreaProvider>
+      <ThemeProvider>
+        <View style={{ flex: 1, justifyContent: 'center', padding: 16 }}>
+          <Card variant="filled" onPress={() => Alert.alert('Tapped')}>
+            <Typography>Tap me</Typography>
+          </Card>
+        </View>
+      </ThemeProvider>
+    </SafeAreaProvider>
+  )
+}
+`}
+/>
 
 ## Props
 

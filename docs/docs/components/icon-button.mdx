@@ -9,15 +9,30 @@ Follows the [Material Design 3 Icon Button](https://m3.material.io/components/ic
 
 ## Usage
 
-```tsx
-import { IconButton } from '@onlynative/components/icon-button'
+<SnackExample
+  name="OnlyNative IconButton — Usage"
+  code={`import { IconButton } from '@onlynative/components'
+import { ThemeProvider } from '@onlynative/core'
+import { SafeAreaProvider } from 'react-native-safe-area-context'
+import { View } from 'react-native'
 
-<IconButton
-  icon="heart-outline"
-  accessibilityLabel="Favorite"
-  onPress={() => {}}
+export default function App() {
+  return (
+    <SafeAreaProvider>
+      <ThemeProvider>
+        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+          <IconButton
+            icon="heart-outline"
+            accessibilityLabel="Favorite"
+            onPress={() => {}}
+          />
+        </View>
+      </ThemeProvider>
+    </SafeAreaProvider>
+  )
+}
+`}
 />
-```
 
 ## Variants
 
@@ -30,27 +45,61 @@ import { IconButton } from '@onlynative/components/icon-button'
 
 ## Sizes
 
-```tsx
-<IconButton icon="star" size="small" accessibilityLabel="Star" />
-<IconButton icon="star" size="medium" accessibilityLabel="Star" />
-<IconButton icon="star" size="large" accessibilityLabel="Star" />
-```
+<SnackExample
+  name="OnlyNative IconButton — Sizes"
+  code={`import { IconButton } from '@onlynative/components'
+import { ThemeProvider } from '@onlynative/core'
+import { SafeAreaProvider } from 'react-native-safe-area-context'
+import { View } from 'react-native'
+
+export default function App() {
+  return (
+    <SafeAreaProvider>
+      <ThemeProvider>
+        <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 12 }}>
+          <IconButton icon="star" size="small" accessibilityLabel="Star" onPress={() => {}} />
+          <IconButton icon="star" size="medium" accessibilityLabel="Star" onPress={() => {}} />
+          <IconButton icon="star" size="large" accessibilityLabel="Star" onPress={() => {}} />
+        </View>
+      </ThemeProvider>
+    </SafeAreaProvider>
+  )
+}
+`}
+/>
 
 ## Toggle Mode
 
 Use `selected` and `selectedIcon` for toggle behavior:
 
-```tsx
-const [liked, setLiked] = useState(false)
+<SnackExample
+  name="OnlyNative IconButton — Toggle"
+  code={`import { IconButton } from '@onlynative/components'
+import { ThemeProvider } from '@onlynative/core'
+import { SafeAreaProvider } from 'react-native-safe-area-context'
+import { useState } from 'react'
+import { View } from 'react-native'
 
-<IconButton
-  icon="heart-outline"
-  selectedIcon="heart"
-  selected={liked}
-  onPress={() => setLiked(!liked)}
-  accessibilityLabel={liked ? 'Unlike' : 'Like'}
+export default function App() {
+  const [liked, setLiked] = useState(false)
+  return (
+    <SafeAreaProvider>
+      <ThemeProvider>
+        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+          <IconButton
+            icon="heart-outline"
+            selectedIcon="heart"
+            selected={liked}
+            onPress={() => setLiked(!liked)}
+            accessibilityLabel={liked ? 'Unlike' : 'Like'}
+          />
+        </View>
+      </ThemeProvider>
+    </SafeAreaProvider>
+  )
+}
+`}
 />
-```
 
 ## Props
 

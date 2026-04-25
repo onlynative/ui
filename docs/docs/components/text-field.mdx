@@ -9,17 +9,32 @@ Follows the [Material Design 3 Text Field](https://m3.material.io/components/tex
 
 ## Usage
 
-```tsx
-import { TextField } from '@onlynative/components/text-field'
+<SnackExample
+  name="OnlyNative TextField — Usage"
+  code={`import { TextField } from '@onlynative/components'
+import { ThemeProvider } from '@onlynative/core'
+import { SafeAreaProvider } from 'react-native-safe-area-context'
+import { useState } from 'react'
+import { View } from 'react-native'
 
-const [value, setValue] = useState('')
-
-<TextField
-  label="Email"
-  value={value}
-  onChangeText={setValue}
+export default function App() {
+  const [value, setValue] = useState('')
+  return (
+    <SafeAreaProvider>
+      <ThemeProvider>
+        <View style={{ flex: 1, justifyContent: 'center', padding: 16 }}>
+          <TextField
+            label="Email"
+            value={value}
+            onChangeText={setValue}
+          />
+        </View>
+      </ThemeProvider>
+    </SafeAreaProvider>
+  )
+}
+`}
 />
-```
 
 ## Variants
 
@@ -28,34 +43,95 @@ const [value, setValue] = useState('')
 | `filled` | Filled container with bottom border (default) |
 | `outlined` | Outlined border around the field |
 
-```tsx
-<TextField label="Name" variant="filled" />
-<TextField label="Name" variant="outlined" />
-```
+<SnackExample
+  name="OnlyNative TextField — Variants"
+  code={`import { TextField } from '@onlynative/components'
+import { ThemeProvider } from '@onlynative/core'
+import { SafeAreaProvider } from 'react-native-safe-area-context'
+import { useState } from 'react'
+import { View } from 'react-native'
+
+export default function App() {
+  const [a, setA] = useState('')
+  const [b, setB] = useState('')
+  return (
+    <SafeAreaProvider>
+      <ThemeProvider>
+        <View style={{ flex: 1, justifyContent: 'center', padding: 16, gap: 16 }}>
+          <TextField label="Filled" variant="filled" value={a} onChangeText={setA} />
+          <TextField label="Outlined" variant="outlined" value={b} onChangeText={setB} />
+        </View>
+      </ThemeProvider>
+    </SafeAreaProvider>
+  )
+}
+`}
+/>
 
 ## With Icons
 
-```tsx
-<TextField
-  label="Search"
-  leadingIcon="magnify"
-  trailingIcon="close"
-  onTrailingIconPress={() => setValue('')}
+<SnackExample
+  name="OnlyNative TextField — Icons"
+  code={`import { TextField } from '@onlynative/components'
+import { ThemeProvider } from '@onlynative/core'
+import { SafeAreaProvider } from 'react-native-safe-area-context'
+import { useState } from 'react'
+import { View } from 'react-native'
+
+export default function App() {
+  const [value, setValue] = useState('')
+  return (
+    <SafeAreaProvider>
+      <ThemeProvider>
+        <View style={{ flex: 1, justifyContent: 'center', padding: 16 }}>
+          <TextField
+            label="Search"
+            value={value}
+            onChangeText={setValue}
+            leadingIcon="magnify"
+            trailingIcon="close"
+            onTrailingIconPress={() => setValue('')}
+          />
+        </View>
+      </ThemeProvider>
+    </SafeAreaProvider>
+  )
+}
+`}
 />
-```
 
 ## Validation
 
-```tsx
-<TextField
-  label="Email"
-  value={email}
-  onChangeText={setEmail}
-  error={!isValid}
-  errorText="Please enter a valid email address"
-  supportingText="We'll never share your email"
+<SnackExample
+  name="OnlyNative TextField — Validation"
+  code={`import { TextField } from '@onlynative/components'
+import { ThemeProvider } from '@onlynative/core'
+import { SafeAreaProvider } from 'react-native-safe-area-context'
+import { useState } from 'react'
+import { View } from 'react-native'
+
+export default function App() {
+  const [email, setEmail] = useState('not-an-email')
+  const isValid = /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(email)
+  return (
+    <SafeAreaProvider>
+      <ThemeProvider>
+        <View style={{ flex: 1, justifyContent: 'center', padding: 16 }}>
+          <TextField
+            label="Email"
+            value={email}
+            onChangeText={setEmail}
+            error={!isValid}
+            errorText="Please enter a valid email address"
+            supportingText="We'll never share your email"
+          />
+        </View>
+      </ThemeProvider>
+    </SafeAreaProvider>
+  )
+}
+`}
 />
-```
 
 ## Props
 

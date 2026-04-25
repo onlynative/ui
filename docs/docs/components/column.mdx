@@ -8,27 +8,58 @@ Lays children out vertically. Extends [Box](./box) with all spacing, alignment, 
 
 ## Usage
 
-```tsx
-import { Column } from '@onlynative/components/layout'
+<SnackExample
+  name="OnlyNative Column — Usage"
+  code={`import { Button, Column, Typography } from '@onlynative/components'
+import { ThemeProvider } from '@onlynative/core'
+import { SafeAreaProvider } from 'react-native-safe-area-context'
+import { View } from 'react-native'
 
-<Column gap="md" p="lg">
-  <Typography variant="headlineSmall">Title</Typography>
-  <Typography variant="bodyMedium">Description text</Typography>
-  <Button variant="filled">Action</Button>
-</Column>
-```
+export default function App() {
+  return (
+    <SafeAreaProvider>
+      <ThemeProvider>
+        <View style={{ flex: 1, justifyContent: 'center' }}>
+          <Column gap="md" p="lg">
+            <Typography variant="headlineSmall">Title</Typography>
+            <Typography variant="bodyMedium">Description text</Typography>
+            <Button variant="filled" onPress={() => {}}>Action</Button>
+          </Column>
+        </View>
+      </ThemeProvider>
+    </SafeAreaProvider>
+  )
+}
+`}
+/>
 
 ## Inverted
 
 Reverse the layout direction with `inverted`:
 
-```tsx
-<Column inverted gap="sm">
-  <Typography>First</Typography>
-  <Typography>Second</Typography>
-  {/* Renders bottom-to-top: Second then First */}
-</Column>
-```
+<SnackExample
+  name="OnlyNative Column — Inverted"
+  code={`import { Column, Typography } from '@onlynative/components'
+import { ThemeProvider } from '@onlynative/core'
+import { SafeAreaProvider } from 'react-native-safe-area-context'
+import { View } from 'react-native'
+
+export default function App() {
+  return (
+    <SafeAreaProvider>
+      <ThemeProvider>
+        <View style={{ flex: 1, justifyContent: 'center', padding: 16 }}>
+          <Column inverted gap="sm">
+            <Typography>First</Typography>
+            <Typography>Second</Typography>
+          </Column>
+        </View>
+      </ThemeProvider>
+    </SafeAreaProvider>
+  )
+}
+`}
+/>
 
 ## Props
 

@@ -8,13 +8,28 @@ A theme-aware replacement for `View` with shorthand props for padding, margin, g
 
 ## Usage
 
-```tsx
-import { Box } from '@onlynative/components/layout'
+<SnackExample
+  name="OnlyNative Box — Usage"
+  code={`import { Box, Typography } from '@onlynative/components'
+import { ThemeProvider } from '@onlynative/core'
+import { SafeAreaProvider } from 'react-native-safe-area-context'
+import { View } from 'react-native'
 
-<Box p="md" bg="#f5f5f5">
-  <Typography variant="bodyMedium">Padded content</Typography>
-</Box>
-```
+export default function App() {
+  return (
+    <SafeAreaProvider>
+      <ThemeProvider>
+        <View style={{ flex: 1, justifyContent: 'center', padding: 16 }}>
+          <Box p="md" bg="#f5f5f5">
+            <Typography variant="bodyMedium">Padded content</Typography>
+          </Box>
+        </View>
+      </ThemeProvider>
+    </SafeAreaProvider>
+  )
+}
+`}
+/>
 
 ## Spacing Tokens
 
@@ -28,45 +43,116 @@ import { Box } from '@onlynative/components/layout'
 
 You can also pass a raw number:
 
-```tsx
-<Box p={20} mx={12}>
-  {/* 20dp padding, 12dp horizontal margin */}
-</Box>
-```
+<SnackExample
+  name="OnlyNative Box — Raw spacing"
+  code={`import { Box, Typography } from '@onlynative/components'
+import { ThemeProvider } from '@onlynative/core'
+import { SafeAreaProvider } from 'react-native-safe-area-context'
+import { View } from 'react-native'
+
+export default function App() {
+  return (
+    <SafeAreaProvider>
+      <ThemeProvider>
+        <View style={{ flex: 1, justifyContent: 'center' }}>
+          <Box p={20} mx={12} bg="#e0e0e0">
+            <Typography>20dp padding, 12dp horizontal margin</Typography>
+          </Box>
+        </View>
+      </ThemeProvider>
+    </SafeAreaProvider>
+  )
+}
+`}
+/>
 
 ## Padding & Margin
 
-```tsx
-{/* All sides */}
-<Box p="md" m="sm" />
+<SnackExample
+  name="OnlyNative Box — Padding & Margin"
+  code={`import { Box, Typography } from '@onlynative/components'
+import { ThemeProvider } from '@onlynative/core'
+import { SafeAreaProvider } from 'react-native-safe-area-context'
+import { View } from 'react-native'
 
-{/* Horizontal / Vertical */}
-<Box px="lg" py="sm" />
-
-{/* Individual sides (RTL-aware) */}
-<Box pt="sm" pb="md" ps="lg" pe="xl" />
-```
+export default function App() {
+  return (
+    <SafeAreaProvider>
+      <ThemeProvider>
+        <View style={{ flex: 1, padding: 16, gap: 12 }}>
+          <Box p="md" m="sm" bg="#fce4ec">
+            <Typography>p="md" m="sm"</Typography>
+          </Box>
+          <Box px="lg" py="sm" bg="#e8f5e9">
+            <Typography>px="lg" py="sm"</Typography>
+          </Box>
+          <Box pt="sm" pb="md" ps="lg" pe="xl" bg="#e3f2fd">
+            <Typography>pt sm, pb md, ps lg, pe xl (RTL-aware)</Typography>
+          </Box>
+        </View>
+      </ThemeProvider>
+    </SafeAreaProvider>
+  )
+}
+`}
+/>
 
 `ps` and `pe` map to `paddingStart` / `paddingEnd`, so they flip automatically in RTL layouts. The same applies to `ms` / `me`.
 
 ## Gap
 
-```tsx
-<Box gap="sm">
-  <Button variant="filled">First</Button>
-  <Button variant="outlined">Second</Button>
-</Box>
-```
+<SnackExample
+  name="OnlyNative Box — Gap"
+  code={`import { Box, Button } from '@onlynative/components'
+import { ThemeProvider } from '@onlynative/core'
+import { SafeAreaProvider } from 'react-native-safe-area-context'
+import { View } from 'react-native'
+
+export default function App() {
+  return (
+    <SafeAreaProvider>
+      <ThemeProvider>
+        <View style={{ flex: 1, justifyContent: 'center', padding: 16 }}>
+          <Box gap="sm">
+            <Button variant="filled" onPress={() => {}}>First</Button>
+            <Button variant="outlined" onPress={() => {}}>Second</Button>
+          </Box>
+        </View>
+      </ThemeProvider>
+    </SafeAreaProvider>
+  )
+}
+`}
+/>
 
 `rowGap` and `columnGap` are also available for finer control.
 
 ## Alignment
 
-```tsx
-<Box align="center" justify="space-between">
-  {/* Children are centered on the cross axis and spaced on the main axis */}
-</Box>
-```
+<SnackExample
+  name="OnlyNative Box — Alignment"
+  code={`import { Box, Typography } from '@onlynative/components'
+import { ThemeProvider } from '@onlynative/core'
+import { SafeAreaProvider } from 'react-native-safe-area-context'
+import { View } from 'react-native'
+
+export default function App() {
+  return (
+    <SafeAreaProvider>
+      <ThemeProvider>
+        <View style={{ flex: 1, padding: 16 }}>
+          <Box align="center" justify="space-between" style={{ height: 200, backgroundColor: '#f5f5f5' }}>
+            <Typography>Top</Typography>
+            <Typography>Middle</Typography>
+            <Typography>Bottom</Typography>
+          </Box>
+        </View>
+      </ThemeProvider>
+    </SafeAreaProvider>
+  )
+}
+`}
+/>
 
 ## Props
 

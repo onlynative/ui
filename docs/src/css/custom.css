@@ -32,3 +32,54 @@
 html {
   scroll-behavior: smooth;
 }
+
+/* SnackExample component */
+.snack-example {
+  margin-bottom: 1rem;
+}
+
+.snack-example__actions {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: flex-end;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.snack-example__link,
+.snack-example__button {
+  display: inline-flex;
+  align-items: center;
+  box-sizing: border-box;
+  height: 2rem;
+  padding: 0 0.75rem;
+  font-size: 0.85rem;
+  font-weight: 500;
+  font-family: inherit;
+  line-height: 1;
+  text-decoration: none;
+  color: var(--ifm-color-primary);
+  border: 1px solid var(--ifm-color-emphasis-300);
+  border-radius: 6px;
+  background: var(--ifm-background-surface-color);
+  cursor: pointer;
+  transition:
+    border-color 0.15s ease,
+    background 0.15s ease;
+}
+
+.snack-example__link:hover,
+.snack-example__button:hover {
+  text-decoration: none;
+  border-color: var(--ifm-color-emphasis-500);
+  background: var(--ifm-color-emphasis-100);
+}
+
+.snack-example__iframe {
+  display: block;
+  width: 100%;
+  border: 1px solid var(--ifm-color-emphasis-300);
+  border-radius: 8px;
+  margin-bottom: 1rem;
+  background: var(--ifm-background-surface-color);
+}

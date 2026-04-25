@@ -8,33 +8,75 @@ Layout provides a safe area wrapper with the theme background color applied auto
 
 ## Usage
 
-```tsx
-import { Layout } from '@onlynative/components/layout'
+<SnackExample
+  name="OnlyNative Layout — Usage"
+  code={`import { Layout, Typography } from '@onlynative/components'
+import { ThemeProvider } from '@onlynative/core'
+import { SafeAreaProvider } from 'react-native-safe-area-context'
 
-<Layout>
-  {/* Content is inside safe area with theme background */}
-</Layout>
-```
+export default function App() {
+  return (
+    <SafeAreaProvider>
+      <ThemeProvider>
+        <Layout>
+          <Typography variant="headlineSmall">Inside safe area</Typography>
+          <Typography variant="bodyMedium">Theme background applied automatically.</Typography>
+        </Layout>
+      </ThemeProvider>
+    </SafeAreaProvider>
+  )
+}
+`}
+/>
 
 ## Immersive Mode
 
 For full-screen layouts that extend behind the status bar:
 
-```tsx
-<Layout immersive>
-  {/* No safe area insets */}
-</Layout>
-```
+<SnackExample
+  name="OnlyNative Layout — Immersive"
+  code={`import { Layout, Typography } from '@onlynative/components'
+import { ThemeProvider } from '@onlynative/core'
+import { SafeAreaProvider } from 'react-native-safe-area-context'
+
+export default function App() {
+  return (
+    <SafeAreaProvider>
+      <ThemeProvider>
+        <Layout immersive>
+          <Typography variant="headlineSmall">Immersive content</Typography>
+          <Typography variant="bodyMedium">No safe area insets applied.</Typography>
+        </Layout>
+      </ThemeProvider>
+    </SafeAreaProvider>
+  )
+}
+`}
+/>
 
 ## Custom Edges
 
 Control which safe area edges are applied:
 
-```tsx
-<Layout edges={['top', 'bottom']}>
-  {/* Safe area on top and bottom only */}
-</Layout>
-```
+<SnackExample
+  name="OnlyNative Layout — Custom Edges"
+  code={`import { Layout, Typography } from '@onlynative/components'
+import { ThemeProvider } from '@onlynative/core'
+import { SafeAreaProvider } from 'react-native-safe-area-context'
+
+export default function App() {
+  return (
+    <SafeAreaProvider>
+      <ThemeProvider>
+        <Layout edges={['top', 'bottom']}>
+          <Typography variant="headlineSmall">Top + Bottom insets</Typography>
+        </Layout>
+      </ThemeProvider>
+    </SafeAreaProvider>
+  )
+}
+`}
+/>
 
 By default, only the `bottom` edge is applied. In immersive mode, no edges are applied.
 

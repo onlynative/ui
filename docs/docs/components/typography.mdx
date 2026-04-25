@@ -8,12 +8,27 @@ Typography renders text using the Material Design 3 type scale.
 
 ## Usage
 
-```tsx
-import { Typography } from '@onlynative/components/typography'
+<SnackExample
+  name="OnlyNative Typography — Usage"
+  code={`import { Typography } from '@onlynative/components'
+import { ThemeProvider } from '@onlynative/core'
+import { SafeAreaProvider } from 'react-native-safe-area-context'
+import { View } from 'react-native'
 
-<Typography variant="headlineMedium">Hello World</Typography>
-<Typography variant="bodyLarge">Body text content.</Typography>
-```
+export default function App() {
+  return (
+    <SafeAreaProvider>
+      <ThemeProvider>
+        <View style={{ flex: 1, justifyContent: 'center', padding: 16, gap: 8 }}>
+          <Typography variant="headlineMedium">Hello World</Typography>
+          <Typography variant="bodyLarge">Body text content.</Typography>
+        </View>
+      </ThemeProvider>
+    </SafeAreaProvider>
+  )
+}
+`}
+/>
 
 ## Variants
 
@@ -33,23 +48,55 @@ Display and headline variants automatically receive `accessibilityRole="header"`
 
 ## Custom Styles
 
-```tsx
-<Typography variant="bodyMedium" style={{ color: 'red' }}>
-  Custom colored text
-</Typography>
-```
+<SnackExample
+  name="OnlyNative Typography — Custom Styles"
+  code={`import { Typography } from '@onlynative/components'
+import { ThemeProvider } from '@onlynative/core'
+import { SafeAreaProvider } from 'react-native-safe-area-context'
+import { View } from 'react-native'
+
+export default function App() {
+  return (
+    <SafeAreaProvider>
+      <ThemeProvider>
+        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+          <Typography variant="bodyMedium" style={{ color: 'red' }}>
+            Custom colored text
+          </Typography>
+        </View>
+      </ThemeProvider>
+    </SafeAreaProvider>
+  )
+}
+`}
+/>
 
 ## Custom Text Component
 
 Use the `as` prop to render with a custom text component:
 
-```tsx
-import { Animated } from 'react-native'
+<SnackExample
+  name="OnlyNative Typography — Custom Component"
+  code={`import { Typography } from '@onlynative/components'
+import { ThemeProvider } from '@onlynative/core'
+import { SafeAreaProvider } from 'react-native-safe-area-context'
+import { Animated, View } from 'react-native'
 
-<Typography variant="titleLarge" as={Animated.Text}>
-  Animated text
-</Typography>
-```
+export default function App() {
+  return (
+    <SafeAreaProvider>
+      <ThemeProvider>
+        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+          <Typography variant="titleLarge" as={Animated.Text}>
+            Animated text
+          </Typography>
+        </View>
+      </ThemeProvider>
+    </SafeAreaProvider>
+  )
+}
+`}
+/>
 
 ## Props
 

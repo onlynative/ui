@@ -9,13 +9,28 @@ Follows the [Material Design 3 Button](https://m3.material.io/components/buttons
 
 ## Usage
 
-```tsx
-import { Button } from '@onlynative/components/button'
+<SnackExample
+  name="OnlyNative Button — Usage"
+  code={`import { Button } from '@onlynative/components'
+import { ThemeProvider } from '@onlynative/core'
+import { SafeAreaProvider } from 'react-native-safe-area-context'
+import { View } from 'react-native'
 
-<Button variant="filled" onPress={() => console.log('pressed')}>
-  Save
-</Button>
-```
+export default function App() {
+  return (
+    <SafeAreaProvider>
+      <ThemeProvider>
+        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', padding: 16 }}>
+          <Button variant="filled" onPress={() => console.log('pressed')}>
+            Save
+          </Button>
+        </View>
+      </ThemeProvider>
+    </SafeAreaProvider>
+  )
+}
+`}
+/>
 
 ## Variants
 
@@ -27,18 +42,77 @@ import { Button } from '@onlynative/components/button'
 | `text` | Low emphasis, often in dialogs |
 | `tonal` | Secondary container fill |
 
+<SnackExample
+  name="OnlyNative Button — Variants"
+  code={`import { Button } from '@onlynative/components'
+import { ThemeProvider } from '@onlynative/core'
+import { SafeAreaProvider } from 'react-native-safe-area-context'
+import { View } from 'react-native'
+
+export default function App() {
+  return (
+    <SafeAreaProvider>
+      <ThemeProvider>
+        <View style={{ flex: 1, justifyContent: 'center', padding: 16, gap: 12 }}>
+          <Button variant="filled" onPress={() => {}}>Filled</Button>
+          <Button variant="elevated" onPress={() => {}}>Elevated</Button>
+          <Button variant="outlined" onPress={() => {}}>Outlined</Button>
+          <Button variant="text" onPress={() => {}}>Text</Button>
+          <Button variant="tonal" onPress={() => {}}>Tonal</Button>
+        </View>
+      </ThemeProvider>
+    </SafeAreaProvider>
+  )
+}
+`}
+/>
+
 ## With Icons
 
-```tsx
-<Button leadingIcon="plus" onPress={() => {}}>Add Item</Button>
-<Button trailingIcon="arrow-right" onPress={() => {}}>Continue</Button>
-```
+<SnackExample
+  name="OnlyNative Button — Icons"
+  code={`import { Button } from '@onlynative/components'
+import { ThemeProvider } from '@onlynative/core'
+import { SafeAreaProvider } from 'react-native-safe-area-context'
+import { View } from 'react-native'
+
+export default function App() {
+  return (
+    <SafeAreaProvider>
+      <ThemeProvider>
+        <View style={{ flex: 1, justifyContent: 'center', padding: 16, gap: 12 }}>
+          <Button leadingIcon="plus" onPress={() => {}}>Add Item</Button>
+          <Button trailingIcon="arrow-right" onPress={() => {}}>Continue</Button>
+        </View>
+      </ThemeProvider>
+    </SafeAreaProvider>
+  )
+}
+`}
+/>
 
 ## Disabled
 
-```tsx
-<Button disabled onPress={() => {}}>Disabled</Button>
-```
+<SnackExample
+  name="OnlyNative Button — Disabled"
+  code={`import { Button } from '@onlynative/components'
+import { ThemeProvider } from '@onlynative/core'
+import { SafeAreaProvider } from 'react-native-safe-area-context'
+import { View } from 'react-native'
+
+export default function App() {
+  return (
+    <SafeAreaProvider>
+      <ThemeProvider>
+        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', padding: 16 }}>
+          <Button disabled onPress={() => {}}>Disabled</Button>
+        </View>
+      </ThemeProvider>
+    </SafeAreaProvider>
+  )
+}
+`}
+/>
 
 ## Props
 
