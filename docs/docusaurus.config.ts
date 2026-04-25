@@ -28,6 +28,7 @@ const config: Config = {
         docs: {
           sidebarPath: './sidebars.ts',
           routeBasePath: '/',
+          editUrl: 'https://github.com/onlynative/ui/edit/main/docs/',
         },
         blog: false,
         theme: {
