@@ -1,5 +1,5 @@
-import React from 'react'
 import useGlobalData from '@docusaurus/useGlobalData'
+import React from 'react'
 
 interface PropInfo {
   name: string
@@ -22,7 +22,7 @@ export default function PropTable({ name }: Props) {
   const globalData = useGlobalData()
   const docgenData = globalData?.[
     'docusaurus-plugin-react-docgen-typescript'
-  ] as Record<string, { default: ComponentData[] }> | undefined
+  ] as Record<string, ComponentData[]> | undefined
 
   if (!docgenData) {
     return <p>No prop data available.</p>
@@ -30,7 +30,7 @@ export default function PropTable({ name }: Props) {
 
   let component: ComponentData | undefined
   for (const pluginId of Object.keys(docgenData)) {
-    const components = docgenData[pluginId]?.default
+    const components = docgenData[pluginId]
     if (Array.isArray(components)) {
       component = components.find((c) => c.displayName === name)
       if (component) break
