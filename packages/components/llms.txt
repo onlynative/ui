@@ -451,6 +451,42 @@ Props:
 
 ---
 
+### Portal
+
+Render content into a shared overlay layer above the rest of the app. Foundation primitive for dialogs, snackbars, menus, tooltips, and bottom sheets.
+
+```tsx
+import { PortalHost, Portal } from '@onlynative/components/portal'
+import { View, Text } from 'react-native'
+
+// Wrap your app root once
+<PortalHost>
+  <App />
+</PortalHost>
+
+// Anywhere in the tree
+<Portal>
+  <View style={{ position: 'absolute', top: 100, left: 20 }}>
+    <Text>Renders into the overlay</Text>
+  </View>
+</Portal>
+```
+
+Behavior:
+- Portals render in mount order — the most recently mounted appears on top.
+- The overlay layer uses `pointerEvents="box-none"`, so empty regions pass touches through. Each Portal entry is responsible for its own positioning and scrim.
+- Without a `PortalHost` ancestor, `<Portal>` logs a development error and falls back to inline rendering.
+
+`PortalHost` props:
+- `children: ReactNode` — App tree to wrap.
+- `style?: StyleProp<ViewStyle>` — Style applied to the root container that wraps host children and the overlay layer.
+
+`Portal` props:
+- `children: ReactNode` — Content to render into the host's overlay layer.
+
+
+---
+
 ## Icons
 
 All icon props accept `MaterialCommunityIcons` names from `@expo/vector-icons`. Browse available icons at https://pictogrammers.com/library/mdi/.

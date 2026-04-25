@@ -18,6 +18,7 @@ export default defineConfig({
     'src/list/index.ts',
     'src/keyboard-avoiding-wrapper/index.ts',
     'src/avatar/index.ts',
+    'src/portal/index.ts',
   ],
   dts: true,
   format: 'cjs',

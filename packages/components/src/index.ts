@@ -60,3 +60,6 @@ export type { KeyboardAvoidingWrapperProps } from './keyboard-avoiding-wrapper'
 
 export { Avatar } from './avatar'
 export type { AvatarProps, AvatarSize } from './avatar'
+
+export { Portal, PortalHost } from './portal'
+export type { PortalProps, PortalHostProps } from './portal'

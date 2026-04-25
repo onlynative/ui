@@ -1,0 +1,67 @@
+---
+sidebar_position: 3
+---
+
+# Portal
+
+Render content into a shared overlay layer that sits above the rest of the app. Portal is the foundation primitive for dialogs, snackbars, menus, tooltips, and bottom sheets — anything that needs to escape its parent's layout and z-order.
+
+## Setup
+
+Wrap your app root with `PortalHost` once. Every `<Portal>` rendered anywhere in the tree below will mount into this host's overlay layer.
+
+```tsx
+import { PortalHost } from '@onlynative/components/portal'
+
+export default function App() {
+  return (
+    <PortalHost>
+      <RootNavigator />
+    </PortalHost>
+  )
+}
+```
+
+## Usage
+
+```tsx
+import { Portal } from '@onlynative/components/portal'
+import { View, Text } from 'react-native'
+
+function MyScreen() {
+  return (
+    <>
+      <Text>This renders in place.</Text>
+      <Portal>
+        <View style={{ position: 'absolute', top: 100, left: 20 }}>
+          <Text>This renders into the overlay.</Text>
+        </View>
+      </Portal>
+    </>
+  )
+}
+```
+
+The `Portal` component itself renders nothing inline — its children appear inside the host's overlay layer instead. Mount and unmount as you would any normal React component.
+
+## How it works
+
+`PortalHost` wraps its children in a root `View` and adds an absolutely-positioned overlay layer on top. Each `<Portal>` registers its children with the host via context; the host renders them in mount order, so the most recently mounted Portal appears on top.
+
+The overlay layer uses `pointerEvents="box-none"`, so empty regions of the overlay pass touches through to the content below. Each Portal entry is responsible for its own positioning and scrim — typically with `position: 'absolute'` and a full-bleed touch-capturing `View`.
+
+## Stacking order
+
+Portals render in mount order. If you open Dialog A then Dialog B, Dialog B sits above Dialog A. Closing B brings A back to the top.
+
+## Without a host
+
+If `<Portal>` is rendered outside a `<PortalHost>`, it logs a development error and falls back to inline rendering so your screen still works. Add a `PortalHost` at the app root to silence the warning and get the overlay behavior.
+
+## Portal Props
+
+<PropTable name="Portal" />
+
+## PortalHost Props
+
+<PropTable name="PortalHost" />

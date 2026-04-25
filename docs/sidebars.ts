@@ -49,7 +49,11 @@ const sidebars: SidebarsConfig = {
       type: 'category',
       label: 'Surfaces',
       collapsed: false,
-      items: ['components/appbar', 'components/keyboard-avoiding-wrapper'],
+      items: [
+        'components/appbar',
+        'components/keyboard-avoiding-wrapper',
+        'components/portal',
+      ],
     },
   ],
 }

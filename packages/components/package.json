@@ -84,6 +84,11 @@
       "types": "./dist/avatar/index.d.ts",
       "react-native": "./dist/avatar/index.js",
       "default": "./dist/avatar/index.js"
+    },
+    "./portal": {
+      "types": "./dist/portal/index.d.ts",
+      "react-native": "./dist/portal/index.js",
+      "default": "./dist/portal/index.js"
     }
   },
   "typesVersions": {
@@ -129,6 +134,9 @@
       ],
       "avatar": [
         "dist/avatar/index.d.ts"
+      ],
+      "portal": [
+        "dist/portal/index.d.ts"
       ]
     }
   },
