@@ -11,24 +11,25 @@ Follows the [Material Design 3 Switch](https://m3.material.io/components/switch/
 
 <SnackExample
   name="OnlyNative Switch — Usage"
-  code={`import { Switch } from '@onlynative/components'
-import { ThemeProvider } from '@onlynative/core'
-import { SafeAreaProvider } from 'react-native-safe-area-context'
-import { useState } from 'react'
-import { View } from 'react-native'
+  code={`
+  import { Switch } from '@onlynative/components'
+  import { ThemeProvider } from '@onlynative/core'
+  import { SafeAreaProvider } from 'react-native-safe-area-context'
+  import { useState } from 'react'
+  import { View } from 'react-native'
 
-export default function App() {
-  const [isOn, setIsOn] = useState(false)
-  return (
-    <SafeAreaProvider>
-      <ThemeProvider>
-        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-          <Switch value={isOn} onValueChange={setIsOn} />
-        </View>
-      </ThemeProvider>
-    </SafeAreaProvider>
-  )
-}
+  export default function App() {
+    const [isOn, setIsOn] = useState(false)
+    return (
+      <SafeAreaProvider>
+        <ThemeProvider>
+          <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+            <Switch value={isOn} onValueChange={setIsOn} />
+          </View>
+        </ThemeProvider>
+      </SafeAreaProvider>
+    )
+  }
 `}
 />
 
@@ -38,31 +39,32 @@ By default, the selected state shows a check icon on the thumb. You can customiz
 
 <SnackExample
   name="OnlyNative Switch — Icons"
-  code={`import { Switch } from '@onlynative/components'
-import { ThemeProvider } from '@onlynative/core'
-import { SafeAreaProvider } from 'react-native-safe-area-context'
-import { useState } from 'react'
-import { View } from 'react-native'
+  code={`
+  import { Switch } from '@onlynative/components'
+  import { ThemeProvider } from '@onlynative/core'
+  import { SafeAreaProvider } from 'react-native-safe-area-context'
+  import { useState } from 'react'
+  import { View } from 'react-native'
 
-export default function App() {
-  const [a, setA] = useState(true)
-  const [b, setB] = useState(true)
-  return (
-    <SafeAreaProvider>
-      <ThemeProvider>
-        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', gap: 16 }}>
-          <Switch value={a} onValueChange={setA} selectedIcon="check" />
-          <Switch
-            value={b}
-            onValueChange={setB}
-            selectedIcon="bell"
-            unselectedIcon="bell-off"
-          />
-        </View>
-      </ThemeProvider>
-    </SafeAreaProvider>
-  )
-}
+  export default function App() {
+    const [a, setA] = useState(true)
+    const [b, setB] = useState(true)
+    return (
+      <SafeAreaProvider>
+        <ThemeProvider>
+          <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', gap: 16 }}>
+            <Switch value={a} onValueChange={setA} selectedIcon="check" />
+            <Switch
+              value={b}
+              onValueChange={setB}
+              selectedIcon="bell"
+              unselectedIcon="bell-off"
+            />
+          </View>
+        </ThemeProvider>
+      </SafeAreaProvider>
+    )
+  }
 `}
 />
 
@@ -72,23 +74,24 @@ When `unselectedIcon` is provided, the thumb renders at the larger selected size
 
 <SnackExample
   name="OnlyNative Switch — Disabled"
-  code={`import { Switch } from '@onlynative/components'
-import { ThemeProvider } from '@onlynative/core'
-import { SafeAreaProvider } from 'react-native-safe-area-context'
-import { View } from 'react-native'
+  code={`
+  import { Switch } from '@onlynative/components'
+  import { ThemeProvider } from '@onlynative/core'
+  import { SafeAreaProvider } from 'react-native-safe-area-context'
+  import { View } from 'react-native'
 
-export default function App() {
-  return (
-    <SafeAreaProvider>
-      <ThemeProvider>
-        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', gap: 12 }}>
-          <Switch value={false} onValueChange={() => {}} disabled />
-          <Switch value onValueChange={() => {}} disabled />
-        </View>
-      </ThemeProvider>
-    </SafeAreaProvider>
-  )
-}
+  export default function App() {
+    return (
+      <SafeAreaProvider>
+        <ThemeProvider>
+          <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', gap: 12 }}>
+            <Switch value={false} onValueChange={() => {}} disabled />
+            <Switch value onValueChange={() => {}} disabled />
+          </View>
+        </ThemeProvider>
+      </SafeAreaProvider>
+    )
+  }
 `}
 />
 

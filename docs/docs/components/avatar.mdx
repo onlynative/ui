@@ -10,24 +10,25 @@ Avatars represent a user or entity with an image, icon, or text initials.
 
 <SnackExample
   name="OnlyNative Avatar — Usage"
-  code={`import { Avatar } from '@onlynative/components'
-import { ThemeProvider } from '@onlynative/core'
-import { SafeAreaProvider } from 'react-native-safe-area-context'
-import { View } from 'react-native'
+  code={`
+  import { Avatar } from '@onlynative/components'
+  import { ThemeProvider } from '@onlynative/core'
+  import { SafeAreaProvider } from 'react-native-safe-area-context'
+  import { View } from 'react-native'
 
-export default function App() {
-  return (
-    <SafeAreaProvider>
-      <ThemeProvider>
-        <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 16 }}>
-          <Avatar imageUri="https://i.pravatar.cc/80" />
-          <Avatar icon="account" />
-          <Avatar label="JD" />
-        </View>
-      </ThemeProvider>
-    </SafeAreaProvider>
-  )
-}
+  export default function App() {
+    return (
+      <SafeAreaProvider>
+        <ThemeProvider>
+          <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 16 }}>
+            <Avatar imageUri="https://i.pravatar.cc/80" />
+            <Avatar icon="account" />
+            <Avatar label="JD" />
+          </View>
+        </ThemeProvider>
+      </SafeAreaProvider>
+    )
+  }
 `}
 />
 
@@ -51,26 +52,27 @@ The avatar renders the first available content in this order:
 
 <SnackExample
   name="OnlyNative Avatar — Sizes"
-  code={`import { Avatar } from '@onlynative/components'
-import { ThemeProvider } from '@onlynative/core'
-import { SafeAreaProvider } from 'react-native-safe-area-context'
-import { View } from 'react-native'
+  code={`
+  import { Avatar } from '@onlynative/components'
+  import { ThemeProvider } from '@onlynative/core'
+  import { SafeAreaProvider } from 'react-native-safe-area-context'
+  import { View } from 'react-native'
 
-export default function App() {
-  return (
-    <SafeAreaProvider>
-      <ThemeProvider>
-        <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 16 }}>
-          <Avatar label="AB" size="xSmall" />
-          <Avatar label="AB" size="small" />
-          <Avatar label="AB" size="medium" />
-          <Avatar label="AB" size="large" />
-          <Avatar label="AB" size="xLarge" />
-        </View>
-      </ThemeProvider>
-    </SafeAreaProvider>
-  )
-}
+  export default function App() {
+    return (
+      <SafeAreaProvider>
+        <ThemeProvider>
+          <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 16 }}>
+            <Avatar label="AB" size="xSmall" />
+            <Avatar label="AB" size="small" />
+            <Avatar label="AB" size="medium" />
+            <Avatar label="AB" size="large" />
+            <Avatar label="AB" size="xLarge" />
+          </View>
+        </ThemeProvider>
+      </SafeAreaProvider>
+    )
+  }
 `}
 />
 
@@ -80,26 +82,27 @@ When `onPress` is provided, the avatar renders as a `Pressable` with automatic s
 
 <SnackExample
   name="OnlyNative Avatar — Interactive"
-  code={`import { Avatar } from '@onlynative/components'
-import { ThemeProvider } from '@onlynative/core'
-import { SafeAreaProvider } from 'react-native-safe-area-context'
-import { Alert, View } from 'react-native'
+  code={`
+  import { Avatar } from '@onlynative/components'
+  import { ThemeProvider } from '@onlynative/core'
+  import { SafeAreaProvider } from 'react-native-safe-area-context'
+  import { Alert, View } from 'react-native'
 
-export default function App() {
-  return (
-    <SafeAreaProvider>
-      <ThemeProvider>
-        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-          <Avatar
-            imageUri="https://i.pravatar.cc/80"
-            onPress={() => Alert.alert('Tapped')}
-            accessibilityLabel="Open profile"
-          />
-        </View>
-      </ThemeProvider>
-    </SafeAreaProvider>
-  )
-}
+  export default function App() {
+    return (
+      <SafeAreaProvider>
+        <ThemeProvider>
+          <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+            <Avatar
+              imageUri="https://i.pravatar.cc/80"
+              onPress={() => Alert.alert('Tapped')}
+              accessibilityLabel="Open profile"
+            />
+          </View>
+        </ThemeProvider>
+      </SafeAreaProvider>
+    )
+  }
 `}
 />
 
@@ -109,22 +112,23 @@ Override the container and content colors:
 
 <SnackExample
   name="OnlyNative Avatar — Custom Colors"
-  code={`import { Avatar } from '@onlynative/components'
-import { ThemeProvider } from '@onlynative/core'
-import { SafeAreaProvider } from 'react-native-safe-area-context'
-import { View } from 'react-native'
+  code={`
+  import { Avatar } from '@onlynative/components'
+  import { ThemeProvider } from '@onlynative/core'
+  import { SafeAreaProvider } from 'react-native-safe-area-context'
+  import { View } from 'react-native'
 
-export default function App() {
-  return (
-    <SafeAreaProvider>
-      <ThemeProvider>
-        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-          <Avatar label="AB" containerColor="#E8DEF8" contentColor="#1D1B20" />
-        </View>
-      </ThemeProvider>
-    </SafeAreaProvider>
-  )
-}
+  export default function App() {
+    return (
+      <SafeAreaProvider>
+        <ThemeProvider>
+          <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+            <Avatar label="AB" containerColor="#E8DEF8" contentColor="#1D1B20" />
+          </View>
+        </ThemeProvider>
+      </SafeAreaProvider>
+    )
+  }
 `}
 />
 

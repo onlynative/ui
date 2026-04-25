@@ -11,25 +11,26 @@ Follows the [Material Design 3 Radio button](https://m3.material.io/components/r
 
 <SnackExample
   name="OnlyNative Radio — Usage"
-  code={`import { Radio } from '@onlynative/components'
-import { ThemeProvider } from '@onlynative/core'
-import { SafeAreaProvider } from 'react-native-safe-area-context'
-import { useState } from 'react'
-import { View } from 'react-native'
+  code={`
+  import { Radio } from '@onlynative/components'
+  import { ThemeProvider } from '@onlynative/core'
+  import { SafeAreaProvider } from 'react-native-safe-area-context'
+  import { useState } from 'react'
+  import { View } from 'react-native'
 
-export default function App() {
-  const [selected, setSelected] = useState('a')
-  return (
-    <SafeAreaProvider>
-      <ThemeProvider>
-        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', gap: 12 }}>
-          <Radio value={selected === 'a'} onValueChange={() => setSelected('a')} />
-          <Radio value={selected === 'b'} onValueChange={() => setSelected('b')} />
-        </View>
-      </ThemeProvider>
-    </SafeAreaProvider>
-  )
-}
+  export default function App() {
+    const [selected, setSelected] = useState('a')
+    return (
+      <SafeAreaProvider>
+        <ThemeProvider>
+          <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', gap: 12 }}>
+            <Radio value={selected === 'a'} onValueChange={() => setSelected('a')} />
+            <Radio value={selected === 'b'} onValueChange={() => setSelected('b')} />
+          </View>
+        </ThemeProvider>
+      </SafeAreaProvider>
+    )
+  }
 `}
 />
 
@@ -39,26 +40,27 @@ Build a radio group by controlling which Radio has `value={true}`:
 
 <SnackExample
   name="OnlyNative Radio — Group"
-  code={`import { Radio } from '@onlynative/components'
-import { ThemeProvider } from '@onlynative/core'
-import { SafeAreaProvider } from 'react-native-safe-area-context'
-import { useState } from 'react'
-import { View } from 'react-native'
+  code={`
+  import { Radio } from '@onlynative/components'
+  import { ThemeProvider } from '@onlynative/core'
+  import { SafeAreaProvider } from 'react-native-safe-area-context'
+  import { useState } from 'react'
+  import { View } from 'react-native'
 
-export default function App() {
-  const [choice, setChoice] = useState('option1')
-  return (
-    <SafeAreaProvider>
-      <ThemeProvider>
-        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', gap: 12 }}>
-          <Radio value={choice === 'option1'} onValueChange={() => setChoice('option1')} />
-          <Radio value={choice === 'option2'} onValueChange={() => setChoice('option2')} />
-          <Radio value={choice === 'option3'} onValueChange={() => setChoice('option3')} />
-        </View>
-      </ThemeProvider>
-    </SafeAreaProvider>
-  )
-}
+  export default function App() {
+    const [choice, setChoice] = useState('option1')
+    return (
+      <SafeAreaProvider>
+        <ThemeProvider>
+          <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', gap: 12 }}>
+            <Radio value={choice === 'option1'} onValueChange={() => setChoice('option1')} />
+            <Radio value={choice === 'option2'} onValueChange={() => setChoice('option2')} />
+            <Radio value={choice === 'option3'} onValueChange={() => setChoice('option3')} />
+          </View>
+        </ThemeProvider>
+      </SafeAreaProvider>
+    )
+  }
 `}
 />
 
@@ -66,23 +68,24 @@ export default function App() {
 
 <SnackExample
   name="OnlyNative Radio — Disabled"
-  code={`import { Radio } from '@onlynative/components'
-import { ThemeProvider } from '@onlynative/core'
-import { SafeAreaProvider } from 'react-native-safe-area-context'
-import { View } from 'react-native'
+  code={`
+  import { Radio } from '@onlynative/components'
+  import { ThemeProvider } from '@onlynative/core'
+  import { SafeAreaProvider } from 'react-native-safe-area-context'
+  import { View } from 'react-native'
 
-export default function App() {
-  return (
-    <SafeAreaProvider>
-      <ThemeProvider>
-        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', gap: 12 }}>
-          <Radio value={false} onValueChange={() => {}} disabled />
-          <Radio value onValueChange={() => {}} disabled />
-        </View>
-      </ThemeProvider>
-    </SafeAreaProvider>
-  )
-}
+  export default function App() {
+    return (
+      <SafeAreaProvider>
+        <ThemeProvider>
+          <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', gap: 12 }}>
+            <Radio value={false} onValueChange={() => {}} disabled />
+            <Radio value onValueChange={() => {}} disabled />
+          </View>
+        </ThemeProvider>
+      </SafeAreaProvider>
+    )
+  }
 `}
 />
 

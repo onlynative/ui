@@ -11,28 +11,29 @@ Follows the [Material Design 3 Text Field](https://m3.material.io/components/tex
 
 <SnackExample
   name="OnlyNative TextField — Usage"
-  code={`import { TextField } from '@onlynative/components'
-import { ThemeProvider } from '@onlynative/core'
-import { SafeAreaProvider } from 'react-native-safe-area-context'
-import { useState } from 'react'
-import { View } from 'react-native'
+  code={`
+  import { TextField } from '@onlynative/components'
+  import { ThemeProvider } from '@onlynative/core'
+  import { SafeAreaProvider } from 'react-native-safe-area-context'
+  import { useState } from 'react'
+  import { View } from 'react-native'
 
-export default function App() {
-  const [value, setValue] = useState('')
-  return (
-    <SafeAreaProvider>
-      <ThemeProvider>
-        <View style={{ flex: 1, justifyContent: 'center', padding: 16 }}>
-          <TextField
-            label="Email"
-            value={value}
-            onChangeText={setValue}
-          />
-        </View>
-      </ThemeProvider>
-    </SafeAreaProvider>
-  )
-}
+  export default function App() {
+    const [value, setValue] = useState('')
+    return (
+      <SafeAreaProvider>
+        <ThemeProvider>
+          <View style={{ flex: 1, justifyContent: 'center', padding: 16 }}>
+            <TextField
+              label="Email"
+              value={value}
+              onChangeText={setValue}
+            />
+          </View>
+        </ThemeProvider>
+      </SafeAreaProvider>
+    )
+  }
 `}
 />
 
@@ -45,26 +46,27 @@ export default function App() {
 
 <SnackExample
   name="OnlyNative TextField — Variants"
-  code={`import { TextField } from '@onlynative/components'
-import { ThemeProvider } from '@onlynative/core'
-import { SafeAreaProvider } from 'react-native-safe-area-context'
-import { useState } from 'react'
-import { View } from 'react-native'
+  code={`
+  import { TextField } from '@onlynative/components'
+  import { ThemeProvider } from '@onlynative/core'
+  import { SafeAreaProvider } from 'react-native-safe-area-context'
+  import { useState } from 'react'
+  import { View } from 'react-native'
 
-export default function App() {
-  const [a, setA] = useState('')
-  const [b, setB] = useState('')
-  return (
-    <SafeAreaProvider>
-      <ThemeProvider>
-        <View style={{ flex: 1, justifyContent: 'center', padding: 16, gap: 16 }}>
-          <TextField label="Filled" variant="filled" value={a} onChangeText={setA} />
-          <TextField label="Outlined" variant="outlined" value={b} onChangeText={setB} />
-        </View>
-      </ThemeProvider>
-    </SafeAreaProvider>
-  )
-}
+  export default function App() {
+    const [a, setA] = useState('')
+    const [b, setB] = useState('')
+    return (
+      <SafeAreaProvider>
+        <ThemeProvider>
+          <View style={{ flex: 1, justifyContent: 'center', padding: 16, gap: 16 }}>
+            <TextField label="Filled" variant="filled" value={a} onChangeText={setA} />
+            <TextField label="Outlined" variant="outlined" value={b} onChangeText={setB} />
+          </View>
+        </ThemeProvider>
+      </SafeAreaProvider>
+    )
+  }
 `}
 />
 
@@ -72,31 +74,32 @@ export default function App() {
 
 <SnackExample
   name="OnlyNative TextField — Icons"
-  code={`import { TextField } from '@onlynative/components'
-import { ThemeProvider } from '@onlynative/core'
-import { SafeAreaProvider } from 'react-native-safe-area-context'
-import { useState } from 'react'
-import { View } from 'react-native'
+  code={`
+  import { TextField } from '@onlynative/components'
+  import { ThemeProvider } from '@onlynative/core'
+  import { SafeAreaProvider } from 'react-native-safe-area-context'
+  import { useState } from 'react'
+  import { View } from 'react-native'
 
-export default function App() {
-  const [value, setValue] = useState('')
-  return (
-    <SafeAreaProvider>
-      <ThemeProvider>
-        <View style={{ flex: 1, justifyContent: 'center', padding: 16 }}>
-          <TextField
-            label="Search"
-            value={value}
-            onChangeText={setValue}
-            leadingIcon="magnify"
-            trailingIcon="close"
-            onTrailingIconPress={() => setValue('')}
-          />
-        </View>
-      </ThemeProvider>
-    </SafeAreaProvider>
-  )
-}
+  export default function App() {
+    const [value, setValue] = useState('')
+    return (
+      <SafeAreaProvider>
+        <ThemeProvider>
+          <View style={{ flex: 1, justifyContent: 'center', padding: 16 }}>
+            <TextField
+              label="Search"
+              value={value}
+              onChangeText={setValue}
+              leadingIcon="magnify"
+              trailingIcon="close"
+              onTrailingIconPress={() => setValue('')}
+            />
+          </View>
+        </ThemeProvider>
+      </SafeAreaProvider>
+    )
+  }
 `}
 />
 
@@ -104,32 +107,33 @@ export default function App() {
 
 <SnackExample
   name="OnlyNative TextField — Validation"
-  code={`import { TextField } from '@onlynative/components'
-import { ThemeProvider } from '@onlynative/core'
-import { SafeAreaProvider } from 'react-native-safe-area-context'
-import { useState } from 'react'
-import { View } from 'react-native'
+  code={`
+  import { TextField } from '@onlynative/components'
+  import { ThemeProvider } from '@onlynative/core'
+  import { SafeAreaProvider } from 'react-native-safe-area-context'
+  import { useState } from 'react'
+  import { View } from 'react-native'
 
-export default function App() {
-  const [email, setEmail] = useState('not-an-email')
-  const isValid = /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(email)
-  return (
-    <SafeAreaProvider>
-      <ThemeProvider>
-        <View style={{ flex: 1, justifyContent: 'center', padding: 16 }}>
-          <TextField
-            label="Email"
-            value={email}
-            onChangeText={setEmail}
-            error={!isValid}
-            errorText="Please enter a valid email address"
-            supportingText="We'll never share your email"
-          />
-        </View>
-      </ThemeProvider>
-    </SafeAreaProvider>
-  )
-}
+  export default function App() {
+    const [email, setEmail] = useState('not-an-email')
+    const isValid = /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(email)
+    return (
+      <SafeAreaProvider>
+        <ThemeProvider>
+          <View style={{ flex: 1, justifyContent: 'center', padding: 16 }}>
+            <TextField
+              label="Email"
+              value={email}
+              onChangeText={setEmail}
+              error={!isValid}
+              errorText="Please enter a valid email address"
+              supportingText="We'll never share your email"
+            />
+          </View>
+        </ThemeProvider>
+      </SafeAreaProvider>
+    )
+  }
 `}
 />
 

@@ -11,22 +11,23 @@ Follows the [Material Design 3 Top App Bar](https://m3.material.io/components/to
 
 <SnackExample
   name="OnlyNative AppBar — Usage"
-  code={`import { AppBar } from '@onlynative/components'
-import { ThemeProvider } from '@onlynative/core'
-import { SafeAreaProvider } from 'react-native-safe-area-context'
-import { View } from 'react-native'
+  code={`
+  import { AppBar } from '@onlynative/components'
+  import { ThemeProvider } from '@onlynative/core'
+  import { SafeAreaProvider } from 'react-native-safe-area-context'
+  import { View } from 'react-native'
 
-export default function App() {
-  return (
-    <SafeAreaProvider>
-      <ThemeProvider>
-        <View style={{ flex: 1 }}>
-          <AppBar title="Home" />
-        </View>
-      </ThemeProvider>
-    </SafeAreaProvider>
-  )
-}
+  export default function App() {
+    return (
+      <SafeAreaProvider>
+        <ThemeProvider>
+          <View style={{ flex: 1 }}>
+            <AppBar title="Home" />
+          </View>
+        </ThemeProvider>
+      </SafeAreaProvider>
+    )
+  }
 `}
 />
 
@@ -43,26 +44,27 @@ export default function App() {
 
 <SnackExample
   name="OnlyNative AppBar — Back Button"
-  code={`import { AppBar } from '@onlynative/components'
-import { ThemeProvider } from '@onlynative/core'
-import { SafeAreaProvider } from 'react-native-safe-area-context'
-import { Alert, View } from 'react-native'
+  code={`
+  import { AppBar } from '@onlynative/components'
+  import { ThemeProvider } from '@onlynative/core'
+  import { SafeAreaProvider } from 'react-native-safe-area-context'
+  import { Alert, View } from 'react-native'
 
-export default function App() {
-  return (
-    <SafeAreaProvider>
-      <ThemeProvider>
-        <View style={{ flex: 1 }}>
-          <AppBar
-            title="Details"
-            canGoBack
-            onBackPress={() => Alert.alert('Back pressed')}
-          />
-        </View>
-      </ThemeProvider>
-    </SafeAreaProvider>
-  )
-}
+  export default function App() {
+    return (
+      <SafeAreaProvider>
+        <ThemeProvider>
+          <View style={{ flex: 1 }}>
+            <AppBar
+              title="Details"
+              canGoBack
+              onBackPress={() => Alert.alert('Back pressed')}
+            />
+          </View>
+        </ThemeProvider>
+      </SafeAreaProvider>
+    )
+  }
 `}
 />
 
@@ -70,28 +72,29 @@ export default function App() {
 
 <SnackExample
   name="OnlyNative AppBar — Actions"
-  code={`import { AppBar } from '@onlynative/components'
-import { ThemeProvider } from '@onlynative/core'
-import { SafeAreaProvider } from 'react-native-safe-area-context'
-import { Alert, View } from 'react-native'
+  code={`
+  import { AppBar } from '@onlynative/components'
+  import { ThemeProvider } from '@onlynative/core'
+  import { SafeAreaProvider } from 'react-native-safe-area-context'
+  import { Alert, View } from 'react-native'
 
-export default function App() {
-  return (
-    <SafeAreaProvider>
-      <ThemeProvider>
-        <View style={{ flex: 1 }}>
-          <AppBar
-            title="Inbox"
-            actions={[
-              { icon: 'magnify', accessibilityLabel: 'Search', onPress: () => Alert.alert('Search') },
-              { icon: 'dots-vertical', accessibilityLabel: 'More', onPress: () => Alert.alert('More') },
-            ]}
-          />
-        </View>
-      </ThemeProvider>
-    </SafeAreaProvider>
-  )
-}
+  export default function App() {
+    return (
+      <SafeAreaProvider>
+        <ThemeProvider>
+          <View style={{ flex: 1 }}>
+            <AppBar
+              title="Inbox"
+              actions={[
+                { icon: 'magnify', accessibilityLabel: 'Search', onPress: () => Alert.alert('Search') },
+                { icon: 'dots-vertical', accessibilityLabel: 'More', onPress: () => Alert.alert('More') },
+              ]}
+            />
+          </View>
+        </ThemeProvider>
+      </SafeAreaProvider>
+    )
+  }
 `}
 />
 

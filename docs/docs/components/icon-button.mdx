@@ -11,26 +11,27 @@ Follows the [Material Design 3 Icon Button](https://m3.material.io/components/ic
 
 <SnackExample
   name="OnlyNative IconButton — Usage"
-  code={`import { IconButton } from '@onlynative/components'
-import { ThemeProvider } from '@onlynative/core'
-import { SafeAreaProvider } from 'react-native-safe-area-context'
-import { View } from 'react-native'
+  code={`
+  import { IconButton } from '@onlynative/components'
+  import { ThemeProvider } from '@onlynative/core'
+  import { SafeAreaProvider } from 'react-native-safe-area-context'
+  import { View } from 'react-native'
 
-export default function App() {
-  return (
-    <SafeAreaProvider>
-      <ThemeProvider>
-        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-          <IconButton
-            icon="heart-outline"
-            accessibilityLabel="Favorite"
-            onPress={() => {}}
-          />
-        </View>
-      </ThemeProvider>
-    </SafeAreaProvider>
-  )
-}
+  export default function App() {
+    return (
+      <SafeAreaProvider>
+        <ThemeProvider>
+          <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+            <IconButton
+              icon="heart-outline"
+              accessibilityLabel="Favorite"
+              onPress={() => {}}
+            />
+          </View>
+        </ThemeProvider>
+      </SafeAreaProvider>
+    )
+  }
 `}
 />
 
@@ -47,24 +48,25 @@ export default function App() {
 
 <SnackExample
   name="OnlyNative IconButton — Sizes"
-  code={`import { IconButton } from '@onlynative/components'
-import { ThemeProvider } from '@onlynative/core'
-import { SafeAreaProvider } from 'react-native-safe-area-context'
-import { View } from 'react-native'
+  code={`
+  import { IconButton } from '@onlynative/components'
+  import { ThemeProvider } from '@onlynative/core'
+  import { SafeAreaProvider } from 'react-native-safe-area-context'
+  import { View } from 'react-native'
 
-export default function App() {
-  return (
-    <SafeAreaProvider>
-      <ThemeProvider>
-        <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 12 }}>
-          <IconButton icon="star" size="small" accessibilityLabel="Star" onPress={() => {}} />
-          <IconButton icon="star" size="medium" accessibilityLabel="Star" onPress={() => {}} />
-          <IconButton icon="star" size="large" accessibilityLabel="Star" onPress={() => {}} />
-        </View>
-      </ThemeProvider>
-    </SafeAreaProvider>
-  )
-}
+  export default function App() {
+    return (
+      <SafeAreaProvider>
+        <ThemeProvider>
+          <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 12 }}>
+            <IconButton icon="star" size="small" accessibilityLabel="Star" onPress={() => {}} />
+            <IconButton icon="star" size="medium" accessibilityLabel="Star" onPress={() => {}} />
+            <IconButton icon="star" size="large" accessibilityLabel="Star" onPress={() => {}} />
+          </View>
+        </ThemeProvider>
+      </SafeAreaProvider>
+    )
+  }
 `}
 />
 
@@ -74,30 +76,31 @@ Use `selected` and `selectedIcon` for toggle behavior:
 
 <SnackExample
   name="OnlyNative IconButton — Toggle"
-  code={`import { IconButton } from '@onlynative/components'
-import { ThemeProvider } from '@onlynative/core'
-import { SafeAreaProvider } from 'react-native-safe-area-context'
-import { useState } from 'react'
-import { View } from 'react-native'
+  code={`
+  import { IconButton } from '@onlynative/components'
+  import { ThemeProvider } from '@onlynative/core'
+  import { SafeAreaProvider } from 'react-native-safe-area-context'
+  import { useState } from 'react'
+  import { View } from 'react-native'
 
-export default function App() {
-  const [liked, setLiked] = useState(false)
-  return (
-    <SafeAreaProvider>
-      <ThemeProvider>
-        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-          <IconButton
-            icon="heart-outline"
-            selectedIcon="heart"
-            selected={liked}
-            onPress={() => setLiked(!liked)}
-            accessibilityLabel={liked ? 'Unlike' : 'Like'}
-          />
-        </View>
-      </ThemeProvider>
-    </SafeAreaProvider>
-  )
-}
+  export default function App() {
+    const [liked, setLiked] = useState(false)
+    return (
+      <SafeAreaProvider>
+        <ThemeProvider>
+          <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+            <IconButton
+              icon="heart-outline"
+              selectedIcon="heart"
+              selected={liked}
+              onPress={() => setLiked(!liked)}
+              accessibilityLabel={liked ? 'Unlike' : 'Like'}
+            />
+          </View>
+        </ThemeProvider>
+      </SafeAreaProvider>
+    )
+  }
 `}
 />
 

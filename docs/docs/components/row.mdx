@@ -10,25 +10,26 @@ Lays children out horizontally. Extends [Box](./box) with all spacing, alignment
 
 <SnackExample
   name="OnlyNative Row — Usage"
-  code={`import { Button, Row } from '@onlynative/components'
-import { ThemeProvider } from '@onlynative/core'
-import { SafeAreaProvider } from 'react-native-safe-area-context'
-import { View } from 'react-native'
+  code={`
+  import { Button, Row } from '@onlynative/components'
+  import { ThemeProvider } from '@onlynative/core'
+  import { SafeAreaProvider } from 'react-native-safe-area-context'
+  import { View } from 'react-native'
 
-export default function App() {
-  return (
-    <SafeAreaProvider>
-      <ThemeProvider>
-        <View style={{ flex: 1, justifyContent: 'center', padding: 16 }}>
-          <Row gap="sm" align="center">
-            <Button variant="filled" onPress={() => {}}>Save</Button>
-            <Button variant="outlined" onPress={() => {}}>Cancel</Button>
-          </Row>
-        </View>
-      </ThemeProvider>
-    </SafeAreaProvider>
-  )
-}
+  export default function App() {
+    return (
+      <SafeAreaProvider>
+        <ThemeProvider>
+          <View style={{ flex: 1, justifyContent: 'center', padding: 16 }}>
+            <Row gap="sm" align="center">
+              <Button variant="filled" onPress={() => {}}>Save</Button>
+              <Button variant="outlined" onPress={() => {}}>Cancel</Button>
+            </Row>
+          </View>
+        </ThemeProvider>
+      </SafeAreaProvider>
+    )
+  }
 `}
 />
 
@@ -38,28 +39,29 @@ Enable `wrap` to let children flow onto the next line when they overflow:
 
 <SnackExample
   name="OnlyNative Row — Wrapping"
-  code={`import { Chip, Row } from '@onlynative/components'
-import { ThemeProvider } from '@onlynative/core'
-import { SafeAreaProvider } from 'react-native-safe-area-context'
-import { View } from 'react-native'
+  code={`
+  import { Chip, Row } from '@onlynative/components'
+  import { ThemeProvider } from '@onlynative/core'
+  import { SafeAreaProvider } from 'react-native-safe-area-context'
+  import { View } from 'react-native'
 
-const tags = ['React', 'TypeScript', 'Expo', 'Material', 'Native', 'Components', 'Design']
+  const tags = ['React', 'TypeScript', 'Expo', 'Material', 'Native', 'Components', 'Design']
 
-export default function App() {
-  return (
-    <SafeAreaProvider>
-      <ThemeProvider>
-        <View style={{ flex: 1, justifyContent: 'center', padding: 16 }}>
-          <Row wrap gap="sm">
-            {tags.map((tag) => (
-              <Chip key={tag} onPress={() => {}}>{tag}</Chip>
-            ))}
-          </Row>
-        </View>
-      </ThemeProvider>
-    </SafeAreaProvider>
-  )
-}
+  export default function App() {
+    return (
+      <SafeAreaProvider>
+        <ThemeProvider>
+          <View style={{ flex: 1, justifyContent: 'center', padding: 16 }}>
+            <Row wrap gap="sm">
+              {tags.map((tag) => (
+                <Chip key={tag} onPress={() => {}}>{tag}</Chip>
+              ))}
+            </Row>
+          </View>
+        </ThemeProvider>
+      </SafeAreaProvider>
+    )
+  }
 `}
 />
 
@@ -69,25 +71,26 @@ Reverse the layout direction with `inverted`:
 
 <SnackExample
   name="OnlyNative Row — Inverted"
-  code={`import { Row, Typography } from '@onlynative/components'
-import { ThemeProvider } from '@onlynative/core'
-import { SafeAreaProvider } from 'react-native-safe-area-context'
-import { View } from 'react-native'
+  code={`
+  import { Row, Typography } from '@onlynative/components'
+  import { ThemeProvider } from '@onlynative/core'
+  import { SafeAreaProvider } from 'react-native-safe-area-context'
+  import { View } from 'react-native'
 
-export default function App() {
-  return (
-    <SafeAreaProvider>
-      <ThemeProvider>
-        <View style={{ flex: 1, justifyContent: 'center', padding: 16 }}>
-          <Row inverted gap="sm">
-            <Typography>First</Typography>
-            <Typography>Second</Typography>
-          </Row>
-        </View>
-      </ThemeProvider>
-    </SafeAreaProvider>
-  )
-}
+  export default function App() {
+    return (
+      <SafeAreaProvider>
+        <ThemeProvider>
+          <View style={{ flex: 1, justifyContent: 'center', padding: 16 }}>
+            <Row inverted gap="sm">
+              <Typography>First</Typography>
+              <Typography>Second</Typography>
+            </Row>
+          </View>
+        </ThemeProvider>
+      </SafeAreaProvider>
+    )
+  }
 `}
 />
 

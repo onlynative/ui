@@ -11,25 +11,26 @@ Zero-config wrapper that keeps form content visible when the keyboard opens. Use
 <SnackExample
   name="OnlyNative KeyboardAvoidingWrapper — Usage"
   platform="ios"
-  code={`import { KeyboardAvoidingWrapper, TextField } from '@onlynative/components'
-import { ThemeProvider } from '@onlynative/core'
-import { SafeAreaProvider } from 'react-native-safe-area-context'
-import { useState } from 'react'
+  code={`
+  import { KeyboardAvoidingWrapper, TextField } from '@onlynative/components'
+  import { ThemeProvider } from '@onlynative/core'
+  import { SafeAreaProvider } from 'react-native-safe-area-context'
+  import { useState } from 'react'
 
-export default function App() {
-  const [name, setName] = useState('')
-  const [email, setEmail] = useState('')
-  return (
-    <SafeAreaProvider>
-      <ThemeProvider>
-        <KeyboardAvoidingWrapper>
-          <TextField label="Name" value={name} onChangeText={setName} />
-          <TextField label="Email" value={email} onChangeText={setEmail} />
-        </KeyboardAvoidingWrapper>
-      </ThemeProvider>
-    </SafeAreaProvider>
-  )
-}
+  export default function App() {
+    const [name, setName] = useState('')
+    const [email, setEmail] = useState('')
+    return (
+      <SafeAreaProvider>
+        <ThemeProvider>
+          <KeyboardAvoidingWrapper>
+            <TextField label="Name" value={name} onChangeText={setName} />
+            <TextField label="Email" value={email} onChangeText={setEmail} />
+          </KeyboardAvoidingWrapper>
+        </ThemeProvider>
+      </SafeAreaProvider>
+    )
+  }
 `}
 />
 
@@ -49,27 +50,28 @@ Listen to keyboard show/hide events:
 <SnackExample
   name="OnlyNative KeyboardAvoidingWrapper — Events"
   platform="ios"
-  code={`import { KeyboardAvoidingWrapper, TextField, Typography } from '@onlynative/components'
-import { ThemeProvider } from '@onlynative/core'
-import { SafeAreaProvider } from 'react-native-safe-area-context'
-import { useState } from 'react'
+  code={`
+  import { KeyboardAvoidingWrapper, TextField, Typography } from '@onlynative/components'
+  import { ThemeProvider } from '@onlynative/core'
+  import { SafeAreaProvider } from 'react-native-safe-area-context'
+  import { useState } from 'react'
 
-export default function App() {
-  const [status, setStatus] = useState('idle')
-  return (
-    <SafeAreaProvider>
-      <ThemeProvider>
-        <KeyboardAvoidingWrapper
-          onKeyboardShow={(e) => setStatus(\`shown @ \${e.endCoordinates.height}\`)}
-          onKeyboardHide={() => setStatus('hidden')}
-        >
-          <Typography variant="bodyMedium">Status: {status}</Typography>
-          <TextField label="Tap to focus" />
-        </KeyboardAvoidingWrapper>
-      </ThemeProvider>
-    </SafeAreaProvider>
-  )
-}
+  export default function App() {
+    const [status, setStatus] = useState('idle')
+    return (
+      <SafeAreaProvider>
+        <ThemeProvider>
+          <KeyboardAvoidingWrapper
+            onKeyboardShow={(e) => setStatus(\`shown @ \${e.endCoordinates.height}\`)}
+            onKeyboardHide={() => setStatus('hidden')}
+          >
+            <Typography variant="bodyMedium">Status: {status}</Typography>
+            <TextField label="Tap to focus" />
+          </KeyboardAvoidingWrapper>
+        </ThemeProvider>
+      </SafeAreaProvider>
+    )
+  }
 `}
 />
 

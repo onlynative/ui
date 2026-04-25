@@ -10,26 +10,27 @@ Lays children out vertically. Extends [Box](./box) with all spacing, alignment, 
 
 <SnackExample
   name="OnlyNative Column — Usage"
-  code={`import { Button, Column, Typography } from '@onlynative/components'
-import { ThemeProvider } from '@onlynative/core'
-import { SafeAreaProvider } from 'react-native-safe-area-context'
-import { View } from 'react-native'
+  code={`
+  import { Button, Column, Typography } from '@onlynative/components'
+  import { ThemeProvider } from '@onlynative/core'
+  import { SafeAreaProvider } from 'react-native-safe-area-context'
+  import { View } from 'react-native'
 
-export default function App() {
-  return (
-    <SafeAreaProvider>
-      <ThemeProvider>
-        <View style={{ flex: 1, justifyContent: 'center' }}>
-          <Column gap="md" p="lg">
-            <Typography variant="headlineSmall">Title</Typography>
-            <Typography variant="bodyMedium">Description text</Typography>
-            <Button variant="filled" onPress={() => {}}>Action</Button>
-          </Column>
-        </View>
-      </ThemeProvider>
-    </SafeAreaProvider>
-  )
-}
+  export default function App() {
+    return (
+      <SafeAreaProvider>
+        <ThemeProvider>
+          <View style={{ flex: 1, justifyContent: 'center' }}>
+            <Column gap="md" p="lg">
+              <Typography variant="headlineSmall">Title</Typography>
+              <Typography variant="bodyMedium">Description text</Typography>
+              <Button variant="filled" onPress={() => {}}>Action</Button>
+            </Column>
+          </View>
+        </ThemeProvider>
+      </SafeAreaProvider>
+    )
+  }
 `}
 />
 
@@ -39,25 +40,26 @@ Reverse the layout direction with `inverted`:
 
 <SnackExample
   name="OnlyNative Column — Inverted"
-  code={`import { Column, Typography } from '@onlynative/components'
-import { ThemeProvider } from '@onlynative/core'
-import { SafeAreaProvider } from 'react-native-safe-area-context'
-import { View } from 'react-native'
+  code={`
+  import { Column, Typography } from '@onlynative/components'
+  import { ThemeProvider } from '@onlynative/core'
+  import { SafeAreaProvider } from 'react-native-safe-area-context'
+  import { View } from 'react-native'
 
-export default function App() {
-  return (
-    <SafeAreaProvider>
-      <ThemeProvider>
-        <View style={{ flex: 1, justifyContent: 'center', padding: 16 }}>
-          <Column inverted gap="sm">
-            <Typography>First</Typography>
-            <Typography>Second</Typography>
-          </Column>
-        </View>
-      </ThemeProvider>
-    </SafeAreaProvider>
-  )
-}
+  export default function App() {
+    return (
+      <SafeAreaProvider>
+        <ThemeProvider>
+          <View style={{ flex: 1, justifyContent: 'center', padding: 16 }}>
+            <Column inverted gap="sm">
+              <Typography>First</Typography>
+              <Typography>Second</Typography>
+            </Column>
+          </View>
+        </ThemeProvider>
+      </SafeAreaProvider>
+    )
+  }
 `}
 />
 

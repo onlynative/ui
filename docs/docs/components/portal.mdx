@@ -12,24 +12,25 @@ Wrap your app root with `PortalHost` once. Every `<Portal>` rendered anywhere in
 
 <SnackExample
   name="OnlyNative Portal — Setup"
-  code={`import { PortalHost, Typography } from '@onlynative/components'
-import { ThemeProvider } from '@onlynative/core'
-import { SafeAreaProvider } from 'react-native-safe-area-context'
-import { View } from 'react-native'
+  code={`
+  import { PortalHost, Typography } from '@onlynative/components'
+  import { ThemeProvider } from '@onlynative/core'
+  import { SafeAreaProvider } from 'react-native-safe-area-context'
+  import { View } from 'react-native'
 
-export default function App() {
-  return (
-    <SafeAreaProvider>
-      <ThemeProvider>
-        <PortalHost>
-          <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-            <Typography variant="bodyLarge">App content lives here.</Typography>
-          </View>
-        </PortalHost>
-      </ThemeProvider>
-    </SafeAreaProvider>
-  )
-}
+  export default function App() {
+    return (
+      <SafeAreaProvider>
+        <ThemeProvider>
+          <PortalHost>
+            <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+              <Typography variant="bodyLarge">App content lives here.</Typography>
+            </View>
+          </PortalHost>
+        </ThemeProvider>
+      </SafeAreaProvider>
+    )
+  }
 `}
 />
 
@@ -37,45 +38,46 @@ export default function App() {
 
 <SnackExample
   name="OnlyNative Portal — Usage"
-  code={`import { Button, Portal, PortalHost, Typography } from '@onlynative/components'
-import { ThemeProvider } from '@onlynative/core'
-import { SafeAreaProvider } from 'react-native-safe-area-context'
-import { useState } from 'react'
-import { Pressable, View } from 'react-native'
+  code={`
+  import { Button, Portal, PortalHost, Typography } from '@onlynative/components'
+  import { ThemeProvider } from '@onlynative/core'
+  import { SafeAreaProvider } from 'react-native-safe-area-context'
+  import { useState } from 'react'
+  import { Pressable, View } from 'react-native'
 
-function Screen() {
-  const [open, setOpen] = useState(false)
-  return (
-    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-      <Button variant="filled" onPress={() => setOpen(true)}>Open overlay</Button>
-      {open ? (
-        <Portal>
-          <Pressable
-            onPress={() => setOpen(false)}
-            style={{ position: 'absolute', inset: 0, backgroundColor: 'rgba(0,0,0,0.4)', alignItems: 'center', justifyContent: 'center' }}
-          >
-            <View style={{ backgroundColor: 'white', padding: 24, borderRadius: 12 }}>
-              <Typography variant="titleMedium">Hello from a Portal</Typography>
-              <Typography variant="bodyMedium">Tap outside to close.</Typography>
-            </View>
-          </Pressable>
-        </Portal>
-      ) : null}
-    </View>
-  )
-}
+  function Screen() {
+    const [open, setOpen] = useState(false)
+    return (
+      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+        <Button variant="filled" onPress={() => setOpen(true)}>Open overlay</Button>
+        {open ? (
+          <Portal>
+            <Pressable
+              onPress={() => setOpen(false)}
+              style={{ position: 'absolute', inset: 0, backgroundColor: 'rgba(0,0,0,0.4)', alignItems: 'center', justifyContent: 'center' }}
+            >
+              <View style={{ backgroundColor: 'white', padding: 24, borderRadius: 12 }}>
+                <Typography variant="titleMedium">Hello from a Portal</Typography>
+                <Typography variant="bodyMedium">Tap outside to close.</Typography>
+              </View>
+            </Pressable>
+          </Portal>
+        ) : null}
+      </View>
+    )
+  }
 
-export default function App() {
-  return (
-    <SafeAreaProvider>
-      <ThemeProvider>
-        <PortalHost>
-          <Screen />
-        </PortalHost>
-      </ThemeProvider>
-    </SafeAreaProvider>
-  )
-}
+  export default function App() {
+    return (
+      <SafeAreaProvider>
+        <ThemeProvider>
+          <PortalHost>
+            <Screen />
+          </PortalHost>
+        </ThemeProvider>
+      </SafeAreaProvider>
+    )
+  }
 `}
 />
 

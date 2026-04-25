@@ -11,24 +11,25 @@ Follows the [Material Design 3 Checkbox](https://m3.material.io/components/check
 
 <SnackExample
   name="OnlyNative Checkbox — Usage"
-  code={`import { Checkbox } from '@onlynative/components'
-import { ThemeProvider } from '@onlynative/core'
-import { SafeAreaProvider } from 'react-native-safe-area-context'
-import { useState } from 'react'
-import { View } from 'react-native'
+  code={`
+  import { Checkbox } from '@onlynative/components'
+  import { ThemeProvider } from '@onlynative/core'
+  import { SafeAreaProvider } from 'react-native-safe-area-context'
+  import { useState } from 'react'
+  import { View } from 'react-native'
 
-export default function App() {
-  const [isChecked, setIsChecked] = useState(false)
-  return (
-    <SafeAreaProvider>
-      <ThemeProvider>
-        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-          <Checkbox value={isChecked} onValueChange={setIsChecked} />
-        </View>
-      </ThemeProvider>
-    </SafeAreaProvider>
-  )
-}
+  export default function App() {
+    const [isChecked, setIsChecked] = useState(false)
+    return (
+      <SafeAreaProvider>
+        <ThemeProvider>
+          <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+            <Checkbox value={isChecked} onValueChange={setIsChecked} />
+          </View>
+        </ThemeProvider>
+      </SafeAreaProvider>
+    )
+  }
 `}
 />
 
@@ -36,28 +37,29 @@ export default function App() {
 
 <SnackExample
   name="OnlyNative Checkbox — Multiple"
-  code={`import { Checkbox } from '@onlynative/components'
-import { ThemeProvider } from '@onlynative/core'
-import { SafeAreaProvider } from 'react-native-safe-area-context'
-import { useState } from 'react'
-import { View } from 'react-native'
+  code={`
+  import { Checkbox } from '@onlynative/components'
+  import { ThemeProvider } from '@onlynative/core'
+  import { SafeAreaProvider } from 'react-native-safe-area-context'
+  import { useState } from 'react'
+  import { View } from 'react-native'
 
-export default function App() {
-  const [a, setA] = useState(true)
-  const [b, setB] = useState(false)
-  const [c, setC] = useState(false)
-  return (
-    <SafeAreaProvider>
-      <ThemeProvider>
-        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', gap: 12 }}>
-          <Checkbox value={a} onValueChange={setA} />
-          <Checkbox value={b} onValueChange={setB} />
-          <Checkbox value={c} onValueChange={setC} />
-        </View>
-      </ThemeProvider>
-    </SafeAreaProvider>
-  )
-}
+  export default function App() {
+    const [a, setA] = useState(true)
+    const [b, setB] = useState(false)
+    const [c, setC] = useState(false)
+    return (
+      <SafeAreaProvider>
+        <ThemeProvider>
+          <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', gap: 12 }}>
+            <Checkbox value={a} onValueChange={setA} />
+            <Checkbox value={b} onValueChange={setB} />
+            <Checkbox value={c} onValueChange={setC} />
+          </View>
+        </ThemeProvider>
+      </SafeAreaProvider>
+    )
+  }
 `}
 />
 
@@ -65,23 +67,24 @@ export default function App() {
 
 <SnackExample
   name="OnlyNative Checkbox — Disabled"
-  code={`import { Checkbox } from '@onlynative/components'
-import { ThemeProvider } from '@onlynative/core'
-import { SafeAreaProvider } from 'react-native-safe-area-context'
-import { View } from 'react-native'
+  code={`
+  import { Checkbox } from '@onlynative/components'
+  import { ThemeProvider } from '@onlynative/core'
+  import { SafeAreaProvider } from 'react-native-safe-area-context'
+  import { View } from 'react-native'
 
-export default function App() {
-  return (
-    <SafeAreaProvider>
-      <ThemeProvider>
-        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', gap: 12 }}>
-          <Checkbox value={false} onValueChange={() => {}} disabled />
-          <Checkbox value onValueChange={() => {}} disabled />
-        </View>
-      </ThemeProvider>
-    </SafeAreaProvider>
-  )
-}
+  export default function App() {
+    return (
+      <SafeAreaProvider>
+        <ThemeProvider>
+          <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', gap: 12 }}>
+            <Checkbox value={false} onValueChange={() => {}} disabled />
+            <Checkbox value onValueChange={() => {}} disabled />
+          </View>
+        </ThemeProvider>
+      </SafeAreaProvider>
+    )
+  }
 `}
 />
 

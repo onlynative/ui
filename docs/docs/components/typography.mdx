@@ -10,23 +10,24 @@ Typography renders text using the Material Design 3 type scale.
 
 <SnackExample
   name="OnlyNative Typography — Usage"
-  code={`import { Typography } from '@onlynative/components'
-import { ThemeProvider } from '@onlynative/core'
-import { SafeAreaProvider } from 'react-native-safe-area-context'
-import { View } from 'react-native'
+  code={`
+  import { Typography } from '@onlynative/components'
+  import { ThemeProvider } from '@onlynative/core'
+  import { SafeAreaProvider } from 'react-native-safe-area-context'
+  import { View } from 'react-native'
 
-export default function App() {
-  return (
-    <SafeAreaProvider>
-      <ThemeProvider>
-        <View style={{ flex: 1, justifyContent: 'center', padding: 16, gap: 8 }}>
-          <Typography variant="headlineMedium">Hello World</Typography>
-          <Typography variant="bodyLarge">Body text content.</Typography>
-        </View>
-      </ThemeProvider>
-    </SafeAreaProvider>
-  )
-}
+  export default function App() {
+    return (
+      <SafeAreaProvider>
+        <ThemeProvider>
+          <View style={{ flex: 1, justifyContent: 'center', padding: 16, gap: 8 }}>
+            <Typography variant="headlineMedium">Hello World</Typography>
+            <Typography variant="bodyLarge">Body text content.</Typography>
+          </View>
+        </ThemeProvider>
+      </SafeAreaProvider>
+    )
+  }
 `}
 />
 
@@ -50,24 +51,25 @@ Display and headline variants automatically receive `accessibilityRole="header"`
 
 <SnackExample
   name="OnlyNative Typography — Custom Styles"
-  code={`import { Typography } from '@onlynative/components'
-import { ThemeProvider } from '@onlynative/core'
-import { SafeAreaProvider } from 'react-native-safe-area-context'
-import { View } from 'react-native'
+  code={`
+  import { Typography } from '@onlynative/components'
+  import { ThemeProvider } from '@onlynative/core'
+  import { SafeAreaProvider } from 'react-native-safe-area-context'
+  import { View } from 'react-native'
 
-export default function App() {
-  return (
-    <SafeAreaProvider>
-      <ThemeProvider>
-        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-          <Typography variant="bodyMedium" style={{ color: 'red' }}>
-            Custom colored text
-          </Typography>
-        </View>
-      </ThemeProvider>
-    </SafeAreaProvider>
-  )
-}
+  export default function App() {
+    return (
+      <SafeAreaProvider>
+        <ThemeProvider>
+          <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+            <Typography variant="bodyMedium" style={{ color: 'red' }}>
+              Custom colored text
+            </Typography>
+          </View>
+        </ThemeProvider>
+      </SafeAreaProvider>
+    )
+  }
 `}
 />
 
@@ -77,24 +79,25 @@ Use the `as` prop to render with a custom text component:
 
 <SnackExample
   name="OnlyNative Typography — Custom Component"
-  code={`import { Typography } from '@onlynative/components'
-import { ThemeProvider } from '@onlynative/core'
-import { SafeAreaProvider } from 'react-native-safe-area-context'
-import { Animated, View } from 'react-native'
+  code={`
+  import { Typography } from '@onlynative/components'
+  import { ThemeProvider } from '@onlynative/core'
+  import { SafeAreaProvider } from 'react-native-safe-area-context'
+  import { Animated, View } from 'react-native'
 
-export default function App() {
-  return (
-    <SafeAreaProvider>
-      <ThemeProvider>
-        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-          <Typography variant="titleLarge" as={Animated.Text}>
-            Animated text
-          </Typography>
-        </View>
-      </ThemeProvider>
-    </SafeAreaProvider>
-  )
-}
+  export default function App() {
+    return (
+      <SafeAreaProvider>
+        <ThemeProvider>
+          <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+            <Typography variant="titleLarge" as={Animated.Text}>
+              Animated text
+            </Typography>
+          </View>
+        </ThemeProvider>
+      </SafeAreaProvider>
+    )
+  }
 `}
 />
 

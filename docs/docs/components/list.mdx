@@ -11,25 +11,26 @@ Follows the [Material Design 3 Lists](https://m3.material.io/components/lists/ov
 
 <SnackExample
   name="OnlyNative List — Usage"
-  code={`import { List, ListItem, ListDivider } from '@onlynative/components'
-import { ThemeProvider } from '@onlynative/core'
-import { SafeAreaProvider } from 'react-native-safe-area-context'
+  code={`
+  import { List, ListItem, ListDivider } from '@onlynative/components'
+  import { ThemeProvider } from '@onlynative/core'
+  import { SafeAreaProvider } from 'react-native-safe-area-context'
 
-export default function App() {
-  return (
-    <SafeAreaProvider>
-      <ThemeProvider>
-        <List>
-          <ListItem headlineText="Photos" supportingText="Jan 9, 2024" />
-          <ListDivider />
-          <ListItem headlineText="Recipes" supportingText="Jan 17, 2024" />
-          <ListDivider />
-          <ListItem headlineText="Work" supportingText="Jan 28, 2024" />
-        </List>
-      </ThemeProvider>
-    </SafeAreaProvider>
-  )
-}
+  export default function App() {
+    return (
+      <SafeAreaProvider>
+        <ThemeProvider>
+          <List>
+            <ListItem headlineText="Photos" supportingText="Jan 9, 2024" />
+            <ListDivider />
+            <ListItem headlineText="Recipes" supportingText="Jan 17, 2024" />
+            <ListDivider />
+            <ListItem headlineText="Work" supportingText="Jan 28, 2024" />
+          </List>
+        </ThemeProvider>
+      </SafeAreaProvider>
+    )
+  }
 `}
 />
 
@@ -49,27 +50,28 @@ Pass any `ReactNode` as `leadingContent` or `trailingContent`:
 
 <SnackExample
   name="OnlyNative List — Leading & Trailing"
-  code={`import { List, ListItem } from '@onlynative/components'
-import { ThemeProvider } from '@onlynative/core'
-import { SafeAreaProvider } from 'react-native-safe-area-context'
-import { MaterialCommunityIcons } from '@expo/vector-icons'
+  code={`
+  import { List, ListItem } from '@onlynative/components'
+  import { ThemeProvider } from '@onlynative/core'
+  import { SafeAreaProvider } from 'react-native-safe-area-context'
+  import { MaterialCommunityIcons } from '@expo/vector-icons'
 
-export default function App() {
-  return (
-    <SafeAreaProvider>
-      <ThemeProvider>
-        <List>
-          <ListItem
-            headlineText="Wi-Fi"
-            supportingText="Connected"
-            leadingContent={<MaterialCommunityIcons name="wifi" size={24} />}
-            trailingSupportingText="On"
-          />
-        </List>
-      </ThemeProvider>
-    </SafeAreaProvider>
-  )
-}
+  export default function App() {
+    return (
+      <SafeAreaProvider>
+        <ThemeProvider>
+          <List>
+            <ListItem
+              headlineText="Wi-Fi"
+              supportingText="Connected"
+              leadingContent={<MaterialCommunityIcons name="wifi" size={24} />}
+              trailingSupportingText="On"
+            />
+          </List>
+        </ThemeProvider>
+      </SafeAreaProvider>
+    )
+  }
 `}
 />
 
@@ -79,25 +81,26 @@ When `onPress` is provided, the item renders as a `Pressable` with state-layer f
 
 <SnackExample
   name="OnlyNative List — Interactive"
-  code={`import { List, ListItem } from '@onlynative/components'
-import { ThemeProvider } from '@onlynative/core'
-import { SafeAreaProvider } from 'react-native-safe-area-context'
-import { Alert } from 'react-native'
+  code={`
+  import { List, ListItem } from '@onlynative/components'
+  import { ThemeProvider } from '@onlynative/core'
+  import { SafeAreaProvider } from 'react-native-safe-area-context'
+  import { Alert } from 'react-native'
 
-export default function App() {
-  return (
-    <SafeAreaProvider>
-      <ThemeProvider>
-        <List>
-          <ListItem
-            headlineText="Settings"
-            onPress={() => Alert.alert('Tapped')}
-          />
-        </List>
-      </ThemeProvider>
-    </SafeAreaProvider>
-  )
-}
+  export default function App() {
+    return (
+      <SafeAreaProvider>
+        <ThemeProvider>
+          <List>
+            <ListItem
+              headlineText="Settings"
+              onPress={() => Alert.alert('Tapped')}
+            />
+          </List>
+        </ThemeProvider>
+      </SafeAreaProvider>
+    )
+  }
 `}
 />
 
@@ -107,30 +110,31 @@ Use `inset` to align the divider with text that follows a leading icon:
 
 <SnackExample
   name="OnlyNative List — Inset Dividers"
-  code={`import { List, ListItem, ListDivider } from '@onlynative/components'
-import { ThemeProvider } from '@onlynative/core'
-import { SafeAreaProvider } from 'react-native-safe-area-context'
-import { MaterialCommunityIcons } from '@expo/vector-icons'
+  code={`
+  import { List, ListItem, ListDivider } from '@onlynative/components'
+  import { ThemeProvider } from '@onlynative/core'
+  import { SafeAreaProvider } from 'react-native-safe-area-context'
+  import { MaterialCommunityIcons } from '@expo/vector-icons'
 
-export default function App() {
-  return (
-    <SafeAreaProvider>
-      <ThemeProvider>
-        <List>
-          <ListItem
-            headlineText="Item 1"
-            leadingContent={<MaterialCommunityIcons name="folder" size={24} />}
-          />
-          <ListDivider inset />
-          <ListItem
-            headlineText="Item 2"
-            leadingContent={<MaterialCommunityIcons name="folder" size={24} />}
-          />
-        </List>
-      </ThemeProvider>
-    </SafeAreaProvider>
-  )
-}
+  export default function App() {
+    return (
+      <SafeAreaProvider>
+        <ThemeProvider>
+          <List>
+            <ListItem
+              headlineText="Item 1"
+              leadingContent={<MaterialCommunityIcons name="folder" size={24} />}
+            />
+            <ListDivider inset />
+            <ListItem
+              headlineText="Item 2"
+              leadingContent={<MaterialCommunityIcons name="folder" size={24} />}
+            />
+          </List>
+        </ThemeProvider>
+      </SafeAreaProvider>
+    )
+  }
 `}
 />
 

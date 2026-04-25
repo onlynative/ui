@@ -10,27 +10,28 @@ A multi-column grid that wraps children into equal-width columns. Built on top o
 
 <SnackExample
   name="OnlyNative Grid — Usage"
-  code={`import { Card, Grid, Typography } from '@onlynative/components'
-import { ThemeProvider } from '@onlynative/core'
-import { SafeAreaProvider } from 'react-native-safe-area-context'
-import { View } from 'react-native'
+  code={`
+  import { Card, Grid, Typography } from '@onlynative/components'
+  import { ThemeProvider } from '@onlynative/core'
+  import { SafeAreaProvider } from 'react-native-safe-area-context'
+  import { View } from 'react-native'
 
-export default function App() {
-  return (
-    <SafeAreaProvider>
-      <ThemeProvider>
-        <View style={{ flex: 1, justifyContent: 'center', padding: 16 }}>
-          <Grid columns={2} gap="sm">
-            <Card variant="outlined"><Typography>Item 1</Typography></Card>
-            <Card variant="outlined"><Typography>Item 2</Typography></Card>
-            <Card variant="outlined"><Typography>Item 3</Typography></Card>
-            <Card variant="outlined"><Typography>Item 4</Typography></Card>
-          </Grid>
-        </View>
-      </ThemeProvider>
-    </SafeAreaProvider>
-  )
-}
+  export default function App() {
+    return (
+      <SafeAreaProvider>
+        <ThemeProvider>
+          <View style={{ flex: 1, justifyContent: 'center', padding: 16 }}>
+            <Grid columns={2} gap="sm">
+              <Card variant="outlined"><Typography>Item 1</Typography></Card>
+              <Card variant="outlined"><Typography>Item 2</Typography></Card>
+              <Card variant="outlined"><Typography>Item 3</Typography></Card>
+              <Card variant="outlined"><Typography>Item 4</Typography></Card>
+            </Grid>
+          </View>
+        </ThemeProvider>
+      </SafeAreaProvider>
+    )
+  }
 `}
 />
 
@@ -42,33 +43,34 @@ Each child is wrapped in a cell with `flexBasis: ${100 / columns}%`, so all colu
 
 <SnackExample
   name="OnlyNative Grid — Column Counts"
-  code={`import { Button, Grid, IconButton, Typography } from '@onlynative/components'
-import { ThemeProvider } from '@onlynative/core'
-import { SafeAreaProvider } from 'react-native-safe-area-context'
-import { View } from 'react-native'
+  code={`
+  import { Button, Grid, IconButton, Typography } from '@onlynative/components'
+  import { ThemeProvider } from '@onlynative/core'
+  import { SafeAreaProvider } from 'react-native-safe-area-context'
+  import { View } from 'react-native'
 
-export default function App() {
-  return (
-    <SafeAreaProvider>
-      <ThemeProvider>
-        <View style={{ flex: 1, justifyContent: 'center', padding: 16, gap: 24 }}>
-          <Typography variant="titleSmall">Two columns</Typography>
-          <Grid columns={2} gap="md">
-            <Button variant="filled" onPress={() => {}}>A</Button>
-            <Button variant="outlined" onPress={() => {}}>B</Button>
-          </Grid>
-          <Typography variant="titleSmall">Four columns</Typography>
-          <Grid columns={4} gap="sm">
-            <IconButton icon="heart" accessibilityLabel="Heart" onPress={() => {}} />
-            <IconButton icon="star" accessibilityLabel="Star" onPress={() => {}} />
-            <IconButton icon="bell" accessibilityLabel="Bell" onPress={() => {}} />
-            <IconButton icon="cog" accessibilityLabel="Settings" onPress={() => {}} />
-          </Grid>
-        </View>
-      </ThemeProvider>
-    </SafeAreaProvider>
-  )
-}
+  export default function App() {
+    return (
+      <SafeAreaProvider>
+        <ThemeProvider>
+          <View style={{ flex: 1, justifyContent: 'center', padding: 16, gap: 24 }}>
+            <Typography variant="titleSmall">Two columns</Typography>
+            <Grid columns={2} gap="md">
+              <Button variant="filled" onPress={() => {}}>A</Button>
+              <Button variant="outlined" onPress={() => {}}>B</Button>
+            </Grid>
+            <Typography variant="titleSmall">Four columns</Typography>
+            <Grid columns={4} gap="sm">
+              <IconButton icon="heart" accessibilityLabel="Heart" onPress={() => {}} />
+              <IconButton icon="star" accessibilityLabel="Star" onPress={() => {}} />
+              <IconButton icon="bell" accessibilityLabel="Bell" onPress={() => {}} />
+              <IconButton icon="cog" accessibilityLabel="Settings" onPress={() => {}} />
+            </Grid>
+          </View>
+        </ThemeProvider>
+      </SafeAreaProvider>
+    )
+  }
 `}
 />
 

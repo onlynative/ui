@@ -11,24 +11,25 @@ Follows the [Material Design 3 Chip](https://m3.material.io/components/chips/ove
 
 <SnackExample
   name="OnlyNative Chip — Usage"
-  code={`import { Chip } from '@onlynative/components'
-import { ThemeProvider } from '@onlynative/core'
-import { SafeAreaProvider } from 'react-native-safe-area-context'
-import { Alert, View } from 'react-native'
+  code={`
+  import { Chip } from '@onlynative/components'
+  import { ThemeProvider } from '@onlynative/core'
+  import { SafeAreaProvider } from 'react-native-safe-area-context'
+  import { Alert, View } from 'react-native'
 
-export default function App() {
-  return (
-    <SafeAreaProvider>
-      <ThemeProvider>
-        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-          <Chip variant="assist" onPress={() => Alert.alert('Pressed')}>
-            Assist
-          </Chip>
-        </View>
-      </ThemeProvider>
-    </SafeAreaProvider>
-  )
-}
+  export default function App() {
+    return (
+      <SafeAreaProvider>
+        <ThemeProvider>
+          <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+            <Chip variant="assist" onPress={() => Alert.alert('Pressed')}>
+              Assist
+            </Chip>
+          </View>
+        </ThemeProvider>
+      </SafeAreaProvider>
+    )
+  }
 `}
 />
 
@@ -47,22 +48,23 @@ Available on `assist`, `filter`, and `suggestion` variants. Ignored on `input`.
 
 <SnackExample
   name="OnlyNative Chip — Elevated"
-  code={`import { Chip } from '@onlynative/components'
-import { ThemeProvider } from '@onlynative/core'
-import { SafeAreaProvider } from 'react-native-safe-area-context'
-import { View } from 'react-native'
+  code={`
+  import { Chip } from '@onlynative/components'
+  import { ThemeProvider } from '@onlynative/core'
+  import { SafeAreaProvider } from 'react-native-safe-area-context'
+  import { View } from 'react-native'
 
-export default function App() {
-  return (
-    <SafeAreaProvider>
-      <ThemeProvider>
-        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-          <Chip variant="assist" elevated onPress={() => {}}>Elevated Assist</Chip>
-        </View>
-      </ThemeProvider>
-    </SafeAreaProvider>
-  )
-}
+  export default function App() {
+    return (
+      <SafeAreaProvider>
+        <ThemeProvider>
+          <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+            <Chip variant="assist" elevated onPress={() => {}}>Elevated Assist</Chip>
+          </View>
+        </ThemeProvider>
+      </SafeAreaProvider>
+    )
+  }
 `}
 />
 
@@ -72,26 +74,27 @@ Filter chips support a `selected` state. When selected, a checkmark icon appears
 
 <SnackExample
   name="OnlyNative Chip — Filter"
-  code={`import { Chip } from '@onlynative/components'
-import { ThemeProvider } from '@onlynative/core'
-import { SafeAreaProvider } from 'react-native-safe-area-context'
-import { useState } from 'react'
-import { View } from 'react-native'
+  code={`
+  import { Chip } from '@onlynative/components'
+  import { ThemeProvider } from '@onlynative/core'
+  import { SafeAreaProvider } from 'react-native-safe-area-context'
+  import { useState } from 'react'
+  import { View } from 'react-native'
 
-export default function App() {
-  const [active, setActive] = useState(true)
-  const [inactive, setInactive] = useState(false)
-  return (
-    <SafeAreaProvider>
-      <ThemeProvider>
-        <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 8 }}>
-          <Chip variant="filter" selected={active} onPress={() => setActive(!active)}>Active</Chip>
-          <Chip variant="filter" selected={inactive} onPress={() => setInactive(!inactive)}>Inactive</Chip>
-        </View>
-      </ThemeProvider>
-    </SafeAreaProvider>
-  )
-}
+  export default function App() {
+    const [active, setActive] = useState(true)
+    const [inactive, setInactive] = useState(false)
+    return (
+      <SafeAreaProvider>
+        <ThemeProvider>
+          <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 8 }}>
+            <Chip variant="filter" selected={active} onPress={() => setActive(!active)}>Active</Chip>
+            <Chip variant="filter" selected={inactive} onPress={() => setInactive(!inactive)}>Inactive</Chip>
+          </View>
+        </ThemeProvider>
+      </SafeAreaProvider>
+    )
+  }
 `}
 />
 
@@ -101,23 +104,24 @@ Pass `onClose` to show a trailing close icon. Only renders on `input` and `filte
 
 <SnackExample
   name="OnlyNative Chip — Close"
-  code={`import { Chip } from '@onlynative/components'
-import { ThemeProvider } from '@onlynative/core'
-import { SafeAreaProvider } from 'react-native-safe-area-context'
-import { Alert, View } from 'react-native'
+  code={`
+  import { Chip } from '@onlynative/components'
+  import { ThemeProvider } from '@onlynative/core'
+  import { SafeAreaProvider } from 'react-native-safe-area-context'
+  import { Alert, View } from 'react-native'
 
-export default function App() {
-  return (
-    <SafeAreaProvider>
-      <ThemeProvider>
-        <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 8 }}>
-          <Chip variant="input" onClose={() => Alert.alert('Closed')}>Tag</Chip>
-          <Chip variant="filter" selected onClose={() => Alert.alert('Closed')}>Active</Chip>
-        </View>
-      </ThemeProvider>
-    </SafeAreaProvider>
-  )
-}
+  export default function App() {
+    return (
+      <SafeAreaProvider>
+        <ThemeProvider>
+          <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 8 }}>
+            <Chip variant="input" onClose={() => Alert.alert('Closed')}>Tag</Chip>
+            <Chip variant="filter" selected onClose={() => Alert.alert('Closed')}>Active</Chip>
+          </View>
+        </ThemeProvider>
+      </SafeAreaProvider>
+    )
+  }
 `}
 />
 
@@ -125,23 +129,24 @@ export default function App() {
 
 <SnackExample
   name="OnlyNative Chip — Icons"
-  code={`import { Chip } from '@onlynative/components'
-import { ThemeProvider } from '@onlynative/core'
-import { SafeAreaProvider } from 'react-native-safe-area-context'
-import { View } from 'react-native'
+  code={`
+  import { Chip } from '@onlynative/components'
+  import { ThemeProvider } from '@onlynative/core'
+  import { SafeAreaProvider } from 'react-native-safe-area-context'
+  import { View } from 'react-native'
 
-export default function App() {
-  return (
-    <SafeAreaProvider>
-      <ThemeProvider>
-        <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 8 }}>
-          <Chip leadingIcon="calendar" onPress={() => {}}>Schedule</Chip>
-          <Chip variant="input" leadingIcon="tag" onClose={() => {}}>Tagged</Chip>
-        </View>
-      </ThemeProvider>
-    </SafeAreaProvider>
-  )
-}
+  export default function App() {
+    return (
+      <SafeAreaProvider>
+        <ThemeProvider>
+          <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 8 }}>
+            <Chip leadingIcon="calendar" onPress={() => {}}>Schedule</Chip>
+            <Chip variant="input" leadingIcon="tag" onClose={() => {}}>Tagged</Chip>
+          </View>
+        </ThemeProvider>
+      </SafeAreaProvider>
+    )
+  }
 `}
 />
 
@@ -151,33 +156,34 @@ The `input` variant supports a custom `avatar` prop that takes precedence over `
 
 <SnackExample
   name="OnlyNative Chip — Avatar"
-  code={`import { Chip } from '@onlynative/components'
-import { ThemeProvider } from '@onlynative/core'
-import { SafeAreaProvider } from 'react-native-safe-area-context'
-import { Image, View } from 'react-native'
+  code={`
+  import { Chip } from '@onlynative/components'
+  import { ThemeProvider } from '@onlynative/core'
+  import { SafeAreaProvider } from 'react-native-safe-area-context'
+  import { Image, View } from 'react-native'
 
-export default function App() {
-  return (
-    <SafeAreaProvider>
-      <ThemeProvider>
-        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-          <Chip
-            variant="input"
-            avatar={
-              <Image
-                source={{ uri: 'https://i.pravatar.cc/40' }}
-                style={{ width: 24, height: 24, borderRadius: 12 }}
-              />
-            }
-            onClose={() => {}}
-          >
-            John Doe
-          </Chip>
-        </View>
-      </ThemeProvider>
-    </SafeAreaProvider>
-  )
-}
+  export default function App() {
+    return (
+      <SafeAreaProvider>
+        <ThemeProvider>
+          <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+            <Chip
+              variant="input"
+              avatar={
+                <Image
+                  source={{ uri: 'https://i.pravatar.cc/40' }}
+                  style={{ width: 24, height: 24, borderRadius: 12 }}
+                />
+              }
+              onClose={() => {}}
+            >
+              John Doe
+            </Chip>
+          </View>
+        </ThemeProvider>
+      </SafeAreaProvider>
+    )
+  }
 `}
 />
 
@@ -185,22 +191,23 @@ export default function App() {
 
 <SnackExample
   name="OnlyNative Chip — Disabled"
-  code={`import { Chip } from '@onlynative/components'
-import { ThemeProvider } from '@onlynative/core'
-import { SafeAreaProvider } from 'react-native-safe-area-context'
-import { View } from 'react-native'
+  code={`
+  import { Chip } from '@onlynative/components'
+  import { ThemeProvider } from '@onlynative/core'
+  import { SafeAreaProvider } from 'react-native-safe-area-context'
+  import { View } from 'react-native'
 
-export default function App() {
-  return (
-    <SafeAreaProvider>
-      <ThemeProvider>
-        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-          <Chip disabled onPress={() => {}}>Disabled</Chip>
-        </View>
-      </ThemeProvider>
-    </SafeAreaProvider>
-  )
-}
+  export default function App() {
+    return (
+      <SafeAreaProvider>
+        <ThemeProvider>
+          <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+            <Chip disabled onPress={() => {}}>Disabled</Chip>
+          </View>
+        </ThemeProvider>
+      </SafeAreaProvider>
+    )
+  }
 `}
 />
 
