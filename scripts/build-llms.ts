@@ -661,6 +661,76 @@ import { Grid } from '@onlynative/components/layout'
     return output
   }
 
+  // --- Chip: discriminated union, one sub-section per variant ---
+  if (dirName === 'chip') {
+    let output = `### ${displayName}\n\n${example}\n\n`
+    output +=
+      '`ChipProps` is a discriminated union on `variant`. Each variant exposes only its valid props — `selected` is filter-only, `elevated` is unavailable on `input`, and on `input` `avatar` and `leadingIcon` are mutually exclusive at the type level.\n\n'
+
+    output += 'Common props (every variant):\n'
+    output += '- `children: string` — Text label rendered inside the chip.\n'
+    output +=
+      '- `iconSize?: number` — Default: `18`. Size of the leading icon in dp.\n'
+    output +=
+      '- `containerColor?: string` — Override the container (background) color. State-layer colors auto-derived.\n'
+    output +=
+      '- `contentColor?: string` — Override the content (label and icon) color. State-layer colors auto-derived when no `containerColor` is set.\n'
+    output +=
+      '- `labelStyle?: StyleProp<TextStyle>` — Additional style applied to the label text.\n'
+    output += '- Inherits `PressableProps` (except `children`)\n\n'
+
+    const interfaceVariants: {
+      iface: string
+      heading: string
+      description: string
+    }[] = [
+      {
+        iface: 'AssistChipProps',
+        heading: '#### Assist (default)',
+        description:
+          'Smart, contextual actions related to the surrounding content.',
+      },
+      {
+        iface: 'FilterChipProps',
+        heading: '#### Filter',
+        description:
+          'Toggleable chip used to refine or narrow content. Supports a `selected` state and an optional close icon while selected.',
+      },
+      {
+        iface: 'SuggestionChipProps',
+        heading: '#### Suggestion',
+        description: 'Dynamic recommendations or follow-up actions.',
+      },
+    ]
+
+    for (const v of interfaceVariants) {
+      const iface = interfaces.find((i) => i.name === v.iface)
+      if (iface) {
+        output += formatSubInterface(
+          iface,
+          typeAliases,
+          v.heading,
+          v.description,
+        )
+        output += '\n'
+      }
+    }
+
+    output += '#### Input\n\n'
+    output +=
+      'User-entered information such as a tag or contact. Always outlined; supports either `avatar` or `leadingIcon` (mutually exclusive) plus an optional close icon.\n\n'
+    output += 'Variant-specific props:\n'
+    output += "- `variant: 'input'`\n"
+    output +=
+      '- `avatar?: ReactNode` — Custom avatar content (e.g. a small Image or View) before the label. Mutually exclusive with `leadingIcon`.\n'
+    output +=
+      '- `leadingIcon?: IconSource` — Icon rendered before the label. Mutually exclusive with `avatar`.\n'
+    output +=
+      '- `onClose?: () => void` — Callback fired when the close/remove icon is pressed. When provided, renders a trailing close icon.\n'
+
+    return output
+  }
+
   // --- Standard single-component section ---
   let output = `### ${displayName}\n\n${example}\n\n`
 

@@ -3,8 +3,6 @@ import { useTheme } from '@onlynative/core'
 import { useState } from 'react'
 import { Alert, ScrollView, StyleSheet, View } from 'react-native'
 
-const variants = ['assist', 'filter', 'input', 'suggestion'] as const
-
 export default function ChipScreen() {
   const theme = useTheme()
   const [filters, setFilters] = useState<Record<string, boolean>>({
@@ -23,11 +21,10 @@ export default function ChipScreen() {
       <Column gap="sm">
         <Typography variant="titleSmall">Variants</Typography>
         <Row wrap gap="sm">
-          {variants.map((variant) => (
-            <Chip key={variant} variant={variant}>
-              {variant}
-            </Chip>
-          ))}
+          <Chip variant="assist">assist</Chip>
+          <Chip variant="filter">filter</Chip>
+          <Chip variant="input">input</Chip>
+          <Chip variant="suggestion">suggestion</Chip>
         </Row>
       </Column>
 
@@ -119,11 +116,18 @@ export default function ChipScreen() {
       <Column gap="sm">
         <Typography variant="titleSmall">Disabled</Typography>
         <Row wrap gap="sm">
-          {variants.map((variant) => (
-            <Chip key={`disabled-${variant}`} variant={variant} disabled>
-              {variant}
-            </Chip>
-          ))}
+          <Chip variant="assist" disabled>
+            assist
+          </Chip>
+          <Chip variant="filter" disabled>
+            filter
+          </Chip>
+          <Chip variant="input" disabled>
+            input
+          </Chip>
+          <Chip variant="suggestion" disabled>
+            suggestion
+          </Chip>
           <Chip variant="filter" selected disabled>
             Selected
           </Chip>

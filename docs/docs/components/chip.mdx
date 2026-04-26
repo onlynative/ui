@@ -152,7 +152,7 @@ Pass `onClose` to show a trailing close icon. Only renders on `input` and `filte
 
 ## Avatar
 
-The `input` variant supports a custom `avatar` prop that takes precedence over `leadingIcon`.
+The `input` variant supports a custom `avatar` prop. `avatar` and `leadingIcon` are mutually exclusive on this variant — TypeScript will reject passing both.
 
 <SnackExample
   name="OnlyNative Chip — Avatar"

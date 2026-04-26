@@ -150,19 +150,54 @@ import { Chip } from '@onlynative/components/chip'
 <Chip variant="suggestion" onPress={handleSuggest}>Try this</Chip>
 ```
 
-Props:
+`ChipProps` is a discriminated union on `variant`. Each variant exposes only its valid props — `selected` is filter-only, `elevated` is unavailable on `input`, and on `input` `avatar` and `leadingIcon` are mutually exclusive at the type level.
+
+Common props (every variant):
 - `children: string` — Text label rendered inside the chip.
-- `variant?: 'assist' | 'filter' | 'input' | 'suggestion'` — Default: `'assist'`. Chip type variant. Controls appearance, allowed interactions, and icon behavior.
-- `elevated?: boolean` — Default: `false`. Whether the chip uses an elevated surface instead of an outline border. Available on `assist`, `filter`, and `suggestion` variants. Ignored on `input` variant (always outlined).
-- `selected?: boolean` — Whether the chip is in a selected (toggled-on) state. Only meaningful for the `filter` variant. Ignored by other variants.
-- `leadingIcon?: IconSource` — Icon rendered before the label. Accepts a string name (resolved via the theme's `iconResolver`, defaulting to `MaterialCommunityIcons`), a pre-rendered element, or a render function that receives `{ size, color }`.
 - `iconSize?: number` — Default: `18`. Size of the leading icon in dp.
-- `avatar?: ReactNode` — Custom avatar content (e.g. a small Image or View) to render before the label. Only applicable to the `input` variant. Takes precedence over `leadingIcon`.
-- `onClose?: () => void` — Callback fired when the close/remove icon is pressed. When provided, renders a trailing close icon. Only renders on `input` and `filter` (when selected) variants.
-- `containerColor?: string` — Override the container (background) color. State-layer colors (hover, press) are derived automatically.
-- `contentColor?: string` — Override the content (label and icon) color. State-layer colors are derived automatically when no containerColor is set.
+- `containerColor?: string` — Override the container (background) color. State-layer colors auto-derived.
+- `contentColor?: string` — Override the content (label and icon) color. State-layer colors auto-derived when no `containerColor` is set.
 - `labelStyle?: StyleProp<TextStyle>` — Additional style applied to the label text.
 - Inherits `PressableProps` (except `children`)
+
+#### Assist (default)
+
+Smart, contextual actions related to the surrounding content.
+
+Props:
+- `variant?: 'assist'`
+- `elevated?: boolean` — Default: `false`. Whether the chip uses an elevated surface instead of an outline border.
+- `leadingIcon?: IconSource` — Icon rendered before the label. Accepts a string name (resolved via the theme's `iconResolver`, defaulting to `MaterialCommunityIcons`), a pre-rendered element, or a render function that receives `{ size, color }`.
+
+#### Filter
+
+Toggleable chip used to refine or narrow content. Supports a `selected` state and an optional close icon while selected.
+
+Props:
+- `variant: 'filter'`
+- `elevated?: boolean` — Default: `false`. Whether the chip uses an elevated surface instead of an outline border.
+- `selected?: boolean` — Whether the chip is in a selected (toggled-on) state.
+- `leadingIcon?: IconSource` — Icon rendered before the label. When the chip is selected and no `leadingIcon` is provided, a checkmark is shown automatically.
+- `onClose?: () => void` — Callback fired when the close icon is pressed. The close icon only renders when the chip is selected.
+
+#### Suggestion
+
+Dynamic recommendations or follow-up actions.
+
+Props:
+- `variant: 'suggestion'`
+- `elevated?: boolean` — Default: `false`. Whether the chip uses an elevated surface instead of an outline border.
+- `leadingIcon?: IconSource` — Icon rendered before the label.
+
+#### Input
+
+User-entered information such as a tag or contact. Always outlined; supports either `avatar` or `leadingIcon` (mutually exclusive) plus an optional close icon.
+
+Variant-specific props:
+- `variant: 'input'`
+- `avatar?: ReactNode` — Custom avatar content (e.g. a small Image or View) before the label. Mutually exclusive with `leadingIcon`.
+- `leadingIcon?: IconSource` — Icon rendered before the label. Mutually exclusive with `avatar`.
+- `onClose?: () => void` — Callback fired when the close/remove icon is pressed. When provided, renders a trailing close icon.
 
 ---
 

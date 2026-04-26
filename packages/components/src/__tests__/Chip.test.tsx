@@ -65,16 +65,6 @@ describe('Chip', () => {
       )
       expect(screen.getByText('AV')).toBeTruthy()
     })
-
-    it('avatar takes precedence over leadingIcon on input variant', () => {
-      renderWithTheme(
-        <Chip variant="input" avatar={<Text>AV</Text>} leadingIcon="star">
-          User
-        </Chip>,
-      )
-      expect(screen.getByText('AV')).toBeTruthy()
-      expect(screen.queryByText('star')).toBeNull()
-    })
   })
 
   describe('close icon', () => {
@@ -112,24 +102,6 @@ describe('Chip', () => {
         </Chip>,
       )
       expect(screen.getByText('close')).toBeTruthy()
-    })
-
-    it('does not render close icon for assist variant', () => {
-      renderWithTheme(
-        <Chip variant="assist" onClose={jest.fn()}>
-          Help
-        </Chip>,
-      )
-      expect(screen.queryByText('close')).toBeNull()
-    })
-
-    it('does not render close icon for suggestion variant', () => {
-      renderWithTheme(
-        <Chip variant="suggestion" onClose={jest.fn()}>
-          Idea
-        </Chip>,
-      )
-      expect(screen.queryByText('close')).toBeNull()
     })
   })
 

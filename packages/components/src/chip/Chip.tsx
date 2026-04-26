@@ -4,27 +4,51 @@ import {
   resolveColorFromStyle,
   resolvePressableStyle,
 } from '@onlynative/utils'
-import { useMemo } from 'react'
-import { Platform, Pressable, Text, View } from 'react-native'
+import type { IconSource } from '@onlynative/utils'
+import { useMemo, type ReactNode } from 'react'
+import {
+  Platform,
+  Pressable,
+  Text,
+  View,
+  type PressableProps,
+  type StyleProp,
+  type TextStyle,
+} from 'react-native'
 import { createStyles } from './styles'
-import type { ChipProps } from './types'
+import type { ChipProps, ChipVariant } from './types'
 
-export function Chip({
-  children,
-  style,
-  variant = 'assist',
-  elevated = false,
-  selected = false,
-  leadingIcon,
-  iconSize = 18,
-  avatar,
-  onClose,
-  containerColor,
-  contentColor,
-  labelStyle: labelStyleOverride,
-  disabled = false,
-  ...props
-}: ChipProps) {
+type ChipImplProps = Omit<PressableProps, 'children'> & {
+  children: string
+  variant?: ChipVariant
+  elevated?: boolean
+  selected?: boolean
+  leadingIcon?: IconSource
+  iconSize?: number
+  avatar?: ReactNode
+  onClose?: () => void
+  containerColor?: string
+  contentColor?: string
+  labelStyle?: StyleProp<TextStyle>
+}
+
+export function Chip(props: ChipProps) {
+  const {
+    children,
+    style,
+    variant = 'assist',
+    elevated = false,
+    selected = false,
+    leadingIcon,
+    iconSize = 18,
+    avatar,
+    onClose,
+    containerColor,
+    contentColor,
+    labelStyle: labelStyleOverride,
+    disabled = false,
+    ...rest
+  } = props as ChipImplProps
   const isDisabled = Boolean(disabled)
   const isSelected = variant === 'filter' ? Boolean(selected) : false
 
@@ -107,7 +131,7 @@ export function Chip({
 
   return (
     <Pressable
-      {...props}
+      {...rest}
       accessibilityRole="button"
       accessibilityState={{
         disabled: isDisabled,
