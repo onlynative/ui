@@ -1033,6 +1033,8 @@ import { alphaColor, blendColor, elevationStyle, getMaterialCommunityIcons, tran
 
 - \`elevationStyle(level: ElevationLevel): ViewStyle\` — Converts an MD3 elevation level into platform-appropriate shadow styles. Uses \`boxShadow\` on web, \`shadow*\` + \`elevation\` on native.
 
+> **Gotcha:** the return shape differs by platform. Both are typed as \`ViewStyle\`, but spreading the result and overriding individual \`shadow*\` props silently no-ops on web — the shadow is baked into the \`boxShadow\` string. To customize, modify the \`ElevationLevel\` before calling, or branch on \`Platform.OS\`.
+
 ### RTL support
 
 - \`transformOrigin(vertical?: 'top' | 'center' | 'bottom'): string\` — Returns \`"left top"\` or \`"right top"\` based on RTL layout direction. Used for label animations.
