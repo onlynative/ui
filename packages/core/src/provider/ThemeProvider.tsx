@@ -36,7 +36,7 @@ export interface ThemeProviderProps {
 
 /**
  * Provides a theme to all child components via context.
- * Works with any design system — Material Design 3, Apple HIG, or custom themes.
+ * Works with any design system — Material Design 3 or custom themes.
  * Defaults to the Material Design 3 light theme when no theme is provided.
  *
  * @example

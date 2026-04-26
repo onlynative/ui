@@ -715,7 +715,7 @@ Disabled state always uses standard MD3 disabled treatment (38% onSurface) regar
 function coreContent(): string {
   return `### ThemeProvider
 
-Wrap your app root to supply the theme to all components. Works with any design system — Material Design 3, Apple HIG, or custom themes. Defaults to the MD3 light theme when no theme is provided.
+Wrap your app root to supply the theme to all components. Works with any design system — Material Design 3 or custom themes. Defaults to the MD3 light theme when no theme is provided.
 
 \`\`\`tsx
 import { ThemeProvider, darkTheme } from '@onlynative/core'
@@ -1157,7 +1157,7 @@ ${cliContent()}`
 function generateFullLlms(): string {
   return `# OnlyNative UI — Full API Reference
 
-> Design-system agnostic component library for React Native — ships with Material Design 3 and Apple HIG
+> Design-system agnostic component library for React Native — ships with Material Design 3
 > Packages: \`@onlynative/core\`, \`@onlynative/components\`
 > Requirements: React Native 0.81+, React 19+, Expo SDK 54+
 > Peer deps: \`react-native-safe-area-context >=4\`

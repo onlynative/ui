@@ -22,7 +22,7 @@ export default function App() {
 
 ### ThemeProvider
 
-Wrap your app root to supply the theme to all components. Works with any design system — Material Design 3, Apple HIG, or custom themes. Defaults to the MD3 light theme when no theme is provided.
+Wrap your app root to supply the theme to all components. Works with any design system — Material Design 3 or custom themes. Defaults to the MD3 light theme when no theme is provided.
 
 ```tsx
 import { ThemeProvider, darkTheme } from '@onlynative/core'

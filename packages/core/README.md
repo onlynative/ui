@@ -30,7 +30,7 @@ export default function App() {
 
 ### ThemeProvider
 
-Provides the theme context to all child components. Works with any design system — Material Design 3, Apple HIG, or custom themes. Defaults to the MD3 light theme.
+Provides the theme context to all child components. Works with any design system — Material Design 3 or custom themes. Defaults to the MD3 light theme.
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
