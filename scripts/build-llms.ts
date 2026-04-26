@@ -1230,7 +1230,7 @@ function generateFullLlms(): string {
   return `# OnlyNative UI — Full API Reference
 
 > Design-system agnostic component library for React Native — ships with Material Design 3
-> Packages: \`@onlynative/core\`, \`@onlynative/components\`
+> Versions: \`@onlynative/core\` ${CORE_VERSION} · \`@onlynative/components\` ${COMPONENTS_VERSION} · \`@onlynative/cli\` ${CLI_VERSION}
 > Requirements: React Native 0.81+, React 19+, Expo SDK 54+
 > Peer deps: \`react-native-safe-area-context >=4\`
 > Optional peer deps: \`@expo/vector-icons >=14\` (only needed for icon props)
