@@ -33,7 +33,7 @@ See the [Quick Start](./quick-start) guide for the full walkthrough.
 
 Add OnlyNative UI to an existing React Native or Expo project:
 
-<PackageManagerTabs cmd="npm install @onlynative/core @onlynative/utils @onlynative/components" />
+<PackageManagerTabs cmd="npm install @onlynative/core @onlynative/components" />
 
 Wrap your app with `ThemeProvider`:
 

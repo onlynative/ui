@@ -1137,7 +1137,7 @@ function generateFullLlms(): string {
   return `# OnlyNative UI — Full API Reference
 
 > Design-system agnostic component library for React Native — ships with Material Design 3 and Apple HIG
-> Packages: \`@onlynative/core\`, \`@onlynative/utils\`, \`@onlynative/components\`
+> Packages: \`@onlynative/core\`, \`@onlynative/components\`
 > Requirements: React Native 0.81+, React 19+, Expo SDK 54+
 > Peer deps: \`react-native-safe-area-context >=4\`
 > Optional peer deps: \`@expo/vector-icons >=14\` (only needed for icon props)
@@ -1164,7 +1164,7 @@ Pass name directly: \`npx onlynative create my-app\`
 ## Installation (existing project)
 
 \`\`\`bash
-pnpm add @onlynative/core @onlynative/utils @onlynative/components @expo/vector-icons react-native-safe-area-context
+pnpm add @onlynative/core @onlynative/components @expo/vector-icons react-native-safe-area-context
 \`\`\`
 
 ---
