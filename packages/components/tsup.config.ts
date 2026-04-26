@@ -19,6 +19,7 @@ export default defineConfig({
     'src/keyboard-avoiding-wrapper/index.ts',
     'src/avatar/index.ts',
     'src/portal/index.ts',
+    'src/slider/index.ts',
   ],
   dts: true,
   format: 'cjs',

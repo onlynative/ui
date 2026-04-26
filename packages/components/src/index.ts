@@ -63,3 +63,6 @@ export type { AvatarProps, AvatarSize } from './avatar'
 
 export { Portal, PortalHost } from './portal'
 export type { PortalProps, PortalHostProps } from './portal'
+
+export { Slider } from './slider'
+export type { SliderProps, SliderValue } from './slider'

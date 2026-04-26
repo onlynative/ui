@@ -1,5 +1,5 @@
 {
-  "version": "0.0.0-alpha.5",
+  "version": "0.0.0-alpha.6",
   "components": [
     {
       "name": "appbar",
@@ -48,6 +48,10 @@
     {
       "name": "radio",
       "description": "Single-choice selection control with selected/unselected states."
+    },
+    {
+      "name": "slider",
+      "description": ""
     },
     {
       "name": "switch",

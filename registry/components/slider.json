@@ -1,0 +1,16 @@
+{
+  "name": "slider",
+  "description": "",
+  "files": [
+    "packages/components/src/slider/Slider.tsx",
+    "packages/components/src/slider/index.ts",
+    "packages/components/src/slider/styles.ts",
+    "packages/components/src/slider/types.ts"
+  ],
+  "utils": ["color", "render-icon"],
+  "componentDependencies": [],
+  "dependencies": {
+    "@onlynative/core": ">=0.0.0-alpha.6"
+  },
+  "optionalDependencies": {}
+}

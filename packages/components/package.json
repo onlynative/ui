@@ -89,6 +89,11 @@
       "types": "./dist/portal/index.d.ts",
       "react-native": "./dist/portal/index.js",
       "default": "./dist/portal/index.js"
+    },
+    "./slider": {
+      "types": "./dist/slider/index.d.ts",
+      "react-native": "./dist/slider/index.js",
+      "default": "./dist/slider/index.js"
     }
   },
   "typesVersions": {
@@ -137,6 +142,9 @@
       ],
       "portal": [
         "dist/portal/index.d.ts"
+      ],
+      "slider": [
+        "dist/slider/index.d.ts"
       ]
     }
   },

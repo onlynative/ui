@@ -384,6 +384,7 @@ const COMPONENT_ORDER = [
   'list',
   'keyboard-avoiding-wrapper',
   'avatar',
+  'slider',
 ]
 
 const COMPONENT_NAMES: Record<string, string> = {
@@ -401,6 +402,7 @@ const COMPONENT_NAMES: Record<string, string> = {
   list: 'List',
   'keyboard-avoiding-wrapper': 'KeyboardAvoidingWrapper',
   avatar: 'Avatar',
+  slider: 'Slider',
 }
 
 const COMPONENT_EXAMPLES: Record<string, string> = {
@@ -509,6 +511,36 @@ import { Avatar } from '@onlynative/components/avatar'
 <Avatar icon="account" size="medium" containerColor="#E8DEF8" />
 <Avatar label="JD" size="small" />
 <Avatar icon="plus" onPress={handleAdd} accessibilityLabel="Add user" />
+\`\`\``,
+
+  slider: `\`\`\`tsx
+import { Slider } from '@onlynative/components/slider'
+
+// Continuous (single thumb)
+<Slider value={value} onValueChange={setValue} />
+
+// Discrete (snaps to step, tick marks shown automatically)
+<Slider
+  value={volume}
+  onValueChange={setVolume}
+  minimumValue={0}
+  maximumValue={100}
+  step={10}
+/>
+
+// Range (pass a tuple for two thumbs)
+<Slider
+  value={range}
+  onValueChange={setRange}
+  minimumValue={0}
+  maximumValue={100}
+/>
+
+// Centered — active track fills from midpoint to thumb
+<Slider value={balance} onValueChange={setBalance} minimumValue={-50} maximumValue={50} centered />
+
+// With start/end icon decorations
+<Slider value={vol} onValueChange={setVol} startIcon="volume-low" endIcon="volume-high" />
 \`\`\``,
 }
 

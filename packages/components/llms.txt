@@ -477,6 +477,61 @@ Props:
 - `accessibilityLabel?: string` — Required when `onPress` is provided — labels the button for screen readers.
 - Inherits `ViewProps` (except `style`)
 
+---
+
+### Slider
+
+```tsx
+import { Slider } from '@onlynative/components/slider'
+
+// Continuous (single thumb)
+<Slider value={value} onValueChange={setValue} />
+
+// Discrete (snaps to step, tick marks shown automatically)
+<Slider
+  value={volume}
+  onValueChange={setVolume}
+  minimumValue={0}
+  maximumValue={100}
+  step={10}
+/>
+
+// Range (pass a tuple for two thumbs)
+<Slider
+  value={range}
+  onValueChange={setRange}
+  minimumValue={0}
+  maximumValue={100}
+/>
+
+// Centered — active track fills from midpoint to thumb
+<Slider value={balance} onValueChange={setBalance} minimumValue={-50} maximumValue={50} centered />
+
+// With start/end icon decorations
+<Slider value={vol} onValueChange={setVol} startIcon="volume-low" endIcon="volume-high" />
+```
+
+Props:
+- `value?: number | [number, number]` — Current value. Pass a number for single-thumb mode or `[low, high]` for range mode. Use `defaultValue` for uncontrolled usage.
+- `defaultValue?: number | [number, number]` — Initial value for uncontrolled usage. Pass a `[low, high]` tuple to enable range mode.
+- `onValueChange?: (value: SliderValue) => void` — Called continuously during a drag with the latest value.
+- `onSlidingComplete?: (value: SliderValue) => void` — Called once when the user releases the thumb.
+- `minimumValue?: number` — Default: `0`. Lowest allowed value.
+- `maximumValue?: number` — Default: `1`. Highest allowed value.
+- `step?: number` — Default: `0`. Step interval. Set to a positive number to enable discrete mode (values snap to multiples of `step` and tick marks are shown by default). Omit or set to `0` for a continuous slider.
+- `centered?: boolean` — Default: `false`. Centered slider — the active track fills from the midpoint to the thumb instead of from the start. Useful for symmetric values like balance or EQ adjustments. Single-thumb mode only; ignored for range sliders.
+- `showTickMarks?: boolean` — Whether to render tick marks along the track. Defaults to `true` when `step > 0`, otherwise `false`. Pass an explicit boolean to override.
+- `showValueLabel?: boolean | 'always'` — Default: `true`. Show the value bubble above the thumb. `true` shows it during drag only, `'always'` keeps it visible, `false` hides it entirely.
+- `formatValueLabel?: (value: number) => string` — Custom formatter for the value-label text. Defaults to integer rounding for discrete sliders and 2-decimal rounding for continuous sliders.
+- `startIcon?: IconSource` — Optional icon decoration shown at the start (leading edge) of the track. Accepts a string name (resolved via the theme's `iconResolver`), a pre-rendered element, or a render function.
+- `endIcon?: IconSource` — Optional icon decoration shown at the end (trailing edge) of the track.
+- `containerColor?: string` — Override the active track color. Hover/press state-layer colors on the thumb are derived from `contentColor` (or the active track color when unset).
+- `contentColor?: string` — Override the thumb color (and the tick-mark color over the active track).
+- `inactiveTrackColor?: string` — Override the inactive track color.
+- `disabled?: boolean` — Default: `false`. Disable interaction. Renders the standard MD3 disabled treatment (38% `onSurface`); `containerColor`/`contentColor` are ignored.
+- `style?: StyleProp<ViewStyle>` — Style applied to the root container.
+- Inherits `ViewProps` (except `children`)
+
 
 ---
 

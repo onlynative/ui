@@ -106,6 +106,13 @@ const components: ComponentEntry[] = [
     icon: 'account-circle-outline',
   },
   {
+    label: 'Slider',
+    route: '/slider',
+    description: 'Continuous, discrete, range, and centered MD3 sliders',
+    colorKey: 'secondaryContainer',
+    icon: 'tune-variant',
+  },
+  {
     label: 'RTL',
     route: '/rtl',
     description:
