@@ -16,6 +16,20 @@
       "@expo/vector-icons": ">=14.0.0"
     }
   },
+  "pressable": {
+    "file": "packages/utils/src/pressable.ts",
+    "exports": ["resolvePressableStyle", "resolveColorFromStyle"],
+    "dependencies": {},
+    "typeExports": ["PressableState", "PressableStyleProp"]
+  },
+  "render-icon": {
+    "file": "packages/utils/src/render-icon.tsx",
+    "exports": ["renderIcon"],
+    "dependencies": {
+      "@expo/vector-icons": ">=14.0.0"
+    },
+    "typeExports": ["IconSource"]
+  },
   "rtl": {
     "file": "packages/utils/src/rtl.ts",
     "exports": ["transformOrigin", "selectRTL"],

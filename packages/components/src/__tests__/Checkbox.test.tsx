@@ -1,6 +1,6 @@
 import { renderWithTheme } from '@onlynative/utils/test'
 import { screen, fireEvent } from '@testing-library/react-native'
-import { StyleSheet } from 'react-native'
+import { StyleSheet, Text } from 'react-native'
 import { Checkbox } from '../checkbox/Checkbox'
 
 describe('Checkbox', () => {
@@ -77,6 +77,36 @@ describe('Checkbox', () => {
       const box = cb.children[0] as any
       const flatStyle = StyleSheet.flatten(box.props.style)
       expect(flatStyle.backgroundColor).toBe('#FF0000')
+    })
+  })
+
+  describe('icon sources', () => {
+    it('accepts a pre-rendered ReactElement as checkIcon', () => {
+      renderWithTheme(
+        <Checkbox value checkIcon={<Text testID="custom-check">✓</Text>} />,
+      )
+      expect(screen.getByTestId('custom-check')).toBeTruthy()
+      // Default 'check' string should not have rendered.
+      expect(screen.queryByText('check')).toBeNull()
+    })
+
+    it('invokes a render-function checkIcon with size and color', () => {
+      const renderFn = jest.fn(({ size, color }) => (
+        <Text testID="fn-icon">{`${size}:${color}`}</Text>
+      ))
+      renderWithTheme(<Checkbox value checkIcon={renderFn} />)
+      expect(renderFn).toHaveBeenCalledWith(
+        expect.objectContaining({ size: 14 }),
+      )
+    })
+
+    it('routes the default check icon through iconResolver', () => {
+      const iconResolver = jest.fn(() => <Text testID="resolved">r</Text>)
+      renderWithTheme(<Checkbox value />, { iconResolver })
+      expect(iconResolver).toHaveBeenCalledWith(
+        'check',
+        expect.objectContaining({ size: 14 }),
+      )
     })
   })
 })

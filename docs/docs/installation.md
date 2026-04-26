@@ -20,9 +20,11 @@ sidebar_position: 3
 
 <PackageManagerTabs cmd="npm install react-native-safe-area-context" />
 
-If you use icon props (`leadingIcon`, `trailingIcon`, `icon` on Button, IconButton, Chip, etc.), also install:
+If you pass **string icon names** (e.g. `leadingIcon="check"`) and don't register a custom `iconResolver`, the library resolves them through [`MaterialCommunityIcons`](https://pictogrammers.com/library/mdi/). Install:
 
 <PackageManagerTabs cmd="npm install @expo/vector-icons" />
+
+You can skip this if you only ever pass icons as React elements (`leadingIcon={<Check />}`) or register a custom resolver for a different library. See the [Icons guide](./icons) for details.
 
 ## Setup
 

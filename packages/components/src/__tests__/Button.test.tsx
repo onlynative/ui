@@ -1,6 +1,6 @@
 import { renderWithTheme } from '@onlynative/utils/test'
 import { screen, fireEvent } from '@testing-library/react-native'
-import { StyleSheet } from 'react-native'
+import { StyleSheet, Text } from 'react-native'
 import { Button } from '../button/Button'
 
 describe('Button', () => {
@@ -40,6 +40,44 @@ describe('Button', () => {
   it('renders a trailing icon', () => {
     renderWithTheme(<Button trailingIcon="arrow-right">Next</Button>)
     expect(screen.getByText('arrow-right')).toBeTruthy()
+  })
+
+  describe('icon sources', () => {
+    it('accepts a pre-rendered ReactElement as leadingIcon', () => {
+      renderWithTheme(
+        <Button leadingIcon={<Text testID="custom-icon">★</Text>}>Star</Button>,
+      )
+      expect(screen.getByTestId('custom-icon')).toBeTruthy()
+    })
+
+    it('invokes a render-function leadingIcon with size and color', () => {
+      const renderFn = jest.fn(({ size, color }) => (
+        <Text testID="fn-icon">{`${size}:${color}`}</Text>
+      ))
+      renderWithTheme(
+        <Button leadingIcon={renderFn} iconSize={20} contentColor="#123456">
+          Fn
+        </Button>,
+      )
+      expect(renderFn).toHaveBeenCalledWith({ size: 20, color: '#123456' })
+      expect(screen.getByTestId('fn-icon').props.children).toBe('20:#123456')
+    })
+
+    it('routes string icon names through the iconResolver when provided', () => {
+      const iconResolver = jest.fn((name: string) => (
+        <Text testID="resolved">{`resolved:${name}`}</Text>
+      ))
+      renderWithTheme(<Button leadingIcon="check">OK</Button>, {
+        iconResolver,
+      })
+      expect(iconResolver).toHaveBeenCalledWith(
+        'check',
+        expect.objectContaining({ size: 18 }),
+      )
+      expect(screen.getByTestId('resolved').props.children).toBe(
+        'resolved:check',
+      )
+    })
   })
 
   describe('overrides', () => {

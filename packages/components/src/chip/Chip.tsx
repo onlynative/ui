@@ -1,6 +1,6 @@
-import { useTheme } from '@onlynative/core'
+import { useIconResolver, useTheme } from '@onlynative/core'
 import {
-  getMaterialCommunityIcons,
+  renderIcon,
   resolveColorFromStyle,
   resolvePressableStyle,
 } from '@onlynative/utils'
@@ -38,13 +38,8 @@ export function Chip({
     (variant === 'filter' && isSelected),
   )
 
-  const needsIcons =
-    Boolean(leadingIcon) ||
-    (variant === 'filter' && isSelected) ||
-    showCloseIcon
-  const MaterialCommunityIcons = needsIcons ? getMaterialCommunityIcons() : null
-
   const theme = useTheme()
+  const iconResolver = useIconResolver()
   const styles = useMemo(
     () =>
       createStyles(
@@ -87,28 +82,24 @@ export function Chip({
     [isDisabled, styles.disabledLabel, styles.label, labelStyleOverride],
   )
 
+  const iconRenderProps = { size: iconSize, color: resolvedIconColor }
+
   const renderLeadingContent = () => {
     if (variant === 'input' && avatar) {
       return <View style={styles.avatar}>{avatar}</View>
     }
     if (leadingIcon) {
       return (
-        <MaterialCommunityIcons
-          name={leadingIcon}
-          size={iconSize}
-          color={resolvedIconColor}
-          style={styles.leadingIcon}
-        />
+        <View style={styles.leadingIcon}>
+          {renderIcon(leadingIcon, iconRenderProps, iconResolver)}
+        </View>
       )
     }
     if (variant === 'filter' && isSelected) {
       return (
-        <MaterialCommunityIcons
-          name="check"
-          size={iconSize}
-          color={resolvedIconColor}
-          style={styles.leadingIcon}
-        />
+        <View style={styles.leadingIcon}>
+          {renderIcon('check', iconRenderProps, iconResolver)}
+        </View>
       )
     }
     return null
@@ -143,11 +134,7 @@ export function Chip({
           hitSlop={4}
           style={styles.closeButton}
         >
-          <MaterialCommunityIcons
-            name="close"
-            size={iconSize}
-            color={resolvedIconColor}
-          />
+          {renderIcon('close', iconRenderProps, iconResolver)}
         </Pressable>
       ) : null}
     </Pressable>

@@ -1,6 +1,6 @@
 import { renderWithTheme } from '@onlynative/utils/test'
 import { fireEvent, screen } from '@testing-library/react-native'
-import { StyleSheet } from 'react-native'
+import { StyleSheet, Text } from 'react-native'
 import { Avatar } from '../avatar/Avatar'
 
 describe('Avatar', () => {
@@ -123,6 +123,41 @@ describe('Avatar', () => {
       const avatar = screen.getByTestId('avatar')
       const flatStyle = StyleSheet.flatten(avatar.props.style)
       expect(flatStyle.borderRadius).toBe(999)
+    })
+  })
+
+  describe('icon sources', () => {
+    it('accepts a pre-rendered ReactElement as icon', () => {
+      renderWithTheme(<Avatar icon={<Text testID="custom-icon">★</Text>} />)
+      expect(screen.getByTestId('custom-icon')).toBeTruthy()
+    })
+
+    it('invokes a render-function icon with size and color', () => {
+      const renderFn = jest.fn(({ size, color }) => (
+        <Text testID="fn-icon">{`${size}:${color}`}</Text>
+      ))
+      renderWithTheme(<Avatar icon={renderFn} contentColor="#123456" />)
+      expect(renderFn).toHaveBeenCalledWith({ size: 24, color: '#123456' })
+    })
+
+    it('routes the default account icon through iconResolver when no icon is set', () => {
+      const iconResolver = jest.fn(() => <Text testID="resolved">r</Text>)
+      renderWithTheme(<Avatar />, { iconResolver })
+      expect(iconResolver).toHaveBeenCalledWith(
+        'account',
+        expect.objectContaining({ size: 24 }),
+      )
+    })
+
+    it('routes string icon names through iconResolver', () => {
+      const iconResolver = jest.fn((name: string) => (
+        <Text testID={`resolved-${name}`}>r</Text>
+      ))
+      renderWithTheme(<Avatar icon="star" />, { iconResolver })
+      expect(iconResolver).toHaveBeenCalledWith(
+        'star',
+        expect.objectContaining({ size: 24 }),
+      )
     })
   })
 })

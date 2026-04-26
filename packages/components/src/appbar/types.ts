@@ -29,7 +29,11 @@ export type AppBarColorScheme =
 
 /** A single action item rendered in the AppBar trailing slot. */
 export interface AppBarAction {
-  /** MaterialCommunityIcons icon name to render. */
+  /**
+   * Icon to render. Accepts the same forms as `IconButton.icon` — a string
+   * name (resolved via the theme's `iconResolver`, defaulting to
+   * `MaterialCommunityIcons`), a pre-rendered element, or a render function.
+   */
   icon: IconButtonProps['icon']
   /** Accessibility label for screen readers (required). */
   accessibilityLabel: string

@@ -1,11 +1,11 @@
-import { useTheme } from '@onlynative/core'
+import { useIconResolver, useTheme } from '@onlynative/core'
 import {
-  getMaterialCommunityIcons,
+  renderIcon,
   resolveColorFromStyle,
   resolvePressableStyle,
 } from '@onlynative/utils'
 import { useMemo } from 'react'
-import { Platform, Pressable, Text } from 'react-native'
+import { Platform, Pressable, Text, View } from 'react-native'
 import { createStyles } from './styles'
 import type { ButtonProps } from './types'
 
@@ -26,6 +26,7 @@ export function Button({
   const hasLeading = Boolean(leadingIcon)
   const hasTrailing = Boolean(trailingIcon)
   const theme = useTheme()
+  const iconResolver = useIconResolver()
   const styles = useMemo(
     () =>
       createStyles(
@@ -38,9 +39,6 @@ export function Button({
       ),
     [theme, variant, hasLeading, hasTrailing, containerColor, contentColor],
   )
-
-  const MaterialCommunityIcons =
-    leadingIcon || trailingIcon ? getMaterialCommunityIcons() : null
 
   const resolvedIconColor = useMemo(
     () =>
@@ -60,6 +58,8 @@ export function Button({
     [isDisabled, styles.disabledLabel, styles.label, labelStyleOverride],
   )
 
+  const iconRenderProps = { size: iconSize, color: resolvedIconColor }
+
   return (
     <Pressable
       {...props}
@@ -77,21 +77,15 @@ export function Button({
       )}
     >
       {leadingIcon ? (
-        <MaterialCommunityIcons
-          name={leadingIcon}
-          size={iconSize}
-          color={resolvedIconColor}
-          style={styles.leadingIcon}
-        />
+        <View style={styles.leadingIcon}>
+          {renderIcon(leadingIcon, iconRenderProps, iconResolver)}
+        </View>
       ) : null}
       <Text style={computedLabelStyle}>{children}</Text>
       {trailingIcon ? (
-        <MaterialCommunityIcons
-          name={trailingIcon}
-          size={iconSize}
-          color={resolvedIconColor}
-          style={styles.trailingIcon}
-        />
+        <View style={styles.trailingIcon}>
+          {renderIcon(trailingIcon, iconRenderProps, iconResolver)}
+        </View>
       ) : null}
     </Pressable>
   )

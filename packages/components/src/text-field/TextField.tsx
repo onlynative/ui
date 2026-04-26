@@ -1,5 +1,5 @@
-import { useTheme } from '@onlynative/core'
-import { getMaterialCommunityIcons } from '@onlynative/utils'
+import { useIconResolver, useTheme } from '@onlynative/core'
+import { renderIcon } from '@onlynative/utils'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import {
   Animated,
@@ -40,13 +40,11 @@ export function TextField({
   ...textInputProps
 }: TextFieldProps) {
   const theme = useTheme()
+  const iconResolver = useIconResolver()
   const isDisabled = Boolean(disabled)
   const isError = Boolean(error) || Boolean(errorText)
   const isFilled = variant === 'filled'
   const hasLeadingIcon = Boolean(leadingIcon)
-
-  const MaterialCommunityIcons =
-    leadingIcon || trailingIcon ? getMaterialCommunityIcons() : null
 
   const { colors, styles } = useMemo(
     () => createStyles(theme, variant),
@@ -197,11 +195,11 @@ export function TextField({
         <View style={containerStyle}>
           {leadingIcon ? (
             <View style={styles.leadingIcon}>
-              <MaterialCommunityIcons
-                name={leadingIcon}
-                size={ICON_SIZE}
-                color={iconColor}
-              />
+              {renderIcon(
+                leadingIcon,
+                { size: ICON_SIZE, color: iconColor },
+                iconResolver,
+              )}
             </View>
           ) : null}
 
@@ -245,11 +243,11 @@ export function TextField({
               style={styles.trailingIconPressable}
             >
               <View style={styles.trailingIcon}>
-                <MaterialCommunityIcons
-                  name={trailingIcon}
-                  size={ICON_SIZE}
-                  color={iconColor}
-                />
+                {renderIcon(
+                  trailingIcon,
+                  { size: ICON_SIZE, color: iconColor },
+                  iconResolver,
+                )}
               </View>
             </Pressable>
           ) : null}

@@ -168,6 +168,70 @@ describe('Chip', () => {
     })
   })
 
+  describe('icon sources', () => {
+    it('accepts a pre-rendered ReactElement as leadingIcon', () => {
+      renderWithTheme(
+        <Chip leadingIcon={<Text testID="lucide-icon">★</Text>}>Star</Chip>,
+      )
+      expect(screen.getByTestId('lucide-icon')).toBeTruthy()
+    })
+
+    it('invokes a render-function leadingIcon with size and color', () => {
+      const renderFn = jest.fn(({ size, color }) => (
+        <Text testID="fn-icon">{`${size}:${color}`}</Text>
+      ))
+      renderWithTheme(
+        <Chip leadingIcon={renderFn} iconSize={20} contentColor="#123456">
+          Fn
+        </Chip>,
+      )
+      expect(renderFn).toHaveBeenCalledWith({ size: 20, color: '#123456' })
+    })
+
+    it('routes string icon names through iconResolver', () => {
+      const iconResolver = jest.fn((name: string) => (
+        <Text testID={`resolved-${name}`}>{`r:${name}`}</Text>
+      ))
+      renderWithTheme(<Chip leadingIcon="star">Star</Chip>, { iconResolver })
+      expect(iconResolver).toHaveBeenCalledWith(
+        'star',
+        expect.objectContaining({ size: 18 }),
+      )
+    })
+
+    it('routes the internal check icon through iconResolver on selected filter', () => {
+      const iconResolver = jest.fn((name: string) => (
+        <Text testID={`resolved-${name}`}>{`r:${name}`}</Text>
+      ))
+      renderWithTheme(
+        <Chip variant="filter" selected>
+          Active
+        </Chip>,
+        { iconResolver },
+      )
+      expect(iconResolver).toHaveBeenCalledWith(
+        'check',
+        expect.objectContaining({ size: 18 }),
+      )
+    })
+
+    it('routes the internal close icon through iconResolver', () => {
+      const iconResolver = jest.fn((name: string) => (
+        <Text testID={`resolved-${name}`}>{`r:${name}`}</Text>
+      ))
+      renderWithTheme(
+        <Chip variant="input" onClose={jest.fn()}>
+          Tag
+        </Chip>,
+        { iconResolver },
+      )
+      expect(iconResolver).toHaveBeenCalledWith(
+        'close',
+        expect.objectContaining({ size: 18 }),
+      )
+    })
+  })
+
   describe('accessibility', () => {
     it('reports selected state for filter variant', () => {
       renderWithTheme(

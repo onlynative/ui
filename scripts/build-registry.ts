@@ -23,12 +23,25 @@ const componentsPkg = JSON.parse(
 )
 const VERSION = componentsPkg.version as string
 
-// Utility exports mapping (file stem → exported names)
+// Utility value exports mapping (file stem → runtime exports)
 const UTIL_EXPORTS: Record<string, string[]> = {
   color: ['alphaColor', 'blendColor'],
   elevation: ['elevationStyle'],
   icon: ['getMaterialCommunityIcons'],
+  pressable: ['resolvePressableStyle', 'resolveColorFromStyle'],
+  'render-icon': ['renderIcon'],
   rtl: ['transformOrigin', 'selectRTL'],
+}
+
+// Utility type-only exports (emitted as `export type {...}` from the barrel)
+const UTIL_TYPE_EXPORTS: Record<string, string[]> = {
+  pressable: ['PressableState', 'PressableStyleProp'],
+  'render-icon': ['IconSource'],
+}
+
+// File extension override — defaults to .ts when omitted.
+const UTIL_EXTENSIONS: Record<string, string> = {
+  'render-icon': 'tsx',
 }
 
 // Utility → npm dependencies
@@ -36,12 +49,19 @@ const UTIL_DEPS: Record<string, Record<string, string>> = {
   color: {},
   elevation: {},
   icon: { '@expo/vector-icons': '>=14.0.0' },
+  pressable: {},
+  'render-icon': { '@expo/vector-icons': '>=14.0.0' },
   rtl: {},
 }
 
-// Map from util export name to util file stem
+// Map from any util export name (value or type) to util file stem
 const EXPORT_TO_UTIL: Record<string, string> = {}
 for (const [util, exports] of Object.entries(UTIL_EXPORTS)) {
+  for (const exp of exports) {
+    EXPORT_TO_UTIL[exp] = util
+  }
+}
+for (const [util, exports] of Object.entries(UTIL_TYPE_EXPORTS)) {
   for (const exp of exports) {
     EXPORT_TO_UTIL[exp] = util
   }
@@ -190,25 +210,28 @@ function buildComponentEntry(componentDir: string): ComponentEntry {
   }
 }
 
-function buildUtilsRegistry(): Record<
-  string,
-  { file: string; exports: string[]; dependencies: Record<string, string> }
-> {
-  const registry: Record<
-    string,
-    {
-      file: string
-      exports: string[]
-      dependencies: Record<string, string>
-    }
-  > = {}
+interface UtilRegistryEntry {
+  file: string
+  exports: string[]
+  typeExports?: string[]
+  dependencies: Record<string, string>
+}
+
+function buildUtilsRegistry(): Record<string, UtilRegistryEntry> {
+  const registry: Record<string, UtilRegistryEntry> = {}
 
   for (const [name, exports] of Object.entries(UTIL_EXPORTS)) {
-    registry[name] = {
-      file: `packages/utils/src/${name}.ts`,
+    const ext = UTIL_EXTENSIONS[name] || 'ts'
+    const entry: UtilRegistryEntry = {
+      file: `packages/utils/src/${name}.${ext}`,
       exports,
       dependencies: UTIL_DEPS[name] || {},
     }
+    const typeExports = UTIL_TYPE_EXPORTS[name]
+    if (typeExports && typeExports.length > 0) {
+      entry.typeExports = typeExports
+    }
+    registry[name] = entry
   }
 
   return registry

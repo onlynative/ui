@@ -1059,9 +1059,30 @@ import { renderWithTheme } from '@onlynative/utils/test'
 function iconsContent(): string {
   return `## Icons
 
-All icon props accept \`MaterialCommunityIcons\` names from \`@expo/vector-icons\`. Browse available icons at https://pictogrammers.com/library/mdi/.
+Every icon prop accepts an \`IconSource\` (\`import type { IconSource } from '@onlynative/utils'\`) — one of three forms:
 
-\`@expo/vector-icons\` is an optional peer dependency — only install it if you use icon props (\`leadingIcon\`, \`trailingIcon\`, \`icon\`).
+1. **String name** — resolved through the theme's \`iconResolver\`. Defaults to \`MaterialCommunityIcons\` from \`@expo/vector-icons\`. Browse names at https://pictogrammers.com/library/mdi/.
+2. **ReactElement** — a pre-rendered icon (\`leadingIcon={<Check size={18} color="#fff" />}\`). The component does not override size/color.
+3. **Render function** — \`(props: { size: number; color?: string }) => ReactNode\`. Receives the component's resolved icon size and color, so the icon stays consistent with theme/variant state.
+
+To swap the default icon library globally, register an \`iconResolver\` on \`ThemeProvider\`:
+
+\`\`\`tsx
+import { ThemeProvider } from '@onlynative/core'
+import type { IconResolver } from '@onlynative/core'
+import { Check, Heart } from 'lucide-react-native'
+
+const icons = { check: Check, heart: Heart }
+
+const lucide: IconResolver = (name, { size, color }) => {
+  const Icon = icons[name as keyof typeof icons]
+  return Icon ? <Icon size={size} color={color} /> : null
+}
+
+<ThemeProvider iconResolver={lucide}>{/* string icon names route to Lucide */}</ThemeProvider>
+\`\`\`
+
+Per-call elements/functions always take precedence over the resolver. \`@expo/vector-icons\` is only required if you actually pass string icon names without a custom resolver.
 `
 }
 

@@ -1,5 +1,5 @@
-import type MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons'
-import type { ComponentProps, ReactNode } from 'react'
+import type { IconSource } from '@onlynative/utils'
+import type { ReactNode } from 'react'
 import type { PressableProps, StyleProp, TextStyle } from 'react-native'
 
 /** Visual variant of the chip following Material Design 3 chip types. */
@@ -25,8 +25,12 @@ export interface ChipProps extends Omit<PressableProps, 'children'> {
    * Only meaningful for the `filter` variant. Ignored by other variants.
    */
   selected?: boolean
-  /** Name of a MaterialCommunityIcons icon to show before the label. */
-  leadingIcon?: ComponentProps<typeof MaterialCommunityIcons>['name']
+  /**
+   * Icon rendered before the label. Accepts a string name (resolved via the
+   * theme's `iconResolver`, defaulting to `MaterialCommunityIcons`), a
+   * pre-rendered element, or a render function that receives `{ size, color }`.
+   */
+  leadingIcon?: IconSource
   /**
    * Size of the leading icon in dp.
    * @default 18

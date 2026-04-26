@@ -7,12 +7,10 @@
     "packages/components/src/avatar/styles.ts",
     "packages/components/src/avatar/types.ts"
   ],
-  "utils": ["color", "icon"],
+  "utils": ["color", "render-icon"],
   "componentDependencies": [],
   "dependencies": {
-    "@onlynative/core": ">=0.0.0-alpha.0"
+    "@onlynative/core": ">=0.0.0-alpha.5"
   },
-  "optionalDependencies": {
-    "@expo/vector-icons": ">=14.0.0"
-  }
+  "optionalDependencies": {}
 }

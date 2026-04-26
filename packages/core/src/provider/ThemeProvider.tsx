@@ -1,6 +1,8 @@
 import * as React from 'react'
 import { lightTheme } from '../theme/light'
 import type { BaseTheme } from '../theme/types'
+import { IconResolverContext } from './IconResolverContext'
+import type { IconResolver } from './IconResolverContext'
 import { ThemeContext } from './ThemeContext'
 
 export interface ThemeProviderProps {
@@ -10,6 +12,24 @@ export interface ThemeProviderProps {
    * @default lightTheme (Material Design 3)
    */
   theme?: BaseTheme
+  /**
+   * Resolves string icon names (e.g. `leadingIcon="check"`) to icon nodes.
+   * Set this once at the app root to use SF Symbols, Lucide, custom SVGs,
+   * etc. instead of the default `MaterialCommunityIcons`.
+   *
+   * @example
+   * import { Check, ArrowRight } from 'lucide-react-native'
+   *
+   * const icons = { check: Check, 'arrow-right': ArrowRight }
+   *
+   * <ThemeProvider iconResolver={(name, { size, color }) => {
+   *   const Icon = icons[name]
+   *   return Icon ? <Icon size={size} color={color} /> : null
+   * }}>
+   *   <App />
+   * </ThemeProvider>
+   */
+  iconResolver?: IconResolver
   /** Tree of components that will have access to the theme via `useTheme()`. */
   children: React.ReactNode
 }
@@ -35,10 +55,16 @@ export interface ThemeProviderProps {
  *   <App />
  * </ThemeProvider>
  */
-export function ThemeProvider({ theme, children }: ThemeProviderProps) {
+export function ThemeProvider({
+  theme,
+  iconResolver,
+  children,
+}: ThemeProviderProps) {
   return (
     <ThemeContext.Provider value={theme ?? lightTheme}>
-      {children}
+      <IconResolverContext.Provider value={iconResolver ?? null}>
+        {children}
+      </IconResolverContext.Provider>
     </ThemeContext.Provider>
   )
 }

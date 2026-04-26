@@ -1,9 +1,5 @@
-import { useTheme } from '@onlynative/core'
-import {
-  alphaColor,
-  blendColor,
-  getMaterialCommunityIcons,
-} from '@onlynative/utils'
+import { useIconResolver, useTheme } from '@onlynative/core'
+import { alphaColor, blendColor, renderIcon } from '@onlynative/utils'
 import { useMemo } from 'react'
 import { Pressable } from 'react-native'
 import type { StyleProp, ViewStyle } from 'react-native'
@@ -265,8 +261,8 @@ export function IconButton({
   accessibilityLabel,
   ...props
 }: IconButtonProps) {
-  const MaterialCommunityIcons = getMaterialCommunityIcons()
   const theme = useTheme()
+  const iconResolver = useIconResolver()
   const styles = useMemo(() => createStyles(theme), [theme])
   const isDisabled = Boolean(disabled)
   const isToggle = selected !== undefined
@@ -351,11 +347,11 @@ export function IconButton({
         return base
       }}
     >
-      <MaterialCommunityIcons
-        name={displayIcon}
-        size={iconPixelSize}
-        color={resolvedIconColor}
-      />
+      {renderIcon(
+        displayIcon,
+        { size: iconPixelSize, color: resolvedIconColor },
+        iconResolver,
+      )}
     </Pressable>
   )
 }

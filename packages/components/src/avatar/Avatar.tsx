@@ -1,5 +1,5 @@
-import { useTheme } from '@onlynative/core'
-import { blendColor, getMaterialCommunityIcons } from '@onlynative/utils'
+import { useIconResolver, useTheme } from '@onlynative/core'
+import { blendColor, renderIcon } from '@onlynative/utils'
 import { useMemo } from 'react'
 import { Image, Pressable, Text, View } from 'react-native'
 import type { ViewStyle } from 'react-native'
@@ -45,8 +45,8 @@ export function Avatar({
   accessibilityLabel,
   ...props
 }: AvatarProps) {
-  const MaterialCommunityIcons = getMaterialCommunityIcons()
   const theme = useTheme()
+  const iconResolver = useIconResolver()
   const styles = useMemo(() => createStyles(theme), [theme])
 
   const bgColor = containerColor ?? theme.colors.primaryContainer
@@ -93,11 +93,11 @@ export function Avatar({
       {initials}
     </Text>
   ) : (
-    <MaterialCommunityIcons
-      name={icon ?? 'account'}
-      size={iconPx}
-      color={fgColor}
-    />
+    renderIcon(
+      icon ?? 'account',
+      { size: iconPx, color: fgColor },
+      iconResolver,
+    )
   )
 
   if (!isInteractive) {

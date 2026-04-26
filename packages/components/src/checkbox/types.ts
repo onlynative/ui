@@ -1,3 +1,4 @@
+import type { IconSource } from '@onlynative/utils'
 import type { PressableProps } from 'react-native'
 
 export interface CheckboxProps extends Omit<PressableProps, 'children'> {
@@ -8,6 +9,16 @@ export interface CheckboxProps extends Omit<PressableProps, 'children'> {
   value?: boolean
   /** Callback fired when the checkbox is toggled. Receives the new value. */
   onValueChange?: (value: boolean) => void
+  /**
+   * Icon shown when the checkbox is checked. Accepts a string name (resolved
+   * via the theme's `iconResolver`, defaulting to `MaterialCommunityIcons`),
+   * a pre-rendered element, or a render function that receives `{ size, color }`.
+   *
+   * Override this when your `iconResolver` doesn't map the default `'check'`
+   * name (e.g. a Lucide-only resolver).
+   * @default 'check'
+   */
+  checkIcon?: IconSource
   /**
    * Override the container (box) color when checked.
    * State-layer colors (hover, press) are derived automatically.

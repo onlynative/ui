@@ -1,5 +1,4 @@
-import type MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons'
-import type { ComponentProps } from 'react'
+import type { IconSource } from '@onlynative/utils'
 import type { PressableProps, StyleProp, TextStyle } from 'react-native'
 
 /** Visual style variant of the button following Material Design 3 roles. */
@@ -18,12 +17,22 @@ export interface ButtonProps extends Omit<PressableProps, 'children'> {
    * @default 'filled'
    */
   variant?: ButtonVariant
-  /** Name of a MaterialCommunityIcons icon to show before the label. */
-  leadingIcon?: ComponentProps<typeof MaterialCommunityIcons>['name']
-  /** Name of a MaterialCommunityIcons icon to show after the label. */
-  trailingIcon?: ComponentProps<typeof MaterialCommunityIcons>['name']
   /**
-   * Size of leading and trailing icons in dp.
+   * Icon rendered before the label. Accepts a string name (resolved via the
+   * theme's `iconResolver`, defaulting to `MaterialCommunityIcons`), a
+   * pre-rendered element, or a render function that receives `{ size, color }`.
+   */
+  leadingIcon?: IconSource
+  /**
+   * Icon rendered after the label. Accepts a string name (resolved via the
+   * theme's `iconResolver`, defaulting to `MaterialCommunityIcons`), a
+   * pre-rendered element, or a render function that receives `{ size, color }`.
+   */
+  trailingIcon?: IconSource
+  /**
+   * Size of leading and trailing icons in dp. Used when resolving string
+   * icon names or invoking the render-function form. Pre-rendered elements
+   * are not resized.
    * @default 18
    */
   iconSize?: number

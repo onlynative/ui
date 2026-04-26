@@ -1,7 +1,7 @@
 # OnlyNative UI — Full API Reference
 
 > Design-system agnostic component library for React Native — ships with Material Design 3 and Apple HIG
-> Packages: `@onlynative/core`, `@onlynative/utils`, `@onlynative/components`
+> Packages: `@onlynative/core`, `@onlynative/components`
 > Requirements: React Native 0.81+, React 19+, Expo SDK 54+
 > Peer deps: `react-native-safe-area-context >=4`
 > Optional peer deps: `@expo/vector-icons >=14` (only needed for icon props)
@@ -28,7 +28,7 @@ Pass name directly: `npx onlynative create my-app`
 ## Installation (existing project)
 
 ```bash
-pnpm add @onlynative/core @onlynative/utils @onlynative/components @expo/vector-icons react-native-safe-area-context
+pnpm add @onlynative/core @onlynative/components @expo/vector-icons react-native-safe-area-context
 ```
 
 ---
@@ -416,9 +416,9 @@ import { Button } from '@onlynative/components/button'
 Props:
 - `children: string` — Text label rendered inside the button.
 - `variant?: 'filled' | 'elevated' | 'outlined' | 'text' | 'tonal'` — Default: `'filled'`. Visual variant. Controls background, border, and text color.
-- `leadingIcon?: string` — Name of a MaterialCommunityIcons icon to show before the label.
-- `trailingIcon?: string` — Name of a MaterialCommunityIcons icon to show after the label.
-- `iconSize?: number` — Default: `18`. Size of leading and trailing icons in dp.
+- `leadingIcon?: IconSource` — Icon rendered before the label. Accepts a string name (resolved via the theme's `iconResolver`, defaulting to `MaterialCommunityIcons`), a pre-rendered element, or a render function that receives `{ size, color }`.
+- `trailingIcon?: IconSource` — Icon rendered after the label. Accepts a string name (resolved via the theme's `iconResolver`, defaulting to `MaterialCommunityIcons`), a pre-rendered element, or a render function that receives `{ size, color }`.
+- `iconSize?: number` — Default: `18`. Size of leading and trailing icons in dp. Used when resolving string icon names or invoking the render-function form. Pre-rendered elements are not resized.
 - `containerColor?: string` — Override the container (background) color. State-layer colors (hover, press) are derived automatically.
 - `contentColor?: string` — Override the content (label and icon) color. State-layer colors are derived automatically when no containerColor is set.
 - `labelStyle?: StyleProp<TextStyle>` — Additional style applied to the label text.
@@ -436,8 +436,8 @@ import { IconButton } from '@onlynative/components/icon-button'
 ```
 
 Props:
-- `icon: string` — MaterialCommunityIcons icon name to display.
-- `selectedIcon?: string` — Icon to display when `selected` is `true` (toggle mode).
+- `icon: IconSource` — Icon to display. Accepts a string name (resolved via the theme's `iconResolver`, defaulting to `MaterialCommunityIcons`), a pre-rendered element, or a render function that receives `{ size, color }`.
+- `selectedIcon?: IconSource` — Icon to display when `selected` is `true` (toggle mode).
 - `iconColor?: string` — Overrides the automatic icon color derived from the variant and state.
 - `contentColor?: string` — Override the content (icon) color. Takes precedence over `iconColor` when both are provided.
 - `containerColor?: string` — Override the container (background) color. State-layer colors (hover, press) are derived automatically.
@@ -481,7 +481,7 @@ Props:
 - `style?: StyleProp<ViewStyle>` — Custom style applied to the root container.
 
 AppBarAction:
-- `icon: string` — MaterialCommunityIcons icon name to render.
+- `icon: string` — Icon to render. Accepts the same forms as `IconButton.icon` — a string name (resolved via the theme's `iconResolver`, defaulting to `MaterialCommunityIcons`), a pre-rendered element, or a render function.
 - `accessibilityLabel: string` — Accessibility label for screen readers (required).
 - `onPress?: () => void` — Called when the action icon is pressed.
 - `disabled?: boolean` — Default: `false`. Disables the action icon.
@@ -523,7 +523,7 @@ Props:
 - `variant?: 'assist' | 'filter' | 'input' | 'suggestion'` — Default: `'assist'`. Chip type variant. Controls appearance, allowed interactions, and icon behavior.
 - `elevated?: boolean` — Default: `false`. Whether the chip uses an elevated surface instead of an outline border. Available on `assist`, `filter`, and `suggestion` variants. Ignored on `input` variant (always outlined).
 - `selected?: boolean` — Whether the chip is in a selected (toggled-on) state. Only meaningful for the `filter` variant. Ignored by other variants.
-- `leadingIcon?: string` — Name of a MaterialCommunityIcons icon to show before the label.
+- `leadingIcon?: IconSource` — Icon rendered before the label. Accepts a string name (resolved via the theme's `iconResolver`, defaulting to `MaterialCommunityIcons`), a pre-rendered element, or a render function that receives `{ size, color }`.
 - `iconSize?: number` — Default: `18`. Size of the leading icon in dp.
 - `avatar?: ReactNode` — Custom avatar content (e.g. a small Image or View) to render before the label. Only applicable to the `input` variant. Takes precedence over `leadingIcon`.
 - `onClose?: () => void` — Callback fired when the close/remove icon is pressed. When provided, renders a trailing close icon. Only renders on `input` and `filter` (when selected) variants.
@@ -545,6 +545,7 @@ import { Checkbox } from '@onlynative/components/checkbox'
 Props:
 - `value?: boolean` — Default: `false`. Whether the checkbox is checked.
 - `onValueChange?: (value: boolean) => void` — Callback fired when the checkbox is toggled. Receives the new value.
+- `checkIcon?: IconSource` — Default: `'check'`. Icon shown when the checkbox is checked. Accepts a string name (resolved via the theme's `iconResolver`, defaulting to `MaterialCommunityIcons`), a pre-rendered element, or a render function that receives `{ size, color }`. Override this when your `iconResolver` doesn't map the default `'check'` name (e.g. a Lucide-only resolver).
 - `containerColor?: string` — Override the container (box) color when checked. State-layer colors (hover, press) are derived automatically.
 - `contentColor?: string` — Override the checkmark icon color.
 - Inherits `PressableProps` (except `children`)
@@ -580,8 +581,8 @@ import { Switch } from '@onlynative/components/switch'
 Props:
 - `value?: boolean` — Default: `false`. Whether the switch is toggled on.
 - `onValueChange?: (value: boolean) => void` — Callback fired when the switch is toggled. Receives the new value.
-- `selectedIcon?: string` — Default: `'check'`. Name of a MaterialCommunityIcons icon to show on the thumb when selected.
-- `unselectedIcon?: string` — Name of a MaterialCommunityIcons icon to show on the thumb when unselected. When provided, the thumb renders at the larger selected size.
+- `selectedIcon?: IconSource` — Default: `'check'`. Icon shown on the thumb when selected. Accepts a string name (resolved via the theme's `iconResolver`, defaulting to `MaterialCommunityIcons`), a pre-rendered element, or a render function that receives `{ size, color }`.
+- `unselectedIcon?: IconSource` — Icon shown on the thumb when unselected. When provided, the thumb renders at the larger selected size. Same accepted forms as `selectedIcon`.
 - `containerColor?: string` — Override the track color. State-layer colors (hover, press) are derived automatically.
 - `contentColor?: string` — Override the thumb and icon color.
 - Inherits `PressableProps` (except `children`)
@@ -605,8 +606,8 @@ Props:
 - `errorText?: string` — Error message. When provided, implicitly sets `error` to `true` and replaces `supportingText`.
 - `error?: boolean` — Default: `false`. When `true`, renders the field in error state with error colors.
 - `disabled?: boolean` — Default: `false`. Disables text input and reduces opacity.
-- `leadingIcon?: string` — MaterialCommunityIcons icon name rendered at the start of the field.
-- `trailingIcon?: string` — MaterialCommunityIcons icon name rendered at the end of the field.
+- `leadingIcon?: IconSource` — Icon rendered at the start of the field. Accepts a string name (resolved via the theme's `iconResolver`, defaulting to `MaterialCommunityIcons`), a pre-rendered element, or a render function that receives `{ size, color }`.
+- `trailingIcon?: IconSource` — Icon rendered at the end of the field. Same accepted forms as `leadingIcon`.
 - `onTrailingIconPress?: () => void` — Called when the trailing icon is pressed.
 - `containerColor?: string` — Override the container (background) color. Disabled state still uses the standard disabled appearance.
 - `contentColor?: string` — Override the content (input text and icon) color. Error and disabled states take precedence.
@@ -800,7 +801,7 @@ import { Avatar } from '@onlynative/components/avatar'
 
 Props:
 - `imageUri?: string` — URI of the image to display. Takes priority over `icon` and `label`.
-- `icon?: string` — MaterialCommunityIcons icon name. Takes priority over `label` when `imageUri` is not set.
+- `icon?: IconSource` — Icon to display. Accepts a string name (resolved via the theme's `iconResolver`, defaulting to `MaterialCommunityIcons`), a pre-rendered element, or a render function that receives `{ size, color }`. Takes priority over `label` when `imageUri` is not set.
 - `label?: string` — Text initials to display (1–2 characters recommended). Shown when `imageUri` and `icon` are not set.
 - `size?: 'xSmall' | 'small' | 'medium' | 'large' | 'xLarge'` — Default: `'medium'`. Size of the avatar.
 - `containerColor?: string` — Override the container (background) color. State-layer colors (hover, press) are derived automatically when `onPress` is set.
@@ -815,9 +816,30 @@ Props:
 
 ## Icons
 
-All icon props accept `MaterialCommunityIcons` names from `@expo/vector-icons`. Browse available icons at https://pictogrammers.com/library/mdi/.
+Every icon prop accepts an `IconSource` (`import type { IconSource } from '@onlynative/utils'`) — one of three forms:
 
-`@expo/vector-icons` is an optional peer dependency — only install it if you use icon props (`leadingIcon`, `trailingIcon`, `icon`).
+1. **String name** — resolved through the theme's `iconResolver`. Defaults to `MaterialCommunityIcons` from `@expo/vector-icons`. Browse names at https://pictogrammers.com/library/mdi/.
+2. **ReactElement** — a pre-rendered icon (`leadingIcon={<Check size={18} color="#fff" />}`). The component does not override size/color.
+3. **Render function** — `(props: { size: number; color?: string }) => ReactNode`. Receives the component's resolved icon size and color, so the icon stays consistent with theme/variant state.
+
+To swap the default icon library globally, register an `iconResolver` on `ThemeProvider`:
+
+```tsx
+import { ThemeProvider } from '@onlynative/core'
+import type { IconResolver } from '@onlynative/core'
+import { Check, Heart } from 'lucide-react-native'
+
+const icons = { check: Check, heart: Heart }
+
+const lucide: IconResolver = (name, { size, color }) => {
+  const Icon = icons[name as keyof typeof icons]
+  return Icon ? <Icon size={size} color={color} /> : null
+}
+
+<ThemeProvider iconResolver={lucide}>{/* string icon names route to Lucide */}</ThemeProvider>
+```
+
+Per-call elements/functions always take precedence over the resolver. `@expo/vector-icons` is only required if you actually pass string icon names without a custom resolver.
 
 ---
 

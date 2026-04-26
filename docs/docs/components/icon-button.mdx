@@ -7,6 +7,8 @@ sidebar_position: 4
 Icon buttons help people take supplementary actions with a single tap.
 Follows the [Material Design 3 Icon Button](https://m3.material.io/components/icon-buttons/overview) specification.
 
+The `icon` and `selectedIcon` props accept three forms — a string name (resolved via [`MaterialCommunityIcons`](https://pictogrammers.com/library/mdi/) by default), a pre-rendered React element from any icon library, or a render function that receives the resolved `{ size, color }`. See the [Icons guide](../icons) for full details, including how to register a global `iconResolver` for Lucide, SF Symbols, or custom SVGs.
+
 ## Usage
 
 <SnackExample
@@ -69,6 +71,20 @@ Follows the [Material Design 3 Icon Button](https://m3.material.io/components/ic
   }
 `}
 />
+
+## Bring your own icon library
+
+```tsx
+import { IconButton } from '@onlynative/components'
+import { Heart } from 'lucide-react-native'
+
+<IconButton
+  icon={({ size, color }) => <Heart size={size} color={color} />}
+  accessibilityLabel="Like"
+/>
+```
+
+The render-function form receives the size and color the IconButton would have given to its default icon (24dp for `medium`, plus the variant + state color), so the icon stays in sync with size/variant changes automatically.
 
 ## Toggle Mode
 

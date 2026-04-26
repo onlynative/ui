@@ -8,6 +8,7 @@ const sidebars: SidebarsConfig = {
     { type: 'doc', id: 'cli', label: 'CLI' },
     { type: 'doc', id: 'theming', label: 'Theming' },
     { type: 'doc', id: 'fonts', label: 'Fonts' },
+    { type: 'doc', id: 'icons', label: 'Icons' },
     {
       type: 'category',
       label: 'Layout',

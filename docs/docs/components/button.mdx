@@ -71,6 +71,8 @@ Follows the [Material Design 3 Button](https://m3.material.io/components/buttons
 
 ## With Icons
 
+`leadingIcon` and `trailingIcon` accept three forms — a string name (resolved via [`MaterialCommunityIcons`](https://pictogrammers.com/library/mdi/) by default), a pre-rendered React element from any icon library, or a render function that receives the resolved `{ size, color }`. See the [Icons guide](../icons) for full details, including how to register a global `iconResolver` for Lucide, SF Symbols, or custom SVGs.
+
 <SnackExample
   name="OnlyNative Button — Icons"
   code={`
@@ -93,6 +95,30 @@ Follows the [Material Design 3 Button](https://m3.material.io/components/buttons
   }
 `}
 />
+
+### Bring your own icon library
+
+Pass any element directly — useful for one-off icons or when you want full control over sizing and color:
+
+```tsx
+import { Button } from '@onlynative/components'
+import { Check, ArrowRight } from 'lucide-react-native'
+
+<Button leadingIcon={<Check size={18} color="#fff" />}>Save</Button>
+<Button trailingIcon={<ArrowRight size={18} color="#fff" />}>Continue</Button>
+```
+
+Or use a render function to receive the button's resolved icon size and color:
+
+```tsx
+<Button
+  leadingIcon={({ size, color }) => <Check size={size} color={color} />}
+  iconSize={20}
+  contentColor="#fff"
+>
+  Save
+</Button>
+```
 
 ## Disabled
 

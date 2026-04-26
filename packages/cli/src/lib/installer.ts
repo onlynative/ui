@@ -126,15 +126,23 @@ async function generateBarrel(
   libDir: string,
 ): Promise<void> {
   const utilExports: Record<string, string[]> = {}
+  const utilTypeExports: Record<string, string[]> = {}
 
   for (const utilName of resolution.utils) {
     const utilEntry = utilsRegistry[utilName]
     if (utilEntry) {
       utilExports[utilName] = utilEntry.exports
+      if (utilEntry.typeExports) {
+        utilTypeExports[utilName] = utilEntry.typeExports
+      }
     }
   }
 
-  const barrelContent = generateUtilsBarrel(resolution.utils, utilExports)
+  const barrelContent = generateUtilsBarrel(
+    resolution.utils,
+    utilExports,
+    utilTypeExports,
+  )
 
   await fs.writeFile(
     path.join(libDir, 'onlynative-utils.ts'),

@@ -1,12 +1,13 @@
-import type MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons'
-import type { ComponentProps } from 'react'
+import type { IconSource } from '@onlynative/utils'
 import type { StyleProp, TextInputProps, TextStyle } from 'react-native'
 
 /** Visual container style for the text field. */
 export type TextFieldVariant = 'filled' | 'outlined'
 
-export interface TextFieldProps
-  extends Omit<TextInputProps, 'placeholderTextColor' | 'editable'> {
+export interface TextFieldProps extends Omit<
+  TextInputProps,
+  'placeholderTextColor' | 'editable'
+> {
   /** Floating label text. Animates above the input when focused or filled. */
   label?: string
   /**
@@ -28,10 +29,16 @@ export interface TextFieldProps
    * @default false
    */
   disabled?: boolean
-  /** MaterialCommunityIcons icon name rendered at the start of the field. */
-  leadingIcon?: ComponentProps<typeof MaterialCommunityIcons>['name']
-  /** MaterialCommunityIcons icon name rendered at the end of the field. */
-  trailingIcon?: ComponentProps<typeof MaterialCommunityIcons>['name']
+  /**
+   * Icon rendered at the start of the field. Accepts a string name (resolved
+   * via the theme's `iconResolver`, defaulting to `MaterialCommunityIcons`),
+   * a pre-rendered element, or a render function that receives `{ size, color }`.
+   */
+  leadingIcon?: IconSource
+  /**
+   * Icon rendered at the end of the field. Same accepted forms as `leadingIcon`.
+   */
+  trailingIcon?: IconSource
   /** Called when the trailing icon is pressed. */
   onTrailingIconPress?: () => void
   /**

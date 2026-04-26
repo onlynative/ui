@@ -1,6 +1,6 @@
-import { useTheme } from '@onlynative/core'
+import { useIconResolver, useTheme } from '@onlynative/core'
 import {
-  getMaterialCommunityIcons,
+  renderIcon,
   resolveColorFromStyle,
   resolvePressableStyle,
 } from '@onlynative/utils'
@@ -22,9 +22,11 @@ export function Switch({
 }: SwitchProps) {
   const isDisabled = Boolean(disabled)
   const isSelected = Boolean(value)
-  const hasIcon = isSelected || Boolean(unselectedIcon)
+  const activeIcon = isSelected ? selectedIcon : unselectedIcon
+  const hasIcon = Boolean(activeIcon)
 
   const theme = useTheme()
+  const iconResolver = useIconResolver()
   const styles = useMemo(
     () =>
       createStyles(theme, isSelected, hasIcon, containerColor, contentColor),
@@ -46,8 +48,6 @@ export function Switch({
     }
   }
 
-  const iconName = isSelected ? selectedIcon : unselectedIcon
-  const MaterialCommunityIcons = iconName ? getMaterialCommunityIcons() : null
   const iconSize = 16
 
   return (
@@ -73,13 +73,13 @@ export function Switch({
       <View
         style={[styles.thumb, isDisabled ? styles.disabledThumb : undefined]}
       >
-        {iconName ? (
-          <MaterialCommunityIcons
-            name={iconName}
-            size={iconSize}
-            color={resolvedIconColor}
-          />
-        ) : null}
+        {activeIcon
+          ? renderIcon(
+              activeIcon,
+              { size: iconSize, color: resolvedIconColor },
+              iconResolver,
+            )
+          : null}
       </View>
     </Pressable>
   )

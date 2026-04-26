@@ -1,5 +1,4 @@
-import type MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons'
-import type { ComponentProps } from 'react'
+import type { IconSource } from '@onlynative/utils'
 import type { PressableProps } from 'react-native'
 
 /** Visual fill style of the icon button. */
@@ -8,15 +7,18 @@ export type IconButtonVariant = 'filled' | 'tonal' | 'outlined' | 'standard'
 /** Touch target size of the icon button. */
 export type IconButtonSize = 'small' | 'medium' | 'large'
 
-export interface IconButtonProps
-  extends Omit<
-    PressableProps,
-    'children' | 'onPress' | 'style' | 'accessibilityLabel'
-  > {
-  /** MaterialCommunityIcons icon name to display. */
-  icon: ComponentProps<typeof MaterialCommunityIcons>['name']
+export interface IconButtonProps extends Omit<
+  PressableProps,
+  'children' | 'onPress' | 'style' | 'accessibilityLabel'
+> {
+  /**
+   * Icon to display. Accepts a string name (resolved via the theme's
+   * `iconResolver`, defaulting to `MaterialCommunityIcons`), a pre-rendered
+   * element, or a render function that receives `{ size, color }`.
+   */
+  icon: IconSource
   /** Icon to display when `selected` is `true` (toggle mode). */
-  selectedIcon?: ComponentProps<typeof MaterialCommunityIcons>['name']
+  selectedIcon?: IconSource
   /** Overrides the automatic icon color derived from the variant and state. */
   iconColor?: string
   /**

@@ -1,6 +1,6 @@
-import { useTheme } from '@onlynative/core'
+import { useIconResolver, useTheme } from '@onlynative/core'
 import {
-  getMaterialCommunityIcons,
+  renderIcon,
   resolveColorFromStyle,
   resolvePressableStyle,
 } from '@onlynative/utils'
@@ -13,6 +13,7 @@ export function Checkbox({
   style,
   value = false,
   onValueChange,
+  checkIcon = 'check',
   containerColor,
   contentColor,
   disabled = false,
@@ -21,9 +22,8 @@ export function Checkbox({
   const isDisabled = Boolean(disabled)
   const isChecked = Boolean(value)
 
-  const MaterialCommunityIcons = isChecked ? getMaterialCommunityIcons() : null
-
   const theme = useTheme()
+  const iconResolver = useIconResolver()
   const styles = useMemo(
     () => createStyles(theme, isChecked, containerColor, contentColor),
     [theme, isChecked, containerColor, contentColor],
@@ -65,13 +65,13 @@ export function Checkbox({
       )}
     >
       <View style={[styles.box, isDisabled ? styles.disabledBox : undefined]}>
-        {isChecked ? (
-          <MaterialCommunityIcons
-            name="check"
-            size={14}
-            color={resolvedIconColor}
-          />
-        ) : null}
+        {isChecked
+          ? renderIcon(
+              checkIcon,
+              { size: 14, color: resolvedIconColor },
+              iconResolver,
+            )
+          : null}
       </View>
     </Pressable>
   )

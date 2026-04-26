@@ -1,5 +1,4 @@
-import type MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons'
-import type { ComponentProps } from 'react'
+import type { IconSource } from '@onlynative/utils'
 import type { StyleProp, ViewProps, ViewStyle } from 'react-native'
 
 /** Size of the avatar container. */
@@ -12,10 +11,12 @@ export interface AvatarProps extends Omit<ViewProps, 'style'> {
    */
   imageUri?: string
   /**
-   * MaterialCommunityIcons icon name.
+   * Icon to display. Accepts a string name (resolved via the theme's
+   * `iconResolver`, defaulting to `MaterialCommunityIcons`), a pre-rendered
+   * element, or a render function that receives `{ size, color }`.
    * Takes priority over `label` when `imageUri` is not set.
    */
-  icon?: ComponentProps<typeof MaterialCommunityIcons>['name']
+  icon?: IconSource
   /**
    * Text initials to display (1–2 characters recommended).
    * Shown when `imageUri` and `icon` are not set.

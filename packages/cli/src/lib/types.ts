@@ -49,6 +49,8 @@ export interface ComponentRegistryEntry {
 export interface UtilEntry {
   file: string
   exports: string[]
+  /** Type-only exports — emitted as `export type { ... }` from the barrel. */
+  typeExports?: string[]
   dependencies: Record<string, string>
 }
 

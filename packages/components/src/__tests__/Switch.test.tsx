@@ -1,6 +1,6 @@
 import { renderWithTheme } from '@onlynative/utils/test'
 import { screen, fireEvent } from '@testing-library/react-native'
-import { StyleSheet } from 'react-native'
+import { StyleSheet, Text } from 'react-native'
 import { Switch } from '../switch/Switch'
 
 describe('Switch', () => {
@@ -75,6 +75,34 @@ describe('Switch', () => {
       const sw = screen.getByRole('switch')
       const flatStyle = StyleSheet.flatten(sw.props.style)
       expect(flatStyle.backgroundColor).toBe('#FF0000')
+    })
+  })
+
+  describe('icon sources', () => {
+    it('accepts a pre-rendered ReactElement as selectedIcon', () => {
+      renderWithTheme(
+        <Switch value selectedIcon={<Text testID="custom-icon">★</Text>} />,
+      )
+      expect(screen.getByTestId('custom-icon')).toBeTruthy()
+    })
+
+    it('invokes a render-function selectedIcon with size and color', () => {
+      const renderFn = jest.fn(({ size, color }) => (
+        <Text testID="fn-icon">{`${size}:${color}`}</Text>
+      ))
+      renderWithTheme(<Switch value selectedIcon={renderFn} />)
+      expect(renderFn).toHaveBeenCalledWith(
+        expect.objectContaining({ size: 16 }),
+      )
+    })
+
+    it('routes string selectedIcon names through iconResolver', () => {
+      const iconResolver = jest.fn(() => <Text testID="resolved">r</Text>)
+      renderWithTheme(<Switch value selectedIcon="check" />, { iconResolver })
+      expect(iconResolver).toHaveBeenCalledWith(
+        'check',
+        expect.objectContaining({ size: 16 }),
+      )
     })
   })
 })

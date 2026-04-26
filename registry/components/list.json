@@ -9,10 +9,10 @@
     "packages/components/src/list/styles.ts",
     "packages/components/src/list/types.ts"
   ],
-  "utils": ["color"],
+  "utils": ["color", "pressable"],
   "componentDependencies": [],
   "dependencies": {
-    "@onlynative/core": ">=0.0.0-alpha.0"
+    "@onlynative/core": ">=0.0.0-alpha.5"
   },
   "optionalDependencies": {}
 }

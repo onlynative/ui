@@ -1,5 +1,4 @@
-import type MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons'
-import type { ComponentProps } from 'react'
+import type { IconSource } from '@onlynative/utils'
 import type { PressableProps } from 'react-native'
 
 export interface SwitchProps extends Omit<PressableProps, 'children'> {
@@ -11,15 +10,18 @@ export interface SwitchProps extends Omit<PressableProps, 'children'> {
   /** Callback fired when the switch is toggled. Receives the new value. */
   onValueChange?: (value: boolean) => void
   /**
-   * Name of a MaterialCommunityIcons icon to show on the thumb when selected.
+   * Icon shown on the thumb when selected. Accepts a string name (resolved
+   * via the theme's `iconResolver`, defaulting to `MaterialCommunityIcons`),
+   * a pre-rendered element, or a render function that receives `{ size, color }`.
    * @default 'check'
    */
-  selectedIcon?: ComponentProps<typeof MaterialCommunityIcons>['name']
+  selectedIcon?: IconSource
   /**
-   * Name of a MaterialCommunityIcons icon to show on the thumb when unselected.
-   * When provided, the thumb renders at the larger selected size.
+   * Icon shown on the thumb when unselected. When provided, the thumb
+   * renders at the larger selected size. Same accepted forms as
+   * `selectedIcon`.
    */
-  unselectedIcon?: ComponentProps<typeof MaterialCommunityIcons>['name']
+  unselectedIcon?: IconSource
   /**
    * Override the track color.
    * State-layer colors (hover, press) are derived automatically.

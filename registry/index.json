@@ -1,5 +1,5 @@
 {
-  "version": "0.0.0-alpha.0",
+  "version": "0.0.0-alpha.5",
   "components": [
     {
       "name": "appbar",
@@ -40,6 +40,10 @@
     {
       "name": "list",
       "description": "List container with interactive items, supporting headline/trailing text and dividers."
+    },
+    {
+      "name": "portal",
+      "description": ""
     },
     {
       "name": "radio",

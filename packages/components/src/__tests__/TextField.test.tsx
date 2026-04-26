@@ -1,6 +1,6 @@
 import { renderWithTheme } from '@onlynative/utils/test'
 import { screen, fireEvent } from '@testing-library/react-native'
-import { StyleSheet } from 'react-native'
+import { StyleSheet, Text } from 'react-native'
 import { TextField } from '../text-field/TextField'
 
 describe('TextField', () => {
@@ -141,6 +141,44 @@ describe('TextField', () => {
       )
       fireEvent.press(screen.getByRole('button'))
       expect(onPress).not.toHaveBeenCalled()
+    })
+
+    it('accepts a pre-rendered ReactElement as leadingIcon', () => {
+      renderWithTheme(
+        <TextField
+          label="Search"
+          leadingIcon={<Text testID="lucide-icon">★</Text>}
+        />,
+      )
+      expect(screen.getByTestId('lucide-icon')).toBeTruthy()
+    })
+
+    it('invokes a render-function trailingIcon with size and color', () => {
+      const renderFn = jest.fn(({ size, color }) => (
+        <Text testID="fn-icon">{`${size}:${color}`}</Text>
+      ))
+      renderWithTheme(<TextField label="Password" trailingIcon={renderFn} />)
+      expect(renderFn).toHaveBeenCalledWith(
+        expect.objectContaining({ size: 24 }),
+      )
+    })
+
+    it('routes string icon names through iconResolver', () => {
+      const iconResolver = jest.fn((name: string) => (
+        <Text testID={`resolved-${name}`}>r</Text>
+      ))
+      renderWithTheme(
+        <TextField label="Search" leadingIcon="magnify" trailingIcon="close" />,
+        { iconResolver },
+      )
+      expect(iconResolver).toHaveBeenCalledWith(
+        'magnify',
+        expect.objectContaining({ size: 24 }),
+      )
+      expect(iconResolver).toHaveBeenCalledWith(
+        'close',
+        expect.objectContaining({ size: 24 }),
+      )
     })
   })
 
