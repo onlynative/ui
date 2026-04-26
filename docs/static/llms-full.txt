@@ -476,17 +476,11 @@ Props:
 - `elevated?: boolean` — Default: `false`. When `true`, adds shadow/elevation to indicate the bar is scrolled.
 - `leading?: ReactNode` — Custom leading content. When provided, overrides `canGoBack`.
 - `trailing?: ReactNode` — Custom trailing content. When provided, overrides `actions`.
-- `actions?: AppBarAction[]` — Array of icon-button actions rendered in the trailing slot.
+- `actions?: AppBarAction[]` — Array of actions rendered in the trailing slot. Each entry is either an icon action (`{ icon }`) or a text action (`{ label }`, e.g. "Save").
 - `containerColor?: string` — Override the container (background) color. Applied to both normal and elevated states.
 - `contentColor?: string` — Override the content (title and icon) color.
 - `titleStyle?: StyleProp<TextStyle>` — Additional style applied to the title text.
 - `style?: StyleProp<ViewStyle>` — Custom style applied to the root container.
-
-AppBarAction:
-- `icon: string` — Icon to render. Accepts the same forms as `IconButton.icon` — a string name (resolved via the theme's `iconResolver`, defaulting to `MaterialCommunityIcons`), a pre-rendered element, or a render function.
-- `accessibilityLabel: string` — Accessibility label for screen readers (required).
-- `onPress?: () => void` — Called when the action icon is pressed.
-- `disabled?: boolean` — Default: `false`. Disables the action icon.
 
 ---
 

@@ -8,7 +8,7 @@
     "packages/components/src/appbar/types.ts"
   ],
   "utils": ["rtl"],
-  "componentDependencies": ["icon-button", "typography"],
+  "componentDependencies": ["button", "icon-button", "typography"],
   "dependencies": {
     "@onlynative/core": ">=0.0.0-alpha.5"
   },

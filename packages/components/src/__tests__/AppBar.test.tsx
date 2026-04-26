@@ -86,6 +86,35 @@ describe('AppBar', () => {
       renderWithTheme(<AppBar title="Home" actions={[]} />)
       expect(screen.queryByRole('button')).toBeNull()
     })
+
+    it('renders a text action when label is provided', () => {
+      const onSave = jest.fn()
+      renderWithTheme(
+        <AppBar
+          title="Edit"
+          actions={[
+            { label: 'Save', accessibilityLabel: 'Save', onPress: onSave },
+          ]}
+        />,
+      )
+      expect(screen.getByText('Save')).toBeTruthy()
+      fireEvent.press(screen.getByLabelText('Save'))
+      expect(onSave).toHaveBeenCalledTimes(1)
+    })
+
+    it('renders icon and text actions side by side', () => {
+      renderWithTheme(
+        <AppBar
+          title="Edit"
+          actions={[
+            { icon: 'magnify', accessibilityLabel: 'Search' },
+            { label: 'Done', accessibilityLabel: 'Done' },
+          ]}
+        />,
+      )
+      expect(screen.getByLabelText('Search')).toBeTruthy()
+      expect(screen.getByText('Done')).toBeTruthy()
+    })
   })
 
   describe('trailing', () => {

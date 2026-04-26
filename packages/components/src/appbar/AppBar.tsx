@@ -4,6 +4,7 @@ import { useCallback, useMemo, useState } from 'react'
 import type { ReactNode } from 'react'
 import type { LayoutChangeEvent, StyleProp, ViewStyle } from 'react-native'
 import { Platform, View } from 'react-native'
+import { Button } from '../button'
 import { IconButton } from '../icon-button'
 import type { IconButtonProps } from '../icon-button'
 import { SafeAreaView } from '../safe-area'
@@ -160,22 +161,39 @@ export function AppBar({
 
     return (
       <View style={styles.actionsRow}>
-        {actions.map((action, index) => (
-          <View
-            key={`${String(action.icon)}-${index}`}
-            style={styles.iconFrame}
-          >
-            <IconButton
-              icon={action.icon}
-              size="medium"
-              variant="standard"
-              iconColor={resolvedContentColor}
-              accessibilityLabel={action.accessibilityLabel}
-              onPress={action.onPress}
-              disabled={action.disabled}
-            />
-          </View>
-        ))}
+        {actions.map((action, index) => {
+          if (action.label !== undefined) {
+            return (
+              <Button
+                key={`${action.label}-${index}`}
+                variant="text"
+                contentColor={resolvedContentColor}
+                onPress={action.onPress}
+                disabled={action.disabled}
+                accessibilityLabel={action.accessibilityLabel}
+              >
+                {action.label}
+              </Button>
+            )
+          }
+
+          return (
+            <View
+              key={`${String(action.icon)}-${index}`}
+              style={styles.iconFrame}
+            >
+              <IconButton
+                icon={action.icon}
+                size="medium"
+                variant="standard"
+                iconColor={resolvedContentColor}
+                accessibilityLabel={action.accessibilityLabel}
+                onPress={action.onPress}
+                disabled={action.disabled}
+              />
+            </View>
+          )
+        })}
       </View>
     )
   }, [

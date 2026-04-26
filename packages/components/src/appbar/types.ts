@@ -27,24 +27,41 @@ export type AppBarColorScheme =
   | 'primary'
   | 'primaryContainer'
 
-/** A single action item rendered in the AppBar trailing slot. */
-export interface AppBarAction {
+interface AppBarActionBase {
+  /** Accessibility label for screen readers (required). */
+  accessibilityLabel: string
+  /** Called when the action is pressed. */
+  onPress?: () => void
+  /**
+   * Disables the action.
+   * @default false
+   */
+  disabled?: boolean
+}
+
+/** An icon-button action in the AppBar trailing slot. */
+export interface AppBarIconAction extends AppBarActionBase {
   /**
    * Icon to render. Accepts the same forms as `IconButton.icon` — a string
    * name (resolved via the theme's `iconResolver`, defaulting to
    * `MaterialCommunityIcons`), a pre-rendered element, or a render function.
    */
   icon: IconButtonProps['icon']
-  /** Accessibility label for screen readers (required). */
-  accessibilityLabel: string
-  /** Called when the action icon is pressed. */
-  onPress?: () => void
-  /**
-   * Disables the action icon.
-   * @default false
-   */
-  disabled?: boolean
+  label?: never
 }
+
+/** A text-button action (e.g. "Save", "Done") in the AppBar trailing slot. */
+export interface AppBarTextAction extends AppBarActionBase {
+  /** Text label rendered inside a `Button` with `variant="text"`. */
+  label: string
+  icon?: never
+}
+
+/**
+ * A single action item rendered in the AppBar trailing slot. Provide either
+ * `icon` (renders an `IconButton`) or `label` (renders a text button).
+ */
+export type AppBarAction = AppBarIconAction | AppBarTextAction
 
 export interface AppBarProps {
   /** Title text displayed in the bar. */
@@ -81,7 +98,10 @@ export interface AppBarProps {
   leading?: ReactNode
   /** Custom trailing content. When provided, overrides `actions`. */
   trailing?: ReactNode
-  /** Array of icon-button actions rendered in the trailing slot. */
+  /**
+   * Array of actions rendered in the trailing slot. Each entry is either an
+   * icon action (`{ icon }`) or a text action (`{ label }`, e.g. "Save").
+   */
   actions?: AppBarAction[]
   /**
    * Override the container (background) color.
