@@ -1,0 +1,288 @@
+---
+sidebar_position: 8
+---
+
+# Slider
+
+Sliders let users select a value or range of values from a continuous or discrete set.
+Follows the [Material Design 3 Slider](https://m3.material.io/components/sliders/overview) specification.
+
+The component supports four MD3 configurations from a single API:
+
+- **Continuous** — single thumb, any value within range
+- **Discrete** — single thumb that snaps to a `step`, with auto-rendered tick marks
+- **Range** — two thumbs (`value={[low, high]}`)
+- **Centered** — active track fills from the midpoint to the thumb (useful for symmetric values like balance)
+
+## Usage
+
+<SnackExample
+  name="OnlyNative Slider — Usage"
+  code={`
+  import { Slider } from '@onlynative/components'
+  import { ThemeProvider } from '@onlynative/core'
+  import { SafeAreaProvider } from 'react-native-safe-area-context'
+  import { useState } from 'react'
+  import { View } from 'react-native'
+
+  export default function App() {
+    const [value, setValue] = useState(0.4)
+    return (
+      <SafeAreaProvider>
+        <ThemeProvider>
+          <View style={{ flex: 1, justifyContent: 'center', padding: 24 }}>
+            <Slider value={value} onValueChange={(v) => setValue(v as number)} />
+          </View>
+        </ThemeProvider>
+      </SafeAreaProvider>
+    )
+  }
+`}
+/>
+
+## Discrete
+
+Set `step` to a positive number to snap to fixed increments. Tick marks are rendered automatically.
+
+<SnackExample
+  name="OnlyNative Slider — Discrete"
+  code={`
+  import { Slider, Typography } from '@onlynative/components'
+  import { ThemeProvider } from '@onlynative/core'
+  import { SafeAreaProvider } from 'react-native-safe-area-context'
+  import { useState } from 'react'
+  import { View } from 'react-native'
+
+  export default function App() {
+    const [value, setValue] = useState(40)
+    return (
+      <SafeAreaProvider>
+        <ThemeProvider>
+          <View style={{ flex: 1, justifyContent: 'center', padding: 24, gap: 12 }}>
+            <Slider
+              value={value}
+              onValueChange={(v) => setValue(v as number)}
+              minimumValue={0}
+              maximumValue={100}
+              step={10}
+            />
+            <Typography variant="bodySmall">Value: {value}</Typography>
+          </View>
+        </ThemeProvider>
+      </SafeAreaProvider>
+    )
+  }
+`}
+/>
+
+## Range
+
+Pass a `[low, high]` tuple for a two-thumb range slider. Both thumbs respect `step` when set.
+
+<SnackExample
+  name="OnlyNative Slider — Range"
+  code={`
+  import { Slider, Typography } from '@onlynative/components'
+  import { ThemeProvider } from '@onlynative/core'
+  import { SafeAreaProvider } from 'react-native-safe-area-context'
+  import { useState } from 'react'
+  import { View } from 'react-native'
+
+  export default function App() {
+    const [range, setRange] = useState([25, 75])
+    return (
+      <SafeAreaProvider>
+        <ThemeProvider>
+          <View style={{ flex: 1, justifyContent: 'center', padding: 24, gap: 12 }}>
+            <Slider
+              value={range}
+              onValueChange={(v) => setRange(v)}
+              minimumValue={0}
+              maximumValue={100}
+              showValueLabel="always"
+            />
+            <Typography variant="bodySmall">
+              {Math.round(range[0])} – {Math.round(range[1])}
+            </Typography>
+          </View>
+        </ThemeProvider>
+      </SafeAreaProvider>
+    )
+  }
+`}
+/>
+
+## Centered
+
+Pass `centered` for a slider where the active track fills outward from the midpoint instead of from the start. Useful for symmetric values like balance, EQ, or zoom adjustments.
+
+<SnackExample
+  name="OnlyNative Slider — Centered"
+  code={`
+  import { Slider, Typography } from '@onlynative/components'
+  import { ThemeProvider } from '@onlynative/core'
+  import { SafeAreaProvider } from 'react-native-safe-area-context'
+  import { useState } from 'react'
+  import { View } from 'react-native'
+
+  export default function App() {
+    const [balance, setBalance] = useState(0)
+    return (
+      <SafeAreaProvider>
+        <ThemeProvider>
+          <View style={{ flex: 1, justifyContent: 'center', padding: 24, gap: 12 }}>
+            <Slider
+              value={balance}
+              onValueChange={(v) => setBalance(v as number)}
+              minimumValue={-50}
+              maximumValue={50}
+              step={5}
+              centered
+              showValueLabel="always"
+            />
+            <Typography variant="bodySmall">Balance: {balance}</Typography>
+          </View>
+        </ThemeProvider>
+      </SafeAreaProvider>
+    )
+  }
+`}
+/>
+
+## With Icons
+
+Decorate either side of the track with `startIcon` and `endIcon` — useful for volume, brightness, or other affordances where the bounds need a visual label.
+
+<SnackExample
+  name="OnlyNative Slider — Icons"
+  code={`
+  import { Slider } from '@onlynative/components'
+  import { ThemeProvider } from '@onlynative/core'
+  import { SafeAreaProvider } from 'react-native-safe-area-context'
+  import { useState } from 'react'
+  import { View } from 'react-native'
+
+  export default function App() {
+    const [volume, setVolume] = useState(0.6)
+    return (
+      <SafeAreaProvider>
+        <ThemeProvider>
+          <View style={{ flex: 1, justifyContent: 'center', padding: 24 }}>
+            <Slider
+              value={volume}
+              onValueChange={(v) => setVolume(v as number)}
+              startIcon="volume-low"
+              endIcon="volume-high"
+            />
+          </View>
+        </ThemeProvider>
+      </SafeAreaProvider>
+    )
+  }
+`}
+/>
+
+## Value label
+
+The value-label bubble appears above the active thumb during a drag by default. Pass `'always'` to keep it visible, or `false` to hide it. Use `formatValueLabel` to customize the displayed string.
+
+```tsx
+<Slider value={value} onValueChange={setValue} showValueLabel="always" />
+
+<Slider
+  value={price}
+  onValueChange={setPrice}
+  minimumValue={0}
+  maximumValue={1000}
+  step={10}
+  formatValueLabel={(v) => `$${v}`}
+/>
+```
+
+## Custom colors
+
+`containerColor` overrides the active track, `contentColor` overrides the thumb (and the active-track tick contrast), and `inactiveTrackColor` overrides the inactive track. The MD3 disabled treatment is preserved regardless of overrides.
+
+<SnackExample
+  name="OnlyNative Slider — Custom colors"
+  code={`
+  import { Slider } from '@onlynative/components'
+  import { ThemeProvider } from '@onlynative/core'
+  import { SafeAreaProvider } from 'react-native-safe-area-context'
+  import { useState } from 'react'
+  import { View } from 'react-native'
+
+  export default function App() {
+    const [value, setValue] = useState(0.5)
+    return (
+      <SafeAreaProvider>
+        <ThemeProvider>
+          <View style={{ flex: 1, justifyContent: 'center', padding: 24 }}>
+            <Slider
+              value={value}
+              onValueChange={(v) => setValue(v as number)}
+              containerColor="#2E7D32"
+              contentColor="#1B5E20"
+              inactiveTrackColor="#C8E6C9"
+            />
+          </View>
+        </ThemeProvider>
+      </SafeAreaProvider>
+    )
+  }
+`}
+/>
+
+## Disabled
+
+<SnackExample
+  name="OnlyNative Slider — Disabled"
+  code={`
+  import { Slider } from '@onlynative/components'
+  import { ThemeProvider } from '@onlynative/core'
+  import { SafeAreaProvider } from 'react-native-safe-area-context'
+  import { View } from 'react-native'
+
+  export default function App() {
+    return (
+      <SafeAreaProvider>
+        <ThemeProvider>
+          <View style={{ flex: 1, justifyContent: 'center', padding: 24 }}>
+            <Slider value={0.7} disabled />
+          </View>
+        </ThemeProvider>
+      </SafeAreaProvider>
+    )
+  }
+`}
+/>
+
+## Controlled vs uncontrolled
+
+Pass `value` for a controlled slider (you own state, mutations come through `onValueChange`). Omit `value` and pass `defaultValue` for an uncontrolled slider that manages its own state internally.
+
+```tsx
+// Controlled
+<Slider value={value} onValueChange={setValue} />
+
+// Uncontrolled — pass `[low, high]` to enable range mode
+<Slider defaultValue={[20, 80]} onSlidingComplete={(v) => console.log(v)} />
+```
+
+`onValueChange` fires continuously during a drag; `onSlidingComplete` fires once when the user releases the thumb — useful for committing expensive updates (network calls, large recomputes) only on release.
+
+## Accessibility
+
+The track has `accessibilityRole="adjustable"` and exposes `accessibilityValue` with `min`/`max`/`now` (rounded to integers; native a11y APIs require integer values) and a formatted `text` field that screen readers read aloud. Pass `accessibilityLabel` to describe what the slider controls.
+
+```tsx
+<Slider
+  value={volume}
+  onValueChange={setVolume}
+  accessibilityLabel="Output volume"
+/>
+```
+
+## Props
+
+<PropTable name="Slider" />

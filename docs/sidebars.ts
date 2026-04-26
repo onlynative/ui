@@ -31,6 +31,7 @@ const sidebars: SidebarsConfig = {
         'components/chip',
         'components/icon-button',
         'components/radio',
+        'components/slider',
         'components/switch',
         'components/text-field',
       ],
