@@ -1,7 +1,27 @@
 import Link from '@docusaurus/Link'
+import useBaseUrl from '@docusaurus/useBaseUrl'
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext'
 import Layout from '@theme/Layout'
+import { useRef } from 'react'
 import styles from './index.module.css'
+
+const HIDE_SCROLLBAR_CSS = `
+  ::-webkit-scrollbar { width: 0 !important; height: 0 !important; display: none !important; }
+  * { scrollbar-width: none !important; -ms-overflow-style: none !important; }
+`
+
+function injectStylesIntoIframe(iframe: HTMLIFrameElement) {
+  try {
+    const doc = iframe.contentDocument
+    if (!doc || doc.getElementById('docs-embed-style')) return
+    const style = doc.createElement('style')
+    style.id = 'docs-embed-style'
+    style.textContent = HIDE_SCROLLBAR_CSS
+    doc.head.appendChild(style)
+  } catch {
+    /* cross-origin — ignore */
+  }
+}
 
 const features = [
   {
@@ -44,6 +64,8 @@ const features = [
 
 function Hero() {
   const { siteConfig } = useDocusaurusContext()
+  const demoUrl = useBaseUrl('/demo/')
+  const iframeRef = useRef<HTMLIFrameElement>(null)
 
   return (
     <header className={styles.hero}>
@@ -67,42 +89,27 @@ function Hero() {
           </div>
         </div>
         <div className={styles.heroVisual}>
-          <div className={styles.heroTerminal}>
-            <div className={styles.codeHeader}>
-              <span className={styles.codeDot} data-color="red" />
-              <span className={styles.codeDot} data-color="yellow" />
-              <span className={styles.codeDot} data-color="green" />
-              <span className={styles.codeFilename}>Terminal</span>
-            </div>
-            <pre className={styles.codePre}>
-              <code>
-                <span className={styles.codeComment}>
-                  # Initialize OnlyNative in your project
-                </span>
-                {'\n'}
-                <span className={styles.codePrompt}>$</span> npx onlynative init
-                {'\n\n'}
-                <span className={styles.codeComment}>◆ Components alias</span>
-                {'\n'}
-                {'  @/components'}
-                {'\n\n'}
-                <span className={styles.codeComment}>◆ Lib alias</span>
-                {'\n'}
-                {'  @/lib'}
-                {'\n\n'}
-                <span className={styles.codeSuccess}>
-                  ✔ Configuration saved
-                </span>
-                {'\n\n'}
-                <span className={styles.codePrompt}>$</span> npx onlynative add
-                button card
-                {'\n'}
-                <span className={styles.codeSuccess}>✔ Added button</span>
-                {'\n'}
-                <span className={styles.codeSuccess}>✔ Added card</span>
-              </code>
-            </pre>
+          <div className={styles.phoneFrame} aria-label="Live demo preview">
+            <div className={styles.phoneNotch} />
+            <iframe
+              ref={iframeRef}
+              src={demoUrl}
+              title="OnlyNative UI live demo"
+              className={styles.phoneScreen}
+              loading="lazy"
+              onLoad={() => {
+                if (iframeRef.current) injectStylesIntoIframe(iframeRef.current)
+              }}
+            />
           </div>
+          <Link
+            className={styles.demoOpenLink}
+            href={demoUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Open demo in new tab ↗
+          </Link>
         </div>
       </div>
     </header>

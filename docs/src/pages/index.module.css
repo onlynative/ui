@@ -1,6 +1,9 @@
 /* ===== Hero ===== */
 .hero {
-  padding: 4rem 2rem 2rem;
+  padding: 1.5rem 2rem;
+  min-height: calc(100dvh - var(--ifm-navbar-height, 60px));
+  display: flex;
+  align-items: center;
   overflow: hidden;
   background: #e9f0ff;
 }
@@ -11,6 +14,7 @@
 
 .heroInner {
   max-width: 1200px;
+  width: 100%;
   margin: 0 auto;
   display: flex;
   align-items: center;
@@ -146,22 +150,76 @@
   box-shadow: 0 4px 24px rgba(66, 165, 245, 0.3);
 }
 
-/* ===== Hero Visual / Terminal ===== */
+/* ===== Hero Visual / Phone Frame ===== */
 .heroVisual {
-  flex: 0 0 420px;
+  flex: 0 0 360px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
 }
 
-.heroTerminal {
-  border-radius: 12px;
+.phoneFrame {
+  position: relative;
+  width: 360px;
+  height: 640px;
+  padding: 12px;
+  border-radius: 40px;
+  background: #0f1117;
+  box-shadow:
+    0 0 0 2px rgba(255, 255, 255, 0.04),
+    0 30px 60px -20px rgba(15, 17, 23, 0.45),
+    0 18px 36px -18px rgba(25, 118, 210, 0.25);
   overflow: hidden;
-  background: #1e1e2e;
-  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.15);
 }
 
-:global([data-theme='light']) .heroTerminal {
+:global([data-theme='light']) .phoneFrame {
+  background: #1e2330;
+  box-shadow:
+    0 0 0 1px rgba(0, 0, 0, 0.08),
+    0 30px 60px -20px rgba(15, 23, 42, 0.35),
+    0 18px 36px -18px rgba(25, 118, 210, 0.2);
+}
+
+.phoneNotch {
+  position: absolute;
+  top: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 120px;
+  height: 20px;
+  border-radius: 0 0 14px 14px;
+  background: #0f1117;
+  z-index: 2;
+  pointer-events: none;
+}
+
+:global([data-theme='light']) .phoneNotch {
+  background: #1e2330;
+}
+
+.phoneScreen {
+  width: 100%;
+  height: 100%;
+  border: none;
+  border-radius: 28px;
   background: #fff;
-  border: 1px solid #d4d6da;
-  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+  display: block;
+}
+
+.demoOpenLink {
+  font-size: 0.85rem;
+  color: var(--ifm-color-emphasis-700);
+  text-decoration: none;
+}
+
+.demoOpenLink:hover {
+  color: #1976d2;
+  text-decoration: none;
+}
+
+:global([data-theme='dark']) .demoOpenLink:hover {
+  color: #90caf9;
 }
 
 /* ===== How It Works ===== */
@@ -587,6 +645,11 @@
 
 /* ===== Responsive ===== */
 @media (max-width: 996px) {
+  .hero {
+    min-height: 0;
+    padding: 3rem 2rem;
+  }
+
   .heroInner {
     flex-direction: column;
     text-align: center;
@@ -599,8 +662,8 @@
 
   .heroVisual {
     flex: none;
-    width: 100%;
-    max-width: 520px;
+    width: 360px;
+    max-width: 100%;
   }
 
   .heroTitle {
@@ -667,11 +730,13 @@
 
   .heroVisual {
     flex: none;
-    width: 100%;
+    width: 300px;
+    max-width: 100%;
   }
 
-  .heroTerminal {
-    font-size: 0.8rem;
+  .phoneFrame {
+    width: 300px;
+    height: 540px;
   }
 
   .howItWorks,

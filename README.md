@@ -153,7 +153,7 @@ pnpm install
 | `pnpm run format` | Format with Prettier |
 | `pnpm run example` | Start the Expo example app |
 | `pnpm run clean` | Clean build outputs |
-| `pnpm run docs:dev` | Start documentation dev server |
+| `pnpm run docs:dev` | Start documentation dev server (first run exports the example app for the homepage demo embed; cached on subsequent runs) |
 
 ### Running the Example App
 

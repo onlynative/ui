@@ -45,10 +45,6 @@ jobs:
       - name: Build packages
         run: pnpm run build
 
-      - name: Export web build
-        working-directory: example
-        run: npx expo export --platform web
-
       - name: Build docs
         run: pnpm docs:build
 
@@ -56,7 +52,6 @@ jobs:
         run: |
           mkdir -p _site
           cp -r docs/build/. _site/
-          cp -r example/dist/. _site/demo/
 
       - name: Add SPA fallback for demo routes
         run: |

@@ -22,6 +22,7 @@ ios/build/
 
 # docusaurus
 .docusaurus/
+docs/static/demo/
 
 # misc
 .DS_Store
