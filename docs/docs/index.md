@@ -89,6 +89,7 @@ import { Button } from '@onlynative/components/button'
 |-----------|-------------|
 | [Card](./components/card) | Contained surfaces for related content |
 | [List](./components/list) | Vertically arranged items with text and icons |
+| [Progress](./components/progress) | Linear and circular progress indicators (determinate / indeterminate) |
 | [Typography](./components/typography) | MD3 type scale text rendering |
 
 ### Surfaces

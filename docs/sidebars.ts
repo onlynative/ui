@@ -44,6 +44,7 @@ const sidebars: SidebarsConfig = {
         'components/avatar',
         'components/card',
         'components/list',
+        'components/progress',
         'components/typography',
       ],
     },

@@ -1,0 +1,222 @@
+---
+sidebar_position: 4
+---
+
+# Progress
+
+Progress indicators express an unspecified wait time or display the length of a process.
+Follows the [Material Design 3 Progress Indicators](https://m3.material.io/components/progress-indicators/overview) specification.
+
+OnlyNative ships two progress indicators that share the same API:
+
+- **`LinearProgress`** — a horizontal bar, used for tracking long-running processes that have a clear start and end
+- **`CircularProgress`** — a circular spinner, used for shorter waits or compact UIs where horizontal space is scarce
+
+Both indicators have two modes:
+
+- **Determinate** — pass a `progress` value between `0` and `1` to show how complete the operation is
+- **Indeterminate** — omit `progress` entirely to show a continuous animation when the wait time is unknown
+
+## Linear
+
+<SnackExample
+  name="OnlyNative LinearProgress — Usage"
+  code={`
+  import { LinearProgress } from '@onlynative/components'
+  import { ThemeProvider } from '@onlynative/core'
+  import { SafeAreaProvider } from 'react-native-safe-area-context'
+  import { useEffect, useState } from 'react'
+  import { View } from 'react-native'
+
+  export default function App() {
+    const [value, setValue] = useState(0.25)
+
+    useEffect(() => {
+      const id = setInterval(() => {
+        setValue((v) => (v >= 1 ? 0 : Math.min(1, v + 0.07)))
+      }, 600)
+      return () => clearInterval(id)
+    }, [])
+
+    return (
+      <SafeAreaProvider>
+        <ThemeProvider>
+          <View style={{ flex: 1, justifyContent: 'center', padding: 24 }}>
+            <LinearProgress progress={value} />
+          </View>
+        </ThemeProvider>
+      </SafeAreaProvider>
+    )
+  }
+`}
+/>
+
+In determinate mode the bar is split into three parts: the **active indicator** (filled portion on the left), a small gap, the **inactive track** (remaining portion on the right), and a trailing **stop indicator dot** that marks the completion target. The dot disappears automatically when `progress` reaches `1`.
+
+## Circular
+
+<SnackExample
+  name="OnlyNative CircularProgress — Usage"
+  code={`
+  import { CircularProgress } from '@onlynative/components'
+  import { ThemeProvider } from '@onlynative/core'
+  import { SafeAreaProvider } from 'react-native-safe-area-context'
+  import { useEffect, useState } from 'react'
+  import { View } from 'react-native'
+
+  export default function App() {
+    const [value, setValue] = useState(0.25)
+
+    useEffect(() => {
+      const id = setInterval(() => {
+        setValue((v) => (v >= 1 ? 0 : Math.min(1, v + 0.07)))
+      }, 600)
+      return () => clearInterval(id)
+    }, [])
+
+    return (
+      <SafeAreaProvider>
+        <ThemeProvider>
+          <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', padding: 24 }}>
+            <CircularProgress progress={value} />
+          </View>
+        </ThemeProvider>
+      </SafeAreaProvider>
+    )
+  }
+`}
+/>
+
+`CircularProgress` is built on `react-native-svg` — make sure it's installed in your app (`npx expo install react-native-svg`). The arc grows clockwise from the 12 o'clock position with a small gap between the active arc and the inactive track.
+
+## Indeterminate
+
+When the duration of an operation is unknown, omit `progress` to show a continuous animation. `LinearProgress` slides a single segment across the track; `CircularProgress` spins a fixed-length arc.
+
+<SnackExample
+  name="OnlyNative Progress — Indeterminate"
+  code={`
+  import { CircularProgress, LinearProgress } from '@onlynative/components'
+  import { ThemeProvider } from '@onlynative/core'
+  import { SafeAreaProvider } from 'react-native-safe-area-context'
+  import { View } from 'react-native'
+
+  export default function App() {
+    return (
+      <SafeAreaProvider>
+        <ThemeProvider>
+          <View style={{ flex: 1, justifyContent: 'center', padding: 24, gap: 24 }}>
+            <LinearProgress />
+            <View style={{ alignItems: 'center' }}>
+              <CircularProgress />
+            </View>
+          </View>
+        </ThemeProvider>
+      </SafeAreaProvider>
+    )
+  }
+`}
+/>
+
+The animations use React Native's built-in `Animated` API with `useNativeDriver: true`, so they continue to run smoothly even while the JS thread is busy.
+
+## Size and thickness
+
+`LinearProgress` exposes `thickness` to control the track height. `CircularProgress` exposes both `size` (outer diameter) and `thickness` (stroke width) so you can place small spinners next to text or larger ones as page-level indicators.
+
+<SnackExample
+  name="OnlyNative Progress — Sizing"
+  code={`
+  import { CircularProgress, LinearProgress } from '@onlynative/components'
+  import { ThemeProvider } from '@onlynative/core'
+  import { SafeAreaProvider } from 'react-native-safe-area-context'
+  import { View } from 'react-native'
+
+  export default function App() {
+    return (
+      <SafeAreaProvider>
+        <ThemeProvider>
+          <View style={{ flex: 1, justifyContent: 'center', padding: 24, gap: 20 }}>
+            <LinearProgress progress={0.4} />
+            <LinearProgress progress={0.4} thickness={8} />
+
+            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 20 }}>
+              <CircularProgress progress={0.4} size={24} thickness={3} />
+              <CircularProgress progress={0.4} />
+              <CircularProgress progress={0.4} size={56} thickness={5} />
+              <CircularProgress progress={0.4} size={72} thickness={6} />
+            </View>
+          </View>
+        </ThemeProvider>
+      </SafeAreaProvider>
+    )
+  }
+`}
+/>
+
+## Stop indicator
+
+`LinearProgress` shows a trailing dot by default to mark the completion target. Pass `stopIndicator={false}` to hide it — useful for very short bars or when you want a simpler look.
+
+```tsx
+<LinearProgress progress={value} />
+<LinearProgress progress={value} stopIndicator={false} />
+```
+
+The dot is automatically hidden in indeterminate mode and when `progress` reaches `1`.
+
+## Custom colors
+
+`containerColor` overrides the active indicator color, and `trackColor` overrides the inactive track color. Both indicators accept the same overrides.
+
+<SnackExample
+  name="OnlyNative Progress — Custom colors"
+  code={`
+  import { CircularProgress, LinearProgress } from '@onlynative/components'
+  import { ThemeProvider } from '@onlynative/core'
+  import { SafeAreaProvider } from 'react-native-safe-area-context'
+  import { View } from 'react-native'
+
+  export default function App() {
+    return (
+      <SafeAreaProvider>
+        <ThemeProvider>
+          <View style={{ flex: 1, justifyContent: 'center', padding: 24, gap: 20 }}>
+            <LinearProgress
+              progress={0.6}
+              containerColor="#2E7D32"
+              trackColor="#C8E6C9"
+            />
+            <View style={{ alignItems: 'center' }}>
+              <CircularProgress
+                progress={0.6}
+                containerColor="#D32F2F"
+                trackColor="#FFCDD2"
+              />
+            </View>
+          </View>
+        </ThemeProvider>
+      </SafeAreaProvider>
+    )
+  }
+`}
+/>
+
+## Accessibility
+
+Both components set `accessibilityRole="progressbar"`. In determinate mode, `accessibilityValue` is exposed as `{ min: 0, max: 100, now }` (rounded to integers — native a11y APIs require integer values). In indeterminate mode `accessibilityValue` is omitted, signaling to assistive technologies that the duration is unknown.
+
+Pass `accessibilityLabel` to describe what the progress indicator is tracking.
+
+```tsx
+<LinearProgress progress={uploadProgress} accessibilityLabel="Upload progress" />
+<CircularProgress accessibilityLabel="Loading user data" />
+```
+
+## LinearProgress props
+
+<PropTable name="LinearProgress" />
+
+## CircularProgress props
+
+<PropTable name="CircularProgress" />
