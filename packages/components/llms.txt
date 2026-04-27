@@ -532,6 +532,50 @@ Props:
 - `style?: StyleProp<ViewStyle>` — Style applied to the root container.
 - Inherits `ViewProps` (except `children`)
 
+---
+
+### Progress
+
+```tsx
+import { LinearProgress, CircularProgress } from '@onlynative/components/progress'
+
+// Determinate (progress 0..1)
+<LinearProgress progress={0.4} />
+<CircularProgress progress={0.4} />
+
+// Indeterminate (omit progress)
+<LinearProgress />
+<CircularProgress />
+
+// Custom sizing / colors
+<LinearProgress progress={value} thickness={8} containerColor="#2E7D32" trackColor="#C8E6C9" />
+<CircularProgress progress={value} size={56} thickness={5} />
+```
+
+#### LinearProgress
+
+Horizontal progress indicator. Omit `progress` for indeterminate mode.
+
+Props:
+- `progress?: number` — Progress value from 0 to 1. When omitted, the indicator shows the indeterminate animation.
+- `containerColor?: string` — Override the active track / indicator color.
+- `trackColor?: string` — Override the inactive track color.
+- `thickness?: number` — Default: `4`. Track / indicator thickness in dp.
+- `stopIndicator?: boolean` — Default: `true`. Show the trailing stop indicator dot. Only applies in determinate mode and is hidden when `progress` reaches 1.
+- Inherits `ViewProps` (except `children`)
+
+#### CircularProgress
+
+Circular progress indicator. Omit `progress` for indeterminate mode.
+
+Props:
+- `progress?: number` — Progress value from 0 to 1. When omitted, the indicator shows the indeterminate animation.
+- `containerColor?: string` — Override the active track / indicator color.
+- `trackColor?: string` — Override the inactive track color.
+- `size?: number` — Default: `40`. Outer diameter in dp.
+- `thickness?: number` — Default: `4`. Stroke thickness in dp.
+- Inherits `ViewProps` (except `children`)
+
 
 ---
 

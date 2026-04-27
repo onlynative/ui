@@ -66,3 +66,6 @@ export type { PortalProps, PortalHostProps } from './portal'
 
 export { Slider } from './slider'
 export type { SliderProps, SliderValue } from './slider'
+
+export { LinearProgress, CircularProgress } from './progress'
+export type { LinearProgressProps, CircularProgressProps } from './progress'

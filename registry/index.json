@@ -46,6 +46,10 @@
       "description": ""
     },
     {
+      "name": "progress",
+      "description": ""
+    },
+    {
       "name": "radio",
       "description": "Single-choice selection control with selected/unselected states."
     },

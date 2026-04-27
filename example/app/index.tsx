@@ -113,6 +113,14 @@ const components: ComponentEntry[] = [
     icon: 'tune-variant',
   },
   {
+    label: 'Progress',
+    route: '/progress',
+    description:
+      'Linear and circular progress indicators (determinate / indeterminate)',
+    colorKey: 'tertiaryContainer',
+    icon: 'progress-clock',
+  },
+  {
     label: 'RTL',
     route: '/rtl',
     description:

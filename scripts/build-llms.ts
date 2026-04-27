@@ -385,6 +385,7 @@ const COMPONENT_ORDER = [
   'keyboard-avoiding-wrapper',
   'avatar',
   'slider',
+  'progress',
 ]
 
 const COMPONENT_NAMES: Record<string, string> = {
@@ -403,6 +404,7 @@ const COMPONENT_NAMES: Record<string, string> = {
   'keyboard-avoiding-wrapper': 'KeyboardAvoidingWrapper',
   avatar: 'Avatar',
   slider: 'Slider',
+  progress: 'Progress',
 }
 
 const COMPONENT_EXAMPLES: Record<string, string> = {
@@ -541,6 +543,22 @@ import { Slider } from '@onlynative/components/slider'
 
 // With start/end icon decorations
 <Slider value={vol} onValueChange={setVol} startIcon="volume-low" endIcon="volume-high" />
+\`\`\``,
+
+  progress: `\`\`\`tsx
+import { LinearProgress, CircularProgress } from '@onlynative/components/progress'
+
+// Determinate (progress 0..1)
+<LinearProgress progress={0.4} />
+<CircularProgress progress={0.4} />
+
+// Indeterminate (omit progress)
+<LinearProgress />
+<CircularProgress />
+
+// Custom sizing / colors
+<LinearProgress progress={value} thickness={8} containerColor="#2E7D32" trackColor="#C8E6C9" />
+<CircularProgress progress={value} size={56} thickness={5} />
 \`\`\``,
 }
 
@@ -759,6 +777,36 @@ import { Grid } from '@onlynative/components/layout'
       '- `leadingIcon?: IconSource` — Icon rendered before the label. Mutually exclusive with `avatar`.\n'
     output +=
       '- `onClose?: () => void` — Callback fired when the close/remove icon is pressed. When provided, renders a trailing close icon.\n'
+
+    return output
+  }
+
+  // --- Progress: shared example + LinearProgress + CircularProgress ---
+  if (dirName === 'progress') {
+    let output = `### ${displayName}\n\n${example}\n\n`
+
+    const linearIface = interfaces.find((i) => i.name === 'LinearProgressProps')
+    if (linearIface) {
+      output += formatSubInterface(
+        linearIface,
+        typeAliases,
+        '#### LinearProgress',
+        'Horizontal progress indicator. Omit `progress` for indeterminate mode.',
+      )
+      output += '\n'
+    }
+
+    const circularIface = interfaces.find(
+      (i) => i.name === 'CircularProgressProps',
+    )
+    if (circularIface) {
+      output += formatSubInterface(
+        circularIface,
+        typeAliases,
+        '#### CircularProgress',
+        'Circular progress indicator. Omit `progress` for indeterminate mode.',
+      )
+    }
 
     return output
   }

@@ -166,6 +166,9 @@ function analyzeImports(componentDir: string): {
     ) {
       externalDeps.add('@expo/vector-icons')
     }
+    if (content.includes('react-native-svg')) {
+      externalDeps.add('react-native-svg')
+    }
   }
 
   return { utils, componentDeps, externalDeps }
@@ -188,6 +191,10 @@ function buildComponentEntry(componentDir: string): ComponentEntry {
 
   if (externalDeps.has('@expo/vector-icons')) {
     optionalDependencies['@expo/vector-icons'] = '>=14.0.0'
+  }
+
+  if (externalDeps.has('react-native-svg')) {
+    dependencies['react-native-svg'] = '>=15.0.0'
   }
 
   // Special case: layout uses safe-area-context only in Layout.tsx (optional)

@@ -94,6 +94,11 @@
       "types": "./dist/slider/index.d.ts",
       "react-native": "./dist/slider/index.js",
       "default": "./dist/slider/index.js"
+    },
+    "./progress": {
+      "types": "./dist/progress/index.d.ts",
+      "react-native": "./dist/progress/index.js",
+      "default": "./dist/progress/index.js"
     }
   },
   "typesVersions": {
@@ -145,6 +150,9 @@
       ],
       "slider": [
         "dist/slider/index.d.ts"
+      ],
+      "progress": [
+        "dist/progress/index.d.ts"
       ]
     }
   },
@@ -179,13 +187,17 @@
     "@onlynative/core": ">=0.0.0-alpha.6",
     "react": ">=18.0.0",
     "react-native": ">=0.72.0",
-    "react-native-safe-area-context": ">=4.0.0"
+    "react-native-safe-area-context": ">=4.0.0",
+    "react-native-svg": ">=15.0.0"
   },
   "peerDependenciesMeta": {
     "@expo/vector-icons": {
       "optional": true
     },
     "react-native-safe-area-context": {
+      "optional": true
+    },
+    "react-native-svg": {
       "optional": true
     }
   },

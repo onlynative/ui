@@ -20,13 +20,18 @@ export default defineConfig({
     'src/avatar/index.ts',
     'src/portal/index.ts',
     'src/slider/index.ts',
+    'src/progress/index.ts',
   ],
   dts: true,
   format: 'cjs',
   outDir: 'dist',
   clean: true,
   noExternal: ['@onlynative/utils'],
-  external: ['@expo/vector-icons', 'react-native-safe-area-context'],
+  external: [
+    '@expo/vector-icons',
+    'react-native-safe-area-context',
+    'react-native-svg',
+  ],
   esbuildOptions(options) {
     options.alias = {
       '@onlynative/utils': path.resolve(__dirname, '../utils/src/index.ts'),
