@@ -29,6 +29,7 @@ export default defineConfig({
   noExternal: ['@onlynative/utils'],
   external: [
     '@expo/vector-icons',
+    'react-native-reanimated',
     'react-native-safe-area-context',
     'react-native-svg',
   ],
