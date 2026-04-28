@@ -1,14 +1,29 @@
 import { useIconResolver, useTheme } from '@onlynative/core'
-import { alphaColor, blendColor, renderIcon } from '@onlynative/utils'
-import { useMemo } from 'react'
+import { alphaColor, renderIcon } from '@onlynative/utils'
+import { useCallback, useMemo } from 'react'
 import { Pressable } from 'react-native'
-import type { StyleProp, ViewStyle } from 'react-native'
-import { createStyles } from './styles'
+import Animated, {
+  interpolateColor,
+  useAnimatedStyle,
+  useSharedValue,
+  withTiming,
+} from 'react-native-reanimated'
+import {
+  applyContainerColorOverride,
+  createStyles,
+  getIconButtonColors,
+} from './styles'
 import type {
   IconButtonProps,
   IconButtonSize,
   IconButtonVariant,
 } from './types'
+
+const AnimatedPressable = Animated.createAnimatedComponent(Pressable)
+
+const HOVER_TIMING = { duration: 150 }
+const PRESS_TIMING = { duration: 100 }
+const FOCUS_TIMING = { duration: 200 }
 
 function getIconColor(
   variant: IconButtonVariant,
@@ -52,197 +67,25 @@ function getIconColor(
   return theme.colors.onSurfaceVariant
 }
 
-function getColorStyle(
-  styles: ReturnType<typeof createStyles>,
-  variant: IconButtonVariant,
-  isToggle: boolean,
-  selected: boolean,
-) {
-  if (isToggle) {
-    if (variant === 'tonal') {
-      return selected
-        ? styles.colorTonalToggleSelected
-        : styles.colorTonalToggleUnselected
-    }
-
-    if (variant === 'outlined') {
-      return selected
-        ? styles.colorOutlinedToggleSelected
-        : styles.colorOutlined
-    }
-
-    if (variant === 'standard') {
-      return selected
-        ? styles.colorStandardToggleSelected
-        : styles.colorStandard
-    }
-
-    return selected
-      ? styles.colorFilledToggleSelected
-      : styles.colorFilledToggleUnselected
-  }
-
-  if (variant === 'tonal') {
-    return styles.colorTonal
-  }
-
-  if (variant === 'outlined') {
-    return styles.colorOutlined
-  }
-
-  if (variant === 'standard') {
-    return styles.colorStandard
-  }
-
-  return styles.colorFilled
-}
-
 function getSizeStyle(
   styles: ReturnType<typeof createStyles>,
   size: IconButtonSize,
 ) {
-  if (size === 'small') {
-    return styles.sizeSmall
-  }
-
-  if (size === 'large') {
-    return styles.sizeLarge
-  }
-
+  if (size === 'small') return styles.sizeSmall
+  if (size === 'large') return styles.sizeLarge
   return styles.sizeMedium
 }
 
 function getIconPixelSize(size: IconButtonSize): number {
-  if (size === 'small') {
-    return 18
-  }
-
-  if (size === 'large') {
-    return 28
-  }
-
+  if (size === 'small') return 18
+  if (size === 'large') return 28
   return 24
 }
 
 function getDefaultHitSlop(size: IconButtonSize): number {
-  if (size === 'small') {
-    return 8
-  }
-
-  if (size === 'large') {
-    return 0
-  }
-
+  if (size === 'small') return 8
+  if (size === 'large') return 0
   return 4
-}
-
-function getHoveredStyle(
-  styles: ReturnType<typeof createStyles>,
-  variant: IconButtonVariant,
-  isToggle: boolean,
-  selected: boolean,
-) {
-  if (isToggle) {
-    if (variant === 'tonal') {
-      return selected
-        ? styles.hoveredTonalToggleSelected
-        : styles.hoveredTonalToggleUnselected
-    }
-
-    if (variant === 'outlined') {
-      return selected
-        ? styles.hoveredOutlinedToggleSelected
-        : styles.hoveredOutlinedToggleUnselected
-    }
-
-    if (variant === 'standard') {
-      return selected
-        ? styles.hoveredStandardToggleSelected
-        : styles.hoveredStandardToggleUnselected
-    }
-
-    return selected
-      ? styles.hoveredFilledToggleSelected
-      : styles.hoveredFilledToggleUnselected
-  }
-
-  if (variant === 'tonal') {
-    return styles.hoveredTonal
-  }
-
-  if (variant === 'outlined') {
-    return styles.hoveredOutlined
-  }
-
-  if (variant === 'standard') {
-    return styles.hoveredStandard
-  }
-
-  return styles.hoveredFilled
-}
-
-function getPressedStyle(
-  styles: ReturnType<typeof createStyles>,
-  variant: IconButtonVariant,
-  isToggle: boolean,
-  selected: boolean,
-) {
-  if (isToggle) {
-    if (variant === 'tonal') {
-      return selected
-        ? styles.pressedTonalToggleSelected
-        : styles.pressedTonalToggleUnselected
-    }
-
-    if (variant === 'outlined') {
-      return selected
-        ? styles.pressedOutlinedToggleSelected
-        : styles.pressedOutlinedToggleUnselected
-    }
-
-    if (variant === 'standard') {
-      return selected
-        ? styles.pressedStandardToggleSelected
-        : styles.pressedStandardToggleUnselected
-    }
-
-    return selected
-      ? styles.pressedFilledToggleSelected
-      : styles.pressedFilledToggleUnselected
-  }
-
-  if (variant === 'tonal') {
-    return styles.pressedTonal
-  }
-
-  if (variant === 'outlined') {
-    return styles.pressedOutlined
-  }
-
-  if (variant === 'standard') {
-    return styles.pressedStandard
-  }
-
-  return styles.pressedFilled
-}
-
-function getDisabledStyle(
-  styles: ReturnType<typeof createStyles>,
-  variant: IconButtonVariant,
-) {
-  if (variant === 'tonal') {
-    return styles.disabledTonal
-  }
-
-  if (variant === 'outlined') {
-    return styles.disabledOutlined
-  }
-
-  if (variant === 'standard') {
-    return styles.disabledStandard
-  }
-
-  return styles.disabledFilled
 }
 
 export function IconButton({
@@ -278,80 +121,111 @@ export function IconButton({
     ? { disabled: isDisabled, selected: isSelected }
     : { disabled: isDisabled }
 
-  const containerOverrides = useMemo(() => {
-    if (!containerColor) return null
-    const overlay = resolvedIconColor
-    return {
-      base: {
-        backgroundColor: containerColor,
-        borderColor: containerColor,
-        borderWidth: 0,
-      } as ViewStyle,
-      hovered: {
-        backgroundColor: blendColor(
-          containerColor,
-          overlay,
-          theme.stateLayer.hoveredOpacity,
-        ),
-      } as ViewStyle,
-      pressed: {
-        backgroundColor: blendColor(
-          containerColor,
-          overlay,
-          theme.stateLayer.pressedOpacity,
-        ),
-      } as ViewStyle,
-    }
-  }, [containerColor, resolvedIconColor, theme.stateLayer])
+  const colors = useMemo(() => {
+    const base = getIconButtonColors(theme, variant, isToggle, isSelected)
+    if (!containerColor) return base
+    return applyContainerColorOverride(
+      theme,
+      base,
+      containerColor,
+      resolvedIconColor,
+    )
+  }, [theme, variant, isToggle, isSelected, containerColor, resolvedIconColor])
+
+  const hovered = useSharedValue(0)
+  const focused = useSharedValue(0)
+  const pressed = useSharedValue(0)
+
+  const animatedContainerStyle = useAnimatedStyle(() => {
+    const focusedBg = interpolateColor(
+      focused.value,
+      [0, 1],
+      [colors.backgroundColor, colors.focusedBackgroundColor],
+    )
+    const hoveredBg = interpolateColor(
+      hovered.value,
+      [0, 1],
+      [focusedBg, colors.hoveredBackgroundColor],
+    )
+    const pressedBg = interpolateColor(
+      pressed.value,
+      [0, 1],
+      [hoveredBg, colors.pressedBackgroundColor],
+    )
+    return { backgroundColor: pressedBg }
+  })
+
+  const animatedFocusRingStyle = useAnimatedStyle(() => ({
+    opacity: focused.value,
+  }))
+
+  const handleHoverIn = useCallback(() => {
+    if (!isDisabled) hovered.value = withTiming(1, HOVER_TIMING)
+  }, [isDisabled, hovered])
+
+  const handleHoverOut = useCallback(() => {
+    hovered.value = withTiming(0, HOVER_TIMING)
+  }, [hovered])
+
+  const handlePressIn = useCallback(() => {
+    if (!isDisabled) pressed.value = withTiming(1, PRESS_TIMING)
+  }, [isDisabled, pressed])
+
+  const handlePressOut = useCallback(() => {
+    pressed.value = withTiming(0, PRESS_TIMING)
+  }, [pressed])
+
+  const handleFocus = useCallback(() => {
+    if (!isDisabled) focused.value = withTiming(1, FOCUS_TIMING)
+  }, [isDisabled, focused])
+
+  const handleBlur = useCallback(() => {
+    focused.value = withTiming(0, FOCUS_TIMING)
+  }, [focused])
+
+  const disabledOverride = isDisabled
+    ? {
+        backgroundColor: colors.disabledBackgroundColor,
+        borderColor: colors.disabledBorderColor,
+      }
+    : undefined
 
   return (
-    <Pressable
-      {...props}
-      accessibilityRole="button"
-      accessibilityLabel={accessibilityLabel}
-      accessibilityState={accessibilityState}
-      disabled={isDisabled}
-      hitSlop={hitSlop ?? getDefaultHitSlop(size)}
-      onPress={onPress}
-      style={({
-        pressed,
-        hovered,
-      }: {
-        pressed: boolean
-        hovered?: boolean
-      }) => {
-        const base: StyleProp<ViewStyle>[] = [
+    <Animated.View style={styles.wrapper}>
+      <Animated.View
+        pointerEvents="none"
+        style={[styles.focusRing, animatedFocusRingStyle]}
+      />
+      <AnimatedPressable
+        {...props}
+        accessibilityRole="button"
+        accessibilityLabel={accessibilityLabel}
+        accessibilityState={accessibilityState}
+        disabled={isDisabled}
+        hitSlop={hitSlop ?? getDefaultHitSlop(size)}
+        onPress={onPress}
+        onHoverIn={handleHoverIn}
+        onHoverOut={handleHoverOut}
+        onPressIn={handlePressIn}
+        onPressOut={handlePressOut}
+        onFocus={handleFocus}
+        onBlur={handleBlur}
+        style={[
           styles.container,
           getSizeStyle(styles, size),
-          getColorStyle(styles, variant, isToggle, isSelected),
-          containerOverrides?.base,
-          hovered && !pressed && !isDisabled
-            ? containerOverrides
-              ? containerOverrides.hovered
-              : getHoveredStyle(styles, variant, isToggle, isSelected)
-            : undefined,
-          pressed && !isDisabled
-            ? containerOverrides
-              ? containerOverrides.pressed
-              : getPressedStyle(styles, variant, isToggle, isSelected)
-            : undefined,
-          isDisabled ? getDisabledStyle(styles, variant) : undefined,
-        ]
-
-        if (typeof style === 'function') {
-          base.push(style({ pressed }))
-        } else if (style) {
-          base.push(style)
-        }
-
-        return base
-      }}
-    >
-      {renderIcon(
-        displayIcon,
-        { size: iconPixelSize, color: resolvedIconColor },
-        iconResolver,
-      )}
-    </Pressable>
+          { borderColor: colors.borderColor, borderWidth: colors.borderWidth },
+          animatedContainerStyle,
+          disabledOverride,
+          isDisabled ? styles.disabled : undefined,
+          typeof style === 'function' ? undefined : style,
+        ]}
+      >
+        {renderIcon(
+          displayIcon,
+          { size: iconPixelSize, color: resolvedIconColor },
+          iconResolver,
+        )}
+      </AnimatedPressable>
+    </Animated.View>
   )
 }

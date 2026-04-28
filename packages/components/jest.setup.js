@@ -33,8 +33,12 @@ jest.mock('react-native-reanimated', () => {
     useAnimatedStyle: (fn) => fn(),
     withSpring: (v) => v,
     withTiming: (v) => v,
-    interpolate: (_value, _input, output) => output[output.length - 1],
-    interpolateColor: (_value, _input, output) => output[output.length - 1],
+    // Pick the input-matched output for static rendering. value=0 → first, value=1 → last.
+    // This lets tests assert against the at-rest visual without animation running.
+    interpolate: (value, _input, output) =>
+      value >= 1 ? output[output.length - 1] : output[0],
+    interpolateColor: (value, _input, output) =>
+      value >= 1 ? output[output.length - 1] : output[0],
   }
 })
 

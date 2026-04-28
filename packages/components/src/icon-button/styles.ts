@@ -1,13 +1,154 @@
 import type { MaterialTheme } from '@onlynative/core'
 import { alphaColor, blendColor } from '@onlynative/utils'
 import { StyleSheet } from 'react-native'
+import type { IconButtonVariant } from './types'
+
+export const ICON_BUTTON_FOCUS_RING_OFFSET = 2
+export const ICON_BUTTON_FOCUS_RING_WIDTH = 3
+
+export interface IconButtonColors {
+  backgroundColor: string
+  hoveredBackgroundColor: string
+  focusedBackgroundColor: string
+  pressedBackgroundColor: string
+  borderColor: string
+  borderWidth: number
+  disabledBackgroundColor: string
+  disabledBorderColor: string
+}
+
+function blendStateLayer(
+  base: string,
+  overlay: string,
+  opacity: number,
+): string {
+  if (base === 'transparent') {
+    return alphaColor(overlay, opacity)
+  }
+  return blendColor(base, overlay, opacity)
+}
+
+export function getIconButtonColors(
+  theme: MaterialTheme,
+  variant: IconButtonVariant,
+  isToggle: boolean,
+  selected: boolean,
+): IconButtonColors {
+  // Per MD3: DisabledContainerOpacity = 0.10
+  const disabledContainerColor = alphaColor(theme.colors.onSurface, 0.1)
+  const disabledOutlineColor = alphaColor(theme.colors.onSurface, 0.12)
+  const stateLayerFocus = 0.1
+  const toggleUnselectedBg = theme.colors.surfaceContainerHighest
+
+  let baseBg: string
+  let overlay: string
+  let borderColor: string = 'transparent'
+  let borderWidth = 0
+  let disabledBg = disabledContainerColor
+  let disabledBorderColor = disabledContainerColor
+
+  if (variant === 'filled') {
+    if (isToggle && !selected) {
+      baseBg = toggleUnselectedBg
+      overlay = theme.colors.primary
+    } else {
+      baseBg = theme.colors.primary
+      overlay = theme.colors.onPrimary
+    }
+    borderColor = baseBg
+  } else if (variant === 'tonal') {
+    if (isToggle && !selected) {
+      baseBg = toggleUnselectedBg
+      overlay = theme.colors.onSurfaceVariant
+    } else {
+      baseBg = theme.colors.secondaryContainer
+      overlay = theme.colors.onSecondaryContainer
+    }
+    borderColor = baseBg
+  } else if (variant === 'outlined') {
+    if (isToggle && selected) {
+      baseBg = theme.colors.inverseSurface
+      overlay = theme.colors.inverseOnSurface
+      borderColor = baseBg
+      borderWidth = 0
+    } else {
+      baseBg = 'transparent'
+      overlay = theme.colors.onSurfaceVariant
+      borderColor = theme.colors.outline
+      borderWidth = 1
+      disabledBg = 'transparent'
+      disabledBorderColor = disabledOutlineColor
+    }
+  } else {
+    // standard
+    baseBg = 'transparent'
+    overlay =
+      isToggle && selected
+        ? theme.colors.primary
+        : theme.colors.onSurfaceVariant
+    disabledBg = 'transparent'
+    disabledBorderColor = 'transparent'
+  }
+
+  return {
+    backgroundColor: baseBg,
+    hoveredBackgroundColor: blendStateLayer(
+      baseBg,
+      overlay,
+      theme.stateLayer.hoveredOpacity,
+    ),
+    focusedBackgroundColor: blendStateLayer(baseBg, overlay, stateLayerFocus),
+    pressedBackgroundColor: blendStateLayer(
+      baseBg,
+      overlay,
+      theme.stateLayer.pressedOpacity,
+    ),
+    borderColor,
+    borderWidth,
+    disabledBackgroundColor: disabledBg,
+    disabledBorderColor,
+  }
+}
+
+export function applyContainerColorOverride(
+  theme: MaterialTheme,
+  colors: IconButtonColors,
+  containerColor: string,
+  overlay: string,
+): IconButtonColors {
+  const stateLayerFocus = 0.1
+  return {
+    ...colors,
+    backgroundColor: containerColor,
+    borderColor: containerColor,
+    borderWidth: 0,
+    hoveredBackgroundColor: blendColor(
+      containerColor,
+      overlay,
+      theme.stateLayer.hoveredOpacity,
+    ),
+    focusedBackgroundColor: blendColor(
+      containerColor,
+      overlay,
+      stateLayerFocus,
+    ),
+    pressedBackgroundColor: blendColor(
+      containerColor,
+      overlay,
+      theme.stateLayer.pressedOpacity,
+    ),
+  }
+}
 
 export function createStyles(theme: MaterialTheme) {
-  const disabledContainerColor = alphaColor(theme.colors.onSurface, 0.12)
-  const disabledOutlineColor = alphaColor(theme.colors.onSurface, 0.12)
-  const toggleUnselectedContainerColor = theme.colors.surfaceContainerHighest
+  const focusRingInset = -(
+    ICON_BUTTON_FOCUS_RING_OFFSET + ICON_BUTTON_FOCUS_RING_WIDTH
+  )
 
   return StyleSheet.create({
+    wrapper: {
+      alignSelf: 'flex-start' as const,
+    },
     container: {
       borderRadius: theme.shape.cornerFull,
       alignItems: 'center',
@@ -26,236 +167,18 @@ export function createStyles(theme: MaterialTheme) {
       width: 48,
       height: 48,
     },
-    colorFilled: {
-      backgroundColor: theme.colors.primary,
-      borderColor: theme.colors.primary,
-      borderWidth: 0,
-    },
-    colorFilledToggleUnselected: {
-      backgroundColor: toggleUnselectedContainerColor,
-      borderColor: toggleUnselectedContainerColor,
-      borderWidth: 0,
-    },
-    colorFilledToggleSelected: {
-      backgroundColor: theme.colors.primary,
-      borderColor: theme.colors.primary,
-      borderWidth: 0,
-    },
-    colorTonal: {
-      backgroundColor: theme.colors.secondaryContainer,
-      borderColor: theme.colors.secondaryContainer,
-      borderWidth: 0,
-    },
-    colorTonalToggleUnselected: {
-      backgroundColor: toggleUnselectedContainerColor,
-      borderColor: toggleUnselectedContainerColor,
-      borderWidth: 0,
-    },
-    colorTonalToggleSelected: {
-      backgroundColor: theme.colors.secondaryContainer,
-      borderColor: theme.colors.secondaryContainer,
-      borderWidth: 0,
-    },
-    colorOutlined: {
-      borderColor: theme.colors.outline,
-      borderWidth: 1,
-    },
-    colorOutlinedToggleSelected: {
-      backgroundColor: theme.colors.inverseSurface,
-      borderColor: theme.colors.inverseSurface,
-      borderWidth: 0,
-    },
-    colorStandard: {
-      borderWidth: 0,
-    },
-    colorStandardToggleSelected: {
-      borderWidth: 0,
-    },
-
-    // Hover states (M3: 8% state layer)
-    hoveredFilled: {
-      backgroundColor: blendColor(
-        theme.colors.primary,
-        theme.colors.onPrimary,
-        theme.stateLayer.hoveredOpacity,
-      ),
-    },
-    hoveredFilledToggleUnselected: {
-      backgroundColor: blendColor(
-        toggleUnselectedContainerColor,
-        theme.colors.primary,
-        theme.stateLayer.hoveredOpacity,
-      ),
-    },
-    hoveredFilledToggleSelected: {
-      backgroundColor: blendColor(
-        theme.colors.primary,
-        theme.colors.onPrimary,
-        theme.stateLayer.hoveredOpacity,
-      ),
-    },
-    hoveredTonal: {
-      backgroundColor: blendColor(
-        theme.colors.secondaryContainer,
-        theme.colors.onSecondaryContainer,
-        theme.stateLayer.hoveredOpacity,
-      ),
-    },
-    hoveredTonalToggleUnselected: {
-      backgroundColor: blendColor(
-        toggleUnselectedContainerColor,
-        theme.colors.onSurfaceVariant,
-        theme.stateLayer.hoveredOpacity,
-      ),
-    },
-    hoveredTonalToggleSelected: {
-      backgroundColor: blendColor(
-        theme.colors.secondaryContainer,
-        theme.colors.onSecondaryContainer,
-        theme.stateLayer.hoveredOpacity,
-      ),
-    },
-    hoveredOutlined: {
-      backgroundColor: alphaColor(
-        theme.colors.onSurfaceVariant,
-        theme.stateLayer.hoveredOpacity,
-      ),
-    },
-    hoveredOutlinedToggleUnselected: {
-      backgroundColor: alphaColor(
-        theme.colors.onSurfaceVariant,
-        theme.stateLayer.hoveredOpacity,
-      ),
-    },
-    hoveredOutlinedToggleSelected: {
-      backgroundColor: blendColor(
-        theme.colors.inverseSurface,
-        theme.colors.inverseOnSurface,
-        theme.stateLayer.hoveredOpacity,
-      ),
-    },
-    hoveredStandard: {
-      backgroundColor: alphaColor(
-        theme.colors.onSurfaceVariant,
-        theme.stateLayer.hoveredOpacity,
-      ),
-    },
-    hoveredStandardToggleUnselected: {
-      backgroundColor: alphaColor(
-        theme.colors.onSurfaceVariant,
-        theme.stateLayer.hoveredOpacity,
-      ),
-    },
-    hoveredStandardToggleSelected: {
-      backgroundColor: alphaColor(
-        theme.colors.primary,
-        theme.stateLayer.hoveredOpacity,
-      ),
-    },
-
-    // Pressed states (M3: 12% state layer)
-    pressedFilled: {
-      backgroundColor: blendColor(
-        theme.colors.primary,
-        theme.colors.onPrimary,
-        theme.stateLayer.pressedOpacity,
-      ),
-    },
-    pressedFilledToggleUnselected: {
-      backgroundColor: blendColor(
-        toggleUnselectedContainerColor,
-        theme.colors.primary,
-        theme.stateLayer.pressedOpacity,
-      ),
-    },
-    pressedFilledToggleSelected: {
-      backgroundColor: blendColor(
-        theme.colors.primary,
-        theme.colors.onPrimary,
-        theme.stateLayer.pressedOpacity,
-      ),
-    },
-    pressedTonal: {
-      backgroundColor: blendColor(
-        theme.colors.secondaryContainer,
-        theme.colors.onSecondaryContainer,
-        theme.stateLayer.pressedOpacity,
-      ),
-    },
-    pressedTonalToggleUnselected: {
-      backgroundColor: blendColor(
-        toggleUnselectedContainerColor,
-        theme.colors.onSurfaceVariant,
-        theme.stateLayer.pressedOpacity,
-      ),
-    },
-    pressedTonalToggleSelected: {
-      backgroundColor: blendColor(
-        theme.colors.secondaryContainer,
-        theme.colors.onSecondaryContainer,
-        theme.stateLayer.pressedOpacity,
-      ),
-    },
-    pressedOutlined: {
-      backgroundColor: alphaColor(
-        theme.colors.onSurfaceVariant,
-        theme.stateLayer.pressedOpacity,
-      ),
-    },
-    pressedOutlinedToggleUnselected: {
-      backgroundColor: alphaColor(
-        theme.colors.onSurfaceVariant,
-        theme.stateLayer.pressedOpacity,
-      ),
-    },
-    pressedOutlinedToggleSelected: {
-      backgroundColor: blendColor(
-        theme.colors.inverseSurface,
-        theme.colors.inverseOnSurface,
-        theme.stateLayer.pressedOpacity,
-      ),
-    },
-    pressedStandard: {
-      backgroundColor: alphaColor(
-        theme.colors.onSurfaceVariant,
-        theme.stateLayer.pressedOpacity,
-      ),
-    },
-    pressedStandardToggleUnselected: {
-      backgroundColor: alphaColor(
-        theme.colors.onSurfaceVariant,
-        theme.stateLayer.pressedOpacity,
-      ),
-    },
-    pressedStandardToggleSelected: {
-      backgroundColor: alphaColor(
-        theme.colors.primary,
-        theme.stateLayer.pressedOpacity,
-      ),
-    },
-
-    // Disabled states
-    disabledFilled: {
-      backgroundColor: disabledContainerColor,
-      borderColor: disabledContainerColor,
+    disabled: {
       cursor: 'auto',
     },
-    disabledTonal: {
-      backgroundColor: disabledContainerColor,
-      borderColor: disabledContainerColor,
-      cursor: 'auto',
-    },
-    // eslint-disable-next-line react-native/no-color-literals
-    disabledOutlined: {
-      backgroundColor: 'transparent',
-      borderColor: disabledOutlineColor,
-      cursor: 'auto',
-    },
-    // eslint-disable-next-line react-native/no-color-literals
-    disabledStandard: {
-      backgroundColor: 'transparent',
-      borderColor: 'transparent',
-      cursor: 'auto',
+    focusRing: {
+      position: 'absolute' as const,
+      top: focusRingInset,
+      left: focusRingInset,
+      right: focusRingInset,
+      bottom: focusRingInset,
+      borderRadius: theme.shape.cornerFull,
+      borderWidth: ICON_BUTTON_FOCUS_RING_WIDTH,
+      borderColor: theme.colors.secondary,
     },
   })
 }

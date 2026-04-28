@@ -3,12 +3,16 @@ import { alphaColor, blendColor, elevationStyle } from '@onlynative/utils'
 import { StyleSheet } from 'react-native'
 import type { ButtonVariant } from './types'
 
-interface VariantColors {
+export const BUTTON_FOCUS_RING_OFFSET = 2
+export const BUTTON_FOCUS_RING_WIDTH = 3
+
+export interface VariantColors {
   backgroundColor: string
   textColor: string
   borderColor: string
   borderWidth: number
   hoveredBackgroundColor: string
+  focusedBackgroundColor: string
   pressedBackgroundColor: string
   disabledBackgroundColor: string
   disabledTextColor: string
@@ -19,9 +23,11 @@ function getVariantColors(
   theme: MaterialTheme,
   variant: ButtonVariant,
 ): VariantColors {
-  const disabledContainerColor = alphaColor(theme.colors.onSurface, 0.12)
+  // Per MD3: DisabledContainerOpacity = 0.10, DisabledLabelTextOpacity = 0.38
+  const disabledContainerColor = alphaColor(theme.colors.onSurface, 0.1)
   const disabledLabelColor = alphaColor(theme.colors.onSurface, 0.38)
   const disabledOutlineColor = alphaColor(theme.colors.onSurface, 0.12)
+  const stateLayerFocus = 0.1
 
   if (variant === 'outlined') {
     return {
@@ -33,6 +39,7 @@ function getVariantColors(
         theme.colors.primary,
         theme.stateLayer.hoveredOpacity,
       ),
+      focusedBackgroundColor: alphaColor(theme.colors.primary, stateLayerFocus),
       pressedBackgroundColor: alphaColor(
         theme.colors.primary,
         theme.stateLayer.pressedOpacity,
@@ -53,6 +60,7 @@ function getVariantColors(
         theme.colors.primary,
         theme.stateLayer.hoveredOpacity,
       ),
+      focusedBackgroundColor: alphaColor(theme.colors.primary, stateLayerFocus),
       pressedBackgroundColor: alphaColor(
         theme.colors.primary,
         theme.stateLayer.pressedOpacity,
@@ -73,6 +81,11 @@ function getVariantColors(
         theme.colors.surfaceContainerLow,
         theme.colors.primary,
         theme.stateLayer.hoveredOpacity,
+      ),
+      focusedBackgroundColor: blendColor(
+        theme.colors.surfaceContainerLow,
+        theme.colors.primary,
+        stateLayerFocus,
       ),
       pressedBackgroundColor: blendColor(
         theme.colors.surfaceContainerLow,
@@ -96,6 +109,11 @@ function getVariantColors(
         theme.colors.onSecondaryContainer,
         theme.stateLayer.hoveredOpacity,
       ),
+      focusedBackgroundColor: blendColor(
+        theme.colors.secondaryContainer,
+        theme.colors.onSecondaryContainer,
+        stateLayerFocus,
+      ),
       pressedBackgroundColor: blendColor(
         theme.colors.secondaryContainer,
         theme.colors.onSecondaryContainer,
@@ -117,6 +135,11 @@ function getVariantColors(
       theme.colors.primary,
       theme.colors.onPrimary,
       theme.stateLayer.hoveredOpacity,
+    ),
+    focusedBackgroundColor: blendColor(
+      theme.colors.primary,
+      theme.colors.onPrimary,
+      stateLayerFocus,
     ),
     pressedBackgroundColor: blendColor(
       theme.colors.primary,
@@ -163,6 +186,7 @@ function applyColorOverrides(
   if (!containerColor && !contentColor) return colors
 
   const result = { ...colors }
+  const stateLayerFocus = 0.1
 
   if (contentColor) {
     result.textColor = contentColor
@@ -177,6 +201,11 @@ function applyColorOverrides(
       overlay,
       theme.stateLayer.hoveredOpacity,
     )
+    result.focusedBackgroundColor = blendColor(
+      containerColor,
+      overlay,
+      stateLayerFocus,
+    )
     result.pressedBackgroundColor = blendColor(
       containerColor,
       overlay,
@@ -188,6 +217,7 @@ function applyColorOverrides(
         contentColor,
         theme.stateLayer.hoveredOpacity,
       )
+      result.focusedBackgroundColor = alphaColor(contentColor, stateLayerFocus)
       result.pressedBackgroundColor = alphaColor(
         contentColor,
         theme.stateLayer.pressedOpacity,
@@ -197,6 +227,11 @@ function applyColorOverrides(
         colors.backgroundColor,
         contentColor,
         theme.stateLayer.hoveredOpacity,
+      )
+      result.focusedBackgroundColor = blendColor(
+        colors.backgroundColor,
+        contentColor,
+        stateLayerFocus,
       )
       result.pressedBackgroundColor = blendColor(
         colors.backgroundColor,
@@ -209,6 +244,20 @@ function applyColorOverrides(
   return result
 }
 
+export function getResolvedButtonColors(
+  theme: MaterialTheme,
+  variant: ButtonVariant,
+  containerColor?: string,
+  contentColor?: string,
+): VariantColors {
+  return applyColorOverrides(
+    theme,
+    getVariantColors(theme, variant),
+    containerColor,
+    contentColor,
+  )
+}
+
 export function createStyles(
   theme: MaterialTheme,
   variant: ButtonVariant,
@@ -217,10 +266,9 @@ export function createStyles(
   containerColor?: string,
   contentColor?: string,
 ) {
-  const baseColors = getVariantColors(theme, variant)
-  const colors = applyColorOverrides(
+  const colors = getResolvedButtonColors(
     theme,
-    baseColors,
+    variant,
     containerColor,
     contentColor,
   )
@@ -233,13 +281,16 @@ export function createStyles(
   )
   const elevationLevel0 = elevationStyle(theme.elevation.level0)
   const elevationLevel1 = elevationStyle(theme.elevation.level1)
-  const elevationLevel2 = elevationStyle(theme.elevation.level2)
   const baseElevation =
     variant === 'elevated' ? elevationLevel1 : elevationLevel0
 
+  const focusRingInset = -(BUTTON_FOCUS_RING_OFFSET + BUTTON_FOCUS_RING_WIDTH)
+
   return StyleSheet.create({
+    wrapper: {
+      alignSelf: 'flex-start' as const,
+    },
     container: {
-      alignSelf: 'flex-start',
       alignItems: 'center',
       flexDirection: 'row',
       justifyContent: 'center',
@@ -249,24 +300,26 @@ export function createStyles(
       paddingEnd: padding.paddingEnd,
       paddingVertical: 10,
       borderRadius: theme.shape.cornerFull,
-      backgroundColor: colors.backgroundColor,
       borderColor: colors.borderColor,
       borderWidth: colors.borderWidth,
       cursor: 'pointer',
       ...baseElevation,
-    },
-    hoveredContainer: {
-      backgroundColor: colors.hoveredBackgroundColor,
-      ...(variant === 'elevated' ? elevationLevel2 : undefined),
-    },
-    pressedContainer: {
-      backgroundColor: colors.pressedBackgroundColor,
     },
     disabledContainer: {
       backgroundColor: colors.disabledBackgroundColor,
       borderColor: colors.disabledBorderColor,
       cursor: 'auto',
       ...elevationLevel0,
+    },
+    focusRing: {
+      position: 'absolute' as const,
+      top: focusRingInset,
+      left: focusRingInset,
+      right: focusRingInset,
+      bottom: focusRingInset,
+      borderRadius: theme.shape.cornerFull,
+      borderWidth: BUTTON_FOCUS_RING_WIDTH,
+      borderColor: theme.colors.secondary,
     },
     label: {
       fontFamily: labelStyle.fontFamily,
