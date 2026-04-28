@@ -18,6 +18,26 @@ jest.mock('@expo/vector-icons/MaterialCommunityIcons', () => {
   }
 })
 
+jest.mock('react-native-reanimated', () => {
+  const React = require('react')
+  const { View } = require('react-native')
+  const AnimatedView = React.forwardRef((props, ref) =>
+    React.createElement(View, { ...props, ref }),
+  )
+  AnimatedView.displayName = 'Animated.View'
+  return {
+    __esModule: true,
+    default: { View: AnimatedView, createAnimatedComponent: (c) => c },
+    View: AnimatedView,
+    useSharedValue: (initial) => ({ value: initial }),
+    useAnimatedStyle: (fn) => fn(),
+    withSpring: (v) => v,
+    withTiming: (v) => v,
+    interpolate: (_value, _input, output) => output[output.length - 1],
+    interpolateColor: (_value, _input, output) => output[output.length - 1],
+  }
+})
+
 jest.mock('react-native-safe-area-context', () => {
   const React = require('react')
   return {
