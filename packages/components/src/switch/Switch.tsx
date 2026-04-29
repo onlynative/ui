@@ -1,5 +1,9 @@
 import { useIconResolver, useTheme } from '@onlynative/core'
-import { renderIcon, resolveColorFromStyle } from '@onlynative/utils'
+import {
+  isFocusVisible,
+  renderIcon,
+  resolveColorFromStyle,
+} from '@onlynative/utils'
 import { useCallback, useEffect, useMemo } from 'react'
 import { Platform, Pressable, View } from 'react-native'
 import Animated, {
@@ -223,8 +227,9 @@ export function Switch({
     hovered.value = withTiming(0, HOVER_TIMING)
   }, [hovered])
 
+  // Match :focus-visible — only show focus state from keyboard navigation.
   const handleFocus = useCallback(() => {
-    if (!isDisabled) {
+    if (!isDisabled && isFocusVisible()) {
       focused.value = withTiming(1, FOCUS_TIMING)
     }
   }, [isDisabled, focused])

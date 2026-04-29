@@ -1,5 +1,5 @@
 import { useIconResolver, useTheme } from '@onlynative/core'
-import { alphaColor, renderIcon } from '@onlynative/utils'
+import { alphaColor, isFocusVisible, renderIcon } from '@onlynative/utils'
 import { useCallback, useMemo } from 'react'
 import { Pressable } from 'react-native'
 import Animated, {
@@ -175,8 +175,11 @@ export function IconButton({
     pressed.value = withTiming(0, PRESS_TIMING)
   }, [pressed])
 
+  // Match :focus-visible — only show focus state from keyboard navigation.
   const handleFocus = useCallback(() => {
-    if (!isDisabled) focused.value = withTiming(1, FOCUS_TIMING)
+    if (!isDisabled && isFocusVisible()) {
+      focused.value = withTiming(1, FOCUS_TIMING)
+    }
   }, [isDisabled, focused])
 
   const handleBlur = useCallback(() => {
