@@ -20,19 +20,30 @@ jest.mock('@expo/vector-icons/MaterialCommunityIcons', () => {
 
 jest.mock('react-native-reanimated', () => {
   const React = require('react')
-  const { View } = require('react-native')
+  const { Text, View } = require('react-native')
   const AnimatedView = React.forwardRef((props, ref) =>
     React.createElement(View, { ...props, ref }),
   )
   AnimatedView.displayName = 'Animated.View'
+  const AnimatedText = React.forwardRef((props, ref) =>
+    React.createElement(Text, { ...props, ref }),
+  )
+  AnimatedText.displayName = 'Animated.Text'
   return {
     __esModule: true,
-    default: { View: AnimatedView, createAnimatedComponent: (c) => c },
+    default: {
+      View: AnimatedView,
+      Text: AnimatedText,
+      createAnimatedComponent: (c) => c,
+    },
     View: AnimatedView,
+    Text: AnimatedText,
     useSharedValue: (initial) => ({ value: initial }),
+    useDerivedValue: (fn) => ({ value: fn() }),
     useAnimatedStyle: (fn) => fn(),
     withSpring: (v) => v,
     withTiming: (v) => v,
+    Easing: { bezier: () => () => 0 },
     // Pick the input-matched output for static rendering. value=0 → first, value=1 → last.
     // This lets tests assert against the at-rest visual without animation running.
     interpolate: (value, _input, output) =>
