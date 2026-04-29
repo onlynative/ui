@@ -79,12 +79,6 @@ export function createStyles(
     safeArea: {
       backgroundColor: schemeColors.containerColor,
     },
-    elevatedRoot: {
-      backgroundColor: schemeColors.elevatedContainerColor,
-    },
-    elevatedSafeArea: {
-      backgroundColor: schemeColors.elevatedContainerColor,
-    },
     smallContainer: {
       height: topAppBar.smallContainerHeight,
       position: 'relative',

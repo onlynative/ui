@@ -1,9 +1,15 @@
 import { defaultTopAppBarTokens, useTheme } from '@onlynative/core'
 import { selectRTL } from '@onlynative/utils'
-import { useCallback, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import type { ReactNode } from 'react'
 import type { LayoutChangeEvent, StyleProp, ViewStyle } from 'react-native'
 import { Platform, View } from 'react-native'
+import Animated, {
+  interpolateColor,
+  useAnimatedStyle,
+  useSharedValue,
+  withTiming,
+} from 'react-native-reanimated'
 import { Button } from '../button'
 import { IconButton } from '../icon-button'
 import type { IconButtonProps } from '../icon-button'
@@ -12,6 +18,11 @@ import { Typography } from '../typography'
 import type { TypographyVariant } from '../typography'
 import { createStyles, getColorSchemeColors } from './styles'
 import type { AppBarProps } from './types'
+
+const AnimatedSafeAreaView = Animated.createAnimatedComponent(SafeAreaView)
+
+// M3 surface tonal shift on scroll uses the standard 250ms easing.
+const ELEVATED_TIMING = { duration: 250 }
 
 type AppBarSize = 'small' | 'medium' | 'large'
 function getBackIcon(): IconButtonProps['icon'] {
@@ -59,13 +70,13 @@ function withTopInset(
 ) {
   if (enabled) {
     return (
-      <SafeAreaView edges={['top']} style={style}>
+      <AnimatedSafeAreaView edges={['top']} style={style}>
         {content}
-      </SafeAreaView>
+      </AnimatedSafeAreaView>
     )
   }
 
-  return <View style={style}>{content}</View>
+  return <Animated.View style={style}>{content}</Animated.View>
 }
 
 function measureWidth(event: LayoutChangeEvent): number {
@@ -248,18 +259,31 @@ export function AppBar({
     </View>
   )
 
+  const elevatedSV = useSharedValue(elevated ? 1 : 0)
+  useEffect(() => {
+    elevatedSV.value = withTiming(elevated ? 1 : 0, ELEVATED_TIMING)
+  }, [elevated, elevatedSV])
+
+  const animatedSurfaceStyle = useAnimatedStyle(() => ({
+    backgroundColor: interpolateColor(
+      elevatedSV.value,
+      [0, 1],
+      [schemeColors.containerColor, schemeColors.elevatedContainerColor],
+    ),
+  }))
+
   const containerOverride = containerColor
     ? ({ backgroundColor: containerColor } as ViewStyle)
     : undefined
   const rootStyle: StyleProp<ViewStyle> = [
     styles.root,
-    elevated ? styles.elevatedRoot : undefined,
+    animatedSurfaceStyle,
     containerOverride,
     style,
   ]
   const safeAreaStyle: StyleProp<ViewStyle> = [
     styles.safeArea,
-    elevated ? styles.elevatedSafeArea : undefined,
+    animatedSurfaceStyle,
     containerOverride,
   ]
 
@@ -293,9 +317,9 @@ export function AppBar({
     )
 
     return (
-      <View style={rootStyle}>
+      <Animated.View style={rootStyle}>
         {withTopInset(insetTop, content, safeAreaStyle)}
-      </View>
+      </Animated.View>
     )
   }
 
@@ -320,8 +344,8 @@ export function AppBar({
   )
 
   return (
-    <View style={rootStyle}>
+    <Animated.View style={rootStyle}>
       {withTopInset(insetTop, content, safeAreaStyle)}
-    </View>
+    </Animated.View>
   )
 }
