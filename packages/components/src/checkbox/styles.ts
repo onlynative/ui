@@ -1,42 +1,40 @@
 import type { MaterialTheme } from '@onlynative/core'
-import { alphaColor, blendColor } from '@onlynative/utils'
+import { alphaColor } from '@onlynative/utils'
 import { StyleSheet } from 'react-native'
 
-interface BoxColors {
+export const CHECKBOX_BOX_SIZE = 18
+export const CHECKBOX_BORDER_WIDTH = 2
+export const CHECKBOX_TOUCH_TARGET = 48
+export const CHECKBOX_STATE_LAYER_SIZE = 40
+export const CHECKBOX_FOCUS_RING_OFFSET = 2
+export const CHECKBOX_FOCUS_RING_WIDTH = 3
+export const CHECKBOX_ICON_SIZE = 14
+
+export interface CheckboxColors {
   backgroundColor: string
   borderColor: string
-  borderWidth: number
   iconColor: string
-  hoveredBackgroundColor: string
-  pressedBackgroundColor: string
+  /**
+   * Solid base color of the state-layer halo. Visible alpha is produced at
+   * render time by multiplying view `opacity` (8 % hover, 10 % focus/press).
+   */
+  stateLayerColor: string
   disabledBackgroundColor: string
   disabledBorderColor: string
-  disabledBorderWidth: number
   disabledIconColor: string
 }
 
-function getColors(theme: MaterialTheme, checked: boolean): BoxColors {
+function getColors(theme: MaterialTheme, checked: boolean): CheckboxColors {
   const disabledOnSurface38 = alphaColor(theme.colors.onSurface, 0.38)
 
   if (checked) {
     return {
       backgroundColor: theme.colors.primary,
       borderColor: 'transparent',
-      borderWidth: 0,
       iconColor: theme.colors.onPrimary,
-      hoveredBackgroundColor: blendColor(
-        theme.colors.primary,
-        theme.colors.onPrimary,
-        theme.stateLayer.hoveredOpacity,
-      ),
-      pressedBackgroundColor: blendColor(
-        theme.colors.primary,
-        theme.colors.onPrimary,
-        theme.stateLayer.pressedOpacity,
-      ),
+      stateLayerColor: theme.colors.primary,
       disabledBackgroundColor: disabledOnSurface38,
       disabledBorderColor: 'transparent',
-      disabledBorderWidth: 0,
       disabledIconColor: theme.colors.surface,
     }
   }
@@ -44,29 +42,19 @@ function getColors(theme: MaterialTheme, checked: boolean): BoxColors {
   return {
     backgroundColor: 'transparent',
     borderColor: theme.colors.onSurfaceVariant,
-    borderWidth: 2,
     iconColor: 'transparent',
-    hoveredBackgroundColor: alphaColor(
-      theme.colors.onSurface,
-      theme.stateLayer.hoveredOpacity,
-    ),
-    pressedBackgroundColor: alphaColor(
-      theme.colors.onSurface,
-      theme.stateLayer.pressedOpacity,
-    ),
+    stateLayerColor: theme.colors.onSurface,
     disabledBackgroundColor: 'transparent',
     disabledBorderColor: disabledOnSurface38,
-    disabledBorderWidth: 2,
     disabledIconColor: 'transparent',
   }
 }
 
 function applyColorOverrides(
-  theme: MaterialTheme,
-  colors: BoxColors,
+  colors: CheckboxColors,
   containerColor?: string,
   contentColor?: string,
-): BoxColors {
+): CheckboxColors {
   if (!containerColor && !contentColor) return colors
 
   const result = { ...colors }
@@ -76,79 +64,74 @@ function applyColorOverrides(
   }
 
   if (containerColor) {
-    const overlay = contentColor ?? colors.iconColor
     result.backgroundColor = containerColor
     result.borderColor = containerColor
-    result.hoveredBackgroundColor = blendColor(
-      containerColor,
-      overlay,
-      theme.stateLayer.hoveredOpacity,
-    )
-    result.pressedBackgroundColor = blendColor(
-      containerColor,
-      overlay,
-      theme.stateLayer.pressedOpacity,
-    )
+    // Halo follows the custom container so the visual stays cohesive — a
+    // low-opacity tint of the same color around the box. Render-time view
+    // opacity (8/10 %) handles transparency, so we keep this color solid.
+    result.stateLayerColor = containerColor
   }
 
   return result
 }
 
-export function createStyles(
+export function getResolvedCheckboxColors(
   theme: MaterialTheme,
   checked: boolean,
   containerColor?: string,
   contentColor?: string,
-) {
-  const colors = applyColorOverrides(
-    theme,
+): CheckboxColors {
+  return applyColorOverrides(
     getColors(theme, checked),
     containerColor,
     contentColor,
   )
+}
 
-  const size = 18
-  const touchTarget = 48
+export function createStyles(theme: MaterialTheme) {
+  const focusRingDiameter =
+    CHECKBOX_BOX_SIZE +
+    (CHECKBOX_FOCUS_RING_OFFSET + CHECKBOX_FOCUS_RING_WIDTH) * 2
+  const stateLayerInset =
+    (CHECKBOX_TOUCH_TARGET - CHECKBOX_STATE_LAYER_SIZE) / 2
+  const focusRingInset = (CHECKBOX_TOUCH_TARGET - focusRingDiameter) / 2
 
   return StyleSheet.create({
     container: {
-      width: touchTarget,
-      height: touchTarget,
+      width: CHECKBOX_TOUCH_TARGET,
+      height: CHECKBOX_TOUCH_TARGET,
       alignItems: 'center',
       justifyContent: 'center',
       cursor: 'pointer',
     },
-    hoveredContainer: {
-      borderRadius: touchTarget / 2,
-      backgroundColor: colors.hoveredBackgroundColor,
-    },
-    pressedContainer: {
-      borderRadius: touchTarget / 2,
-      backgroundColor: colors.pressedBackgroundColor,
-    },
     disabledContainer: {
       cursor: 'auto',
     },
+    stateLayer: {
+      position: 'absolute' as const,
+      top: stateLayerInset,
+      left: stateLayerInset,
+      width: CHECKBOX_STATE_LAYER_SIZE,
+      height: CHECKBOX_STATE_LAYER_SIZE,
+      borderRadius: CHECKBOX_STATE_LAYER_SIZE / 2,
+    },
+    focusRing: {
+      position: 'absolute' as const,
+      top: focusRingInset,
+      left: focusRingInset,
+      width: focusRingDiameter,
+      height: focusRingDiameter,
+      borderRadius: theme.shape.cornerExtraSmall + CHECKBOX_FOCUS_RING_OFFSET,
+      borderWidth: CHECKBOX_FOCUS_RING_WIDTH,
+      borderColor: theme.colors.secondary,
+    },
     box: {
-      width: size,
-      height: size,
+      width: CHECKBOX_BOX_SIZE,
+      height: CHECKBOX_BOX_SIZE,
       borderRadius: theme.shape.cornerExtraSmall,
-      backgroundColor: colors.backgroundColor,
-      borderColor: colors.borderColor,
-      borderWidth: colors.borderWidth,
+      borderWidth: CHECKBOX_BORDER_WIDTH,
       alignItems: 'center' as const,
       justifyContent: 'center' as const,
-    },
-    disabledBox: {
-      backgroundColor: colors.disabledBackgroundColor,
-      borderColor: colors.disabledBorderColor,
-      borderWidth: colors.disabledBorderWidth,
-    },
-    iconColor: {
-      color: colors.iconColor,
-    },
-    disabledIconColor: {
-      color: colors.disabledIconColor,
     },
   })
 }

@@ -2,11 +2,21 @@ import type { MaterialTheme } from '@onlynative/core'
 import { alphaColor } from '@onlynative/utils'
 import { StyleSheet } from 'react-native'
 
-interface RadioColors {
+export const RADIO_OUTER_SIZE = 20
+export const RADIO_INNER_SIZE = 10
+export const RADIO_TOUCH_TARGET = 48
+export const RADIO_STATE_LAYER_SIZE = 40
+export const RADIO_FOCUS_RING_OFFSET = 2
+export const RADIO_FOCUS_RING_WIDTH = 3
+
+export interface RadioColors {
   borderColor: string
   dotColor: string
-  hoveredBackgroundColor: string
-  pressedBackgroundColor: string
+  /**
+   * Solid base color of the state-layer halo. Visible alpha is produced at
+   * render time by view `opacity` (8 % hover, 10 % focus/press).
+   */
+  stateLayerColor: string
   disabledBorderColor: string
   disabledDotColor: string
 }
@@ -18,14 +28,7 @@ function getColors(theme: MaterialTheme, selected: boolean): RadioColors {
     return {
       borderColor: theme.colors.primary,
       dotColor: theme.colors.primary,
-      hoveredBackgroundColor: alphaColor(
-        theme.colors.primary,
-        theme.stateLayer.hoveredOpacity,
-      ),
-      pressedBackgroundColor: alphaColor(
-        theme.colors.primary,
-        theme.stateLayer.pressedOpacity,
-      ),
+      stateLayerColor: theme.colors.primary,
       disabledBorderColor: disabledOnSurface38,
       disabledDotColor: disabledOnSurface38,
     }
@@ -34,21 +37,13 @@ function getColors(theme: MaterialTheme, selected: boolean): RadioColors {
   return {
     borderColor: theme.colors.onSurfaceVariant,
     dotColor: 'transparent',
-    hoveredBackgroundColor: alphaColor(
-      theme.colors.onSurface,
-      theme.stateLayer.hoveredOpacity,
-    ),
-    pressedBackgroundColor: alphaColor(
-      theme.colors.onSurface,
-      theme.stateLayer.pressedOpacity,
-    ),
+    stateLayerColor: theme.colors.onSurface,
     disabledBorderColor: disabledOnSurface38,
     disabledDotColor: 'transparent',
   }
 }
 
 function applyColorOverrides(
-  theme: MaterialTheme,
   colors: RadioColors,
   containerColor?: string,
   contentColor?: string,
@@ -60,14 +55,8 @@ function applyColorOverrides(
   if (containerColor) {
     result.borderColor = containerColor
     result.dotColor = containerColor
-    result.hoveredBackgroundColor = alphaColor(
-      containerColor,
-      theme.stateLayer.hoveredOpacity,
-    )
-    result.pressedBackgroundColor = alphaColor(
-      containerColor,
-      theme.stateLayer.pressedOpacity,
-    )
+    // Halo follows the custom container color so the visual stays cohesive.
+    result.stateLayerColor = containerColor
   }
 
   if (contentColor) {
@@ -77,62 +66,69 @@ function applyColorOverrides(
   return result
 }
 
-export function createStyles(
+export function getResolvedRadioColors(
   theme: MaterialTheme,
   selected: boolean,
   containerColor?: string,
   contentColor?: string,
-) {
-  const colors = applyColorOverrides(
-    theme,
+): RadioColors {
+  return applyColorOverrides(
     getColors(theme, selected),
     containerColor,
     contentColor,
   )
+}
 
-  const outerSize = 20
-  const innerSize = 10
-  const touchTarget = 48
+export function createStyles(theme: MaterialTheme) {
+  const focusRingDiameter =
+    RADIO_STATE_LAYER_SIZE +
+    (RADIO_FOCUS_RING_OFFSET + RADIO_FOCUS_RING_WIDTH) * 2
+  // Center absolute children inside the 48 dp Pressable. flex centering
+  // doesn't apply to absolute-positioned children.
+  const stateLayerInset = (RADIO_TOUCH_TARGET - RADIO_STATE_LAYER_SIZE) / 2
+  const focusRingInset = (RADIO_TOUCH_TARGET - focusRingDiameter) / 2
 
   return StyleSheet.create({
     container: {
-      width: touchTarget,
-      height: touchTarget,
+      width: RADIO_TOUCH_TARGET,
+      height: RADIO_TOUCH_TARGET,
       alignItems: 'center',
       justifyContent: 'center',
       cursor: 'pointer',
     },
-    hoveredContainer: {
-      borderRadius: touchTarget / 2,
-      backgroundColor: colors.hoveredBackgroundColor,
-    },
-    pressedContainer: {
-      borderRadius: touchTarget / 2,
-      backgroundColor: colors.pressedBackgroundColor,
-    },
     disabledContainer: {
       cursor: 'auto',
     },
+    stateLayer: {
+      position: 'absolute' as const,
+      top: stateLayerInset,
+      left: stateLayerInset,
+      width: RADIO_STATE_LAYER_SIZE,
+      height: RADIO_STATE_LAYER_SIZE,
+      borderRadius: RADIO_STATE_LAYER_SIZE / 2,
+    },
+    focusRing: {
+      position: 'absolute' as const,
+      top: focusRingInset,
+      left: focusRingInset,
+      width: focusRingDiameter,
+      height: focusRingDiameter,
+      borderRadius: focusRingDiameter / 2,
+      borderWidth: RADIO_FOCUS_RING_WIDTH,
+      borderColor: theme.colors.secondary,
+    },
     outer: {
-      width: outerSize,
-      height: outerSize,
-      borderRadius: outerSize / 2,
+      width: RADIO_OUTER_SIZE,
+      height: RADIO_OUTER_SIZE,
+      borderRadius: RADIO_OUTER_SIZE / 2,
       borderWidth: 2,
-      borderColor: colors.borderColor,
       alignItems: 'center' as const,
       justifyContent: 'center' as const,
     },
-    disabledOuter: {
-      borderColor: colors.disabledBorderColor,
-    },
     inner: {
-      width: innerSize,
-      height: innerSize,
-      borderRadius: innerSize / 2,
-      backgroundColor: colors.dotColor,
-    },
-    disabledInner: {
-      backgroundColor: colors.disabledDotColor,
+      width: RADIO_INNER_SIZE,
+      height: RADIO_INNER_SIZE,
+      borderRadius: RADIO_INNER_SIZE / 2,
     },
   })
 }
