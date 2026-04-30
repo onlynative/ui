@@ -7,10 +7,11 @@
     "packages/components/src/radio/styles.ts",
     "packages/components/src/radio/types.ts"
   ],
-  "utils": ["color", "pressable"],
+  "utils": ["color"],
   "componentDependencies": [],
   "dependencies": {
-    "@onlynative/core": ">=0.0.0-alpha.6"
+    "@onlynative/core": ">=0.0.0-alpha.6",
+    "react-native-reanimated": ">=4.0.0"
   },
   "optionalDependencies": {}
 }

@@ -9,10 +9,11 @@
     "packages/components/src/list/styles.ts",
     "packages/components/src/list/types.ts"
   ],
-  "utils": ["color", "pressable"],
+  "utils": ["color"],
   "componentDependencies": [],
   "dependencies": {
-    "@onlynative/core": ">=0.0.0-alpha.6"
+    "@onlynative/core": ">=0.0.0-alpha.6",
+    "react-native-reanimated": ">=4.0.0"
   },
   "optionalDependencies": {}
 }
