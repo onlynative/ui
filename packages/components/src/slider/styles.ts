@@ -21,6 +21,16 @@ export const SLIDER_TOUCH_HEIGHT = 48
 export const SLIDER_TRACK_CORNER_OUTER = SLIDER_TRACK_HEIGHT / 2
 export const SLIDER_TRACK_CORNER_INNER = 2
 export const SLIDER_LABEL_GAP = 12
+// MD3 state-layer halo around the thumb during hover/focus/press.
+export const SLIDER_STATE_LAYER_SIZE = 40
+// MD3 focus ring around the focused thumb.
+export const SLIDER_FOCUS_RING_OFFSET = 2
+export const SLIDER_FOCUS_RING_WIDTH = 3
+// Outside diameter of the ring — used by the JSX layer to size the absolute
+// positioned ring around the (pressed) thumb's center.
+export const SLIDER_FOCUS_RING_SIZE =
+  SLIDER_THUMB_WIDTH_PRESSED +
+  (SLIDER_FOCUS_RING_OFFSET + SLIDER_FOCUS_RING_WIDTH) * 2
 
 interface SliderColors {
   activeTrack: string
@@ -88,9 +98,9 @@ export function createStyles(
       justifyContent: 'center',
     },
     trackArea: {
-      flex: 1,
       height: SLIDER_TOUCH_HEIGHT,
       justifyContent: 'center',
+      // Cross-axis stretch (default) fills the parent Pressable's width.
     },
     activeSegment: {
       position: 'absolute',
@@ -109,6 +119,26 @@ export function createStyles(
       height: SLIDER_THUMB_HEIGHT,
       top: (SLIDER_TOUCH_HEIGHT - SLIDER_THUMB_HEIGHT) / 2,
       backgroundColor: c.thumb,
+    },
+    stateLayer: {
+      position: 'absolute',
+      width: SLIDER_STATE_LAYER_SIZE,
+      height: SLIDER_STATE_LAYER_SIZE,
+      borderRadius: SLIDER_STATE_LAYER_SIZE / 2,
+      top: (SLIDER_TOUCH_HEIGHT - SLIDER_STATE_LAYER_SIZE) / 2,
+      backgroundColor: c.thumb,
+    },
+    focusRing: {
+      position: 'absolute',
+      width: SLIDER_FOCUS_RING_SIZE,
+      height: SLIDER_FOCUS_RING_SIZE,
+      borderRadius: SLIDER_FOCUS_RING_SIZE / 2,
+      top: (SLIDER_TOUCH_HEIGHT - SLIDER_FOCUS_RING_SIZE) / 2,
+      borderWidth: SLIDER_FOCUS_RING_WIDTH,
+      borderColor: theme.colors.secondary,
+    },
+    pressableWrapper: {
+      flex: 1,
     },
     stopIndicator: {
       position: 'absolute',
@@ -150,9 +180,6 @@ export function createStyles(
       alignItems: 'center',
       justifyContent: 'center',
       minWidth: 32,
-    },
-    valueLabelHidden: {
-      opacity: 0,
     },
     valueLabelText: {
       fontFamily: labelTypography.fontFamily,
