@@ -1,7 +1,15 @@
 import { useTheme } from '@onlynative/core'
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import type { LayoutChangeEvent } from 'react-native'
-import { Animated, Easing, View } from 'react-native'
+import { View } from 'react-native'
+import Animated, {
+  Easing,
+  cancelAnimation,
+  useAnimatedStyle,
+  useSharedValue,
+  withRepeat,
+  withTiming,
+} from 'react-native-reanimated'
 import {
   PROGRESS_STOP_INDICATOR,
   PROGRESS_TRACK_GAP,
@@ -14,6 +22,18 @@ import type { LinearProgressProps } from './types'
 // loop iteration. Matches the visual cadence of the MD3 single-segment variant.
 const INDETERMINATE_SEGMENT_RATIO = 0.4
 const INDETERMINATE_DURATION_MS = 1800
+
+// MD3 emphasized cubic-bezier for value transitions (short4 ~250 ms).
+const MOTION_TIMING = {
+  duration: 250,
+  easing: Easing.bezier(0.2, 0, 0, 1),
+}
+// Cubic in-out for the indeterminate slide (matches the prior
+// Easing.inOut(Easing.cubic) curve from the RN-Animated implementation).
+const INDETERMINATE_TIMING = {
+  duration: INDETERMINATE_DURATION_MS,
+  easing: Easing.bezier(0.42, 0, 0.58, 1),
+}
 
 const clamp = (v: number, min: number, max: number) =>
   Math.min(Math.max(v, min), max)
@@ -43,44 +63,36 @@ export function LinearProgress({
     setWidth((prev) => (prev === w ? prev : w))
   }
 
-  const animValue = useRef(new Animated.Value(0)).current
+  // Indeterminate slide progress (0 → 1, looped).
+  const slide = useSharedValue(0)
   useEffect(() => {
     if (!indeterminate) {
-      animValue.stopAnimation()
+      cancelAnimation(slide)
       return
     }
-    animValue.setValue(0)
-    const loop = Animated.loop(
-      Animated.timing(animValue, {
-        toValue: 1,
-        duration: INDETERMINATE_DURATION_MS,
-        easing: Easing.inOut(Easing.cubic),
-        useNativeDriver: true,
-      }),
-    )
-    loop.start()
-    return () => loop.stop()
-  }, [indeterminate, animValue])
+    slide.value = 0
+    slide.value = withRepeat(withTiming(1, INDETERMINATE_TIMING), -1, false)
+    return () => cancelAnimation(slide)
+  }, [indeterminate, slide])
+
+  // Determinate value, smoothly tweened to the latest prop.
+  const progressShared = useSharedValue(value)
+  useEffect(() => {
+    if (indeterminate) return
+    progressShared.value = withTiming(value, MOTION_TIMING)
+  }, [value, indeterminate, progressShared])
 
   const segmentWidth = Math.max(width * INDETERMINATE_SEGMENT_RATIO, 0)
 
-  const indeterminateIndicatorStyle = useMemo(
-    () => [
-      styles.activeIndicator,
-      {
-        left: 0,
-        width: segmentWidth,
-        transform: [
-          {
-            translateX: animValue.interpolate({
-              inputRange: [0, 1],
-              outputRange: [-segmentWidth, width],
-            }),
-          },
-        ],
-      },
-    ],
-    [styles.activeIndicator, segmentWidth, width, animValue],
+  const indeterminateStyle = useAnimatedStyle(
+    () => ({
+      left: 0,
+      width: segmentWidth,
+      transform: [
+        { translateX: -segmentWidth + slide.value * (width + segmentWidth) },
+      ],
+    }),
+    [segmentWidth, width],
   )
 
   // Determinate layout. The bar is split into:
@@ -92,21 +104,24 @@ export function LinearProgress({
   const trailingReserved = showStop
     ? PROGRESS_STOP_INDICATOR + PROGRESS_TRACK_GAP
     : 0
-  const midGap =
-    !indeterminate && value > 0 && value < 1 ? PROGRESS_TRACK_GAP : 0
   const progressArea = Math.max(0, width - trailingReserved)
-  const activeWidth = Math.max(0, value * (progressArea - midGap))
-  const inactiveLeft = activeWidth + midGap
-  const inactiveWidth = Math.max(0, progressArea - activeWidth - midGap)
 
-  const activeStyle = useMemo(
-    () => [styles.activeIndicator, { left: 0, width: activeWidth }],
-    [styles.activeIndicator, activeWidth],
-  )
-  const inactiveStyle = useMemo(
-    () => [styles.inactiveTrack, { left: inactiveLeft, width: inactiveWidth }],
-    [styles.inactiveTrack, inactiveLeft, inactiveWidth],
-  )
+  const activeStyle = useAnimatedStyle(() => {
+    const v = progressShared.value
+    const midGap = v > 0 && v < 1 ? PROGRESS_TRACK_GAP : 0
+    const w = Math.max(0, v * (progressArea - midGap))
+    return { left: 0, width: w }
+  }, [progressArea])
+
+  const inactiveStyle = useAnimatedStyle(() => {
+    const v = progressShared.value
+    const midGap = v > 0 && v < 1 ? PROGRESS_TRACK_GAP : 0
+    const aw = Math.max(0, v * (progressArea - midGap))
+    const left = aw + midGap
+    const w = Math.max(0, progressArea - aw - midGap)
+    return { left, width: w }
+  }, [progressArea])
+
   const stopStyle = useMemo(
     () => [
       styles.stopDot,
@@ -131,12 +146,12 @@ export function LinearProgress({
       {indeterminate ? (
         <>
           <View style={styles.inactiveTrackFull} />
-          <Animated.View style={indeterminateIndicatorStyle} />
+          <Animated.View style={[styles.activeIndicator, indeterminateStyle]} />
         </>
       ) : (
         <>
-          {activeWidth > 0 ? <View style={activeStyle} /> : null}
-          {inactiveWidth > 0 ? <View style={inactiveStyle} /> : null}
+          <Animated.View style={[styles.activeIndicator, activeStyle]} />
+          <Animated.View style={[styles.inactiveTrack, inactiveStyle]} />
           {showStop ? <View style={stopStyle} /> : null}
         </>
       )}

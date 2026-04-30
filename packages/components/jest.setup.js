@@ -41,8 +41,11 @@ jest.mock('react-native-reanimated', () => {
     useSharedValue: (initial) => ({ value: initial }),
     useDerivedValue: (fn) => ({ value: fn() }),
     useAnimatedStyle: (fn) => fn(),
+    useAnimatedProps: (fn) => fn(),
+    cancelAnimation: () => {},
     withSpring: (v) => v,
     withTiming: (v) => v,
+    withRepeat: (v) => v,
     Easing: { bezier: () => () => 0 },
     // Pick the input-matched output for static rendering. value=0 → first, value=1 → last.
     // This lets tests assert against the at-rest visual without animation running.
