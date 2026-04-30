@@ -3,12 +3,18 @@ import { alphaColor, blendColor, elevationStyle } from '@onlynative/utils'
 import { StyleSheet } from 'react-native'
 import type { ChipVariant } from './types'
 
-interface VariantColors {
+export const CHIP_FOCUS_RING_OFFSET = 2
+export const CHIP_FOCUS_RING_WIDTH = 3
+
+const STATE_LAYER_FOCUS = 0.1
+
+export interface VariantColors {
   backgroundColor: string
   textColor: string
   borderColor: string
   borderWidth: number
   hoveredBackgroundColor: string
+  focusedBackgroundColor: string
   pressedBackgroundColor: string
   disabledBackgroundColor: string
   disabledTextColor: string
@@ -36,6 +42,11 @@ function getVariantColors(
         theme.colors.secondaryContainer,
         theme.colors.onSecondaryContainer,
         theme.stateLayer.hoveredOpacity,
+      ),
+      focusedBackgroundColor: blendColor(
+        theme.colors.secondaryContainer,
+        theme.colors.onSecondaryContainer,
+        STATE_LAYER_FOCUS,
       ),
       pressedBackgroundColor: blendColor(
         theme.colors.secondaryContainer,
@@ -65,6 +76,11 @@ function getVariantColors(
         textColor,
         theme.stateLayer.hoveredOpacity,
       ),
+      focusedBackgroundColor: blendColor(
+        theme.colors.surfaceContainerLow,
+        textColor,
+        STATE_LAYER_FOCUS,
+      ),
       pressedBackgroundColor: blendColor(
         theme.colors.surfaceContainerLow,
         textColor,
@@ -91,6 +107,11 @@ function getVariantColors(
       theme.colors.surface,
       textColor,
       theme.stateLayer.hoveredOpacity,
+    ),
+    focusedBackgroundColor: blendColor(
+      theme.colors.surface,
+      textColor,
+      STATE_LAYER_FOCUS,
     ),
     pressedBackgroundColor: blendColor(
       theme.colors.surface,
@@ -126,6 +147,11 @@ function applyColorOverrides(
       overlay,
       theme.stateLayer.hoveredOpacity,
     )
+    result.focusedBackgroundColor = blendColor(
+      containerColor,
+      overlay,
+      STATE_LAYER_FOCUS,
+    )
     result.pressedBackgroundColor = blendColor(
       containerColor,
       overlay,
@@ -137,6 +163,10 @@ function applyColorOverrides(
         contentColor,
         theme.stateLayer.hoveredOpacity,
       )
+      result.focusedBackgroundColor = alphaColor(
+        contentColor,
+        STATE_LAYER_FOCUS,
+      )
       result.pressedBackgroundColor = alphaColor(
         contentColor,
         theme.stateLayer.pressedOpacity,
@@ -146,6 +176,11 @@ function applyColorOverrides(
         colors.backgroundColor,
         contentColor,
         theme.stateLayer.hoveredOpacity,
+      )
+      result.focusedBackgroundColor = blendColor(
+        colors.backgroundColor,
+        contentColor,
+        STATE_LAYER_FOCUS,
       )
       result.pressedBackgroundColor = blendColor(
         colors.backgroundColor,
@@ -158,6 +193,22 @@ function applyColorOverrides(
   return result
 }
 
+export function getResolvedChipColors(
+  theme: MaterialTheme,
+  variant: ChipVariant,
+  elevated: boolean,
+  selected: boolean,
+  containerColor?: string,
+  contentColor?: string,
+): VariantColors {
+  return applyColorOverrides(
+    theme,
+    getVariantColors(theme, variant, elevated, selected),
+    containerColor,
+    contentColor,
+  )
+}
+
 export function createStyles(
   theme: MaterialTheme,
   variant: ChipVariant,
@@ -168,10 +219,11 @@ export function createStyles(
   containerColor?: string,
   contentColor?: string,
 ) {
-  const baseColors = getVariantColors(theme, variant, elevated, selected)
-  const colors = applyColorOverrides(
+  const colors = getResolvedChipColors(
     theme,
-    baseColors,
+    variant,
+    elevated,
+    selected,
     containerColor,
     contentColor,
   )
@@ -179,36 +231,62 @@ export function createStyles(
   const elevationLevel0 = elevationStyle(theme.elevation.level0)
   const elevationLevel1 = elevationStyle(theme.elevation.level1)
   const elevationLevel2 = elevationStyle(theme.elevation.level2)
-  const isElevated = elevated && variant !== 'input'
-  const baseElevation = isElevated ? elevationLevel1 : elevationLevel0
+  const focusRingInset = -(CHIP_FOCUS_RING_OFFSET + CHIP_FOCUS_RING_WIDTH)
+  const focusRingRadius = theme.shape.cornerSmall + CHIP_FOCUS_RING_OFFSET
 
   return StyleSheet.create({
+    wrapper: {
+      alignSelf: 'flex-start' as const,
+    },
     container: {
-      alignSelf: 'flex-start',
       alignItems: 'center',
       flexDirection: 'row',
       height: 32,
       paddingStart: hasLeadingContent ? 8 : 16,
       paddingEnd: hasTrailingContent ? 8 : 16,
       borderRadius: theme.shape.cornerSmall,
-      backgroundColor: colors.backgroundColor,
       borderColor: colors.borderColor,
       borderWidth: colors.borderWidth,
       cursor: 'pointer',
-      ...baseElevation,
-    },
-    hoveredContainer: {
-      backgroundColor: colors.hoveredBackgroundColor,
-      ...(isElevated ? elevationLevel2 : undefined),
-    },
-    pressedContainer: {
-      backgroundColor: colors.pressedBackgroundColor,
+      ...elevationLevel0,
     },
     disabledContainer: {
       backgroundColor: colors.disabledBackgroundColor,
       borderColor: colors.disabledBorderColor,
       cursor: 'auto',
       ...elevationLevel0,
+    },
+    // Two stacked, absolutely-positioned shadow layers that cross-fade the
+    // elevated chip from level 1 (rest) → level 2 (hover), per MD3.
+    elevationLayerLevel1: {
+      position: 'absolute' as const,
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: 0,
+      borderRadius: theme.shape.cornerSmall,
+      backgroundColor: colors.backgroundColor,
+      ...elevationLevel1,
+    },
+    elevationLayerLevel2: {
+      position: 'absolute' as const,
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: 0,
+      borderRadius: theme.shape.cornerSmall,
+      backgroundColor: colors.backgroundColor,
+      ...elevationLevel2,
+    },
+    focusRing: {
+      position: 'absolute' as const,
+      top: focusRingInset,
+      left: focusRingInset,
+      right: focusRingInset,
+      bottom: focusRingInset,
+      borderRadius: focusRingRadius,
+      borderWidth: CHIP_FOCUS_RING_WIDTH,
+      borderColor: theme.colors.secondary,
     },
     label: {
       fontFamily: labelStyle.fontFamily,
@@ -231,8 +309,14 @@ export function createStyles(
       borderRadius: 12,
       overflow: 'hidden' as const,
     },
+    // 24dp circular tap target with state layer (MD3 chip close affordance).
     closeButton: {
       marginStart: theme.spacing.sm,
+      width: 24,
+      height: 24,
+      borderRadius: 12,
+      alignItems: 'center',
+      justifyContent: 'center',
     },
   })
 }
