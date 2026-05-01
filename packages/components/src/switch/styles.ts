@@ -2,18 +2,27 @@ import type { MaterialTheme } from '@onlynative/core'
 import { alphaColor, blendColor } from '@onlynative/utils'
 import { StyleSheet } from 'react-native'
 
-interface TrackColors {
+export const SWITCH_TRACK_WIDTH = 52
+export const SWITCH_TRACK_HEIGHT = 32
+export const SWITCH_TRACK_PADDING = 4
+export const SWITCH_TRACK_BORDER_WIDTH = 2
+export const SWITCH_THUMB_ON_SIZE = 24
+export const SWITCH_THUMB_OFF_SIZE = 16
+export const SWITCH_THUMB_PRESSED_SIZE = 28
+export const SWITCH_STATE_LAYER_SIZE = 40
+export const SWITCH_FOCUS_RING_OFFSET = 2
+export const SWITCH_FOCUS_RING_WIDTH = 3
+
+export interface TrackColors {
   trackColor: string
   thumbColor: string
   iconColor: string
   hoveredTrackColor: string
   pressedTrackColor: string
   borderColor: string
-  borderWidth: number
   disabledTrackColor: string
   disabledThumbColor: string
   disabledBorderColor: string
-  disabledBorderWidth: number
 }
 
 function getColors(theme: MaterialTheme, selected: boolean): TrackColors {
@@ -36,11 +45,9 @@ function getColors(theme: MaterialTheme, selected: boolean): TrackColors {
         theme.stateLayer.pressedOpacity,
       ),
       borderColor: 'transparent',
-      borderWidth: 0,
       disabledTrackColor: disabledOnSurface12,
       disabledThumbColor: theme.colors.surface,
       disabledBorderColor: 'transparent',
-      disabledBorderWidth: 0,
     }
   }
 
@@ -59,11 +66,9 @@ function getColors(theme: MaterialTheme, selected: boolean): TrackColors {
       theme.stateLayer.pressedOpacity,
     ),
     borderColor: theme.colors.outline,
-    borderWidth: 2,
     disabledTrackColor: disabledOnSurface12,
     disabledThumbColor: disabledOnSurface38,
     disabledBorderColor: disabledOnSurface12,
-    disabledBorderWidth: 2,
   }
 }
 
@@ -104,65 +109,88 @@ function applyColorOverrides(
   return result
 }
 
-export function createStyles(
+export function getResolvedColors(
   theme: MaterialTheme,
   selected: boolean,
-  hasIcon: boolean,
   containerColor?: string,
   contentColor?: string,
-) {
-  const colors = applyColorOverrides(
+): TrackColors {
+  return applyColorOverrides(
     theme,
     getColors(theme, selected),
     containerColor,
     contentColor,
   )
+}
 
-  const thumbSize = selected || hasIcon ? 24 : 16
-  const trackWidth = 52
-  const trackHeight = 32
-  const trackPadding = 4
-  const thumbOffset = selected
-    ? trackWidth - trackPadding - thumbSize
-    : trackPadding
+export function createStyles(
+  theme: MaterialTheme,
+  containerColor?: string,
+  contentColor?: string,
+) {
+  // Disabled colors are derived from the unselected token set; the disabled
+  // visual is uniform across off/on per MD3.
+  const disabledColors = getResolvedColors(
+    theme,
+    false,
+    containerColor,
+    contentColor,
+  )
+
+  const focusRingInset = -(SWITCH_FOCUS_RING_OFFSET + SWITCH_FOCUS_RING_WIDTH)
 
   return StyleSheet.create({
+    wrapper: {
+      width: SWITCH_TRACK_WIDTH,
+      height: SWITCH_TRACK_HEIGHT,
+    },
     track: {
-      width: trackWidth,
-      height: trackHeight,
-      borderRadius: trackHeight / 2,
-      backgroundColor: colors.trackColor,
-      borderColor: colors.borderColor,
-      borderWidth: colors.borderWidth,
+      width: SWITCH_TRACK_WIDTH,
+      height: SWITCH_TRACK_HEIGHT,
+      borderRadius: SWITCH_TRACK_HEIGHT / 2,
+      borderWidth: SWITCH_TRACK_BORDER_WIDTH,
       justifyContent: 'center',
+      overflow: 'visible' as const,
       cursor: 'pointer',
     },
-    hoveredTrack: {
-      backgroundColor: colors.hoveredTrackColor,
-    },
-    pressedTrack: {
-      backgroundColor: colors.pressedTrackColor,
-    },
     disabledTrack: {
-      backgroundColor: colors.disabledTrackColor,
-      borderColor: colors.disabledBorderColor,
-      borderWidth: colors.disabledBorderWidth,
+      backgroundColor: disabledColors.disabledTrackColor,
+      borderColor: disabledColors.disabledBorderColor,
       cursor: 'auto',
     },
-    thumb: {
-      width: thumbSize,
-      height: thumbSize,
-      borderRadius: thumbSize / 2,
-      backgroundColor: colors.thumbColor,
-      marginStart: thumbOffset,
+    focusRing: {
+      position: 'absolute' as const,
+      top: focusRingInset,
+      left: focusRingInset,
+      right: focusRingInset,
+      bottom: focusRingInset,
+      borderRadius:
+        SWITCH_TRACK_HEIGHT / 2 +
+        SWITCH_FOCUS_RING_OFFSET +
+        SWITCH_FOCUS_RING_WIDTH,
+      borderWidth: SWITCH_FOCUS_RING_WIDTH,
+      borderColor: theme.colors.secondary,
+    },
+    stateLayer: {
+      position: 'absolute' as const,
+      width: SWITCH_STATE_LAYER_SIZE,
+      height: SWITCH_STATE_LAYER_SIZE,
+      borderRadius: SWITCH_STATE_LAYER_SIZE / 2,
+      // Centered vertically on the 32 dp track: (32 - 40) / 2 = -4
+      top: (SWITCH_TRACK_HEIGHT - SWITCH_STATE_LAYER_SIZE) / 2,
+    },
+    thumbBase: {
+      marginStart: SWITCH_TRACK_PADDING - SWITCH_TRACK_BORDER_WIDTH,
       alignItems: 'center' as const,
       justifyContent: 'center' as const,
     },
     disabledThumb: {
-      backgroundColor: colors.disabledThumbColor,
+      backgroundColor: disabledColors.disabledThumbColor,
     },
-    iconColor: {
-      color: colors.iconColor,
+    iconLayer: {
+      position: 'absolute' as const,
+      alignItems: 'center' as const,
+      justifyContent: 'center' as const,
     },
     disabledIconColor: {
       color: alphaColor(theme.colors.onSurface, 0.38),

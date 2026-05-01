@@ -6,6 +6,9 @@ import type { ListItemLines } from './types'
 const ITEM_PADDING_VERTICAL = 12
 const INSET_START = 56
 
+export const LIST_ITEM_FOCUS_RING_INSET = 2
+export const LIST_ITEM_FOCUS_RING_WIDTH = 3
+
 const MIN_HEIGHT: Record<ListItemLines, number> = {
   1: 56,
   2: 72,
@@ -20,17 +23,18 @@ export function createListStyles(theme: MaterialTheme) {
   })
 }
 
-interface ItemColors {
+export interface ListItemColors {
   backgroundColor: string
   hoveredBackgroundColor: string
+  focusedBackgroundColor: string
   pressedBackgroundColor: string
 }
 
-function getItemColors(
+export function getResolvedListItemColors(
   theme: MaterialTheme,
   containerColor?: string,
-): ItemColors {
-  const base = containerColor ?? 'transparent'
+): ListItemColors {
+  const stateLayerFocus = 0.1
 
   if (containerColor) {
     return {
@@ -39,6 +43,11 @@ function getItemColors(
         containerColor,
         theme.colors.onSurface,
         theme.stateLayer.hoveredOpacity,
+      ),
+      focusedBackgroundColor: blendColor(
+        containerColor,
+        theme.colors.onSurface,
+        stateLayerFocus,
       ),
       pressedBackgroundColor: blendColor(
         containerColor,
@@ -49,11 +58,12 @@ function getItemColors(
   }
 
   return {
-    backgroundColor: base,
+    backgroundColor: 'transparent',
     hoveredBackgroundColor: alphaColor(
       theme.colors.onSurface,
       theme.stateLayer.hoveredOpacity,
     ),
+    focusedBackgroundColor: alphaColor(theme.colors.onSurface, stateLayerFocus),
     pressedBackgroundColor: alphaColor(
       theme.colors.onSurface,
       theme.stateLayer.pressedOpacity,
@@ -66,7 +76,7 @@ export function createListItemStyles(
   lines: ListItemLines,
   containerColor?: string,
 ) {
-  const colors = getItemColors(theme, containerColor)
+  const colors = getResolvedListItemColors(theme, containerColor)
 
   return StyleSheet.create({
     container: {
@@ -80,14 +90,18 @@ export function createListItemStyles(
     interactiveContainer: {
       cursor: 'pointer',
     },
-    hoveredContainer: {
-      backgroundColor: colors.hoveredBackgroundColor,
-    },
-    pressedContainer: {
-      backgroundColor: colors.pressedBackgroundColor,
-    },
     disabledContainer: {
       cursor: 'auto',
+    },
+    focusRing: {
+      position: 'absolute' as const,
+      top: LIST_ITEM_FOCUS_RING_INSET,
+      left: LIST_ITEM_FOCUS_RING_INSET,
+      right: LIST_ITEM_FOCUS_RING_INSET,
+      bottom: LIST_ITEM_FOCUS_RING_INSET,
+      borderWidth: LIST_ITEM_FOCUS_RING_WIDTH,
+      borderColor: theme.colors.secondary,
+      borderRadius: theme.shape.cornerExtraSmall,
     },
     disabledContentWrapper: {
       flexDirection: 'row',

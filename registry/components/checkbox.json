@@ -7,10 +7,12 @@
     "packages/components/src/checkbox/styles.ts",
     "packages/components/src/checkbox/types.ts"
   ],
-  "utils": ["color", "pressable", "render-icon"],
+  "utils": ["color", "render-icon"],
   "componentDependencies": [],
   "dependencies": {
     "@onlynative/core": ">=0.0.0-alpha.6"
   },
-  "optionalDependencies": {}
+  "optionalDependencies": {
+    "react-native-reanimated": ">=4.0.0"
+  }
 }

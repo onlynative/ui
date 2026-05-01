@@ -1,7 +1,16 @@
 import type { MaterialTheme } from '@onlynative/core'
 import { alphaColor, transformOrigin } from '@onlynative/utils'
-import { StyleSheet } from 'react-native'
+import { Platform, StyleSheet } from 'react-native'
 import type { TextFieldVariant } from './types'
+
+// RN-Web only: suppress the browser's default focus outline. The field's
+// active indicator (filled) or thickened outline (outlined) is the focus
+// signal, so the UA outline is redundant noise on web. `outline-style: none`
+// is the canonical CSS reset; RN's types restrict the union to solid/dotted/
+// dashed, so we cast — the value at runtime is still the string 'none' and
+// RN-Web translates it to the right CSS.
+const webOutlineReset =
+  Platform.OS === 'web' ? { outlineStyle: 'none' as 'solid' } : null
 
 const CONTAINER_HEIGHT = 56
 const ICON_SIZE = 24
@@ -114,29 +123,30 @@ export function createStyles(theme: MaterialTheme, variant: TextFieldVariant) {
               borderTopEndRadius: theme.shape.cornerExtraSmall,
             }
           : {
+              // No border on the container itself for outlined — drawn by
+              // the absolute borderLayer overlay below so the inner padding
+              // box never shifts when the active border thickens.
               borderRadius: theme.shape.cornerExtraSmall,
-              borderWidth: 1,
-              borderColor: colors.borderColor,
             }),
       },
-      containerFocused: isFilled
-        ? {}
-        : {
-            borderWidth: 2,
-            borderColor: colors.focusedBorderColor,
-            paddingHorizontal: theme.spacing.md - 1,
-          },
-      containerError: isFilled
-        ? {}
-        : {
-            borderWidth: 2,
-            borderColor: colors.errorBorderColor,
-            paddingHorizontal: theme.spacing.md - 1,
-          },
       containerDisabled: isFilled
         ? { backgroundColor: colors.disabledBackgroundColor }
+        : {},
+      // Outlined border drawn as an absolute overlay so animating its width
+      // (1 dp rest → 2 dp focus/error) never moves the container's padding
+      // box. Without this, the absolute label and padding-anchored input
+      // would both jump 1 dp on iOS at focus/blur.
+      borderLayer: isFilled
+        ? { display: 'none' }
         : {
-            borderColor: colors.disabledBorderColor,
+            position: 'absolute',
+            top: 0,
+            start: 0,
+            end: 0,
+            bottom: 0,
+            borderRadius: theme.shape.cornerExtraSmall,
+            borderWidth: 1,
+            borderColor: colors.borderColor,
           },
       indicator: {
         position: 'absolute',
@@ -146,17 +156,24 @@ export function createStyles(theme: MaterialTheme, variant: TextFieldVariant) {
         height: 1,
         backgroundColor: colors.borderColor,
       },
-      indicatorFocused: {
-        height: 2,
-        backgroundColor: colors.focusedBorderColor,
-      },
-      indicatorError: {
-        height: 2,
-        backgroundColor: colors.errorBorderColor,
-      },
       indicatorDisabled: {
         backgroundColor: colors.disabledBorderColor,
       },
+      // MD3 filled hover state-layer overlay. Solid color, opacity is animated.
+      // Matches the container's top corner radius so it doesn't bleed past
+      // the rounded edges; bottom is straight to align with the indicator.
+      hoverLayer: isFilled
+        ? {
+            position: 'absolute',
+            top: 0,
+            start: 0,
+            end: 0,
+            bottom: 0,
+            backgroundColor: theme.colors.onSurface,
+            borderTopStartRadius: theme.shape.cornerExtraSmall,
+            borderTopEndRadius: theme.shape.cornerExtraSmall,
+          }
+        : { display: 'none' },
       inputWrapper: {
         flex: 1,
         justifyContent: 'center',
@@ -168,19 +185,29 @@ export function createStyles(theme: MaterialTheme, variant: TextFieldVariant) {
         paddingTop: isFilled ? FILLED_INPUT_TOP : OUTLINED_INPUT_VERTICAL,
         paddingBottom: isFilled ? FILLED_INPUT_BOTTOM : OUTLINED_INPUT_VERTICAL,
       },
-      label: {
+      // Wrapper carries the position + transform. Putting them on a View
+      // (rather than directly on Animated.Text) avoids fighting iOS text
+      // rasterisation while the layer scales — text composition gets jittery
+      // when a color worklet and a transform worklet target the same Text.
+      labelWrapper: {
         position: 'absolute',
         zIndex: 1,
+        transformOrigin: transformOrigin('top'),
+      },
+      // Outlined floated label notches the border by sitting on top of it
+      // with the surface color filling the slot. Padding extends the notch
+      // 4 dp on each side of the text so the border break reads cleanly.
+      labelWrapperNotch: {
+        paddingHorizontal: 4,
+        backgroundColor: theme.colors.surface,
+      },
+      labelText: {
         fontFamily: bodySmall.fontFamily,
         fontSize: bodySmall.fontSize,
         lineHeight: bodySmall.lineHeight,
         fontWeight: bodySmall.fontWeight,
         letterSpacing: bodySmall.letterSpacing,
         color: colors.labelColor,
-        transformOrigin: transformOrigin('top'),
-      },
-      labelNotch: {
-        paddingHorizontal: 4,
       },
       input: {
         fontFamily: bodyLarge.fontFamily,
@@ -193,7 +220,9 @@ export function createStyles(theme: MaterialTheme, variant: TextFieldVariant) {
         paddingHorizontal: 0,
         margin: 0,
         includeFontPadding: false,
+        ...webOutlineReset,
       },
+      pressableReset: { ...webOutlineReset },
       inputDisabled: {
         color: colors.disabledTextColor,
       },

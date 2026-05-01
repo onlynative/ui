@@ -7,10 +7,12 @@
     "packages/components/src/card/styles.ts",
     "packages/components/src/card/types.ts"
   ],
-  "utils": ["color", "elevation", "pressable"],
+  "utils": ["color", "elevation"],
   "componentDependencies": [],
   "dependencies": {
     "@onlynative/core": ">=0.0.0-alpha.6"
   },
-  "optionalDependencies": {}
+  "optionalDependencies": {
+    "react-native-reanimated": ">=4.0.0"
+  }
 }

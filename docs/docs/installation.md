@@ -16,9 +16,11 @@ sidebar_position: 3
 
 ### Peer dependencies
 
-`@onlynative/components` requires this peer dependency:
+`@onlynative/components` requires these peer dependencies:
 
-<PackageManagerTabs cmd="npm install react-native-safe-area-context" />
+<PackageManagerTabs cmd="npm install react-native-safe-area-context react-native-reanimated" />
+
+`react-native-reanimated` drives state-layer transitions and gesture-driven components (Slider, Switch). It's bundled with Expo SDK 54 and works in Expo Go — no custom dev client required. You can skip it only if you exclusively use static components (Typography, Layout, Avatar).
 
 If you pass **string icon names** (e.g. `leadingIcon="check"`) and don't register a custom `iconResolver`, the library resolves them through [`MaterialCommunityIcons`](https://pictogrammers.com/library/mdi/). Install:
 

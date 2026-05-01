@@ -1,9 +1,21 @@
 import { useTheme } from '@onlynative/core'
-import { resolvePressableStyle } from '@onlynative/utils'
-import { useMemo } from 'react'
+import { isFocusVisible } from '@onlynative/utils'
+import { useCallback, useMemo } from 'react'
 import { Platform, Pressable, Text, View } from 'react-native'
-import { createListItemStyles } from './styles'
+import Animated, {
+  interpolateColor,
+  useAnimatedStyle,
+  useSharedValue,
+  withTiming,
+} from 'react-native-reanimated'
+import { createListItemStyles, getResolvedListItemColors } from './styles'
 import type { ListItemLines, ListItemProps } from './types'
+
+const AnimatedPressable = Animated.createAnimatedComponent(Pressable)
+
+const HOVER_TIMING = { duration: 150 }
+const PRESS_TIMING = { duration: 100 }
+const FOCUS_TIMING = { duration: 200 }
 
 function getLines(
   supportingText?: string,
@@ -48,6 +60,66 @@ export function ListItem({
     () => createListItemStyles(theme, lines, containerColor),
     [theme, lines, containerColor],
   )
+
+  const colors = useMemo(
+    () => getResolvedListItemColors(theme, containerColor),
+    [theme, containerColor],
+  )
+
+  const hovered = useSharedValue(0)
+  const focused = useSharedValue(0)
+  const pressed = useSharedValue(0)
+
+  // Layered crossfade: rest → focus → hover → press (priority: press > hover > focus > rest).
+  const animatedContainerStyle = useAnimatedStyle(() => {
+    const focusedBg = interpolateColor(
+      focused.value,
+      [0, 1],
+      [colors.backgroundColor, colors.focusedBackgroundColor],
+    )
+    const hoveredBg = interpolateColor(
+      hovered.value,
+      [0, 1],
+      [focusedBg, colors.hoveredBackgroundColor],
+    )
+    const pressedBg = interpolateColor(
+      pressed.value,
+      [0, 1],
+      [hoveredBg, colors.pressedBackgroundColor],
+    )
+    return { backgroundColor: pressedBg }
+  })
+
+  const animatedFocusRingStyle = useAnimatedStyle(() => ({
+    opacity: focused.value,
+  }))
+
+  const handleHoverIn = useCallback(() => {
+    if (!isDisabled) hovered.value = withTiming(1, HOVER_TIMING)
+  }, [isDisabled, hovered])
+
+  const handleHoverOut = useCallback(() => {
+    hovered.value = withTiming(0, HOVER_TIMING)
+  }, [hovered])
+
+  const handlePressIn = useCallback(() => {
+    if (!isDisabled) pressed.value = withTiming(1, PRESS_TIMING)
+  }, [isDisabled, pressed])
+
+  const handlePressOut = useCallback(() => {
+    pressed.value = withTiming(0, PRESS_TIMING)
+  }, [pressed])
+
+  // Match :focus-visible — only show focus state from keyboard navigation.
+  const handleFocus = useCallback(() => {
+    if (!isDisabled && isFocusVisible()) {
+      focused.value = withTiming(1, FOCUS_TIMING)
+    }
+  }, [isDisabled, focused])
+
+  const handleBlur = useCallback(() => {
+    focused.value = withTiming(0, FOCUS_TIMING)
+  }, [focused])
 
   const content = (
     <>
@@ -94,27 +166,36 @@ export function ListItem({
   }
 
   return (
-    <Pressable
+    <AnimatedPressable
       {...props}
       role="button"
       accessibilityState={{ disabled: isDisabled }}
       hitSlop={Platform.OS === 'web' ? undefined : 4}
       disabled={isDisabled}
       onPress={onPress}
-      style={resolvePressableStyle(
-        [styles.container, styles.interactiveContainer],
-        styles.hoveredContainer,
-        styles.pressedContainer,
-        styles.disabledContainer,
-        isDisabled,
+      onHoverIn={handleHoverIn}
+      onHoverOut={handleHoverOut}
+      onPressIn={handlePressIn}
+      onPressOut={handlePressOut}
+      onFocus={handleFocus}
+      onBlur={handleBlur}
+      style={[
+        styles.container,
+        styles.interactiveContainer,
+        animatedContainerStyle,
+        isDisabled ? styles.disabledContainer : undefined,
         style,
-      )}
+      ]}
     >
+      <Animated.View
+        pointerEvents="none"
+        style={[styles.focusRing, animatedFocusRingStyle]}
+      />
       {isDisabled ? (
         <View style={styles.disabledContentWrapper}>{content}</View>
       ) : (
         content
       )}
-    </Pressable>
+    </AnimatedPressable>
   )
 }

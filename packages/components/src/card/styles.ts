@@ -3,33 +3,56 @@ import { alphaColor, blendColor, elevationStyle } from '@onlynative/utils'
 import { StyleSheet } from 'react-native'
 import type { CardVariant } from './types'
 
-interface VariantColors {
+export const CARD_FOCUS_RING_OFFSET = 2
+export const CARD_FOCUS_RING_WIDTH = 3
+
+export interface CardColors {
   backgroundColor: string
   borderColor: string
   borderWidth: number
   hoveredBackgroundColor: string
+  focusedBackgroundColor: string
   pressedBackgroundColor: string
   disabledBackgroundColor: string
   disabledBorderColor: string
 }
 
+function blendStateLayer(
+  base: string,
+  overlay: string,
+  opacity: number,
+): string {
+  if (base === 'transparent') {
+    return alphaColor(overlay, opacity)
+  }
+  return blendColor(base, overlay, opacity)
+}
+
 function getVariantColors(
   theme: MaterialTheme,
   variant: CardVariant,
-): VariantColors {
+): CardColors {
   const disabledContainerColor = alphaColor(theme.colors.onSurface, 0.12)
   const disabledOutlineColor = alphaColor(theme.colors.onSurface, 0.12)
+  const stateLayerFocus = 0.1
 
   if (variant === 'outlined') {
     return {
       backgroundColor: theme.colors.surface,
       borderColor: theme.colors.outline,
       borderWidth: 1,
-      hoveredBackgroundColor: alphaColor(
+      hoveredBackgroundColor: blendStateLayer(
+        theme.colors.surface,
         theme.colors.onSurface,
         theme.stateLayer.hoveredOpacity,
       ),
-      pressedBackgroundColor: alphaColor(
+      focusedBackgroundColor: blendStateLayer(
+        theme.colors.surface,
+        theme.colors.onSurface,
+        stateLayerFocus,
+      ),
+      pressedBackgroundColor: blendStateLayer(
+        theme.colors.surface,
         theme.colors.onSurface,
         theme.stateLayer.pressedOpacity,
       ),
@@ -47,6 +70,11 @@ function getVariantColors(
         theme.colors.surfaceContainerHighest,
         theme.colors.onSurface,
         theme.stateLayer.hoveredOpacity,
+      ),
+      focusedBackgroundColor: blendColor(
+        theme.colors.surfaceContainerHighest,
+        theme.colors.onSurface,
+        stateLayerFocus,
       ),
       pressedBackgroundColor: blendColor(
         theme.colors.surfaceContainerHighest,
@@ -68,6 +96,11 @@ function getVariantColors(
       theme.colors.onSurface,
       theme.stateLayer.hoveredOpacity,
     ),
+    focusedBackgroundColor: blendColor(
+      theme.colors.surface,
+      theme.colors.onSurface,
+      stateLayerFocus,
+    ),
     pressedBackgroundColor: blendColor(
       theme.colors.surface,
       theme.colors.onSurface,
@@ -78,12 +111,13 @@ function getVariantColors(
   }
 }
 
-function applyColorOverrides(
+function applyContainerColorOverride(
   theme: MaterialTheme,
-  colors: VariantColors,
+  colors: CardColors,
   containerColor?: string,
-): VariantColors {
+): CardColors {
   if (!containerColor) return colors
+  const stateLayerFocus = 0.1
 
   return {
     ...colors,
@@ -95,6 +129,11 @@ function applyColorOverrides(
       theme.colors.onSurface,
       theme.stateLayer.hoveredOpacity,
     ),
+    focusedBackgroundColor: blendColor(
+      containerColor,
+      theme.colors.onSurface,
+      stateLayerFocus,
+    ),
     pressedBackgroundColor: blendColor(
       containerColor,
       theme.colors.onSurface,
@@ -103,20 +142,35 @@ function applyColorOverrides(
   }
 }
 
+export function getResolvedCardColors(
+  theme: MaterialTheme,
+  variant: CardVariant,
+  containerColor?: string,
+): CardColors {
+  return applyContainerColorOverride(
+    theme,
+    getVariantColors(theme, variant),
+    containerColor,
+  )
+}
+
 export function createStyles(
   theme: MaterialTheme,
   variant: CardVariant,
   containerColor?: string,
 ) {
-  const baseColors = getVariantColors(theme, variant)
-  const colors = applyColorOverrides(theme, baseColors, containerColor)
+  const colors = getResolvedCardColors(theme, variant, containerColor)
   const elevationLevel0 = elevationStyle(theme.elevation.level0)
   const elevationLevel1 = elevationStyle(theme.elevation.level1)
-  const elevationLevel2 = elevationStyle(theme.elevation.level2)
   const baseElevation =
     variant === 'elevated' ? elevationLevel1 : elevationLevel0
 
+  const focusRingInset = -(CARD_FOCUS_RING_OFFSET + CARD_FOCUS_RING_WIDTH)
+
   return StyleSheet.create({
+    wrapper: {
+      borderRadius: theme.shape.cornerMedium,
+    },
     container: {
       borderRadius: theme.shape.cornerMedium,
       backgroundColor: colors.backgroundColor,
@@ -128,16 +182,15 @@ export function createStyles(
     interactiveContainer: {
       cursor: 'pointer',
     },
-    hoveredContainer: {
-      backgroundColor: colors.hoveredBackgroundColor,
-      ...(variant === 'elevated'
-        ? elevationLevel2
-        : variant === 'filled'
-          ? elevationLevel1
-          : undefined),
-    },
-    pressedContainer: {
-      backgroundColor: colors.pressedBackgroundColor,
+    focusRing: {
+      position: 'absolute' as const,
+      top: focusRingInset,
+      left: focusRingInset,
+      right: focusRingInset,
+      bottom: focusRingInset,
+      borderRadius: theme.shape.cornerMedium + CARD_FOCUS_RING_OFFSET,
+      borderWidth: CARD_FOCUS_RING_WIDTH,
+      borderColor: theme.colors.secondary,
     },
     disabledContainer: {
       backgroundColor: colors.disabledBackgroundColor,
