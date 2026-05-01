@@ -1,159 +1,394 @@
 import { MaterialCommunityIcons } from '@expo/vector-icons'
-import { Box, Card, Column, Grid, Typography } from '@onlynative/components'
+import {
+  Avatar,
+  Box,
+  Button,
+  Card,
+  Checkbox,
+  Chip,
+  CircularProgress,
+  Column,
+  Grid,
+  LinearProgress,
+  ListItem,
+  Radio,
+  Row,
+  Slider,
+  Switch,
+  TextField,
+  Typography,
+} from '@onlynative/components'
 import { useTheme, useBreakpointValue } from '@onlynative/core'
-import type { Colors } from '@onlynative/core'
+import type { MaterialTheme } from '@onlynative/core'
 import { useRouter } from 'expo-router'
-import { ScrollView, StyleSheet } from 'react-native'
+import { useMemo } from 'react'
+import { Pressable, ScrollView, StyleSheet, View } from 'react-native'
 
 interface ComponentEntry {
   label: string
   route: string
   description: string
-  colorKey: keyof Colors
-  icon: keyof typeof MaterialCommunityIcons.glyphMap
 }
 
-const components: ComponentEntry[] = [
+interface ComponentSection {
+  title: string
+  description: string
+  items: ComponentEntry[]
+}
+
+const sections: ComponentSection[] = [
   {
-    label: 'AppBar',
-    route: '/appbar',
-    description: 'Top app bars for navigation and actions',
-    colorKey: 'primaryContainer',
-    icon: 'dock-top',
+    title: 'Foundations',
+    description: 'Type, layout, and direction primitives',
+    items: [
+      {
+        label: 'Typography',
+        route: '/typography',
+        description: 'Display, headline, body, and label text styles',
+      },
+      {
+        label: 'Layout',
+        route: '/layout',
+        description: 'Flexbox primitives for building page structure',
+      },
+      {
+        label: 'RTL',
+        route: '/rtl',
+        description: 'Right-to-left layout — toggle from the AppBar',
+      },
+    ],
   },
   {
-    label: 'Typography',
-    route: '/typography',
-    description: 'Display, headline, body, and label text styles',
-    colorKey: 'secondaryContainer',
-    icon: 'format-text',
+    title: 'Actions & Inputs',
+    description: 'Buttons, chips, and text fields',
+    items: [
+      {
+        label: 'Button',
+        route: '/button',
+        description: 'Filled, outlined, tonal, elevated, and text buttons',
+      },
+      {
+        label: 'Chip',
+        route: '/chip',
+        description: 'Compact elements for filters and selections',
+      },
+      {
+        label: 'TextField',
+        route: '/text-field',
+        description: 'Filled and outlined text input fields',
+      },
+      {
+        label: 'Keyboard Wrapper',
+        route: '/keyboard-avoiding-wrapper',
+        description: 'Smart keyboard-aware wrapper with platform behavior',
+      },
+    ],
   },
   {
-    label: 'Button',
-    route: '/button',
-    description: 'Filled, outlined, tonal, elevated, and text buttons',
-    colorKey: 'tertiaryContainer',
-    icon: 'gesture-tap-button',
+    title: 'Selection',
+    description: 'Toggles, checkboxes, radios, and sliders',
+    items: [
+      {
+        label: 'Switch',
+        route: '/switch',
+        description: 'Toggle controls for on/off settings',
+      },
+      {
+        label: 'Checkbox',
+        route: '/checkbox',
+        description: 'Selection controls for multiple choices',
+      },
+      {
+        label: 'Radio',
+        route: '/radio',
+        description: 'Selection controls for single-choice options',
+      },
+      {
+        label: 'Slider',
+        route: '/slider',
+        description: 'Continuous, discrete, range, and centered MD3 sliders',
+      },
+    ],
   },
   {
-    label: 'Chip',
-    route: '/chip',
-    description: 'Compact elements for filters and selections',
-    colorKey: 'primaryFixedDim',
-    icon: 'label-outline',
-  },
-  {
-    label: 'TextField',
-    route: '/text-field',
-    description: 'Text input fields with filled and outlined styles',
-    colorKey: 'secondaryFixedDim',
-    icon: 'form-textbox',
-  },
-  {
-    label: 'Card',
-    route: '/card',
-    description: 'Contained surfaces for grouping related content',
-    colorKey: 'tertiaryContainer',
-    icon: 'card-outline',
-  },
-  {
-    label: 'List',
-    route: '/list',
-    description: 'Vertically arranged items with text and icons',
-    colorKey: 'surfaceContainerHigh',
-    icon: 'format-list-bulleted',
-  },
-  {
-    label: 'Layout',
-    route: '/layout',
-    description: 'Flexbox primitives for building page structure',
-    colorKey: 'primaryContainer',
-    icon: 'view-grid-outline',
-  },
-  {
-    label: 'Switch',
-    route: '/switch',
-    description: 'Toggle controls for on/off settings',
-    colorKey: 'secondaryContainer',
-    icon: 'toggle-switch-outline',
-  },
-  {
-    label: 'Checkbox',
-    route: '/checkbox',
-    description: 'Selection controls for multiple choices',
-    colorKey: 'tertiaryContainer',
-    icon: 'checkbox-marked-outline',
-  },
-  {
-    label: 'Radio',
-    route: '/radio',
-    description: 'Selection controls for single choice options',
-    colorKey: 'primaryFixedDim',
-    icon: 'radiobox-marked',
-  },
-  {
-    label: 'Keyboard Wrapper',
-    route: '/keyboard-avoiding-wrapper',
-    description: 'Smart keyboard-aware wrapper with auto platform behavior',
-    colorKey: 'secondaryFixedDim',
-    icon: 'keyboard-outline',
-  },
-  {
-    label: 'Avatar',
-    route: '/avatar',
-    description: 'Circular user representations with image, icon, or initials',
-    colorKey: 'primaryContainer',
-    icon: 'account-circle-outline',
-  },
-  {
-    label: 'Slider',
-    route: '/slider',
-    description: 'Continuous, discrete, range, and centered MD3 sliders',
-    colorKey: 'secondaryContainer',
-    icon: 'tune-variant',
-  },
-  {
-    label: 'Progress',
-    route: '/progress',
-    description:
-      'Linear and circular progress indicators (determinate / indeterminate)',
-    colorKey: 'tertiaryContainer',
-    icon: 'progress-clock',
-  },
-  {
-    label: 'RTL',
-    route: '/rtl',
-    description:
-      'Right-to-left layout showcase — toggle direction from the AppBar',
-    colorKey: 'tertiaryContainer',
-    icon: 'format-pilcrow-arrow-left',
+    title: 'Containment & Display',
+    description: 'Surfaces, lists, app bars, avatars, and progress',
+    items: [
+      {
+        label: 'AppBar',
+        route: '/appbar',
+        description: 'Top app bars for navigation and actions',
+      },
+      {
+        label: 'Card',
+        route: '/card',
+        description: 'Contained surfaces for grouping related content',
+      },
+      {
+        label: 'List',
+        route: '/list',
+        description: 'Vertically arranged items with text and icons',
+      },
+      {
+        label: 'Avatar',
+        route: '/avatar',
+        description: 'Circular user representations — image, icon, or initials',
+      },
+      {
+        label: 'Progress',
+        route: '/progress',
+        description:
+          'Linear and circular progress (determinate, indeterminate)',
+      },
+    ],
   },
 ]
+
+const totalComponents = sections.reduce((sum, s) => sum + s.items.length, 0)
+
+function Preview({ label, theme }: { label: string; theme: MaterialTheme }) {
+  switch (label) {
+    case 'Typography':
+      return (
+        <Column align="center" gap="xs">
+          <Typography variant="displaySmall">Aa</Typography>
+          <Typography variant="labelSmall" style={previewMutedText(theme)}>
+            Type scale
+          </Typography>
+        </Column>
+      )
+    case 'Layout':
+      return (
+        <Column gap="xs">
+          <Row gap="xs">
+            <Box bg={theme.colors.primary} style={previewStyles.swatch} />
+            <Box bg={theme.colors.secondary} style={previewStyles.swatch} />
+            <Box bg={theme.colors.tertiary} style={previewStyles.swatch} />
+          </Row>
+          <Row gap="xs">
+            <Box
+              bg={theme.colors.primaryContainer}
+              style={previewStyles.swatch}
+            />
+            <Box
+              bg={theme.colors.secondaryContainer}
+              style={previewStyles.swatch}
+            />
+            <Box
+              bg={theme.colors.tertiaryContainer}
+              style={previewStyles.swatch}
+            />
+          </Row>
+        </Column>
+      )
+    case 'RTL':
+      return (
+        <Row gap="md" align="center">
+          <MaterialCommunityIcons
+            name="format-pilcrow-arrow-left"
+            size={32}
+            color={theme.colors.primary}
+          />
+          <MaterialCommunityIcons
+            name="swap-horizontal"
+            size={20}
+            color={theme.colors.onSurfaceVariant}
+          />
+          <MaterialCommunityIcons
+            name="format-pilcrow-arrow-right"
+            size={32}
+            color={theme.colors.tertiary}
+          />
+        </Row>
+      )
+    case 'Button':
+      return (
+        <Column gap="xs">
+          <Button variant="filled">Filled</Button>
+          <Button variant="outlined">Outlined</Button>
+        </Column>
+      )
+    case 'Chip':
+      return (
+        <Row gap="xs" wrap justify="center">
+          <Chip variant="filter" selected>
+            Selected
+          </Chip>
+          <Chip variant="assist">Assist</Chip>
+        </Row>
+      )
+    case 'TextField':
+      return (
+        <View style={previewStyles.fieldWrapper}>
+          <TextField label="Email" variant="outlined" />
+        </View>
+      )
+    case 'Keyboard Wrapper':
+      return (
+        <MaterialCommunityIcons
+          name="keyboard-outline"
+          size={48}
+          color={theme.colors.primary}
+        />
+      )
+    case 'Switch':
+      return (
+        <Row gap="md" align="center">
+          <Switch value={true} />
+          <Switch value={false} />
+        </Row>
+      )
+    case 'Checkbox':
+      return (
+        <Row gap="md" align="center">
+          <Checkbox value={true} />
+          <Checkbox value={false} />
+        </Row>
+      )
+    case 'Radio':
+      return (
+        <Row gap="md" align="center">
+          <Radio value={true} />
+          <Radio value={false} />
+        </Row>
+      )
+    case 'Slider':
+      return (
+        <View style={previewStyles.sliderWrapper}>
+          <Slider value={0.6} />
+        </View>
+      )
+    case 'AppBar':
+      return (
+        <Row
+          bg={theme.colors.surfaceContainer}
+          style={previewStyles.appBar}
+          align="center"
+          gap="sm"
+          px="sm"
+        >
+          <Box bg={theme.colors.onSurface} style={previewStyles.appBarHandle} />
+          <View style={previewStyles.appBarSpacer}>
+            <Box
+              bg={theme.colors.onSurfaceVariant}
+              style={previewStyles.appBarTitle}
+            />
+          </View>
+          <Box bg={theme.colors.onSurface} style={previewStyles.appBarHandle} />
+          <Box bg={theme.colors.onSurface} style={previewStyles.appBarHandle} />
+        </Row>
+      )
+    case 'Card':
+      return (
+        <View style={previewStyles.cardMini}>
+          <Card variant="elevated">
+            <Column p="sm" gap="xs">
+              <Typography variant="labelLarge">Card title</Typography>
+              <Typography variant="labelSmall" style={previewMutedText(theme)}>
+                Supporting line
+              </Typography>
+            </Column>
+          </Card>
+        </View>
+      )
+    case 'List':
+      return (
+        <Column style={previewStyles.listMini} gap="xs">
+          <ListItem
+            leadingContent={<Avatar size="xSmall" label="JD" />}
+            headlineText="Jane Doe"
+            supportingText="Updated just now"
+          />
+          <ListItem
+            leadingContent={<Avatar size="xSmall" label="AK" />}
+            headlineText="Alex Kim"
+          />
+        </Column>
+      )
+    case 'Avatar':
+      return (
+        <Row gap="sm" align="center">
+          <Avatar size="small" label="JD" />
+          <Avatar size="medium" label="AK" />
+          <Avatar size="small" icon="account" />
+        </Row>
+      )
+    case 'Progress':
+      return (
+        <Column gap="md" align="center" style={previewStyles.progressWrapper}>
+          <LinearProgress progress={0.65} />
+          <CircularProgress progress={0.5} size={36} />
+        </Column>
+      )
+    default:
+      return null
+  }
+}
+
+const previewMutedText = (theme: MaterialTheme) => ({
+  color: theme.colors.onSurfaceVariant,
+})
 
 export default function HomeScreen() {
   const router = useRouter()
   const theme = useTheme()
-  const columns = useBreakpointValue({ compact: 2, medium: 4 })
+  const columns = useBreakpointValue({
+    compact: 2,
+    medium: 3,
+    expanded: 4,
+    large: 4,
+  })
   const padding = useBreakpointValue({
     compact: 16,
     medium: 24,
     expanded: 32,
   })
   const previewHeight = useBreakpointValue({
-    compact: 100,
-    medium: 120,
-    expanded: 140,
+    compact: 128,
+    medium: 144,
+    expanded: 160,
   })
-  const iconSize = useBreakpointValue({
-    compact: 32,
-    medium: 36,
-    expanded: 40,
+  const heroVariant = useBreakpointValue({
+    compact: 'displaySmall' as const,
+    medium: 'displayMedium' as const,
+    expanded: 'displayLarge' as const,
   })
-  const headingVariant = useBreakpointValue({
-    compact: 'titleLarge' as const,
-    medium: 'headlineSmall' as const,
-    expanded: 'headlineMedium' as const,
+  const taglineVariant = useBreakpointValue({
+    compact: 'bodyLarge' as const,
+    medium: 'titleMedium' as const,
+    expanded: 'titleLarge' as const,
   })
+  const sectionTitleVariant = useBreakpointValue({
+    compact: 'titleMedium' as const,
+    medium: 'titleLarge' as const,
+  })
+
+  const previewBoxStyle = useMemo(
+    () => ({
+      height: previewHeight,
+      backgroundColor: theme.colors.surfaceContainerLow,
+    }),
+    [previewHeight, theme.colors.surfaceContainerLow],
+  )
+  const captionStyle = useMemo(
+    () => ({ color: theme.colors.onSurfaceVariant }),
+    [theme.colors.onSurfaceVariant],
+  )
+  const descriptionStyle = useMemo(
+    () => ({ color: theme.colors.onSurfaceVariant, minHeight: 32 }),
+    [theme.colors.onSurfaceVariant],
+  )
+  const dotStyle = useMemo(
+    () => ({ color: theme.colors.outlineVariant }),
+    [theme.colors.outlineVariant],
+  )
+
+  const stats: Array<{ label: string; value: string }> = [
+    { value: String(totalComponents), label: 'components' },
+    { value: 'iOS · Android · Web', label: 'platforms' },
+    { value: 'TypeScript', label: 'first' },
+    { value: 'MIT', label: 'license' },
+  ]
 
   return (
     <ScrollView
@@ -162,45 +397,81 @@ export default function HomeScreen() {
         { padding, paddingBottom: padding * 2 },
       ]}
     >
-      <Box style={styles.container}>
-        <Typography variant={headingVariant} style={styles.heading}>
-          Components
-        </Typography>
-        <Grid columns={columns} gap="md">
-          {components.map((item) => (
-            <Card
-              key={item.route}
-              variant="outlined"
-              onPress={() => router.push(item.route)}
-              style={styles.card}
-            >
-              <Box
-                align="center"
-                justify="center"
-                bg={theme.colors[item.colorKey]}
-                style={{ height: previewHeight }}
-              >
-                <MaterialCommunityIcons
-                  name={item.icon}
-                  size={iconSize}
-                  color={theme.colors.onSurface}
-                  style={styles.icon}
-                />
-              </Box>
-              <Column px="md" py="sm" gap="xs">
-                <Typography variant="titleMedium">{item.label}</Typography>
-                <Typography
-                  variant="bodySmall"
-                  style={{ color: theme.colors.onSurfaceVariant }}
-                  numberOfLines={2}
-                >
-                  {item.description}
-                </Typography>
-              </Column>
-            </Card>
-          ))}
-        </Grid>
-      </Box>
+      <Column style={styles.container} gap="xl">
+        <Column gap="md" style={styles.hero}>
+          <Row gap="xs" align="center">
+            <Chip variant="suggestion" leadingIcon="palette-outline">
+              Material Design 3
+            </Chip>
+          </Row>
+          <Typography variant={heroVariant}>OnlyNative UI</Typography>
+          <Typography variant={taglineVariant} style={captionStyle}>
+            Beautiful Material Design 3 components for React Native — copy,
+            paste, ship.
+          </Typography>
+          <Row gap="md" wrap style={styles.statsRow}>
+            {stats.map((stat, idx) => (
+              <Row gap="md" align="center" key={stat.label}>
+                <Column>
+                  <Typography variant="titleMedium">{stat.value}</Typography>
+                  <Typography variant="labelSmall" style={captionStyle}>
+                    {stat.label}
+                  </Typography>
+                </Column>
+                {idx < stats.length - 1 ? (
+                  <Typography variant="titleMedium" style={dotStyle}>
+                    ·
+                  </Typography>
+                ) : null}
+              </Row>
+            ))}
+          </Row>
+        </Column>
+
+        {sections.map((section) => (
+          <Column gap="md" key={section.title}>
+            <Column gap="xs">
+              <Typography variant={sectionTitleVariant}>
+                {section.title}
+              </Typography>
+              <Typography variant="bodySmall" style={captionStyle}>
+                {section.description}
+              </Typography>
+            </Column>
+            <Grid columns={columns} gap="md">
+              {section.items.map((item) => (
+                <Card key={item.route} variant="outlined" style={styles.card}>
+                  <Box align="center" justify="center" style={previewBoxStyle}>
+                    <View
+                      style={styles.previewInner}
+                      accessibilityElementsHidden
+                      importantForAccessibility="no-hide-descendants"
+                    >
+                      <Preview label={item.label} theme={theme} />
+                    </View>
+                  </Box>
+                  <Column px="md" py="sm" gap="xs">
+                    <Typography variant="titleMedium">{item.label}</Typography>
+                    <Typography
+                      variant="bodySmall"
+                      style={descriptionStyle}
+                      numberOfLines={2}
+                    >
+                      {item.description}
+                    </Typography>
+                  </Column>
+                  <Pressable
+                    onPress={() => router.push(item.route)}
+                    accessibilityRole="button"
+                    accessibilityLabel={item.label}
+                    style={styles.pressOverlay}
+                  />
+                </Card>
+              ))}
+            </Grid>
+          </Column>
+        ))}
+      </Column>
     </ScrollView>
   )
 }
@@ -214,14 +485,77 @@ const styles = StyleSheet.create({
     width: '100%',
     maxWidth: 1200,
   },
-  heading: {
-    marginBottom: 16,
+  hero: {
+    paddingVertical: 16,
+  },
+  statsRow: {
+    marginTop: 8,
   },
   card: {
     flex: 1,
     overflow: 'hidden',
   },
-  icon: {
-    opacity: 0.6,
+  previewInner: {
+    paddingHorizontal: 16,
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '100%',
+    pointerEvents: 'none',
+  },
+  pressOverlay: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+  },
+})
+
+const previewStyles = StyleSheet.create({
+  swatch: {
+    width: 22,
+    height: 16,
+    borderRadius: 4,
+  },
+  fieldWrapper: {
+    width: '100%',
+    maxWidth: 200,
+  },
+  sliderWrapper: {
+    width: '100%',
+    maxWidth: 200,
+  },
+  appBar: {
+    width: '100%',
+    maxWidth: 220,
+    height: 40,
+    borderRadius: 8,
+  },
+  appBarHandle: {
+    width: 14,
+    height: 14,
+    borderRadius: 7,
+    opacity: 0.7,
+  },
+  appBarTitle: {
+    width: '70%',
+    height: 6,
+    borderRadius: 3,
+    opacity: 0.5,
+  },
+  appBarSpacer: {
+    flex: 1,
+  },
+  cardMini: {
+    width: '100%',
+    maxWidth: 180,
+  },
+  listMini: {
+    width: '100%',
+    maxWidth: 220,
+  },
+  progressWrapper: {
+    width: '100%',
+    maxWidth: 180,
   },
 })
