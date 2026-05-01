@@ -41,12 +41,22 @@ const previousResolveRequest = config.resolver.resolveRequest
 config.resolver.resolveRequest = (context, moduleName, platform) => {
   for (const [pkg, srcDir] of Object.entries(WORKSPACE_PACKAGES)) {
     if (moduleName !== pkg && !moduleName.startsWith(`${pkg}/`)) continue
-    const subpath =
-      moduleName === pkg ? 'index' : `${moduleName.slice(pkg.length + 1)}/index`
-    for (const ext of ['ts', 'tsx']) {
-      const candidate = path.join(srcDir, `${subpath}.${ext}`)
-      if (fs.existsSync(candidate)) {
-        return { filePath: candidate, type: 'sourceFile' }
+    const rel = moduleName === pkg ? '' : moduleName.slice(pkg.length + 1)
+    // Try `<rel>.{ts,tsx}` (direct file) before `<rel>/index.{ts,tsx}`. The
+    // root entry (rel === '') skips the direct lookup since `src.ts` is never
+    // the right answer.
+    const candidates = []
+    if (rel) {
+      candidates.push(`${rel}.ts`, `${rel}.tsx`)
+    }
+    candidates.push(
+      `${rel ? `${rel}/` : ''}index.ts`,
+      `${rel ? `${rel}/` : ''}index.tsx`,
+    )
+    for (const candidate of candidates) {
+      const full = path.join(srcDir, candidate)
+      if (fs.existsSync(full)) {
+        return { filePath: full, type: 'sourceFile' }
       }
     }
   }

@@ -18,6 +18,23 @@ jest.mock('@expo/vector-icons/MaterialCommunityIcons', () => {
   }
 })
 
+// Reanimated mock — STATIC RENDER ONLY.
+//
+// `useAnimatedStyle`/`useAnimatedProps` invoke the worklet exactly once at
+// render and return a plain object. They are NOT live: mutating a shared
+// value after mount (e.g. via `pressed.value = withTiming(1)`) does not
+// re-run the worklet and the rendered style stays at its initial state.
+//
+// What this means for tests:
+//   ✅ assert at-rest structure / role / accessibility / static styles
+//   ✅ assert static color, layout that comes from props, not shared values
+//   ❌ don't fire press/hover/focus and assert post-interaction styles
+//      coming from `useSharedValue` + `withTiming`/`withSpring` — they will
+//      silently read as the at-rest values
+//
+// If you need to assert a hover/press visual, derive the asserted style from
+// component props instead (e.g. via `containerColor`) so it doesn't go
+// through reanimated's animated style.
 jest.mock('react-native-reanimated', () => {
   const React = require('react')
   const { Text, View } = require('react-native')
@@ -40,6 +57,7 @@ jest.mock('react-native-reanimated', () => {
     Text: AnimatedText,
     useSharedValue: (initial) => ({ value: initial }),
     useDerivedValue: (fn) => ({ value: fn() }),
+    // One-shot: see the warning above the mock.
     useAnimatedStyle: (fn) => fn(),
     useAnimatedProps: (fn) => fn(),
     cancelAnimation: () => {},

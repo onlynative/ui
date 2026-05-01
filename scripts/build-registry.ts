@@ -201,7 +201,7 @@ function buildComponentEntry(componentDir: string): ComponentEntry {
   }
 
   if (externalDeps.has('react-native-reanimated')) {
-    dependencies['react-native-reanimated'] = '>=4.0.0'
+    optionalDependencies['react-native-reanimated'] = '>=4.0.0'
   }
 
   // Special case: layout uses safe-area-context only in Layout.tsx (optional)
