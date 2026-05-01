@@ -1,6 +1,6 @@
 {
   "name": "progress",
-  "description": "",
+  "description": "Linear and circular progress indicators with determinate and indeterminate modes.",
   "files": [
     "packages/components/src/progress/CircularProgress.tsx",
     "packages/components/src/progress/LinearProgress.tsx",
@@ -12,9 +12,8 @@
   "componentDependencies": [],
   "dependencies": {
     "@onlynative/core": ">=0.0.0-alpha.6",
-    "react-native-svg": ">=15.0.0"
-  },
-  "optionalDependencies": {
+    "react-native-svg": ">=15.0.0",
     "react-native-reanimated": ">=4.0.0"
-  }
+  },
+  "optionalDependencies": {}
 }

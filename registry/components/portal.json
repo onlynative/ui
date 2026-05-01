@@ -1,6 +1,6 @@
 {
   "name": "portal",
-  "description": "",
+  "description": "Render children into a host elsewhere in the tree (Portal + PortalHost) for overlays like dialogs, sheets, and tooltips.",
   "files": [
     "packages/components/src/portal/Portal.tsx",
     "packages/components/src/portal/PortalHost.tsx",
