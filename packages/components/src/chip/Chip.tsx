@@ -302,6 +302,11 @@ export function Chip(props: ChipProps) {
           styles.container,
           animatedContainerStyle,
           isDisabled ? styles.disabledContainer : undefined,
+          // Function-form `style` is intentionally dropped on animated
+          // components — wrapping the whole `style` array in a function would
+          // hide the animated container style from Reanimated's prop diff and
+          // break the state-layer transitions. Use `containerColor` /
+          // `contentColor` for state-aware styling instead.
           typeof style === 'function' ? undefined : style,
         ]}
       >

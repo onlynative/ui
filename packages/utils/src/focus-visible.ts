@@ -1,14 +1,14 @@
-import { useEffect, useState } from 'react'
+import { useSyncExternalStore } from 'react'
 
 type Modality = 'keyboard' | 'pointer'
 
 let currentModality: Modality = 'pointer'
-const subscribers = new Set<(m: Modality) => void>()
+const subscribers = new Set<() => void>()
 
 function setModality(next: Modality) {
   if (currentModality !== next) {
     currentModality = next
-    subscribers.forEach((fn) => fn(next))
+    subscribers.forEach((fn) => fn())
   }
 }
 
@@ -36,27 +36,44 @@ if (
   document.addEventListener('touchstart', onPointerDown, true)
 }
 
-/**
- * Returns true when the user's most recent input was a keyboard event,
- * indicating that focus indicators should be visible. Mirrors the CSS
- * `:focus-visible` semantics for React Native.
- */
-export function useFocusVisible(): boolean {
-  const [keyboardActive, setKeyboardActive] = useState(
-    currentModality === 'keyboard',
-  )
-
-  useEffect(() => {
-    const fn = (m: Modality) => setKeyboardActive(m === 'keyboard')
-    subscribers.add(fn)
-    return () => {
-      subscribers.delete(fn)
-    }
-  }, [])
-
-  return keyboardActive
+function subscribe(callback: () => void) {
+  subscribers.add(callback)
+  return () => {
+    subscribers.delete(callback)
+  }
 }
 
+function getSnapshot() {
+  return currentModality === 'keyboard'
+}
+
+/**
+ * Reactive focus-visible state — re-renders the calling component whenever
+ * the user's input modality flips between keyboard and pointer. Mirrors the
+ * CSS `:focus-visible` semantics for React Native.
+ *
+ * Backed by `useSyncExternalStore` so the initial snapshot and the subscribed
+ * snapshot are always in sync (no first-render race when modality changes
+ * between render and effect).
+ *
+ * Prefer `isFocusVisible()` inside event handlers — it returns the same
+ * boolean without subscribing the calling component to re-renders. Use this
+ * hook only when render output itself depends on the modality (e.g. a focus
+ * ring rendered conditionally without a separate handler).
+ */
+export function useFocusVisible(): boolean {
+  return useSyncExternalStore(subscribe, getSnapshot, getSnapshot)
+}
+
+/**
+ * Imperative read of focus-visible state — returns `true` when the user's
+ * most recent input was a keyboard event. Designed for use inside event
+ * handlers (`onFocus`, `onBlur`, etc.) where you want the boolean value
+ * without subscribing the component to re-renders.
+ *
+ * If the rendered output itself depends on the modality, use the reactive
+ * `useFocusVisible()` hook instead.
+ */
 export function isFocusVisible(): boolean {
   return currentModality === 'keyboard'
 }

@@ -18,6 +18,7 @@ import type {
 import { I18nManager, PanResponder, Pressable, Text, View } from 'react-native'
 import Animated, {
   Easing,
+  cancelAnimation,
   type SharedValue,
   useAnimatedStyle,
   useSharedValue,
@@ -37,6 +38,15 @@ import {
   createStyles,
 } from './styles'
 import type { SliderProps, SliderValue } from './types'
+
+// RN-Web's Pressable forwards `onKeyDown` to the underlying DOM element, but
+// the upstream `PressableProps` type doesn't include it. Augmenting locally
+// keeps the prop typed at the call site without an `as object` cast.
+declare module 'react-native' {
+  interface PressableProps {
+    onKeyDown?: (event: { nativeEvent: { key?: string } }) => void
+  }
+}
 
 type ThumbId = 'low' | 'high'
 
@@ -575,32 +585,43 @@ export function Slider({
     [controlledValue, onValueChange, onSlidingComplete],
   )
 
-  const handleTouch = useCallback(
-    (locationX: number, complete: boolean) => {
-      const v = positionToValue(locationX)
-      const current = valueRef.current
+  // Stash the latest commit / position-mapping callbacks behind refs so the
+  // PanResponder isn't rebuilt mid-gesture when a parent re-renders with a new
+  // `onValueChange` identity (common when consumers pass inline arrows). RN's
+  // gesture system holds state on the responder instance — recreating it
+  // mid-gesture can drop subsequent move events.
+  const positionToValueRef = useRef(positionToValue)
+  useEffect(() => {
+    positionToValueRef.current = positionToValue
+  }, [positionToValue])
+  const commitRef = useRef(commitValue)
+  useEffect(() => {
+    commitRef.current = commitValue
+  }, [commitValue])
 
-      if (Array.isArray(current)) {
-        const [low, high] = current
-        let which = activeThumbRef.current
-        if (!which) {
-          which = Math.abs(v - low) <= Math.abs(v - high) ? 'low' : 'high'
-          activeThumbRef.current = which
-          setActiveThumb(which)
-        }
-        const next: [number, number] =
-          which === 'low' ? [Math.min(v, high), high] : [low, Math.max(v, low)]
-        commitValue(next, complete)
-      } else {
-        if (!activeThumbRef.current) {
-          activeThumbRef.current = 'low'
-          setActiveThumb('low')
-        }
-        commitValue(v, complete)
+  const handleTouch = useCallback((locationX: number, complete: boolean) => {
+    const v = positionToValueRef.current(locationX)
+    const current = valueRef.current
+
+    if (Array.isArray(current)) {
+      const [low, high] = current
+      let which = activeThumbRef.current
+      if (!which) {
+        which = Math.abs(v - low) <= Math.abs(v - high) ? 'low' : 'high'
+        activeThumbRef.current = which
+        setActiveThumb(which)
       }
-    },
-    [commitValue, positionToValue],
-  )
+      const next: [number, number] =
+        which === 'low' ? [Math.min(v, high), high] : [low, Math.max(v, low)]
+      commitRef.current(next, complete)
+    } else {
+      if (!activeThumbRef.current) {
+        activeThumbRef.current = 'low'
+        setActiveThumb('low')
+      }
+      commitRef.current(v, complete)
+    }
+  }, [])
 
   const panResponder = useMemo(
     () =>
@@ -650,6 +671,33 @@ export function Slider({
   const highFocused = useSharedValue(0)
   const lowLabelOpacity = useSharedValue(0)
   const highLabelOpacity = useSharedValue(0)
+
+  // Cancel any in-flight springs/timings on unmount. Reanimated GCs the
+  // shared values themselves, but a mid-flight animation outliving the
+  // component can keep the worklet running for a frame or two — relevant
+  // when the slider unmounts mid-drag (route transition, orientation change).
+  useEffect(
+    () => () => {
+      cancelAnimation(lowPressed)
+      cancelAnimation(highPressed)
+      cancelAnimation(lowHovered)
+      cancelAnimation(highHovered)
+      cancelAnimation(lowFocused)
+      cancelAnimation(highFocused)
+      cancelAnimation(lowLabelOpacity)
+      cancelAnimation(highLabelOpacity)
+    },
+    [
+      lowPressed,
+      highPressed,
+      lowHovered,
+      highHovered,
+      lowFocused,
+      highFocused,
+      lowLabelOpacity,
+      highLabelOpacity,
+    ],
+  )
 
   // The single Pressable wrapper has one focus target. For range sliders we
   // route keyboard adjustments and focus indication to the thumb the user is
@@ -1174,8 +1222,9 @@ export function Slider({
         onHoverOut={handleHoverOut}
         onFocus={handleFocus}
         onBlur={handleBlur}
-        // Web only: arrow / Page / Home / End / Enter handling. Native ignores.
-        {...({ onKeyDown: handleKeyDown } as object)}
+        // Web only: arrow / Page / Home / End / Enter handling. Native ignores
+        // the prop because RN's Pressable doesn't dispatch onKeyDown there.
+        onKeyDown={handleKeyDown}
         disabled={isDisabled}
         style={styles.pressableWrapper}
       >
