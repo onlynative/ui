@@ -104,9 +104,9 @@ The `init` + `add` workflow copies component source files directly into your pro
 
 | Package | Size | Description |
 | --- | --- | --- |
-| [`@onlynative/core`](packages/core) | ![npm bundle size](https://img.shields.io/bundlephobia/min/@onlynative/core) | Theme engine, theme contracts, built-in Material Design You theme, `ThemeProvider`, `useTheme` hook, responsive utilities. |
-| [`@onlynative/components`](packages/components) | ![npm bundle size](https://img.shields.io/bundlephobia/min/@onlynative/components) | UI components with subpath exports for tree-shaking. |
-| [`@onlynative/cli`](packages/cli) | ![npm bundle size](https://img.shields.io/bundlephobia/min/@onlynative/cli) | CLI to scaffold components into your project (shadcn/ui-style). |
+| [`@onlynative/core`](packages/core) | ![install size](https://packagephobia.com/badge?p=@onlynative/core) | Theme engine, theme contracts, built-in Material Design You theme, `ThemeProvider`, `useTheme` hook, responsive utilities. |
+| [`@onlynative/components`](packages/components) | ![install size](https://packagephobia.com/badge?p=@onlynative/components) | UI components with subpath exports for tree-shaking. |
+| [`@onlynative/cli`](packages/cli) | ![install size](https://packagephobia.com/badge?p=@onlynative/cli) | CLI to scaffold components into your project (shadcn/ui-style). |
 | [`onlynative`](packages/onlynative) | — | Shorthand wrapper for `@onlynative/cli`. |
 | [`@onlynative/utils`](packages/utils) | — | Internal utilities used by components (not published). |
 | [`example`](example) | — | Expo Router showcase app for testing and previewing components. |
@@ -124,7 +124,11 @@ The `init` + `add` workflow copies component source files directly into your pro
 │   ├── cli/               # CLI for scaffolding components into projects
 │   ├── onlynative/        # Shorthand CLI wrapper
 │   └── utils/             # Internal utilities (not published)
-├── template/              # Quick start template (used by `onlynative create`)
+├── templates/             # Quick start templates (used by `onlynative create`)
+│   ├── blank/
+│   └── with-router/
+├── registry/              # Auto-generated component metadata for the CLI
+├── scripts/               # Build utilities (registry, llms.txt generators)
 ├── turbo.json
 └── pnpm-workspace.yaml
 ```
