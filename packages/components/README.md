@@ -5,7 +5,7 @@ Material Design 3 UI components for React Native, part of [OnlyNative UI](https:
 ## Install
 
 ```bash
-pnpm add @onlynative/core @onlynative/components react-native-safe-area-context
+pnpm add @onlynative/core @onlynative/components react-native-safe-area-context react-native-reanimated
 ```
 
 **Optional** — only needed if you plan to use icons in your app:
@@ -13,6 +13,8 @@ pnpm add @onlynative/core @onlynative/components react-native-safe-area-context
 ```bash
 pnpm add @expo/vector-icons
 ```
+
+> `react-native-reanimated` powers state-layer transitions and gesture-driven components (Slider, Switch). Required for any interactive component; static components (Typography, Layout, Avatar) work without it. With Expo SDK 54 it's also already available in Expo Go.
 
 Wrap your app with `ThemeProvider` from `@onlynative/core` (see [@onlynative/core](https://www.npmjs.com/package/@onlynative/core)).
 

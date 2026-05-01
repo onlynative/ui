@@ -1282,7 +1282,7 @@ function generateComponentsLlms(): string {
   return `# @onlynative/components — MD3 UI Components for React Native
 
 > Version: ${COMPONENTS_VERSION}
-> Peer deps: @onlynative/core >=${CORE_VERSION}, react >=18, react-native >=0.72, react-native-safe-area-context >=4
+> Peer deps: @onlynative/core >=${CORE_VERSION}, react >=18, react-native >=0.72, react-native-safe-area-context >=4, react-native-reanimated >=4
 > Optional: @expo/vector-icons >=14 (only needed for icon props)
 
 ## Usage
@@ -1312,7 +1312,7 @@ function generateFullLlms(): string {
 > Design-system agnostic component library for React Native — ships with Material Design 3
 > Versions: \`@onlynative/core\` ${CORE_VERSION} · \`@onlynative/components\` ${COMPONENTS_VERSION} · \`@onlynative/cli\` ${CLI_VERSION}
 > Requirements: React Native 0.81+, React 19+, Expo SDK 54+
-> Peer deps: \`react-native-safe-area-context >=4\`
+> Peer deps: \`react-native-safe-area-context >=4\`, \`react-native-reanimated >=4\`
 > Optional peer deps: \`@expo/vector-icons >=14\` (only needed for icon props)
 
 ---
@@ -1337,7 +1337,7 @@ Pass name directly: \`npx onlynative create my-app\`
 ## Installation (existing project)
 
 \`\`\`bash
-pnpm add @onlynative/core @onlynative/components @expo/vector-icons react-native-safe-area-context
+pnpm add @onlynative/core @onlynative/components @expo/vector-icons react-native-safe-area-context react-native-reanimated
 \`\`\`
 
 ---
