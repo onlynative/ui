@@ -134,6 +134,7 @@ export function LinearProgress({
     <View
       {...rest}
       onLayout={onLayout}
+      accessible
       accessibilityRole="progressbar"
       accessibilityLabel={accessibilityLabel}
       accessibilityValue={

@@ -171,6 +171,7 @@ export function CircularProgress({
   return (
     <View
       {...rest}
+      accessible
       accessibilityRole="progressbar"
       accessibilityLabel={accessibilityLabel}
       accessibilityValue={accessibilityValue}

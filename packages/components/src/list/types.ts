@@ -36,6 +36,12 @@ export interface ListItemProps extends ViewProps {
    */
   containerColor?: string
   /**
+   * Override the headline text color. Overline, supporting, and
+   * trailing-supporting text keep their MD3 muted variants (`onSurfaceVariant`)
+   * — those are intentionally distinct from the primary content color.
+   */
+  contentColor?: string
+  /**
    * Maximum number of lines for supportingText before truncating.
    * @default 1
    */

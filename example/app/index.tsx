@@ -9,6 +9,7 @@ import {
   CircularProgress,
   Column,
   Grid,
+  IconButton,
   LinearProgress,
   ListItem,
   Radio,
@@ -66,6 +67,11 @@ const sections: ComponentSection[] = [
         label: 'Button',
         route: '/button',
         description: 'Filled, outlined, tonal, elevated, and text buttons',
+      },
+      {
+        label: 'IconButton',
+        route: '/icon-button',
+        description: 'Compact icon-only actions with toggle and size variants',
       },
       {
         label: 'Chip',
@@ -140,6 +146,12 @@ const sections: ComponentSection[] = [
         description:
           'Linear and circular progress (determinate, indeterminate)',
       },
+      {
+        label: 'Portal',
+        route: '/portal',
+        description:
+          'Render overlays above the rest of the tree — toasts, dialogs, scrims',
+      },
     ],
   },
 ]
@@ -207,6 +219,26 @@ function Preview({ label, theme }: { label: string; theme: MaterialTheme }) {
           <Button variant="filled">Filled</Button>
           <Button variant="outlined">Outlined</Button>
         </Column>
+      )
+    case 'IconButton':
+      return (
+        <Row gap="sm" align="center">
+          <IconButton
+            icon="heart-outline"
+            variant="filled"
+            accessibilityLabel="Like (filled)"
+          />
+          <IconButton
+            icon="heart-outline"
+            variant="tonal"
+            accessibilityLabel="Like (tonal)"
+          />
+          <IconButton
+            icon="heart-outline"
+            variant="outlined"
+            accessibilityLabel="Like (outlined)"
+          />
+        </Row>
       )
     case 'Chip':
       return (
@@ -319,6 +351,19 @@ function Preview({ label, theme }: { label: string; theme: MaterialTheme }) {
           <LinearProgress progress={0.65} />
           <CircularProgress progress={0.5} size={36} />
         </Column>
+      )
+    case 'Portal':
+      return (
+        <View style={previewStyles.portalWrapper}>
+          <Box
+            bg={theme.colors.surfaceContainer}
+            style={previewStyles.portalSurface}
+          />
+          <Box
+            bg={theme.colors.inverseSurface}
+            style={previewStyles.portalToast}
+          />
+        </View>
       )
     default:
       return null
@@ -557,5 +602,25 @@ const previewStyles = StyleSheet.create({
   progressWrapper: {
     width: '100%',
     maxWidth: 180,
+  },
+  portalWrapper: {
+    width: '100%',
+    maxWidth: 180,
+    height: 80,
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+  },
+  portalSurface: {
+    width: '100%',
+    height: 36,
+    borderRadius: 8,
+    opacity: 0.5,
+  },
+  portalToast: {
+    position: 'absolute',
+    bottom: 0,
+    width: '70%',
+    height: 24,
+    borderRadius: 6,
   },
 })

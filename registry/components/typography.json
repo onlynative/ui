@@ -4,12 +4,13 @@
   "files": [
     "packages/components/src/typography/Typography.tsx",
     "packages/components/src/typography/index.ts",
+    "packages/components/src/typography/styles.ts",
     "packages/components/src/typography/types.ts"
   ],
   "utils": [],
   "componentDependencies": [],
   "dependencies": {
-    "@onlynative/core": ">=0.0.0-alpha.6"
+    "@onlynative/core": ">=0.0.0-alpha.7"
   },
   "optionalDependencies": {}
 }

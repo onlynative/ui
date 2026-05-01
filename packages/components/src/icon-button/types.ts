@@ -1,5 +1,5 @@
 import type { IconSource } from '@onlynative/utils'
-import type { PressableProps } from 'react-native'
+import type { PressableProps, StyleProp, ViewStyle } from 'react-native'
 
 /** Visual fill style of the icon button. */
 export type IconButtonVariant = 'filled' | 'tonal' | 'outlined' | 'standard'
@@ -31,8 +31,13 @@ export interface IconButtonProps extends Omit<
    * State-layer colors (hover, press) are derived automatically.
    */
   containerColor?: string
-  /** Custom style applied to the root container. */
-  style?: PressableProps['style']
+  /**
+   * Style applied to the root container. Static form only — the function
+   * form `(state) => style` is not supported because the component drives
+   * its container background through Reanimated. Use `containerColor` /
+   * `contentColor` for state-aware styling.
+   */
+  style?: StyleProp<ViewStyle>
   /** Called when the button is pressed. */
   onPress?: () => void
   /**

@@ -424,7 +424,7 @@ Props:
 - `containerColor?: string` — Override the container (background) color. State-layer colors (hover, press) are derived automatically.
 - `contentColor?: string` — Override the content (label and icon) color. State-layer colors are derived automatically when no containerColor is set.
 - `labelStyle?: StyleProp<TextStyle>` — Additional style applied to the label text.
-- Inherits `PressableProps` (except `children`)
+- `style?: StyleProp<ViewStyle>` — Style applied to the root container. Static form only — the function form `(state) => style` is not supported because the component drives its container background through Reanimated. Use `containerColor` / `contentColor` for state-aware styling.
 
 ---
 
@@ -443,7 +443,7 @@ Props:
 - `iconColor?: string` — Overrides the automatic icon color derived from the variant and state.
 - `contentColor?: string` — Override the content (icon) color. Takes precedence over `iconColor` when both are provided.
 - `containerColor?: string` — Override the container (background) color. State-layer colors (hover, press) are derived automatically.
-- `style?: PressableProps['style']` — Custom style applied to the root container.
+- `style?: StyleProp<ViewStyle>` — Style applied to the root container. Static form only — the function form `(state) => style` is not supported because the component drives its container background through Reanimated. Use `containerColor` / `contentColor` for state-aware styling.
 - `onPress?: () => void` — Called when the button is pressed.
 - `disabled?: boolean` — Default: `false`. Disables the button.
 - `variant?: 'filled' | 'tonal' | 'outlined' | 'standard'` — Default: `'filled'`. Visual style variant.
@@ -579,7 +579,7 @@ Props:
 - `checkIcon?: IconSource` — Default: `'check'`. Icon shown when the checkbox is checked. Accepts a string name (resolved via the theme's `iconResolver`, defaulting to `MaterialCommunityIcons`), a pre-rendered element, or a render function that receives `{ size, color }`. Override this when your `iconResolver` doesn't map the default `'check'` name (e.g. a Lucide-only resolver).
 - `containerColor?: string` — Override the container (box) color when checked. State-layer colors (hover, press) are derived automatically.
 - `contentColor?: string` — Override the checkmark icon color.
-- Inherits `PressableProps` (except `children`)
+- `style?: StyleProp<ViewStyle>` — Style applied to the root container. Static form only — the function form `(state) => style` is not supported because the component drives its container background through Reanimated. Use `containerColor` / `contentColor` for state-aware styling.
 
 ---
 
@@ -596,7 +596,8 @@ Props:
 - `onValueChange?: (value: boolean) => void` — Callback fired when the radio is pressed. Receives the new value.
 - `containerColor?: string` — Override the outer ring and inner dot color when selected. State-layer colors (hover, press) are derived automatically.
 - `contentColor?: string` — Override the outer ring color when unselected.
-- Inherits `PressableProps` (except `children`)
+- `style?: StyleProp<ViewStyle>` — Style applied to the root container. Static form only — the function form `(state) => style` is not supported because the component drives its container background through Reanimated. Use `containerColor` / `contentColor` for state-aware styling.
+- Inherits `PressableProps` (except `children`, `style`)
 
 ---
 
@@ -616,7 +617,7 @@ Props:
 - `unselectedIcon?: IconSource` — Icon shown on the thumb when unselected. When provided, the thumb renders at the larger selected size. Same accepted forms as `selectedIcon`.
 - `containerColor?: string` — Override the track color. State-layer colors (hover, press) are derived automatically.
 - `contentColor?: string` — Override the thumb and icon color.
-- Inherits `PressableProps` (except `children`)
+- `style?: StyleProp<ViewStyle>` — Style applied to the root container. Static form only — the function form `(state) => style` is not supported because the component drives its container background through Reanimated. Use `containerColor` / `contentColor` for state-aware styling.
 
 ---
 
@@ -781,6 +782,7 @@ Props:
 - `onPress?: () => void` — When provided, the item becomes interactive (Pressable). Omit to render as a plain View.
 - `disabled?: boolean` — Default: `false`. Disables the press interaction and reduces opacity. Only effective when `onPress` is provided.
 - `containerColor?: string` — Override the container (background) color. State-layer colors (hover, press) are derived automatically.
+- `contentColor?: string` — Override the headline text color. Overline, supporting, and trailing-supporting text keep their MD3 muted variants (`onSurfaceVariant`) — those are intentionally distinct from the primary content color.
 - `supportingTextNumberOfLines?: number` — Default: `1`. Maximum number of lines for supportingText before truncating.
 - `style?: StyleProp<ViewStyle>`
 - Inherits `ViewProps`

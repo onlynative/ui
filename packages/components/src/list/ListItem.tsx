@@ -44,6 +44,7 @@ export function ListItem({
   onPress,
   disabled = false,
   containerColor,
+  contentColor,
   supportingTextNumberOfLines = 1,
   style,
   ...props
@@ -57,8 +58,8 @@ export function ListItem({
     supportingTextNumberOfLines,
   )
   const styles = useMemo(
-    () => createListItemStyles(theme, lines, containerColor),
-    [theme, lines, containerColor],
+    () => createListItemStyles(theme, lines, containerColor, contentColor),
+    [theme, lines, containerColor, contentColor],
   )
 
   const colors = useMemo(

@@ -1,7 +1,10 @@
 import type { IconSource } from '@onlynative/utils'
-import type { PressableProps } from 'react-native'
+import type { PressableProps, StyleProp, ViewStyle } from 'react-native'
 
-export interface CheckboxProps extends Omit<PressableProps, 'children'> {
+export interface CheckboxProps extends Omit<
+  PressableProps,
+  'children' | 'style'
+> {
   /**
    * Whether the checkbox is checked.
    * @default false
@@ -28,4 +31,11 @@ export interface CheckboxProps extends Omit<PressableProps, 'children'> {
    * Override the checkmark icon color.
    */
   contentColor?: string
+  /**
+   * Style applied to the root container. Static form only — the function
+   * form `(state) => style` is not supported because the component drives
+   * its container background through Reanimated. Use `containerColor` /
+   * `contentColor` for state-aware styling.
+   */
+  style?: StyleProp<ViewStyle>
 }

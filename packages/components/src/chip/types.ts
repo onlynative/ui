@@ -1,11 +1,16 @@
 import type { IconSource } from '@onlynative/utils'
 import type { ReactNode } from 'react'
-import type { PressableProps, StyleProp, TextStyle } from 'react-native'
+import type {
+  PressableProps,
+  StyleProp,
+  TextStyle,
+  ViewStyle,
+} from 'react-native'
 
 /** Visual variant of the chip following Material Design 3 chip types. */
 export type ChipVariant = 'assist' | 'filter' | 'input' | 'suggestion'
 
-interface ChipCommonProps extends Omit<PressableProps, 'children'> {
+interface ChipCommonProps extends Omit<PressableProps, 'children' | 'style'> {
   /** Text label rendered inside the chip. */
   children: string
   /**
@@ -25,6 +30,13 @@ interface ChipCommonProps extends Omit<PressableProps, 'children'> {
   contentColor?: string
   /** Additional style applied to the label text. */
   labelStyle?: StyleProp<TextStyle>
+  /**
+   * Style applied to the root container. Static form only — the function
+   * form `(state) => style` is not supported because the component drives
+   * its container background through Reanimated. Use `containerColor` /
+   * `contentColor` for state-aware styling.
+   */
+  style?: StyleProp<ViewStyle>
 }
 
 /**

@@ -4,6 +4,7 @@ import { useMemo } from 'react'
 import type { ComponentType, ReactNode } from 'react'
 import type { StyleProp, TextProps, TextStyle } from 'react-native'
 import { StyleSheet, Text } from 'react-native'
+import { createStyles } from './styles'
 import type { TypographyVariant } from './types'
 
 const HEADING_VARIANTS: ReadonlySet<TypographyVariant> = new Set([
@@ -45,6 +46,7 @@ export function Typography({
 }: TypographyProps) {
   const theme = useTheme() as MaterialTheme
   const typographyStyle = theme.typography[variant]
+  const styles = useMemo(() => createStyles(theme), [theme])
   const resolvedRole =
     accessibilityRole ?? (HEADING_VARIANTS.has(variant) ? 'header' : undefined)
 
@@ -60,16 +62,21 @@ export function Typography({
     return { lineHeight: Math.ceil(flat.fontSize * ratio) }
   }, [style, typographyStyle.fontSize, typographyStyle.lineHeight])
 
+  const colorOverride = useMemo(
+    () => (color != null ? { color } : undefined),
+    [color],
+  )
+
   return (
     <Component
       {...textProps}
       accessibilityRole={resolvedRole}
       style={[
-        { color: theme.colors.onSurface },
+        styles.base,
         typographyStyle,
         style,
         lineHeightFix,
-        color != null ? { color } : undefined,
+        colorOverride,
       ]}
     >
       {children}

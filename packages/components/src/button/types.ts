@@ -1,5 +1,10 @@
 import type { IconSource } from '@onlynative/utils'
-import type { PressableProps, StyleProp, TextStyle } from 'react-native'
+import type {
+  PressableProps,
+  StyleProp,
+  TextStyle,
+  ViewStyle,
+} from 'react-native'
 
 /** Visual style variant of the button following Material Design 3 roles. */
 export type ButtonVariant =
@@ -9,7 +14,10 @@ export type ButtonVariant =
   | 'text'
   | 'tonal'
 
-export interface ButtonProps extends Omit<PressableProps, 'children'> {
+export interface ButtonProps extends Omit<
+  PressableProps,
+  'children' | 'style'
+> {
   /** Text label rendered inside the button. */
   children: string
   /**
@@ -48,4 +56,11 @@ export interface ButtonProps extends Omit<PressableProps, 'children'> {
   contentColor?: string
   /** Additional style applied to the label text. */
   labelStyle?: StyleProp<TextStyle>
+  /**
+   * Style applied to the root container. Static form only — the function
+   * form `(state) => style` is not supported because the component drives
+   * its container background through Reanimated. Use `containerColor` /
+   * `contentColor` for state-aware styling.
+   */
+  style?: StyleProp<ViewStyle>
 }

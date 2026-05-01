@@ -75,8 +75,10 @@ export function createListItemStyles(
   theme: MaterialTheme,
   lines: ListItemLines,
   containerColor?: string,
+  contentColor?: string,
 ) {
   const colors = getResolvedListItemColors(theme, containerColor)
+  const headlineColor = contentColor ?? theme.colors.onSurface
 
   return StyleSheet.create({
     container: {
@@ -120,7 +122,7 @@ export function createListItemStyles(
     },
     headlineText: {
       ...theme.typography.bodyLarge,
-      color: theme.colors.onSurface,
+      color: headlineColor,
     },
     supportingText: {
       ...theme.typography.bodyMedium,
