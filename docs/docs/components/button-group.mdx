@@ -1,0 +1,359 @@
+---
+sidebar_position: 2
+---
+
+# Button Group
+
+Button Groups display a set of related actions as a row of connected or pill-shaped buttons. They support standalone actions, single selection, or multiple selection — replacing the deprecated MD3 Segmented Button.
+Follows the [Material Design 3 Button Group](https://m3.material.io/components/button-groups/overview) Expressive specification.
+
+## Usage
+
+<SnackExample
+  name="OnlyNative ButtonGroup — Usage"
+  code={`
+  import { ButtonGroup } from '@onlynative/components'
+  import { ThemeProvider } from '@onlynative/core'
+  import { SafeAreaProvider } from 'react-native-safe-area-context'
+  import { View } from 'react-native'
+  import { useState } from 'react'
+
+  export default function App() {
+    const [value, setValue] = useState('left')
+
+    return (
+      <SafeAreaProvider>
+        <ThemeProvider>
+          <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', padding: 16 }}>
+            <ButtonGroup
+              selectionMode="single"
+              value={value}
+              onValueChange={setValue}
+              items={[
+                { value: 'left', label: 'Left', leadingIcon: 'format-align-left' },
+                { value: 'center', label: 'Center', leadingIcon: 'format-align-center' },
+                { value: 'right', label: 'Right', leadingIcon: 'format-align-right' },
+              ]}
+            />
+          </View>
+        </ThemeProvider>
+      </SafeAreaProvider>
+    )
+  }
+`}
+/>
+
+## Variants
+
+| Variant | Use case |
+|---------|----------|
+| `standard` | Pill-shaped buttons separated by a small gap |
+| `connected` | Buttons share edges as a single segmented bar; the selected button morphs to a smaller corner radius |
+
+<SnackExample
+  name="OnlyNative ButtonGroup — Variants"
+  code={`
+  import { ButtonGroup } from '@onlynative/components'
+  import { ThemeProvider } from '@onlynative/core'
+  import { SafeAreaProvider } from 'react-native-safe-area-context'
+  import { View } from 'react-native'
+  import { useState } from 'react'
+
+  const items = [
+    { value: 'left', label: 'Left', leadingIcon: 'format-align-left' },
+    { value: 'center', label: 'Center', leadingIcon: 'format-align-center' },
+    { value: 'right', label: 'Right', leadingIcon: 'format-align-right' },
+  ]
+
+  export default function App() {
+    const [standard, setStandard] = useState('left')
+    const [connected, setConnected] = useState('center')
+
+    return (
+      <SafeAreaProvider>
+        <ThemeProvider>
+          <View style={{ flex: 1, justifyContent: 'center', padding: 16, gap: 16 }}>
+            <ButtonGroup
+              variant="standard"
+              selectionMode="single"
+              value={standard}
+              onValueChange={setStandard}
+              items={items}
+            />
+            <ButtonGroup
+              variant="connected"
+              selectionMode="single"
+              value={connected}
+              onValueChange={setConnected}
+              items={items}
+            />
+          </View>
+        </ThemeProvider>
+      </SafeAreaProvider>
+    )
+  }
+`}
+/>
+
+## Selection Modes
+
+`selectionMode` controls how the group tracks state.
+
+| Mode | Behavior | `value` type |
+|------|----------|--------------|
+| `none` (default) | Items act as standalone actions; no selection state. Use `onItemPress` | — |
+| `single` | Exactly one item can be selected | `string \| null` |
+| `multiple` | Any number of items can be selected | `string[]` |
+
+Both `single` and `multiple` modes can be controlled (`value` + `onValueChange`) or uncontrolled (`defaultValue`).
+
+### Single select
+
+<SnackExample
+  name="OnlyNative ButtonGroup — Single Select"
+  code={`
+  import { ButtonGroup } from '@onlynative/components'
+  import { ThemeProvider } from '@onlynative/core'
+  import { SafeAreaProvider } from 'react-native-safe-area-context'
+  import { View } from 'react-native'
+  import { useState } from 'react'
+
+  export default function App() {
+    const [alignment, setAlignment] = useState('left')
+
+    return (
+      <SafeAreaProvider>
+        <ThemeProvider>
+          <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', padding: 16 }}>
+            <ButtonGroup
+              variant="connected"
+              selectionMode="single"
+              value={alignment}
+              onValueChange={setAlignment}
+              items={[
+                { value: 'left', label: 'Left', leadingIcon: 'format-align-left' },
+                { value: 'center', label: 'Center', leadingIcon: 'format-align-center' },
+                { value: 'right', label: 'Right', leadingIcon: 'format-align-right' },
+              ]}
+            />
+          </View>
+        </ThemeProvider>
+      </SafeAreaProvider>
+    )
+  }
+`}
+/>
+
+### Multiple select
+
+<SnackExample
+  name="OnlyNative ButtonGroup — Multiple Select"
+  code={`
+  import { ButtonGroup } from '@onlynative/components'
+  import { ThemeProvider } from '@onlynative/core'
+  import { SafeAreaProvider } from 'react-native-safe-area-context'
+  import { View } from 'react-native'
+  import { useState } from 'react'
+
+  export default function App() {
+    const [formatting, setFormatting] = useState(['bold'])
+
+    return (
+      <SafeAreaProvider>
+        <ThemeProvider>
+          <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', padding: 16 }}>
+            <ButtonGroup
+              variant="standard"
+              selectionMode="multiple"
+              value={formatting}
+              onValueChange={setFormatting}
+              items={[
+                { value: 'bold', label: 'Bold', leadingIcon: 'format-bold' },
+                { value: 'italic', label: 'Italic', leadingIcon: 'format-italic' },
+                { value: 'underline', label: 'Underline', leadingIcon: 'format-underline' },
+              ]}
+            />
+          </View>
+        </ThemeProvider>
+      </SafeAreaProvider>
+    )
+  }
+`}
+/>
+
+### Action group (no selection)
+
+<SnackExample
+  name="OnlyNative ButtonGroup — Actions"
+  code={`
+  import { ButtonGroup } from '@onlynative/components'
+  import { ThemeProvider } from '@onlynative/core'
+  import { SafeAreaProvider } from 'react-native-safe-area-context'
+  import { View } from 'react-native'
+
+  export default function App() {
+    return (
+      <SafeAreaProvider>
+        <ThemeProvider>
+          <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', padding: 16 }}>
+            <ButtonGroup
+              variant="standard"
+              selectionMode="none"
+              onItemPress={(value) => console.log('pressed', value)}
+              items={[
+                { value: 'reply', label: 'Reply', leadingIcon: 'reply' },
+                { value: 'forward', label: 'Forward', leadingIcon: 'share' },
+                { value: 'archive', label: 'Archive', leadingIcon: 'archive-outline' },
+              ]}
+            />
+          </View>
+        </ThemeProvider>
+      </SafeAreaProvider>
+    )
+  }
+`}
+/>
+
+## Sizes
+
+Five MD3 Expressive sizes are supported. Heights and corner radii scale together.
+
+| Size | Use case |
+|------|----------|
+| `extraSmall` | Dense toolbars |
+| `small` (default) | Standard inline controls |
+| `medium` | Comfortable density |
+| `large` | Prominent toolbars |
+| `extraLarge` | Hero-level emphasis |
+
+<SnackExample
+  name="OnlyNative ButtonGroup — Sizes"
+  code={`
+  import { ButtonGroup } from '@onlynative/components'
+  import { ThemeProvider } from '@onlynative/core'
+  import { SafeAreaProvider } from 'react-native-safe-area-context'
+  import { View } from 'react-native'
+
+  const sizes = ['extraSmall', 'small', 'medium', 'large', 'extraLarge']
+
+  export default function App() {
+    return (
+      <SafeAreaProvider>
+        <ThemeProvider>
+          <View style={{ flex: 1, justifyContent: 'center', padding: 16, gap: 12 }}>
+            {sizes.map((size) => (
+              <ButtonGroup
+                key={size}
+                variant="connected"
+                selectionMode="single"
+                size={size}
+                defaultValue="center"
+                items={[
+                  { value: 'left', leadingIcon: 'format-align-left', accessibilityLabel: 'Align left' },
+                  { value: 'center', leadingIcon: 'format-align-center', accessibilityLabel: 'Align center' },
+                  { value: 'right', leadingIcon: 'format-align-right', accessibilityLabel: 'Align right' },
+                ]}
+              />
+            ))}
+          </View>
+        </ThemeProvider>
+      </SafeAreaProvider>
+    )
+  }
+`}
+/>
+
+## Icons
+
+Each item's `leadingIcon` and `trailingIcon` accept the same forms as [Button](./button) — a string name (resolved via [`MaterialCommunityIcons`](https://pictogrammers.com/library/mdi/) by default), a pre-rendered React element, or a render function that receives `{ size, color }`. See the [Icons guide](../icons) for full details.
+
+Items can omit `label` entirely when an icon plus `accessibilityLabel` is enough.
+
+## Disabled
+
+Disable the entire group with `disabled`, or disable individual items with `item.disabled`.
+
+<SnackExample
+  name="OnlyNative ButtonGroup — Disabled"
+  code={`
+  import { ButtonGroup } from '@onlynative/components'
+  import { ThemeProvider } from '@onlynative/core'
+  import { SafeAreaProvider } from 'react-native-safe-area-context'
+  import { View } from 'react-native'
+
+  export default function App() {
+    return (
+      <SafeAreaProvider>
+        <ThemeProvider>
+          <View style={{ flex: 1, justifyContent: 'center', padding: 16, gap: 16 }}>
+            <ButtonGroup
+              variant="connected"
+              selectionMode="single"
+              defaultValue="b"
+              disabled
+              items={[
+                { value: 'a', label: 'One' },
+                { value: 'b', label: 'Two' },
+                { value: 'c', label: 'Three' },
+              ]}
+            />
+            <ButtonGroup
+              variant="standard"
+              selectionMode="single"
+              defaultValue="a"
+              items={[
+                { value: 'a', label: 'Available' },
+                { value: 'b', label: 'Locked', disabled: true },
+                { value: 'c', label: 'Available' },
+              ]}
+            />
+          </View>
+        </ThemeProvider>
+      </SafeAreaProvider>
+    )
+  }
+`}
+/>
+
+## Custom colors
+
+Override unselected and selected container/content colors independently. State-layer colors (hover, press) are auto-derived.
+
+<SnackExample
+  name="OnlyNative ButtonGroup — Custom Colors"
+  code={`
+  import { ButtonGroup } from '@onlynative/components'
+  import { ThemeProvider } from '@onlynative/core'
+  import { SafeAreaProvider } from 'react-native-safe-area-context'
+  import { View } from 'react-native'
+
+  export default function App() {
+    return (
+      <SafeAreaProvider>
+        <ThemeProvider>
+          <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', padding: 16 }}>
+            <ButtonGroup
+              variant="connected"
+              selectionMode="single"
+              defaultValue="b"
+              containerColor="#E8DEF8"
+              contentColor="#4A148C"
+              selectedContainerColor="#6750A4"
+              selectedContentColor="#FFFFFF"
+              items={[
+                { value: 'a', label: 'Day', leadingIcon: 'weather-sunny' },
+                { value: 'b', label: 'Night', leadingIcon: 'weather-night' },
+                { value: 'c', label: 'Auto', leadingIcon: 'theme-light-dark' },
+              ]}
+            />
+          </View>
+        </ThemeProvider>
+      </SafeAreaProvider>
+    )
+  }
+`}
+/>
+
+## Props
+
+<PropTable name="ButtonGroup" />

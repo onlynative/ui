@@ -27,6 +27,7 @@ const sidebars: SidebarsConfig = {
       collapsed: false,
       items: [
         'components/button',
+        'components/button-group',
         'components/checkbox',
         'components/chip',
         'components/icon-button',
