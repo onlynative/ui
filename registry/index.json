@@ -14,6 +14,10 @@
       "description": "MD3 button with 5 variants (filled, elevated, outlined, text, tonal) and icon support."
     },
     {
+      "name": "button-group",
+      "description": "Standard and connected button groups with single or multi-select toggle behavior; replaces the deprecated MD3 segmented button."
+    },
+    {
       "name": "card",
       "description": "Surface container with 3 variants (elevated, filled, outlined) and optional press handler."
     },

@@ -3,6 +3,7 @@ import {
   Avatar,
   Box,
   Button,
+  ButtonGroup,
   Card,
   Checkbox,
   Chip,
@@ -67,6 +68,12 @@ const sections: ComponentSection[] = [
         label: 'Button',
         route: '/button',
         description: 'Filled, outlined, tonal, elevated, and text buttons',
+      },
+      {
+        label: 'ButtonGroup',
+        route: '/button-group',
+        description:
+          'Standard and connected button groups with single/multi select',
       },
       {
         label: 'IconButton',
@@ -219,6 +226,20 @@ function Preview({ label, theme }: { label: string; theme: MaterialTheme }) {
           <Button variant="filled">Filled</Button>
           <Button variant="outlined">Outlined</Button>
         </Column>
+      )
+    case 'ButtonGroup':
+      return (
+        <ButtonGroup
+          variant="connected"
+          selectionMode="single"
+          size="extraSmall"
+          defaultValue="b"
+          items={[
+            { value: 'a', label: 'A' },
+            { value: 'b', label: 'B' },
+            { value: 'c', label: 'C' },
+          ]}
+        />
       )
     case 'IconButton':
       return (

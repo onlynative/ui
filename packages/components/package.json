@@ -30,6 +30,11 @@
       "react-native": "./dist/button/index.js",
       "default": "./dist/button/index.js"
     },
+    "./button-group": {
+      "types": "./dist/button-group/index.d.ts",
+      "react-native": "./dist/button-group/index.js",
+      "default": "./dist/button-group/index.js"
+    },
     "./icon-button": {
       "types": "./dist/icon-button/index.d.ts",
       "react-native": "./dist/icon-button/index.js",
@@ -111,6 +116,9 @@
       ],
       "button": [
         "dist/button/index.d.ts"
+      ],
+      "button-group": [
+        "dist/button-group/index.d.ts"
       ],
       "icon-button": [
         "dist/icon-button/index.d.ts"

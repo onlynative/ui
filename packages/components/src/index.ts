@@ -14,6 +14,15 @@ export type {
 export { Button } from './button'
 export type { ButtonProps, ButtonVariant } from './button'
 
+export { ButtonGroup } from './button-group'
+export type {
+  ButtonGroupItem,
+  ButtonGroupProps,
+  ButtonGroupSelectionMode,
+  ButtonGroupSize,
+  ButtonGroupVariant,
+} from './button-group'
+
 export { IconButton } from './icon-button'
 export type {
   IconButtonProps,

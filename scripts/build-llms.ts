@@ -372,6 +372,7 @@ function formatSubInterface(
 const COMPONENT_ORDER = [
   'typography',
   'button',
+  'button-group',
   'icon-button',
   'appbar',
   'card',
@@ -391,6 +392,7 @@ const COMPONENT_ORDER = [
 const COMPONENT_NAMES: Record<string, string> = {
   typography: 'Typography',
   button: 'Button',
+  'button-group': 'ButtonGroup',
   'icon-button': 'IconButton',
   appbar: 'AppBar',
   card: 'Card',
@@ -420,6 +422,45 @@ import { Button } from '@onlynative/components/button'
 <Button variant="filled" leadingIcon="plus" onPress={handlePress}>Create</Button>
 <Button variant="outlined">Cancel</Button>
 <Button variant="tonal" containerColor="#E8DEF8" contentColor="#1D192B">Custom</Button>
+\`\`\``,
+
+  'button-group': `\`\`\`tsx
+import { ButtonGroup } from '@onlynative/components/button-group'
+
+// Single-select connected group (replaces deprecated MD3 segmented button).
+<ButtonGroup
+  variant="connected"
+  selectionMode="single"
+  value={alignment}
+  onValueChange={setAlignment}
+  items={[
+    { value: 'left', label: 'Left', leadingIcon: 'format-align-left' },
+    { value: 'center', label: 'Center', leadingIcon: 'format-align-center' },
+    { value: 'right', label: 'Right', leadingIcon: 'format-align-right' },
+  ]}
+/>
+
+// Multi-select standard group.
+<ButtonGroup
+  variant="standard"
+  selectionMode="multiple"
+  value={formatting}
+  onValueChange={setFormatting}
+  items={[
+    { value: 'bold', label: 'Bold', leadingIcon: 'format-bold' },
+    { value: 'italic', label: 'Italic', leadingIcon: 'format-italic' },
+  ]}
+/>
+
+// Action-only group — no selection state.
+<ButtonGroup
+  selectionMode="none"
+  onItemPress={handleAction}
+  items={[
+    { value: 'reply', label: 'Reply', leadingIcon: 'reply' },
+    { value: 'forward', label: 'Forward', leadingIcon: 'share' },
+  ]}
+/>
 \`\`\``,
 
   'icon-button': `\`\`\`tsx

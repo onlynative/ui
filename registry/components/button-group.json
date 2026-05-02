@@ -1,0 +1,17 @@
+{
+  "name": "button-group",
+  "description": "Standard and connected button groups with single or multi-select toggle behavior; replaces the deprecated MD3 segmented button.",
+  "files": [
+    "packages/components/src/button-group/ButtonGroup.tsx",
+    "packages/components/src/button-group/index.ts",
+    "packages/components/src/button-group/styles.ts",
+    "packages/components/src/button-group/types.ts"
+  ],
+  "utils": ["color", "pressable", "render-icon"],
+  "componentDependencies": [],
+  "dependencies": {
+    "@onlynative/core": ">=0.0.0-alpha.7",
+    "react-native-reanimated": ">=4.0.0"
+  },
+  "optionalDependencies": {}
+}

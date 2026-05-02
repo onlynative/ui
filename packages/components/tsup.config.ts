@@ -7,6 +7,7 @@ export default defineConfig({
     'src/typography/index.ts',
     'src/layout/index.ts',
     'src/button/index.ts',
+    'src/button-group/index.ts',
     'src/icon-button/index.ts',
     'src/appbar/index.ts',
     'src/card/index.ts',
