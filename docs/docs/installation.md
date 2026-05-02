@@ -28,6 +28,10 @@ If you pass **string icon names** (e.g. `leadingIcon="check"`) and don't registe
 
 You can skip this if you only ever pass icons as React elements (`leadingIcon={<Check />}`) or register a custom resolver for a different library. See the [Icons guide](./icons) for details.
 
+To swap in [Lucide](https://lucide.dev), [Phosphor](https://phosphoricons.com), or another vector-icon set as the default, install `@onlynative/icons` for the pre-built adapter helpers:
+
+<PackageManagerTabs cmd="npm install @onlynative/icons" />
+
 ## Setup
 
 Wrap your root component with `ThemeProvider`:

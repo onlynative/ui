@@ -82,16 +82,124 @@ This is the form to use when you want consistent sizing/coloring without hard-co
 
 If you'd rather keep using string names but route them to a different library, register a resolver on `ThemeProvider`. This is the cleanest approach when one icon library powers your whole app.
 
+You have two paths:
+
+1. **Use a built-in adapter from `@onlynative/icons`.** Recommended for Lucide, Phosphor, and `@expo/vector-icons` — handles sizing, coloring, MDI-name compatibility, and missing-icon warnings for you.
+2. **Hand-roll a resolver.** A plain `(name, { size, color }) => ReactNode` function. Use this for SF Symbols, custom SVG sprites, or any other source.
+
+### Library adapters: `@onlynative/icons`
+
+`@onlynative/icons` ships pre-built resolver factories so you don't have to figure out the resolver shape yourself:
+
+```bash
+npm install @onlynative/icons
+```
+
+| Helper | For |
+|--------|-----|
+| `createLucideResolver({ icons })` | [Lucide](https://lucide.dev) (`lucide-react-native`) |
+| `createPhosphorResolver({ icons })` | [Phosphor](https://phosphoricons.com) (`phosphor-react-native`) |
+| `createVectorIconsResolver({ IconSet })` | Any `@expo/vector-icons` set (`Ionicons`, `FontAwesome`, …) |
+| `withLegacyMdiFallback(resolver)` | Wrap any custom resolver to add MDI-name compatibility |
+
+Each adapter accepts the icons it can render and returns an `IconResolver` you pass straight to `ThemeProvider`. Lucide and Phosphor adapters declare `lucide-react-native` / `phosphor-react-native` as **optional** peer deps — install only the one you actually use.
+
+#### Lucide
+
+```tsx
+import { ThemeProvider } from '@onlynative/core'
+import { createLucideResolver } from '@onlynative/icons'
+import { Check, Search, ArrowRight, Heart } from 'lucide-react-native'
+
+const resolver = createLucideResolver({
+  icons: {
+    check: Check,
+    search: Search,
+    'arrow-right': ArrowRight,
+    heart: Heart,
+  },
+  mdiCompat: true,        // accept legacy MDI names like "magnify", "delete"
+  strokeWidth: 1.75,      // optional — Lucide default is 2
+})
+
+export default function App() {
+  return (
+    <ThemeProvider iconResolver={resolver}>
+      {/* String names render through Lucide */}
+    </ThemeProvider>
+  )
+}
+```
+
+`mdiCompat: true` enables a built-in alias map so `magnify` → `search`, `pencil` → `pencil`, `delete` → `trash-2`, `dots-vertical` → `more-vertical`, etc. — useful when migrating an MDI codebase to Lucide without rewriting every call site. You can also pass an object to extend or suppress entries (`mdiCompat: { magnify: 'binoculars', pencil: null }`).
+
+When a name isn't found, the resolver `console.warn`s once per missing name. Override with `onMissing: 'silent'` to mute, or pass another `IconResolver` to chain.
+
+#### Phosphor
+
+```tsx
+import { ThemeProvider } from '@onlynative/core'
+import { createPhosphorResolver } from '@onlynative/icons'
+import { Check, MagnifyingGlass, ArrowRight } from 'phosphor-react-native'
+
+const resolver = createPhosphorResolver({
+  icons: { Check, MagnifyingGlass, ArrowRight },
+  weight: 'regular',     // 'thin' | 'light' | 'regular' | 'bold' | 'fill' | 'duotone'
+  mdiCompat: true,       // legacy MDI names → PascalCase Phosphor names
+})
+
+<ThemeProvider iconResolver={resolver}>{children}</ThemeProvider>
+```
+
+Phosphor exports each glyph in PascalCase (e.g. `MagnifyingGlass`, `DotsThreeVertical`). The built-in MDI map maps `magnify` → `MagnifyingGlass`, `dots-vertical` → `DotsThreeVertical`, `delete` → `Trash`, etc.
+
+#### `@expo/vector-icons`
+
+Use this when you want a different vector-icon set than the default `MaterialCommunityIcons`, or when you want to register a small alias map at the resolver level:
+
+```tsx
+import { Ionicons } from '@expo/vector-icons'
+import { createVectorIconsResolver } from '@onlynative/icons'
+
+const resolver = createVectorIconsResolver({
+  IconSet: Ionicons,
+  aliases: {
+    check: 'checkmark',
+    close: 'close',
+    'arrow-right': 'arrow-forward',
+  },
+})
+```
+
+Names you don't alias are forwarded to the icon set verbatim — the set itself decides what to render for unknown glyphs.
+
+#### Custom resolver + MDI compatibility
+
+If you're rolling your own resolver (SF Symbols, SVG sprites, hand-rolled mappings), wrap it with `withLegacyMdiFallback` to add MDI-name compatibility without re-implementing the alias logic:
+
+```tsx
+import { withLegacyMdiFallback } from '@onlynative/icons'
+
+const baseResolver: IconResolver = (name, { size, color }) => {
+  const Svg = mySvgIcons[name]
+  return Svg ? <Svg width={size} height={size} fill={color} /> : null
+}
+
+// Pass-through unknown names through the lucide-flavored MDI map.
+// `target` can also be 'phosphor' or your own Record<string, string>.
+const resolver = withLegacyMdiFallback(baseResolver, { target: 'lucide' })
+```
+
+The base resolver is always tried first with the original name; the alias map is only consulted when the base returns `null`. The first call with each legacy name emits a one-time `console.warn` so you know which call sites still need to be migrated. Pass `warn: false` to suppress.
+
+### Manual resolver (no adapter)
+
+You can skip the adapter and write the resolver inline. The shape is just `(name, { size, color }) => ReactNode`:
+
 ```tsx
 import { ThemeProvider } from '@onlynative/core'
 import type { IconResolver } from '@onlynative/core'
-import {
-  Check,
-  Plus,
-  ArrowRight,
-  Heart,
-  HeartOff,
-} from 'lucide-react-native'
+import { Check, Plus, ArrowRight, Heart, HeartOff } from 'lucide-react-native'
 
 const icons: Record<string, React.ComponentType<{ size?: number; color?: string }>> = {
   check: Check,
@@ -106,13 +214,7 @@ const lucideResolver: IconResolver = (name, { size, color }) => {
   return Icon ? <Icon size={size} color={color} /> : null
 }
 
-export default function App() {
-  return (
-    <ThemeProvider iconResolver={lucideResolver}>
-      {/* All string icon names now route through Lucide */}
-    </ThemeProvider>
-  )
-}
+<ThemeProvider iconResolver={lucideResolver}>{children}</ThemeProvider>
 ```
 
 Now any string name passed to a component flows through your resolver:
@@ -242,6 +344,18 @@ Types live in `@onlynative/core` (the resolver) and `@onlynative/utils` (`IconSo
 ```ts
 import type { IconResolver, IconRenderProps } from '@onlynative/core'
 import type { IconSource } from '@onlynative/utils'
+```
+
+`@onlynative/icons` re-exports `IconResolver` and `IconRenderProps` for convenience, plus its own helper types:
+
+```ts
+import type {
+  LucideResolverOptions,
+  PhosphorResolverOptions,
+  PhosphorIconWeight,
+  VectorIconsResolverOptions,
+  WithLegacyMdiFallbackOptions,
+} from '@onlynative/icons'
 ```
 
 Use these when you build wrapper components or shared resolvers.

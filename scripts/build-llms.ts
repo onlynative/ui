@@ -30,6 +30,7 @@ const COMPONENTS_VERSION: string = readPkg(
   'packages/components/package.json',
 ).version
 const CLI_VERSION: string = readPkg('packages/cli/package.json').version
+const ICONS_VERSION: string = readPkg('packages/icons/package.json').version
 
 // ============================================================
 // Type Extraction — Interfaces & Type Aliases from TS source
@@ -1258,7 +1259,97 @@ Every icon prop accepts an \`IconSource\` (\`import type { IconSource } from '@o
 2. **ReactElement** — a pre-rendered icon (\`leadingIcon={<Check size={18} color="#fff" />}\`). The component does not override size/color.
 3. **Render function** — \`(props: { size: number; color?: string }) => ReactNode\`. Receives the component's resolved icon size and color, so the icon stays consistent with theme/variant state.
 
-To swap the default icon library globally, register an \`iconResolver\` on \`ThemeProvider\`:
+Per-call elements/functions always take precedence over the resolver. \`@expo/vector-icons\` is only required if you actually pass string icon names without a custom resolver.
+
+### \`@onlynative/icons\` adapter package (v${ICONS_VERSION})
+
+Pre-built resolver factories for the most common React Native icon libraries. Install only the icon library you actually use — Lucide / Phosphor / \`@expo/vector-icons\` are declared as optional peer deps.
+
+\`\`\`bash
+pnpm add @onlynative/icons
+\`\`\`
+
+| Helper | For |
+|--------|-----|
+| \`createLucideResolver({ icons })\` | [Lucide](https://lucide.dev) (\`lucide-react-native\`) |
+| \`createPhosphorResolver({ icons })\` | [Phosphor](https://phosphoricons.com) (\`phosphor-react-native\`) |
+| \`createVectorIconsResolver({ IconSet })\` | Any \`@expo/vector-icons\` set (\`Ionicons\`, \`FontAwesome\`, …) |
+| \`withLegacyMdiFallback(resolver)\` | Wrap any custom resolver to add MDI-name compatibility |
+
+#### Lucide
+
+\`\`\`tsx
+import { ThemeProvider } from '@onlynative/core'
+import { createLucideResolver } from '@onlynative/icons'
+import { Check, Search, ArrowRight } from 'lucide-react-native'
+
+const resolver = createLucideResolver({
+  icons: { check: Check, search: Search, 'arrow-right': ArrowRight },
+  mdiCompat: true,        // accept legacy MDI names like "magnify"
+  strokeWidth: 1.75,      // optional — Lucide default is 2
+})
+
+<ThemeProvider iconResolver={resolver}>{children}</ThemeProvider>
+\`\`\`
+
+#### Phosphor
+
+\`\`\`tsx
+import { ThemeProvider } from '@onlynative/core'
+import { createPhosphorResolver } from '@onlynative/icons'
+import { Check, MagnifyingGlass } from 'phosphor-react-native'
+
+const resolver = createPhosphorResolver({
+  icons: { Check, MagnifyingGlass },
+  weight: 'regular',     // 'thin' | 'light' | 'regular' | 'bold' | 'fill' | 'duotone'
+  mdiCompat: true,
+})
+\`\`\`
+
+#### \`@expo/vector-icons\`
+
+\`\`\`tsx
+import { Ionicons } from '@expo/vector-icons'
+import { createVectorIconsResolver } from '@onlynative/icons'
+
+const resolver = createVectorIconsResolver({
+  IconSet: Ionicons,
+  aliases: { check: 'checkmark', close: 'close', 'arrow-right': 'arrow-forward' },
+})
+\`\`\`
+
+#### Custom resolver + MDI compatibility
+
+\`withLegacyMdiFallback\` wraps any \`IconResolver\` so that legacy MaterialCommunityIcons names (\`magnify\`, \`pencil\`, \`dots-vertical\`, …) are rewritten to the wrapped resolver's vocabulary. The base resolver is always tried first; the alias map is consulted only when the base returns \`null\`.
+
+\`\`\`tsx
+import { withLegacyMdiFallback } from '@onlynative/icons'
+import type { IconResolver } from '@onlynative/core'
+
+const baseResolver: IconResolver = (name, { size, color }) => {
+  const Svg = mySvgIcons[name]
+  return Svg ? <Svg width={size} height={size} fill={color} /> : null
+}
+
+// target: 'lucide' | 'phosphor' | Record<string, string>
+const resolver = withLegacyMdiFallback(baseResolver, { target: 'lucide' })
+\`\`\`
+
+The first call with each legacy name emits a one-time \`console.warn\` so you know which call sites still need migrating. Pass \`warn: false\` to suppress.
+
+#### Adapter options reference
+
+All three name-mapped adapters (Lucide / Phosphor) accept:
+
+- \`icons: Record<string, IconComponent>\` — required. Names you'll pass to component props.
+- \`mdiCompat?: boolean | Record<string, string | null>\` — \`true\` enables the built-in MDI alias map; an object merges/overrides entries (\`null\` to suppress).
+- \`onMissing?: 'warn' | 'silent' | IconResolver\` — what to do when a name isn't registered. Defaults to \`'warn'\` (one-time \`console.warn\` per missing name). Pass another resolver to delegate.
+
+Lucide-specific: \`strokeWidth?: number\`. Phosphor-specific: \`weight?: 'thin' | 'light' | 'regular' | 'bold' | 'fill' | 'duotone'\`.
+
+#### Manual resolver (no adapter package)
+
+You don't need \`@onlynative/icons\` at all — \`iconResolver\` accepts any \`(name, { size, color }) => ReactNode\` function:
 
 \`\`\`tsx
 import { ThemeProvider } from '@onlynative/core'
@@ -1275,7 +1366,7 @@ const lucide: IconResolver = (name, { size, color }) => {
 <ThemeProvider iconResolver={lucide}>{/* string icon names route to Lucide */}</ThemeProvider>
 \`\`\`
 
-Per-call elements/functions always take precedence over the resolver. \`@expo/vector-icons\` is only required if you actually pass string icon names without a custom resolver.
+Reach for the adapter package when you want \`mdiCompat\`, \`onMissing\` warning behavior, or a typed options surface; reach for the manual form for one-offs and SF Symbols / SVG sprite sheets.
 `
 }
 
@@ -1347,11 +1438,27 @@ function generateCliLlms(): string {
 ${cliContent()}`
 }
 
+function generateIconsLlms(): string {
+  return `# @onlynative/icons — Icon Library Adapters for OnlyNative UI
+
+> Version: ${ICONS_VERSION}
+> Peer deps: @onlynative/core >=${CORE_VERSION}, react >=18, react-native >=0.72
+> Optional peer deps: lucide-react-native, phosphor-react-native, @expo/vector-icons
+
+Pre-built resolver factories that plug into the theme's \`iconResolver\`. Install only the icon library you actually use — each is declared as an optional peer dep.
+
+\`\`\`bash
+pnpm add @onlynative/icons
+\`\`\`
+
+${iconsContent()}`
+}
+
 function generateFullLlms(): string {
   return `# OnlyNative UI — Full API Reference
 
 > Design-system agnostic component library for React Native — ships with Material Design 3
-> Versions: \`@onlynative/core\` ${CORE_VERSION} · \`@onlynative/components\` ${COMPONENTS_VERSION} · \`@onlynative/cli\` ${CLI_VERSION}
+> Versions: \`@onlynative/core\` ${CORE_VERSION} · \`@onlynative/components\` ${COMPONENTS_VERSION} · \`@onlynative/icons\` ${ICONS_VERSION} · \`@onlynative/cli\` ${CLI_VERSION}
 > Requirements: React Native 0.81+, React 19+, Expo SDK 54+
 > Peer deps: \`react-native-safe-area-context >=4\`, \`react-native-reanimated >=4\`
 > Optional peer deps: \`@expo/vector-icons >=14\` (only needed for icon props)
@@ -1418,6 +1525,7 @@ const outputs = [
   { file: 'packages/core/llms.txt', content: generateCoreLlms() },
   { file: 'packages/components/llms.txt', content: generateComponentsLlms() },
   { file: 'packages/cli/llms.txt', content: generateCliLlms() },
+  { file: 'packages/icons/llms.txt', content: generateIconsLlms() },
   { file: 'docs/static/llms-full.txt', content: generateFullLlms() },
 ]
 

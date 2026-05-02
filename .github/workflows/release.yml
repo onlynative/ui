@@ -133,7 +133,7 @@ jobs:
       - name: Commit and tag
         run: |
           git add pnpm-lock.yaml
-          git add packages/core/llms.txt packages/components/llms.txt packages/cli/llms.txt docs/static/llms-full.txt
+          git add packages/*/llms.txt docs/static/llms-full.txt
           for PKG_DIR in ${{ steps.packages.outputs.packages }}; do
             git add "packages/$PKG_DIR/package.json"
           done

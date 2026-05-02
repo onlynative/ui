@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       packages:
-        description: 'Package dirs to publish (comma-separated, e.g. "cli" or "core,components,cli")'
+        description: 'Package dirs to publish (comma-separated, e.g. "cli" or "core,components,icons,cli")'
         required: true
         type: string
       version:
@@ -159,7 +159,7 @@ jobs:
           TAG="${PKGS_LABEL}@${{ steps.version.outputs.version }}"
 
           git add pnpm-lock.yaml
-          git add packages/core/llms.txt packages/components/llms.txt packages/cli/llms.txt docs/static/llms-full.txt
+          git add packages/*/llms.txt docs/static/llms-full.txt
           for PKG_DIR in ${{ steps.packages.outputs.packages }}; do
             git add "packages/$PKG_DIR/package.json"
           done
