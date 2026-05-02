@@ -115,4 +115,145 @@ describe('createMaterialTheme', () => {
       red.lightTheme.colors.primary,
     )
   })
+
+  describe('contrastLevel', () => {
+    it('keeps standard contrast equal to no option', () => {
+      const standard = createMaterialTheme('#006A6A', {
+        contrastLevel: 'standard',
+      })
+      expect(standard.lightTheme.colors.primary).toBe(
+        result.lightTheme.colors.primary,
+      )
+      expect(standard.lightTheme.colors.onSurface).toBe(
+        result.lightTheme.colors.onSurface,
+      )
+    })
+
+    it('produces different on-color contrast at higher levels', () => {
+      const standard = createMaterialTheme('#006A6A', {
+        contrastLevel: 'standard',
+      })
+      const medium = createMaterialTheme('#006A6A', {
+        contrastLevel: 'medium',
+      })
+      const high = createMaterialTheme('#006A6A', { contrastLevel: 'high' })
+
+      expect(medium.lightTheme.colors.onSurfaceVariant).not.toBe(
+        standard.lightTheme.colors.onSurfaceVariant,
+      )
+      expect(high.lightTheme.colors.onSurfaceVariant).not.toBe(
+        medium.lightTheme.colors.onSurfaceVariant,
+      )
+    })
+  })
+
+  describe('variant', () => {
+    it('defaults to tonalSpot (matches no-option output)', () => {
+      const tonalSpot = createMaterialTheme('#006A6A', {
+        variant: 'tonalSpot',
+      })
+      expect(tonalSpot.lightTheme.colors.primary).toBe(
+        result.lightTheme.colors.primary,
+      )
+      expect(tonalSpot.darkTheme.colors.surface).toBe(
+        result.darkTheme.colors.surface,
+      )
+    })
+
+    it.each([
+      'neutral',
+      'vibrant',
+      'expressive',
+      'fidelity',
+      'content',
+      'monochrome',
+      'rainbow',
+      'fruitSalad',
+    ] as const)('produces a distinct palette for %s', (variant) => {
+      const themed = createMaterialTheme('#006A6A', { variant })
+      // At least one color role must differ from the tonalSpot default.
+      const themedColors = themed.lightTheme.colors as Record<string, string>
+      const defaultColors = result.lightTheme.colors as Record<string, string>
+      const anyDifferent = Object.keys(defaultColors).some(
+        (key) => themedColors[key] !== defaultColors[key],
+      )
+      expect(anyDifferent).toBe(true)
+    })
+
+    it('monochrome variant produces grey primary', () => {
+      const mono = createMaterialTheme('#006A6A', { variant: 'monochrome' })
+      const primary = mono.lightTheme.colors.primary
+      expect(primary.slice(1, 3)).toBe(primary.slice(3, 5))
+      expect(primary.slice(3, 5)).toBe(primary.slice(5, 7))
+    })
+  })
+
+  describe('surfaceTone (override)', () => {
+    it('defaults to spec (matches no-option output)', () => {
+      const spec = createMaterialTheme('#006A6A', { surfaceTone: 'spec' })
+      expect(spec.lightTheme.colors.surface).toBe(
+        result.lightTheme.colors.surface,
+      )
+    })
+
+    it('flattens neutral chroma when set to neutral', () => {
+      const neutral = createMaterialTheme('#006A6A', {
+        surfaceTone: 'neutral',
+      })
+      const surface = neutral.lightTheme.colors.surface
+      const r = surface.slice(1, 3)
+      const g = surface.slice(3, 5)
+      const b = surface.slice(5, 7)
+      expect(r).toBe(g)
+      expect(g).toBe(b)
+    })
+
+    it('keeps colorful primary/secondary when flattening surfaces', () => {
+      const neutral = createMaterialTheme('#006A6A', {
+        surfaceTone: 'neutral',
+      })
+      const primary = neutral.lightTheme.colors.primary
+      // Primary channels should NOT all be equal — surface flatten must not
+      // bleed into primary palette (that's what `variant: 'monochrome'` is for).
+      const allEqual =
+        primary.slice(1, 3) === primary.slice(3, 5) &&
+        primary.slice(3, 5) === primary.slice(5, 7)
+      expect(allEqual).toBe(false)
+    })
+  })
+
+  describe('seedAdjustments', () => {
+    it('produces a more saturated primary container when chroma is raised', () => {
+      const base = createMaterialTheme('#006A6A')
+      const punchy = createMaterialTheme('#006A6A', {
+        seedAdjustments: { primary: 80 },
+      })
+      expect(punchy.lightTheme.colors.primaryContainer).not.toBe(
+        base.lightTheme.colors.primaryContainer,
+      )
+    })
+
+    it('overrides secondary chroma independently of primary', () => {
+      const base = createMaterialTheme('#006A6A')
+      const tweaked = createMaterialTheme('#006A6A', {
+        seedAdjustments: { secondary: 48 },
+      })
+      expect(tweaked.lightTheme.colors.secondaryContainer).not.toBe(
+        base.lightTheme.colors.secondaryContainer,
+      )
+      expect(tweaked.lightTheme.colors.primary).toBe(
+        base.lightTheme.colors.primary,
+      )
+    })
+
+    it('leaves colors unchanged when no overrides are provided', () => {
+      const noop = createMaterialTheme('#006A6A', { seedAdjustments: {} })
+      expect(noop.lightTheme.colors.primary).toBe(
+        result.lightTheme.colors.primary,
+      )
+      expect(noop.lightTheme.colors.secondary).toBe(
+        result.lightTheme.colors.secondary,
+      )
+    })
+  })
 })

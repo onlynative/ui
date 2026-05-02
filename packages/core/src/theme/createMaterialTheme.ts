@@ -2,21 +2,169 @@ import {
   argbFromHex,
   hexFromArgb,
   Hct,
+  SchemeContent,
+  SchemeExpressive,
+  SchemeFidelity,
+  SchemeFruitSalad,
+  SchemeMonochrome,
+  SchemeNeutral,
+  SchemeRainbow,
   SchemeTonalSpot,
+  SchemeVibrant,
   MaterialDynamicColors,
+  DynamicScheme,
+  TonalPalette,
+  Variant,
 } from '@material/material-color-utilities'
-import type { DynamicScheme } from '@material/material-color-utilities'
 import { applyRoundness } from './applyRoundness'
 import { lightTheme } from './light'
 import { defaultTopAppBarTokens } from './topAppBar'
 import type { Colors, Theme, Typography } from './types'
 import { defaultTypography } from './typography'
 
+/**
+ * MD3 scheme variant. Each is a spec-defined recipe for deriving the palette
+ * from the seed color. `'tonalSpot'` is the Material You default used on
+ * Android 12+.
+ */
+export type ThemeVariant =
+  | 'tonalSpot'
+  | 'neutral'
+  | 'vibrant'
+  | 'expressive'
+  | 'fidelity'
+  | 'content'
+  | 'monochrome'
+  | 'rainbow'
+  | 'fruitSalad'
+
+export type ContrastLevel = 'standard' | 'medium' | 'high'
+
+/**
+ * Custom override (NOT part of the MD3 spec). Forces neutral palettes to
+ * chroma 0 for pure-grey surfaces while keeping the variant's colorful
+ * primary/secondary/tertiary palettes. Use this for an OLED-near-black /
+ * carbon aesthetic. For a fully spec-legal monochrome theme prefer
+ * `variant: 'monochrome'`.
+ */
+export type SurfaceTone = 'spec' | 'neutral'
+
+export interface SeedAdjustments {
+  /** Override HCT chroma for the primary palette. Variant defaults are spec-defined (TonalSpot uses `36`). Raise for richer container colors. NOT part of MD3 spec. */
+  primary?: number
+  /** Override HCT chroma for the secondary palette. Variant defaults are spec-defined (TonalSpot uses `16`). Raise for more saturated secondary containers. NOT part of MD3 spec. */
+  secondary?: number
+}
+
 export interface CreateMaterialThemeOptions {
+  /** MD3 scheme variant. Each is a spec-defined recipe; pick the one whose colorfulness/hue-shifting matches your brand. @default 'tonalSpot' */
+  variant?: ThemeVariant
   /** Custom font family applied to all typography styles. When omitted, platform defaults are used (Roboto on Android, System on iOS). */
   fontFamily?: string
   /** Global corner-radius multiplier. `0` = sharp, `1` = default MD3, `2` = double rounding. @default 1 */
   roundness?: number
+  /** MD3 contrast preset. `'standard'` matches the spec; `'medium'` and `'high'` boost on/container contrast for accessibility. @default 'standard' */
+  contrastLevel?: ContrastLevel
+  /** **Custom override (deviates from MD3 spec).** `'spec'` keeps the variant's neutral palette as-is. `'neutral'` flattens neutral chroma to 0 for pure-grey / OLED-near-black surfaces. Prefer `variant: 'monochrome'` for spec-legal monochrome themes. @default 'spec' */
+  surfaceTone?: SurfaceTone
+  /** **Custom override (deviates from MD3 spec).** Per-palette HCT chroma overrides for cases where the spec-defined variant chromas come out too pastel or too vivid for your brand. */
+  seedAdjustments?: SeedAdjustments
+}
+
+const CONTRAST_VALUES: Record<ContrastLevel, number> = {
+  standard: 0,
+  medium: 0.5,
+  high: 1.0,
+}
+
+const VARIANT_ENUM: Record<ThemeVariant, Variant> = {
+  tonalSpot: Variant.TONAL_SPOT,
+  neutral: Variant.NEUTRAL,
+  vibrant: Variant.VIBRANT,
+  expressive: Variant.EXPRESSIVE,
+  fidelity: Variant.FIDELITY,
+  content: Variant.CONTENT,
+  monochrome: Variant.MONOCHROME,
+  rainbow: Variant.RAINBOW,
+  fruitSalad: Variant.FRUIT_SALAD,
+}
+
+function buildBaseScheme(
+  variant: ThemeVariant,
+  sourceHct: Hct,
+  isDark: boolean,
+  contrast: number,
+): DynamicScheme {
+  switch (variant) {
+    case 'tonalSpot':
+      return new SchemeTonalSpot(sourceHct, isDark, contrast)
+    case 'neutral':
+      return new SchemeNeutral(sourceHct, isDark, contrast)
+    case 'vibrant':
+      return new SchemeVibrant(sourceHct, isDark, contrast)
+    case 'expressive':
+      return new SchemeExpressive(sourceHct, isDark, contrast)
+    case 'fidelity':
+      return new SchemeFidelity(sourceHct, isDark, contrast)
+    case 'content':
+      return new SchemeContent(sourceHct, isDark, contrast)
+    case 'monochrome':
+      return new SchemeMonochrome(sourceHct, isDark, contrast)
+    case 'rainbow':
+      return new SchemeRainbow(sourceHct, isDark, contrast)
+    case 'fruitSalad':
+      return new SchemeFruitSalad(sourceHct, isDark, contrast)
+  }
+}
+
+function buildScheme(
+  variant: ThemeVariant,
+  sourceHct: Hct,
+  isDark: boolean,
+  contrast: number,
+  surfaceTone: SurfaceTone,
+  seedAdjustments: SeedAdjustments | undefined,
+): DynamicScheme {
+  const base = buildBaseScheme(variant, sourceHct, isDark, contrast)
+
+  const primaryChroma = seedAdjustments?.primary
+  const secondaryChroma = seedAdjustments?.secondary
+  const flattenNeutrals = surfaceTone === 'neutral'
+
+  if (primaryChroma == null && secondaryChroma == null && !flattenNeutrals) {
+    return base
+  }
+
+  const primaryPalette =
+    primaryChroma != null
+      ? TonalPalette.fromHueAndChroma(base.primaryPalette.hue, primaryChroma)
+      : base.primaryPalette
+  const secondaryPalette =
+    secondaryChroma != null
+      ? TonalPalette.fromHueAndChroma(
+          base.secondaryPalette.hue,
+          secondaryChroma,
+        )
+      : base.secondaryPalette
+  const neutralPalette = flattenNeutrals
+    ? TonalPalette.fromHueAndChroma(base.neutralPalette.hue, 0)
+    : base.neutralPalette
+  const neutralVariantPalette = flattenNeutrals
+    ? TonalPalette.fromHueAndChroma(base.neutralVariantPalette.hue, 0)
+    : base.neutralVariantPalette
+
+  return new DynamicScheme({
+    sourceColorHct: sourceHct,
+    variant: VARIANT_ENUM[variant],
+    contrastLevel: contrast,
+    isDark,
+    primaryPalette,
+    secondaryPalette,
+    tertiaryPalette: base.tertiaryPalette,
+    neutralPalette,
+    neutralVariantPalette,
+    errorPalette: base.errorPalette,
+  })
 }
 
 function extractColors(scheme: DynamicScheme): Colors {
@@ -86,7 +234,17 @@ function extractColors(scheme: DynamicScheme): Colors {
 
 /**
  * Generates a complete Material Design 3 light and dark theme from a single seed color.
- * Uses Google's HCT color space for spec-compliant palette generation.
+ * Uses Google's HCT color space and the official `material-color-utilities` schemes,
+ * so all defaults are byte-identical to the MD3 spec.
+ *
+ * Spec-aligned options (recommended):
+ *   - `variant` — pick from the 9 MD3 schemes
+ *   - `contrastLevel` — `'standard' | 'medium' | 'high'` (MD3 accessibility tiers)
+ *   - `fontFamily`, `roundness` — local layering on top of MD3
+ *
+ * Explicit overrides (deviate from MD3, use only when the spec doesn't cover your case):
+ *   - `surfaceTone: 'neutral'` — pure-grey / OLED-near-black surfaces
+ *   - `seedAdjustments` — per-palette HCT chroma overrides
  *
  * @param seedColor - Hex color string (e.g. '#6750A4', '#FF0000')
  * @returns Object with `lightTheme` and `darkTheme`, both typed as `Theme`
@@ -94,13 +252,25 @@ function extractColors(scheme: DynamicScheme): Colors {
  * @example
  * import { createMaterialTheme } from '@onlynative/core/create-theme'
  *
+ * // Pure MD3 default (TonalSpot variant)
  * const { lightTheme, darkTheme } = createMaterialTheme('#006A6A')
  *
- * // Custom font
- * const { lightTheme, darkTheme } = createMaterialTheme('#006A6A', { fontFamily: 'Inter' })
+ * // Switch to a different MD3 variant
+ * createMaterialTheme('#006A6A', { variant: 'vibrant' })
  *
- * // Sharp corners
- * const { lightTheme, darkTheme } = createMaterialTheme('#006A6A', { roundness: 0 })
+ * // High-contrast accessibility preset
+ * createMaterialTheme('#006A6A', { contrastLevel: 'high' })
+ *
+ * // Spec-legal monochrome theme
+ * createMaterialTheme('#006A6A', { variant: 'monochrome' })
+ *
+ * // Explicit override: keep colorful primary/secondary, flatten surfaces
+ * createMaterialTheme('#006A6A', { surfaceTone: 'neutral' })
+ *
+ * // Explicit override: punchier container chroma
+ * createMaterialTheme('#006A6A', {
+ *   seedAdjustments: { primary: 60, secondary: 32 },
+ * })
  *
  * <ThemeProvider theme={lightTheme}>
  *   <App />
@@ -114,10 +284,33 @@ export function createMaterialTheme(
   darkTheme: Theme
 } {
   const sourceHct = Hct.fromInt(argbFromHex(seedColor))
-  const { fontFamily, roundness = 1 } = options ?? {}
+  const {
+    variant = 'tonalSpot',
+    fontFamily,
+    roundness = 1,
+    contrastLevel = 'standard',
+    surfaceTone = 'spec',
+    seedAdjustments,
+  } = options ?? {}
 
-  const lightScheme = new SchemeTonalSpot(sourceHct, false, 0)
-  const darkScheme = new SchemeTonalSpot(sourceHct, true, 0)
+  const contrast = CONTRAST_VALUES[contrastLevel]
+
+  const lightScheme = buildScheme(
+    variant,
+    sourceHct,
+    false,
+    contrast,
+    surfaceTone,
+    seedAdjustments,
+  )
+  const darkScheme = buildScheme(
+    variant,
+    sourceHct,
+    true,
+    contrast,
+    surfaceTone,
+    seedAdjustments,
+  )
 
   const shape = roundness === 1 ? lightTheme.shape : applyRoundness(roundness)
 

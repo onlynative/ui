@@ -981,9 +981,17 @@ const myTheme = defineTheme<MyTheme>({
 
 Generates a complete MD3 light and dark theme from a single seed color. Uses Google's HCT color space via \`@material/material-color-utilities\` for spec-compliant palette generation.
 
-**Options:**
+Defaults are byte-identical to the upstream MD3 \`material-color-utilities\` library — pure spec output.
+
+**Spec-aligned options:**
+- \`variant?: 'tonalSpot' | 'neutral' | 'vibrant' | 'expressive' | 'fidelity' | 'content' | 'monochrome' | 'rainbow' | 'fruitSalad'\` — MD3 scheme variant (default \`'tonalSpot'\`, the Material You default on Android 12+). Each is a spec-defined recipe for deriving the palette. Use \`'monochrome'\` for spec-legal pure-grey themes, \`'vibrant'\` for high-colorfulness, etc.
+- \`contrastLevel?: 'standard' | 'medium' | 'high'\` — MD3 contrast preset (default \`'standard'\`). Maps to MD3 contrast values \`0 / 0.5 / 1.0\`. Use \`'medium'\` or \`'high'\` for WCAG AAA / low-vision modes.
 - \`fontFamily?: string\` — Custom font family applied to all 15 typography styles. When omitted, platform defaults are used (Roboto on Android, System on iOS).
 - \`roundness?: number\` — Global corner-radius multiplier. \`0\` = sharp corners, \`1\` = default MD3 (default), \`2\` = double rounding. Does not affect \`cornerNone\` or \`cornerFull\`.
+
+**Explicit overrides (NOT part of MD3 spec — use only when no built-in \`variant\` covers your case):**
+- \`surfaceTone?: 'spec' | 'neutral'\` — Default \`'spec'\` keeps the variant's neutral palette as-is. \`'neutral'\` rebuilds the neutral and neutralVariant palettes with chroma \`0\` while leaving primary/secondary/tertiary untouched. Use this for a colorful brand + OLED-near-black surfaces. For a fully spec-legal monochrome theme prefer \`variant: 'monochrome'\`.
+- \`seedAdjustments?: { primary?: number, secondary?: number }\` — Per-palette HCT chroma overrides. Same hue, fresh chroma. The variant defaults are spec-defined (TonalSpot uses \`primary: 36\` / \`secondary: 16\`); only override when no \`variant\` matches your brand. Try \`variant: 'vibrant'\` first.
 
 **Separate entry point** — keeps the ~60 kB dependency out of the main bundle:
 
@@ -991,13 +999,26 @@ Generates a complete MD3 light and dark theme from a single seed color. Uses Goo
 import { createMaterialTheme } from '@onlynative/core/create-theme'
 import { ThemeProvider } from '@onlynative/core'
 
+// Pure MD3 default (TonalSpot variant)
 const { lightTheme, darkTheme } = createMaterialTheme('#006A6A')
 
-// Custom font
-const { lightTheme, darkTheme } = createMaterialTheme('#006A6A', { fontFamily: 'Inter' })
+// Switch MD3 variant
+createMaterialTheme('#006A6A', { variant: 'vibrant' })
 
-// Sharp corners
-const { lightTheme, darkTheme } = createMaterialTheme('#006A6A', { roundness: 0 })
+// Spec-legal monochrome theme
+createMaterialTheme('#006A6A', { variant: 'monochrome' })
+
+// High-contrast accessibility preset
+createMaterialTheme('#006A6A', { contrastLevel: 'high' })
+
+// Custom font + sharp corners
+createMaterialTheme('#006A6A', { fontFamily: 'Inter', roundness: 0 })
+
+// Override: keep colorful primary/secondary, flatten surfaces to pure grey
+createMaterialTheme('#006A6A', { surfaceTone: 'neutral' })
+
+// Override: per-palette chroma
+createMaterialTheme('#006A6A', { seedAdjustments: { primary: 60, secondary: 32 } })
 
 // Use in provider
 <ThemeProvider theme={lightTheme}>{children}</ThemeProvider>

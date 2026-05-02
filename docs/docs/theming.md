@@ -101,6 +101,81 @@ const { lightTheme, darkTheme } = createMaterialTheme('#006A6A', {
 
 This is the easiest way to create a branded theme — pick your brand color and the entire palette is generated for you. See the [Fonts](./fonts) guide for full details on loading and using custom fonts.
 
+#### Spec-aligned options
+
+These map directly to MD3 spec primitives. Defaults produce byte-identical output to the official `material-color-utilities` library.
+
+| Option | Type | Default | Notes |
+|--------|------|---------|-------|
+| `variant` | [see below](#md3-scheme-variants) | `'tonalSpot'` | The MD3 scheme used to derive palettes. |
+| `contrastLevel` | `'standard' \| 'medium' \| 'high'` | `'standard'` | MD3 contrast preset. Maps to MD3 contrast values `0 / 0.5 / 1.0`. |
+| `fontFamily` | `string` | platform default | Applied to every typography style. |
+| `roundness` | `number` | `1` | Corner-radius multiplier. `0` = sharp, `1` = MD3 default, `2` = doubled. |
+
+##### MD3 scheme variants
+
+Each variant is a spec-defined recipe in `material-color-utilities` for deriving the full palette from the seed.
+
+| Variant | When to use |
+|---------|-------------|
+| `'tonalSpot'` (default) | Material You default. Low-to-medium colorfulness, tertiary hue related to source. |
+| `'neutral'` | Calm, low-colorfulness theme. Quieter than tonalSpot. |
+| `'vibrant'` | High colorfulness primary, distinct hue rotations. |
+| `'expressive'` | Playful, source hue is intentionally shifted for variety. |
+| `'fidelity'` | Closely matches the seed color (high colorfulness, no hue shift). |
+| `'content'` | Designed for content-driven theming (e.g. derived from images). |
+| `'monochrome'` | Pure greys. Spec-legal way to get a fully neutral theme. |
+| `'rainbow'` | All hues represented across the secondary/tertiary palettes. |
+| `'fruitSalad'` | Distinct vibrant hues for primary/secondary/tertiary. |
+
+```tsx
+// Spec-legal monochrome theme
+createMaterialTheme('#006A6A', { variant: 'monochrome' })
+
+// Spec-legal vibrant theme
+createMaterialTheme('#006A6A', { variant: 'vibrant' })
+```
+
+##### Accessibility-friendly contrast
+
+```tsx
+const { lightTheme, darkTheme } = createMaterialTheme('#006A6A', {
+  contrastLevel: 'high',
+})
+```
+
+`'standard'` matches the MD3 spec exactly. `'medium'` and `'high'` widen the gap between content and container colors, useful for WCAG AAA targets or low-vision modes.
+
+#### Explicit overrides
+
+These deviate from the MD3 spec. **Reach for them only when no built-in `variant` covers your case** — the spec already covers most aesthetics.
+
+| Option | Type | Default | Notes |
+|--------|------|---------|-------|
+| `surfaceTone` | `'spec' \| 'neutral'` | `'spec'` | `'neutral'` flattens neutral palettes to chroma `0` while keeping a colorful primary/secondary. |
+| `seedAdjustments.primary` | `number` | spec-defined | HCT chroma override for the primary palette. |
+| `seedAdjustments.secondary` | `number` | spec-defined | HCT chroma override for the secondary palette. |
+
+##### `surfaceTone: 'neutral'` — colorful brand + pure-grey surfaces
+
+```tsx
+const { lightTheme, darkTheme } = createMaterialTheme('#006A6A', {
+  surfaceTone: 'neutral',
+})
+```
+
+Use this when you need a colorful primary/secondary (e.g. brand color) but want OLED-near-black, untinted surfaces (a "carbon" aesthetic). For a fully neutral theme prefer the spec-legal `variant: 'monochrome'`.
+
+##### `seedAdjustments` — chroma overrides
+
+```tsx
+const { lightTheme, darkTheme } = createMaterialTheme('#006A6A', {
+  seedAdjustments: { primary: 60, secondary: 32 },
+})
+```
+
+Overrides the HCT chroma of the primary and secondary palettes while keeping their hues. Use this only when the spec-defined chromas come out too pastel or too vivid for your brand. Try `variant: 'vibrant'` first — it's the spec-legal answer to "containers too pastel".
+
 ### Access theme values
 
 Use the `useTheme` hook in any component:
@@ -272,4 +347,9 @@ function MyComponent() {
 | Override a few MD3 colors | Spread `lightTheme` and override |
 | Branded MD3 theme from one color | `import { createMaterialTheme } from '@onlynative/core/create-theme'` |
 | Custom font | `createMaterialTheme('#color', { fontFamily: 'Inter' })` — see [Fonts](./fonts) |
+| Switch MD3 variant | `createMaterialTheme('#color', { variant: 'vibrant' })` |
+| High-contrast accessibility | `createMaterialTheme('#color', { contrastLevel: 'high' })` |
+| Spec-legal monochrome | `createMaterialTheme('#color', { variant: 'monochrome' })` |
+| Brand color + pure-grey surfaces (override) | `createMaterialTheme('#color', { surfaceTone: 'neutral' })` |
+| Custom palette chroma (override) | `createMaterialTheme('#color', { seedAdjustments: { primary: 60 } })` |
 | Fully custom design system | `defineTheme` + `<ThemeProvider>` + `useTheme<T>()` |
