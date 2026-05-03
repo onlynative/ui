@@ -3,7 +3,9 @@
   "description": "Single-thumb or range slider with continuous and discrete (stepped) modes and optional centered origin.",
   "files": [
     "packages/components/src/slider/Slider.tsx",
+    "packages/components/src/slider/geometry.ts",
     "packages/components/src/slider/index.ts",
+    "packages/components/src/slider/slots.tsx",
     "packages/components/src/slider/styles.ts",
     "packages/components/src/slider/types.ts"
   ],
