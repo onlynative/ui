@@ -78,3 +78,6 @@ export type { SliderProps, SliderValue } from './slider'
 
 export { LinearProgress, CircularProgress } from './progress'
 export type { LinearProgressProps, CircularProgressProps } from './progress'
+
+export { FAB } from './fab'
+export type { FABProps, FABSize, FABVariant } from './fab'

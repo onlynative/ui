@@ -9,6 +9,7 @@ import {
   Chip,
   CircularProgress,
   Column,
+  FAB,
   Grid,
   IconButton,
   LinearProgress,
@@ -79,6 +80,12 @@ const sections: ComponentSection[] = [
         label: 'IconButton',
         route: '/icon-button',
         description: 'Compact icon-only actions with toggle and size variants',
+      },
+      {
+        label: 'FAB',
+        route: '/fab',
+        description:
+          'Floating action button — primary, surface, sizes, and extended',
       },
       {
         label: 'Chip',
@@ -259,6 +266,13 @@ function Preview({ label, theme }: { label: string; theme: MaterialTheme }) {
             variant="outlined"
             accessibilityLabel="Like (outlined)"
           />
+        </Row>
+      )
+    case 'FAB':
+      return (
+        <Row gap="md" align="center">
+          <FAB icon="plus" accessibilityLabel="Add" />
+          <FAB icon="pencil-outline" label="Edit" />
         </Row>
       )
     case 'Chip':

@@ -22,6 +22,7 @@ export default defineConfig({
     'src/portal/index.ts',
     'src/slider/index.ts',
     'src/progress/index.ts',
+    'src/fab/index.ts',
   ],
   dts: true,
   format: 'cjs',

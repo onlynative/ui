@@ -1,0 +1,156 @@
+---
+sidebar_position: 4
+---
+
+# FAB
+
+Floating action buttons (FABs) represent the screen's primary action. They appear in front of all other content, typically pinned to a corner.
+Follows the [Material Design 3 Floating Action Button](https://m3.material.io/components/floating-action-button/overview) specification.
+
+The `icon` prop accepts three forms — a string name (resolved via [`MaterialCommunityIcons`](https://pictogrammers.com/library/mdi/) by default), a pre-rendered React element from any icon library, or a render function that receives the resolved `{ size, color }`. See the [Icons guide](../icons) for details.
+
+## Usage
+
+<SnackExample
+  name="OnlyNative FAB — Usage"
+  code={`
+  import { FAB } from '@onlynative/components'
+  import { ThemeProvider } from '@onlynative/core'
+  import { SafeAreaProvider } from 'react-native-safe-area-context'
+  import { View } from 'react-native'
+
+  export default function App() {
+    return (
+      <SafeAreaProvider>
+        <ThemeProvider>
+          <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+            <FAB
+              icon="plus"
+              accessibilityLabel="Add"
+              onPress={() => {}}
+            />
+          </View>
+        </ThemeProvider>
+      </SafeAreaProvider>
+    )
+  }
+`}
+/>
+
+## Variants
+
+| Variant | Container | Content |
+|---------|-----------|---------|
+| `primary` | `primaryContainer` | `onPrimaryContainer` |
+| `secondary` | `secondaryContainer` | `onSecondaryContainer` |
+| `tertiary` | `tertiaryContainer` | `onTertiaryContainer` |
+| `surface` | `surfaceContainerHigh` | `primary` |
+
+## Sizes
+
+<SnackExample
+  name="OnlyNative FAB — Sizes"
+  code={`
+  import { FAB } from '@onlynative/components'
+  import { ThemeProvider } from '@onlynative/core'
+  import { SafeAreaProvider } from 'react-native-safe-area-context'
+  import { View } from 'react-native'
+
+  export default function App() {
+    return (
+      <SafeAreaProvider>
+        <ThemeProvider>
+          <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 16 }}>
+            <FAB icon="plus" size="small" accessibilityLabel="Add (small)" onPress={() => {}} />
+            <FAB icon="plus" size="medium" accessibilityLabel="Add (medium)" onPress={() => {}} />
+            <FAB icon="plus" size="large" accessibilityLabel="Add (large)" onPress={() => {}} />
+          </View>
+        </ThemeProvider>
+      </SafeAreaProvider>
+    )
+  }
+`}
+/>
+
+| Size | Container | Icon | Shape |
+|------|-----------|------|-------|
+| `small` | 40 × 40 | 24dp | `cornerMedium` (12) |
+| `medium` (default) | 56 × 56 | 24dp | `cornerLarge` (16) |
+| `large` | 96 × 96 | 36dp | `cornerExtraLarge` (28) |
+
+## Extended
+
+Pass a `label` to render an extended FAB. Extended FABs are always 56dp tall — the `size` prop is unavailable.
+
+<SnackExample
+  name="OnlyNative FAB — Extended"
+  code={`
+  import { FAB } from '@onlynative/components'
+  import { ThemeProvider } from '@onlynative/core'
+  import { SafeAreaProvider } from 'react-native-safe-area-context'
+  import { View } from 'react-native'
+
+  export default function App() {
+    return (
+      <SafeAreaProvider>
+        <ThemeProvider>
+          <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', gap: 12 }}>
+            <FAB icon="plus" label="Compose" onPress={() => {}} />
+            <FAB icon="pencil-outline" label="Edit" variant="surface" onPress={() => {}} />
+          </View>
+        </ThemeProvider>
+      </SafeAreaProvider>
+    )
+  }
+`}
+/>
+
+The label doubles as the accessible name, so `accessibilityLabel` is optional in extended mode (override it if you need a more descriptive name for screen readers).
+
+## Bring your own icon library
+
+```tsx
+import { FAB } from '@onlynative/components'
+import { Plus } from 'lucide-react-native'
+
+<FAB
+  icon={({ size, color }) => <Plus size={size} color={color} />}
+  accessibilityLabel="Add"
+/>
+```
+
+## Custom Colors
+
+Override `containerColor` and `contentColor` to bypass the variant defaults. State-layer colors (hover, press, focus) are derived automatically.
+
+<SnackExample
+  name="OnlyNative FAB — Custom Colors"
+  code={`
+  import { FAB } from '@onlynative/components'
+  import { ThemeProvider } from '@onlynative/core'
+  import { SafeAreaProvider } from 'react-native-safe-area-context'
+  import { View } from 'react-native'
+
+  export default function App() {
+    return (
+      <SafeAreaProvider>
+        <ThemeProvider>
+          <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+            <FAB
+              icon="heart"
+              containerColor="#B00020"
+              contentColor="#FFFFFF"
+              accessibilityLabel="Favorite"
+              onPress={() => {}}
+            />
+          </View>
+        </ThemeProvider>
+      </SafeAreaProvider>
+    )
+  }
+`}
+/>
+
+## Props
+
+<PropTable name="FAB" />

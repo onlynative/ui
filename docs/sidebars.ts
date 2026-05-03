@@ -30,6 +30,7 @@ const sidebars: SidebarsConfig = {
         'components/button-group',
         'components/checkbox',
         'components/chip',
+        'components/fab',
         'components/icon-button',
         'components/radio',
         'components/slider',

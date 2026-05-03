@@ -104,6 +104,11 @@
       "types": "./dist/progress/index.d.ts",
       "react-native": "./dist/progress/index.js",
       "default": "./dist/progress/index.js"
+    },
+    "./fab": {
+      "types": "./dist/fab/index.d.ts",
+      "react-native": "./dist/fab/index.js",
+      "default": "./dist/fab/index.js"
     }
   },
   "typesVersions": {
@@ -161,6 +166,9 @@
       ],
       "progress": [
         "dist/progress/index.d.ts"
+      ],
+      "fab": [
+        "dist/fab/index.d.ts"
       ]
     }
   },

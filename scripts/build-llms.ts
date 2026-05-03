@@ -375,6 +375,7 @@ const COMPONENT_ORDER = [
   'button',
   'button-group',
   'icon-button',
+  'fab',
   'appbar',
   'card',
   'chip',
@@ -395,6 +396,7 @@ const COMPONENT_NAMES: Record<string, string> = {
   button: 'Button',
   'button-group': 'ButtonGroup',
   'icon-button': 'IconButton',
+  fab: 'FAB',
   appbar: 'AppBar',
   card: 'Card',
   chip: 'Chip',
@@ -469,6 +471,17 @@ import { IconButton } from '@onlynative/components/icon-button'
 
 <IconButton icon="heart" variant="filled" accessibilityLabel="Like" onPress={handleLike} />
 <IconButton icon="heart-outline" selectedIcon="heart" selected={liked} variant="tonal" accessibilityLabel="Like" onPress={toggle} />
+\`\`\``,
+
+  fab: `\`\`\`tsx
+import { FAB } from '@onlynative/components/fab'
+
+// Icon-only — accessibilityLabel required
+<FAB icon="plus" accessibilityLabel="Add" onPress={handleAdd} />
+<FAB icon="plus" size="large" variant="tertiary" accessibilityLabel="Add" onPress={handleAdd} />
+
+// Extended — label doubles as the accessible name
+<FAB icon="pencil-outline" label="Edit" variant="surface" onPress={handleEdit} />
 \`\`\``,
 
   appbar: `\`\`\`tsx

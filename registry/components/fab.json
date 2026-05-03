@@ -1,0 +1,17 @@
+{
+  "name": "fab",
+  "description": "Floating action button with 4 color variants (primary, secondary, tertiary, surface), 3 sizes (small, medium, large), and optional extended label.",
+  "files": [
+    "packages/components/src/fab/FAB.tsx",
+    "packages/components/src/fab/index.ts",
+    "packages/components/src/fab/styles.ts",
+    "packages/components/src/fab/types.ts"
+  ],
+  "utils": ["color", "elevation", "render-icon"],
+  "componentDependencies": [],
+  "dependencies": {
+    "@onlynative/core": ">=0.0.0-alpha.7",
+    "react-native-reanimated": ">=4.0.0"
+  },
+  "optionalDependencies": {}
+}

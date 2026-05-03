@@ -30,6 +30,10 @@
       "description": "Input chip with 4 variants (assist, filter, input, suggestion) and icon/avatar support."
     },
     {
+      "name": "fab",
+      "description": "Floating action button with 4 color variants (primary, secondary, tertiary, surface), 3 sizes (small, medium, large), and optional extended label."
+    },
+    {
       "name": "icon-button",
       "description": "Icon-only button with 4 variants (filled, tonal, outlined, standard) and toggle support."
     },
