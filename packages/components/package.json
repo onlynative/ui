@@ -196,7 +196,8 @@
   "scripts": {
     "build": "tsup",
     "typecheck": "tsc --noEmit",
-    "test": "jest --passWithNoTests"
+    "test": "jest --passWithNoTests",
+    "lint": "eslint . --max-warnings 0"
   },
   "peerDependencies": {
     "@expo/vector-icons": ">=14.0.0",

@@ -1,15 +1,47 @@
 {
   "$schema": "https://turbo.build/schema.json",
+  "globalDependencies": [
+    "tsconfig.json",
+    "eslint.config.mjs",
+    ".prettierrc",
+    ".prettierignore"
+  ],
   "tasks": {
     "build": {
       "dependsOn": ["^build"],
+      "inputs": ["src/**", "tsup.config.ts", "tsconfig.json", "package.json"],
       "outputs": ["dist/**", "build/**"]
     },
     "typecheck": {
-      "dependsOn": ["^build"]
+      "dependsOn": ["^build"],
+      "inputs": [
+        "src/**/*.{ts,tsx}",
+        "src/**/*.d.ts",
+        "tsconfig.json",
+        "package.json"
+      ],
+      "outputs": []
     },
     "test": {
       "dependsOn": ["build"],
+      "inputs": [
+        "src/**",
+        "jest.config.{js,ts}",
+        "jest.setup.{js,ts}",
+        "vitest.config.ts",
+        "babel.config.js",
+        "tsconfig.json",
+        "package.json"
+      ],
+      "outputs": []
+    },
+    "lint": {
+      "inputs": [
+        "src/**/*.{ts,tsx}",
+        "tsup.config.ts",
+        "tsconfig.json",
+        "package.json"
+      ],
       "outputs": []
     },
     "dev": {
