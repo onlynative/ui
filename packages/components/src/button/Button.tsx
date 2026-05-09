@@ -1,25 +1,13 @@
 import { useIconResolver, useTheme } from '@onlynative/core'
-import {
-  isFocusVisible,
-  renderIcon,
-  resolveColorFromStyle,
-} from '@onlynative/utils'
-import { useCallback, useMemo } from 'react'
-import { Platform, Pressable, Text, View } from 'react-native'
-import Animated, {
-  interpolateColor,
-  useAnimatedStyle,
-  useSharedValue,
-  withTiming,
-} from 'react-native-reanimated'
+import { Motion } from '@onlynative/inertia'
+import { renderIcon, resolveColorFromStyle } from '@onlynative/utils'
+import { useMemo } from 'react'
+import { Platform, Text, View } from 'react-native'
 import { createStyles, getResolvedButtonColors } from './styles'
 import type { ButtonProps } from './types'
 
-const AnimatedPressable = Animated.createAnimatedComponent(Pressable)
-
-const HOVER_TIMING = { duration: 150 }
-const PRESS_TIMING = { duration: 100 }
-const FOCUS_TIMING = { duration: 200 }
+const BG_TRANSITION = { type: 'timing', duration: 150 } as const
+const FOCUS_RING_TRANSITION = { type: 'timing', duration: 200 } as const
 
 export function Button({
   children,
@@ -58,33 +46,61 @@ export function Button({
     [theme, variant, containerColor, contentColor],
   )
 
-  const hovered = useSharedValue(0)
-  const focused = useSharedValue(0)
-  const pressed = useSharedValue(0)
+  // The rest target lives on `animate` (and `initial` to seed without a flash
+  // from Inertia's transparent default). Disabled drives a separate target so
+  // the gesture map can be omitted.
+  const restBackgroundColor = isDisabled
+    ? colors.disabledBackgroundColor
+    : colors.backgroundColor
 
-  // Layered crossfade: rest → focus → hover → press (priority: press > hover > focus > rest).
-  const animatedContainerStyle = useAnimatedStyle(() => {
-    const focusedBg = interpolateColor(
-      focused.value,
-      [0, 1],
-      [colors.backgroundColor, colors.focusedBackgroundColor],
-    )
-    const hoveredBg = interpolateColor(
-      hovered.value,
-      [0, 1],
-      [focusedBg, colors.hoveredBackgroundColor],
-    )
-    const pressedBg = interpolateColor(
-      pressed.value,
-      [0, 1],
-      [hoveredBg, colors.pressedBackgroundColor],
-    )
-    return { backgroundColor: pressedBg }
-  })
+  const animate = useMemo(
+    () => ({ backgroundColor: restBackgroundColor }),
+    [restBackgroundColor],
+  )
 
-  const animatedFocusRingStyle = useAnimatedStyle(() => ({
-    opacity: focused.value,
-  }))
+  const initialAnimate = useMemo(
+    () => ({ backgroundColor: restBackgroundColor }),
+    [restBackgroundColor],
+  )
+
+  // Layered state cascade: rest → focusVisible → hover → press. Inertia's
+  // `gesture` prop selects the highest-priority active sub-state per-property
+  // (priority: pressed > focusVisible > focused > hovered) and transitions
+  // backgroundColor between targets via the shared transition below. Disabling
+  // the component drops the gesture map so no state layer mounts.
+  const gesture = useMemo(
+    () =>
+      isDisabled
+        ? undefined
+        : {
+            hovered: { backgroundColor: colors.hoveredBackgroundColor },
+            focusVisible: { backgroundColor: colors.focusedBackgroundColor },
+            pressed: { backgroundColor: colors.pressedBackgroundColor },
+          },
+    [
+      isDisabled,
+      colors.hoveredBackgroundColor,
+      colors.focusedBackgroundColor,
+      colors.pressedBackgroundColor,
+    ],
+  )
+
+  const focusRingGesture = useMemo(
+    () =>
+      isDisabled
+        ? undefined
+        : {
+            focusVisible: { opacity: 1 },
+          },
+    [isDisabled],
+  )
+
+  const transition = useMemo(() => ({ backgroundColor: BG_TRANSITION }), [])
+
+  const focusRingTransition = useMemo(
+    () => ({ opacity: FOCUS_RING_TRANSITION }),
+    [],
+  )
 
   const resolvedIconColor = useMemo(
     () =>
@@ -104,58 +120,37 @@ export function Button({
     [isDisabled, styles.disabledLabel, styles.label, labelStyleOverride],
   )
 
-  const handleHoverIn = useCallback(() => {
-    if (!isDisabled) hovered.value = withTiming(1, HOVER_TIMING)
-  }, [isDisabled, hovered])
-
-  const handleHoverOut = useCallback(() => {
-    hovered.value = withTiming(0, HOVER_TIMING)
-  }, [hovered])
-
-  const handlePressIn = useCallback(() => {
-    if (!isDisabled) pressed.value = withTiming(1, PRESS_TIMING)
-  }, [isDisabled, pressed])
-
-  const handlePressOut = useCallback(() => {
-    pressed.value = withTiming(0, PRESS_TIMING)
-  }, [pressed])
-
-  // Match :focus-visible — only show focus state from keyboard navigation.
-  const handleFocus = useCallback(() => {
-    if (!isDisabled && isFocusVisible()) {
-      focused.value = withTiming(1, FOCUS_TIMING)
-    }
-  }, [isDisabled, focused])
-
-  const handleBlur = useCallback(() => {
-    focused.value = withTiming(0, FOCUS_TIMING)
-  }, [focused])
-
   const iconRenderProps = { size: iconSize, color: resolvedIconColor }
+
+  // Function-form `style` is dropped on animated components — wrapping the
+  // style array in a function hides the gesture-driven backgroundColor from
+  // Inertia's prop diff and breaks the cascade. Use `containerColor` /
+  // `contentColor` for state-aware styling.
+  const userStyle = typeof style === 'function' ? undefined : style
 
   return (
     <View style={styles.wrapper}>
-      <Animated.View
+      <Motion.View
         pointerEvents="none"
-        style={[styles.focusRing, animatedFocusRingStyle]}
+        initial={{ opacity: 0 }}
+        gesture={focusRingGesture}
+        transition={focusRingTransition}
+        style={styles.focusRing}
       />
-      <AnimatedPressable
+      <Motion.Pressable
         {...props}
         accessibilityRole="button"
         accessibilityState={{ disabled: isDisabled }}
         hitSlop={Platform.OS === 'web' ? undefined : 4}
         disabled={isDisabled}
-        onHoverIn={handleHoverIn}
-        onHoverOut={handleHoverOut}
-        onPressIn={handlePressIn}
-        onPressOut={handlePressOut}
-        onFocus={handleFocus}
-        onBlur={handleBlur}
+        initial={initialAnimate}
+        animate={animate}
+        gesture={gesture}
+        transition={transition}
         style={[
           styles.container,
-          animatedContainerStyle,
           isDisabled ? styles.disabledContainer : undefined,
-          style,
+          userStyle,
         ]}
       >
         {leadingIcon ? (
@@ -169,7 +164,7 @@ export function Button({
             {renderIcon(trailingIcon, iconRenderProps, iconResolver)}
           </View>
         ) : null}
-      </AnimatedPressable>
+      </Motion.Pressable>
     </View>
   )
 }

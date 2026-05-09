@@ -172,6 +172,11 @@ function analyzeImports(componentDir: string): {
     if (content.includes('react-native-reanimated')) {
       externalDeps.add('react-native-reanimated')
     }
+    if (content.includes('@onlynative/inertia-gestures')) {
+      externalDeps.add('@onlynative/inertia-gestures')
+    } else if (content.includes('@onlynative/inertia')) {
+      externalDeps.add('@onlynative/inertia')
+    }
   }
 
   return { utils, componentDeps, externalDeps }
@@ -202,6 +207,14 @@ function buildComponentEntry(componentDir: string): ComponentEntry {
 
   if (externalDeps.has('react-native-reanimated')) {
     dependencies['react-native-reanimated'] = '>=4.0.0'
+  }
+
+  if (externalDeps.has('@onlynative/inertia')) {
+    dependencies['@onlynative/inertia'] = '0.0.1-alpha.2'
+  }
+
+  if (externalDeps.has('@onlynative/inertia-gestures')) {
+    dependencies['@onlynative/inertia-gestures'] = '0.0.1-alpha.2'
   }
 
   // Special case: layout uses safe-area-context only in Layout.tsx (optional)
