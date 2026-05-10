@@ -1,7 +1,7 @@
 # @onlynative/icons — Icon Library Adapters for OnlyNative UI
 
 > Version: 0.0.0-alpha.7
-> Peer deps: @onlynative/core >=0.0.0-alpha.7, react >=18, react-native >=0.72
+> Peer deps: @onlynative/core >=0.0.0-alpha.8, react >=18, react-native >=0.72
 > Optional peer deps: lucide-react-native, phosphor-react-native, @expo/vector-icons
 
 Pre-built resolver factories that plug into the theme's `iconResolver`. Install only the icon library you actually use — each is declared as an optional peer dep.
