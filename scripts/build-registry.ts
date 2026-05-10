@@ -69,6 +69,9 @@ for (const [util, exports] of Object.entries(UTIL_TYPE_EXPORTS)) {
 
 // Directories to skip
 const SKIP_DIRS = new Set(['__tests__'])
+// Private helper folders: get a per-file registry entry (so CLI can copy them
+// when a public component depends on them) but are hidden from `onlynative list`.
+const INTERNAL_DIRS = new Set(['internal'])
 
 interface ComponentEntry {
   name: string
@@ -311,13 +314,17 @@ for (const dir of componentDirs) {
   console.log(`Wrote registry/components/${dir}.json`)
 }
 
-// Build index (with descriptions for fast list command)
+// Build index (with descriptions for fast list command). Internal helper
+// dirs are written to disk above so CLI can resolve componentDeps, but they
+// shouldn't appear in the public listing.
 const indexData = {
   version: VERSION,
-  components: componentEntries.map((e) => ({
-    name: e.name,
-    description: e.description,
-  })),
+  components: componentEntries
+    .filter((e) => !INTERNAL_DIRS.has(e.name))
+    .map((e) => ({
+      name: e.name,
+      description: e.description,
+    })),
 }
 fs.writeFileSync(
   path.join(REGISTRY_DIR, 'index.json'),

@@ -3,6 +3,7 @@ import { Motion } from '@onlynative/inertia'
 import { alphaColor, renderIcon } from '@onlynative/utils'
 import { useMemo } from 'react'
 import { View } from 'react-native'
+import { useStateLayer } from '../internal/useStateLayer'
 import {
   applyContainerColorOverride,
   createStyles,
@@ -13,9 +14,6 @@ import type {
   IconButtonSize,
   IconButtonVariant,
 } from './types'
-
-const BG_TRANSITION = { type: 'timing', duration: 150 } as const
-const FOCUS_RING_TRANSITION = { type: 'timing', duration: 200 } as const
 
 function getIconColor(
   variant: IconButtonVariant,
@@ -124,52 +122,16 @@ export function IconButton({
     )
   }, [theme, variant, isToggle, isSelected, containerColor, resolvedIconColor])
 
-  const restBackgroundColor = isDisabled
-    ? colors.disabledBackgroundColor
-    : colors.backgroundColor
-
-  const animate = useMemo(
-    () => ({ backgroundColor: restBackgroundColor }),
-    [restBackgroundColor],
-  )
-
-  const initialAnimate = useMemo(
-    () => ({ backgroundColor: restBackgroundColor }),
-    [restBackgroundColor],
-  )
-
-  const gesture = useMemo(
-    () =>
-      isDisabled
-        ? undefined
-        : {
-            hovered: { backgroundColor: colors.hoveredBackgroundColor },
-            focusVisible: { backgroundColor: colors.focusedBackgroundColor },
-            pressed: { backgroundColor: colors.pressedBackgroundColor },
-          },
-    [
-      isDisabled,
-      colors.hoveredBackgroundColor,
-      colors.focusedBackgroundColor,
-      colors.pressedBackgroundColor,
-    ],
-  )
-
-  const focusRingGesture = useMemo(
-    () =>
-      isDisabled
-        ? undefined
-        : {
-            focusVisible: { opacity: 1 },
-          },
-    [isDisabled],
-  )
-
-  const transition = useMemo(() => ({ backgroundColor: BG_TRANSITION }), [])
-  const focusRingTransition = useMemo(
-    () => ({ opacity: FOCUS_RING_TRANSITION }),
-    [],
-  )
+  const layer = useStateLayer({
+    colors: {
+      rest: colors.backgroundColor,
+      hovered: colors.hoveredBackgroundColor,
+      focused: colors.focusedBackgroundColor,
+      pressed: colors.pressedBackgroundColor,
+      disabled: colors.disabledBackgroundColor,
+    },
+    isDisabled,
+  })
 
   const disabledOverride = isDisabled
     ? { borderColor: colors.disabledBorderColor }
@@ -185,9 +147,7 @@ export function IconButton({
     <View style={styles.wrapper}>
       <Motion.View
         pointerEvents="none"
-        initial={{ opacity: 0 }}
-        gesture={focusRingGesture}
-        transition={focusRingTransition}
+        {...layer.focusRing}
         style={styles.focusRing}
       />
       <Motion.Pressable
@@ -198,10 +158,7 @@ export function IconButton({
         disabled={isDisabled}
         hitSlop={hitSlop ?? getDefaultHitSlop(size)}
         onPress={onPress}
-        initial={initialAnimate}
-        animate={animate}
-        gesture={gesture}
-        transition={transition}
+        {...layer.container}
         style={[
           styles.container,
           getSizeStyle(styles, size),

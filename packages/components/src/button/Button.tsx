@@ -3,11 +3,9 @@ import { Motion } from '@onlynative/inertia'
 import { renderIcon, resolveColorFromStyle } from '@onlynative/utils'
 import { useMemo } from 'react'
 import { Platform, Text, View } from 'react-native'
+import { useStateLayer } from '../internal/useStateLayer'
 import { createStyles, getResolvedButtonColors } from './styles'
 import type { ButtonProps } from './types'
-
-const BG_TRANSITION = { type: 'timing', duration: 150 } as const
-const FOCUS_RING_TRANSITION = { type: 'timing', duration: 200 } as const
 
 export function Button({
   children,
@@ -46,61 +44,16 @@ export function Button({
     [theme, variant, containerColor, contentColor],
   )
 
-  // The rest target lives on `animate` (and `initial` to seed without a flash
-  // from Inertia's transparent default). Disabled drives a separate target so
-  // the gesture map can be omitted.
-  const restBackgroundColor = isDisabled
-    ? colors.disabledBackgroundColor
-    : colors.backgroundColor
-
-  const animate = useMemo(
-    () => ({ backgroundColor: restBackgroundColor }),
-    [restBackgroundColor],
-  )
-
-  const initialAnimate = useMemo(
-    () => ({ backgroundColor: restBackgroundColor }),
-    [restBackgroundColor],
-  )
-
-  // Layered state cascade: rest → focusVisible → hover → press. Inertia's
-  // `gesture` prop selects the highest-priority active sub-state per-property
-  // (priority: pressed > focusVisible > focused > hovered) and transitions
-  // backgroundColor between targets via the shared transition below. Disabling
-  // the component drops the gesture map so no state layer mounts.
-  const gesture = useMemo(
-    () =>
-      isDisabled
-        ? undefined
-        : {
-            hovered: { backgroundColor: colors.hoveredBackgroundColor },
-            focusVisible: { backgroundColor: colors.focusedBackgroundColor },
-            pressed: { backgroundColor: colors.pressedBackgroundColor },
-          },
-    [
-      isDisabled,
-      colors.hoveredBackgroundColor,
-      colors.focusedBackgroundColor,
-      colors.pressedBackgroundColor,
-    ],
-  )
-
-  const focusRingGesture = useMemo(
-    () =>
-      isDisabled
-        ? undefined
-        : {
-            focusVisible: { opacity: 1 },
-          },
-    [isDisabled],
-  )
-
-  const transition = useMemo(() => ({ backgroundColor: BG_TRANSITION }), [])
-
-  const focusRingTransition = useMemo(
-    () => ({ opacity: FOCUS_RING_TRANSITION }),
-    [],
-  )
+  const layer = useStateLayer({
+    colors: {
+      rest: colors.backgroundColor,
+      hovered: colors.hoveredBackgroundColor,
+      focused: colors.focusedBackgroundColor,
+      pressed: colors.pressedBackgroundColor,
+      disabled: colors.disabledBackgroundColor,
+    },
+    isDisabled,
+  })
 
   const resolvedIconColor = useMemo(
     () =>
@@ -132,9 +85,7 @@ export function Button({
     <View style={styles.wrapper}>
       <Motion.View
         pointerEvents="none"
-        initial={{ opacity: 0 }}
-        gesture={focusRingGesture}
-        transition={focusRingTransition}
+        {...layer.focusRing}
         style={styles.focusRing}
       />
       <Motion.Pressable
@@ -143,10 +94,7 @@ export function Button({
         accessibilityState={{ disabled: isDisabled }}
         hitSlop={Platform.OS === 'web' ? undefined : 4}
         disabled={isDisabled}
-        initial={initialAnimate}
-        animate={animate}
-        gesture={gesture}
-        transition={transition}
+        {...layer.container}
         style={[
           styles.container,
           isDisabled ? styles.disabledContainer : undefined,
