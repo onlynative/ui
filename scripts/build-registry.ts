@@ -210,7 +210,7 @@ function buildComponentEntry(componentDir: string): ComponentEntry {
   }
 
   if (externalDeps.has('@onlynative/inertia')) {
-    dependencies['@onlynative/inertia'] = '0.0.1-alpha.2'
+    dependencies['@onlynative/inertia'] = '0.0.1-alpha.3'
   }
 
   if (externalDeps.has('@onlynative/inertia-gestures')) {
