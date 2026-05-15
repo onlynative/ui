@@ -87,6 +87,13 @@ jest.mock('react-native-reanimated', () => {
   }
 })
 
+jest.mock('react-native-worklets', () => ({
+  __esModule: true,
+  isWorkletFunction: () => false,
+  runOnJS: (fn) => fn,
+  runOnUI: (fn) => fn,
+}))
+
 jest.mock('react-native-safe-area-context', () => {
   const React = require('react')
   return {
