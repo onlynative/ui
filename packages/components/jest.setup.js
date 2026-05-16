@@ -72,7 +72,11 @@ jest.mock('react-native-reanimated', () => {
     withDelay: (_d, v) => v,
     withSequence: (...args) => args[args.length - 1],
     Easing: {
-      bezier: () => () => 0,
+      // Real `Easing.bezier(...)` returns an `EasingFunctionFactory` wrapper
+      // (`{ factory: () => (t) => number }`). Reanimated's `withTiming` accepts
+      // either the factory or a plain function; Inertia consumers call
+      // `.factory()` to unwrap. Mock both shapes.
+      bezier: () => ({ factory: () => () => 0 }),
       linear: () => 0,
       ease: () => 0,
       in: () => () => 0,
