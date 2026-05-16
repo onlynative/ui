@@ -90,7 +90,16 @@ export interface AppBarProps {
    */
   insetTop?: boolean
   /**
-   * When `true`, adds shadow/elevation to indicate the bar is scrolled.
+   * When `true`, applies the MD3 "scrolled" tonal-color shift to indicate
+   * content has scrolled under the bar (e.g. `surface` → `surfaceContainer`).
+   * No shadow elevation is added — MD3 communicates this state via tonal
+   * shift, not real elevation.
+   *
+   * The shift is only visible on the `surface` color scheme (the only scheme
+   * whose container and elevated container colors differ). For all other
+   * schemes (`primary`, `primaryContainer`, the `surfaceContainer*` family)
+   * `elevated` has no visible effect, consistent with MD3 — a primary-tinted
+   * bar stays primary on scroll.
    * @default false
    */
   elevated?: boolean
