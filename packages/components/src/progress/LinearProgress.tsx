@@ -1,15 +1,9 @@
 import { useTheme } from '@onlynative/core'
-import { useEffect, useMemo, useState } from 'react'
+import { useAnimation } from '@onlynative/inertia'
+import { useMemo, useState } from 'react'
 import type { LayoutChangeEvent } from 'react-native'
-import { View } from 'react-native'
-import Animated, {
-  Easing,
-  cancelAnimation,
-  useAnimatedStyle,
-  useSharedValue,
-  withRepeat,
-  withTiming,
-} from 'react-native-reanimated'
+import { I18nManager, View } from 'react-native'
+import Animated, { Easing, useAnimatedStyle } from 'react-native-reanimated'
 import {
   PROGRESS_STOP_INDICATOR,
   PROGRESS_TRACK_GAP,
@@ -23,17 +17,31 @@ import type { LinearProgressProps } from './types'
 const INDETERMINATE_SEGMENT_RATIO = 0.4
 const INDETERMINATE_DURATION_MS = 1800
 
-// MD3 emphasized cubic-bezier for value transitions (short4 ~250 ms).
-const MOTION_TIMING = {
+// `Easing.bezier(...)` returns an `EasingFunctionFactory`; `.factory()`
+// unwraps it to the plain `(t: number) => number` Inertia expects.
+const M3_STANDARD = Easing.bezier(0.2, 0, 0, 1).factory()
+const M3_IN_OUT_CUBIC = Easing.bezier(0.42, 0, 0.58, 1).factory()
+
+// MD3 emphasized timing for determinate value transitions (short4 ~250 ms).
+const MOTION_TRANSITION = {
+  type: 'timing',
   duration: 250,
-  easing: Easing.bezier(0.2, 0, 0, 1),
-}
-// Cubic in-out for the indeterminate slide (matches the prior
-// Easing.inOut(Easing.cubic) curve from the RN-Animated implementation).
-const INDETERMINATE_TIMING = {
+  easing: M3_STANDARD,
+} as const
+
+// Indeterminate slide loops 0 → 1 forever; `alternate: false` so it snaps
+// back to 0 at the end of each cycle rather than sliding back across.
+const INDETERMINATE_TRANSITION = {
+  type: 'timing',
   duration: INDETERMINATE_DURATION_MS,
-  easing: Easing.bezier(0.42, 0, 0.58, 1),
-}
+  easing: M3_IN_OUT_CUBIC,
+  repeat: { count: 'infinite', alternate: false },
+} as const
+
+// When transitioning from indeterminate → determinate the slide value snaps
+// back to 0 with no animation (the loop is gone; we don't want it to slowly
+// drift toward 0 mid-cycle).
+const SNAP_TRANSITION = { type: 'no-animation' } as const
 
 const clamp = (v: number, min: number, max: number) =>
   Math.min(Math.max(v, min), max)
@@ -63,36 +71,43 @@ export function LinearProgress({
     setWidth((prev) => (prev === w ? prev : w))
   }
 
-  // Indeterminate slide progress (0 → 1, looped).
-  const slide = useSharedValue(0)
-  useEffect(() => {
-    if (!indeterminate) {
-      cancelAnimation(slide)
-      return
-    }
-    slide.value = 0
-    slide.value = withRepeat(withTiming(1, INDETERMINATE_TIMING), -1, false)
-    return () => cancelAnimation(slide)
-  }, [indeterminate, slide])
+  // Indeterminate slide (0 → 1, looped). When `indeterminate` flips off, we
+  // re-run with target 0 + `no-animation` so the slider snaps home instead of
+  // continuing a partial cycle.
+  const slide = useAnimation(
+    indeterminate ? 1 : 0,
+    indeterminate ? INDETERMINATE_TRANSITION : SNAP_TRANSITION,
+  )
 
-  // Determinate value, smoothly tweened to the latest prop.
-  const progressShared = useSharedValue(value)
-  useEffect(() => {
-    if (indeterminate) return
-    progressShared.value = withTiming(value, MOTION_TIMING)
-  }, [value, indeterminate, progressShared])
+  // Determinate value, smoothly tweened to the latest prop. When the field is
+  // indeterminate the target is 0 (matching the original behaviour where the
+  // determinate SV was effectively unused) and isn't visible anyway — the
+  // indeterminate branch of the JSX never reads `progressShared`.
+  const progressShared = useAnimation(
+    indeterminate ? 0 : value,
+    MOTION_TRANSITION,
+  )
 
   const segmentWidth = Math.max(width * INDETERMINATE_SEGMENT_RATIO, 0)
 
+  // RTL: position the segment with `start: 0` so it anchors at the leading
+  // edge of the bar in both directions; then flip the `translateX` sign so
+  // the segment slides from the leading edge toward the trailing edge in
+  // RTL too (physical `translateX` is direction-agnostic in RN).
+  const rtlSlideMultiplier = I18nManager.isRTL ? -1 : 1
   const indeterminateStyle = useAnimatedStyle(
     () => ({
-      left: 0,
+      start: 0,
       width: segmentWidth,
       transform: [
-        { translateX: -segmentWidth + slide.value * (width + segmentWidth) },
+        {
+          translateX:
+            rtlSlideMultiplier *
+            (-segmentWidth + slide.value * (width + segmentWidth)),
+        },
       ],
     }),
-    [segmentWidth, width],
+    [segmentWidth, width, rtlSlideMultiplier],
   )
 
   // Determinate layout. The bar is split into:
@@ -110,22 +125,22 @@ export function LinearProgress({
     const v = progressShared.value
     const midGap = v > 0 && v < 1 ? PROGRESS_TRACK_GAP : 0
     const w = Math.max(0, v * (progressArea - midGap))
-    return { left: 0, width: w }
+    return { start: 0, width: w }
   }, [progressArea])
 
   const inactiveStyle = useAnimatedStyle(() => {
     const v = progressShared.value
     const midGap = v > 0 && v < 1 ? PROGRESS_TRACK_GAP : 0
     const aw = Math.max(0, v * (progressArea - midGap))
-    const left = aw + midGap
+    const start = aw + midGap
     const w = Math.max(0, progressArea - aw - midGap)
-    return { left, width: w }
+    return { start, width: w }
   }, [progressArea])
 
   const stopStyle = useMemo(
     () => [
       styles.stopDot,
-      { right: 0, top: thickness / 2 - PROGRESS_STOP_INDICATOR / 2 },
+      { end: 0, top: thickness / 2 - PROGRESS_STOP_INDICATOR / 2 },
     ],
     [styles.stopDot, thickness],
   )
