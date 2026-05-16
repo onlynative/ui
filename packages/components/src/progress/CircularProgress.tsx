@@ -1,14 +1,11 @@
 import { useTheme } from '@onlynative/core'
-import { useEffect, useMemo } from 'react'
+import { useAnimation } from '@onlynative/inertia'
+import { useMemo } from 'react'
 import { View } from 'react-native'
 import Animated, {
   Easing,
-  cancelAnimation,
   useAnimatedProps,
   useAnimatedStyle,
-  useSharedValue,
-  withRepeat,
-  withTiming,
 } from 'react-native-reanimated'
 import Svg, { Circle } from 'react-native-svg'
 import {
@@ -27,16 +24,32 @@ const INDETERMINATE_DURATION_MS = 1400
 // classic spinner cadence.
 const INDETERMINATE_ARC_RATIO = 0.25
 
-// MD3 emphasized cubic-bezier for value transitions (short4 ~250 ms).
-const MOTION_TIMING = {
+// `Easing.bezier(...)` returns an `EasingFunctionFactory`; `.factory()`
+// unwraps it to the plain `(t: number) => number` Inertia expects.
+const M3_STANDARD = Easing.bezier(0.2, 0, 0, 1).factory()
+const M3_LINEAR = Easing.bezier(0, 0, 1, 1).factory()
+
+// MD3 emphasized timing for determinate value transitions (short4 ~250 ms).
+const MOTION_TRANSITION = {
+  type: 'timing',
   duration: 250,
-  easing: Easing.bezier(0.2, 0, 0, 1),
-}
-// Linear-equivalent bezier for the constant-speed indeterminate rotation.
-const ROTATION_TIMING = {
+  easing: M3_STANDARD,
+} as const
+
+// Constant-speed indeterminate rotation, loops 0 → 1 forever; `alternate:
+// false` so it snaps back to 0 at the end of each cycle (otherwise the
+// rotation would reverse direction every other cycle, which reads as broken).
+const ROTATION_TRANSITION = {
+  type: 'timing',
   duration: INDETERMINATE_DURATION_MS,
-  easing: Easing.bezier(0, 0, 1, 1),
-}
+  easing: M3_LINEAR,
+  repeat: { count: 'infinite', alternate: false },
+} as const
+
+// When transitioning indeterminate → determinate the rotation snaps back to
+// 0 (no animation) — otherwise the determinate arc would briefly continue
+// rotating before settling.
+const SNAP_TRANSITION = { type: 'no-animation' } as const
 
 const clamp = (v: number, min: number, max: number) =>
   Math.min(Math.max(v, min), max)
@@ -69,28 +82,26 @@ export function CircularProgress({
   // size / thickness.
   const gapLength = Math.min(PROGRESS_TRACK_GAP, circumference / 4)
 
-  // Indeterminate rotation (0 → 1 mapped to 0 → 360°, looped).
-  const rotation = useSharedValue(0)
-  useEffect(() => {
-    if (!indeterminate) {
-      cancelAnimation(rotation)
-      return
-    }
-    rotation.value = 0
-    rotation.value = withRepeat(withTiming(1, ROTATION_TIMING), -1, false)
-    return () => cancelAnimation(rotation)
-  }, [indeterminate, rotation])
+  // Indeterminate rotation (0 → 1 mapped to 0 → 360°, looped). Same
+  // indeterminate/determinate-handoff pattern as LinearProgress: when the
+  // field becomes determinate, snap rotation back to 0 with `no-animation`
+  // so the arc doesn't continue spinning past the determinate render.
+  const rotation = useAnimation(
+    indeterminate ? 1 : 0,
+    indeterminate ? ROTATION_TRANSITION : SNAP_TRANSITION,
+  )
 
   const spinStyle = useAnimatedStyle(() => ({
     transform: [{ rotate: `${rotation.value * 360}deg` }],
   }))
 
-  // Determinate progress, smoothly tweened to the latest prop.
-  const progressShared = useSharedValue(value)
-  useEffect(() => {
-    if (indeterminate) return
-    progressShared.value = withTiming(value, MOTION_TIMING)
-  }, [value, indeterminate, progressShared])
+  // Determinate progress, smoothly tweened to the latest prop. When
+  // indeterminate the target is 0 — `progressShared` isn't read by the
+  // indeterminate branch of the JSX, so animating it down is harmless.
+  const progressShared = useAnimation(
+    indeterminate ? 0 : value,
+    MOTION_TRANSITION,
+  )
 
   // SVG circles are rotated -90° so that the 0° start position is at 12
   // o'clock instead of 3 o'clock (default SVG behavior).

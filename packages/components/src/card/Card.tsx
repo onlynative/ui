@@ -1,21 +1,13 @@
 import { useTheme } from '@onlynative/core'
-import { isFocusVisible } from '@onlynative/utils'
-import { useCallback, useMemo } from 'react'
-import { Platform, Pressable, View } from 'react-native'
-import Animated, {
-  interpolateColor,
-  useAnimatedStyle,
-  useSharedValue,
-  withTiming,
-} from 'react-native-reanimated'
+import { Motion } from '@onlynative/inertia'
+import { useMemo } from 'react'
+import { Platform, View } from 'react-native'
+import { useStateLayer } from '../internal/useStateLayer'
 import { createStyles, getResolvedCardColors } from './styles'
 import type { CardProps } from './types'
 
-const AnimatedPressable = Animated.createAnimatedComponent(Pressable)
-
-const HOVER_TIMING = { duration: 150 }
-const PRESS_TIMING = { duration: 100 }
-const FOCUS_TIMING = { duration: 200 }
+// MD3 elevation transitions follow the standard short4 duration.
+const ELEVATION_TRANSITION = { type: 'timing', duration: 250 } as const
 
 export function Card({
   children,
@@ -39,60 +31,51 @@ export function Card({
     [theme, variant, containerColor],
   )
 
-  const hovered = useSharedValue(0)
-  const focused = useSharedValue(0)
-  const pressed = useSharedValue(0)
-
-  // Layered crossfade: rest → focus → hover → press (priority: press > hover > focus > rest).
-  const animatedContainerStyle = useAnimatedStyle(() => {
-    const focusedBg = interpolateColor(
-      focused.value,
-      [0, 1],
-      [colors.backgroundColor, colors.focusedBackgroundColor],
-    )
-    const hoveredBg = interpolateColor(
-      hovered.value,
-      [0, 1],
-      [focusedBg, colors.hoveredBackgroundColor],
-    )
-    const pressedBg = interpolateColor(
-      pressed.value,
-      [0, 1],
-      [hoveredBg, colors.pressedBackgroundColor],
-    )
-    return { backgroundColor: pressedBg }
+  const layer = useStateLayer({
+    colors: {
+      rest: colors.backgroundColor,
+      hovered: colors.hoveredBackgroundColor,
+      focused: colors.focusedBackgroundColor,
+      pressed: colors.pressedBackgroundColor,
+    },
+    isDisabled,
   })
 
-  const animatedFocusRingStyle = useAnimatedStyle(() => ({
-    opacity: focused.value,
-  }))
-
-  const handleHoverIn = useCallback(() => {
-    if (!isDisabled) hovered.value = withTiming(1, HOVER_TIMING)
-  }, [isDisabled, hovered])
-
-  const handleHoverOut = useCallback(() => {
-    hovered.value = withTiming(0, HOVER_TIMING)
-  }, [hovered])
-
-  const handlePressIn = useCallback(() => {
-    if (!isDisabled) pressed.value = withTiming(1, PRESS_TIMING)
-  }, [isDisabled, pressed])
-
-  const handlePressOut = useCallback(() => {
-    pressed.value = withTiming(0, PRESS_TIMING)
-  }, [pressed])
-
-  // Match :focus-visible — only show focus state from keyboard navigation.
-  const handleFocus = useCallback(() => {
-    if (!isDisabled && isFocusVisible()) {
-      focused.value = withTiming(1, FOCUS_TIMING)
+  // MD3 elevation-on-hover cascade. Only `shadowOpacity` / `shadowRadius` /
+  // `elevation` are animated — `shadowOffset` is nested and stays static at
+  // the rest level (set by `styles.container`). The visible lift comes from
+  // the radius + opacity growth, which is the bulk of the MD3 effect.
+  const containerMotion = useMemo(() => {
+    if (variant === 'outlined') return layer.container
+    const rest =
+      variant === 'elevated' ? theme.elevation.level1 : theme.elevation.level0
+    const hover =
+      variant === 'elevated' ? theme.elevation.level2 : theme.elevation.level1
+    const animate = {
+      ...layer.container.animate,
+      shadowOpacity: rest.shadowOpacity,
+      shadowRadius: rest.shadowRadius,
+      elevation: rest.elevation,
     }
-  }, [isDisabled, focused])
-
-  const handleBlur = useCallback(() => {
-    focused.value = withTiming(0, FOCUS_TIMING)
-  }, [focused])
+    const gesture = layer.container.gesture
+      ? {
+          ...layer.container.gesture,
+          hovered: {
+            ...layer.container.gesture.hovered,
+            shadowOpacity: hover.shadowOpacity,
+            shadowRadius: hover.shadowRadius,
+            elevation: hover.elevation,
+          },
+        }
+      : undefined
+    const transition = {
+      ...layer.container.transition,
+      shadowOpacity: ELEVATION_TRANSITION,
+      shadowRadius: ELEVATION_TRANSITION,
+      elevation: ELEVATION_TRANSITION,
+    }
+    return { animate, gesture, transition }
+  }, [layer.container, theme.elevation, variant])
 
   if (!isInteractive) {
     return (
@@ -102,31 +85,28 @@ export function Card({
     )
   }
 
+  const userStyle = typeof style === 'function' ? undefined : style
+
   return (
     <View style={styles.wrapper}>
-      <Animated.View
+      <Motion.View
         pointerEvents="none"
-        style={[styles.focusRing, animatedFocusRingStyle]}
+        {...layer.focusRing}
+        style={styles.focusRing}
       />
-      <AnimatedPressable
+      <Motion.Pressable
         {...props}
         role="button"
         accessibilityState={{ disabled: isDisabled }}
         hitSlop={Platform.OS === 'web' ? undefined : 4}
         disabled={isDisabled}
         onPress={onPress}
-        onHoverIn={handleHoverIn}
-        onHoverOut={handleHoverOut}
-        onPressIn={handlePressIn}
-        onPressOut={handlePressOut}
-        onFocus={handleFocus}
-        onBlur={handleBlur}
+        {...containerMotion}
         style={[
           styles.container,
           styles.interactiveContainer,
-          animatedContainerStyle,
           isDisabled ? styles.disabledContainer : undefined,
-          style,
+          userStyle,
         ]}
       >
         {isDisabled ? (
@@ -134,7 +114,7 @@ export function Card({
         ) : (
           children
         )}
-      </AnimatedPressable>
+      </Motion.Pressable>
     </View>
   )
 }

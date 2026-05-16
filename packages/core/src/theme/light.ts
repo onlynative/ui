@@ -120,6 +120,16 @@ export const lightTheme: Theme = {
       shadowRadius: 8,
       elevation: 6,
     },
+    level4: {
+      shadowColor: '#000000',
+      shadowOffset: {
+        width: 0,
+        height: 6,
+      },
+      shadowOpacity: 0.28,
+      shadowRadius: 12,
+      elevation: 8,
+    },
   },
   motion: {
     durationShort1: 50,

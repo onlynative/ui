@@ -9,6 +9,6 @@ module.exports = {
     '^@onlynative/utils/test$': '<rootDir>/../utils/src/test-utils/index.ts',
   },
   transformIgnorePatterns: [
-    'node_modules/(?!((jest-)?react-native|@react-native(-community)?|@expo/vector-icons|react-native-safe-area-context|@material/material-color-utilities)/)',
+    'node_modules/(?!((jest-)?react-native|@react-native(-community)?|@expo/vector-icons|@onlynative/inertia|@onlynative/inertia-gestures|react-native-safe-area-context|react-native-worklets|@material/material-color-utilities)/)',
   ],
 }

@@ -1,14 +1,13 @@
 import { defaultTopAppBarTokens, useTheme } from '@onlynative/core'
+import { useAnimation } from '@onlynative/inertia'
 import { selectRTL } from '@onlynative/utils'
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import type { ReactNode } from 'react'
 import type { LayoutChangeEvent, StyleProp, ViewStyle } from 'react-native'
 import { Platform, View } from 'react-native'
 import Animated, {
   interpolateColor,
   useAnimatedStyle,
-  useSharedValue,
-  withTiming,
 } from 'react-native-reanimated'
 import { Button } from '../button'
 import { IconButton } from '../icon-button'
@@ -22,7 +21,7 @@ import type { AppBarProps } from './types'
 const AnimatedSafeAreaView = Animated.createAnimatedComponent(SafeAreaView)
 
 // M3 surface tonal shift on scroll uses the standard 250ms easing.
-const ELEVATED_TIMING = { duration: 250 }
+const ELEVATED_TRANSITION = { type: 'timing', duration: 250 } as const
 
 type AppBarSize = 'small' | 'medium' | 'large'
 function getBackIcon(): IconButtonProps['icon'] {
@@ -259,10 +258,7 @@ export function AppBar({
     </View>
   )
 
-  const elevatedSV = useSharedValue(elevated ? 1 : 0)
-  useEffect(() => {
-    elevatedSV.value = withTiming(elevated ? 1 : 0, ELEVATED_TIMING)
-  }, [elevated, elevatedSV])
+  const elevatedSV = useAnimation(elevated ? 1 : 0, ELEVATED_TRANSITION)
 
   const animatedSurfaceStyle = useAnimatedStyle(() => ({
     backgroundColor: interpolateColor(

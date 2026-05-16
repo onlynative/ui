@@ -1,13 +1,9 @@
 import { useIconResolver, useTheme } from '@onlynative/core'
-import { alphaColor, isFocusVisible, renderIcon } from '@onlynative/utils'
-import { useCallback, useMemo } from 'react'
-import { Pressable } from 'react-native'
-import Animated, {
-  interpolateColor,
-  useAnimatedStyle,
-  useSharedValue,
-  withTiming,
-} from 'react-native-reanimated'
+import { Motion } from '@onlynative/inertia'
+import { alphaColor, renderIcon } from '@onlynative/utils'
+import { useMemo } from 'react'
+import { View } from 'react-native'
+import { useStateLayer } from '../internal/useStateLayer'
 import {
   applyContainerColorOverride,
   createStyles,
@@ -18,12 +14,6 @@ import type {
   IconButtonSize,
   IconButtonVariant,
 } from './types'
-
-const AnimatedPressable = Animated.createAnimatedComponent(Pressable)
-
-const HOVER_TIMING = { duration: 150 }
-const PRESS_TIMING = { duration: 100 }
-const FOCUS_TIMING = { duration: 200 }
 
 function getIconColor(
   variant: IconButtonVariant,
@@ -132,74 +122,35 @@ export function IconButton({
     )
   }, [theme, variant, isToggle, isSelected, containerColor, resolvedIconColor])
 
-  const hovered = useSharedValue(0)
-  const focused = useSharedValue(0)
-  const pressed = useSharedValue(0)
-
-  const animatedContainerStyle = useAnimatedStyle(() => {
-    const focusedBg = interpolateColor(
-      focused.value,
-      [0, 1],
-      [colors.backgroundColor, colors.focusedBackgroundColor],
-    )
-    const hoveredBg = interpolateColor(
-      hovered.value,
-      [0, 1],
-      [focusedBg, colors.hoveredBackgroundColor],
-    )
-    const pressedBg = interpolateColor(
-      pressed.value,
-      [0, 1],
-      [hoveredBg, colors.pressedBackgroundColor],
-    )
-    return { backgroundColor: pressedBg }
+  const layer = useStateLayer({
+    colors: {
+      rest: colors.backgroundColor,
+      hovered: colors.hoveredBackgroundColor,
+      focused: colors.focusedBackgroundColor,
+      pressed: colors.pressedBackgroundColor,
+      disabled: colors.disabledBackgroundColor,
+    },
+    isDisabled,
   })
 
-  const animatedFocusRingStyle = useAnimatedStyle(() => ({
-    opacity: focused.value,
-  }))
-
-  const handleHoverIn = useCallback(() => {
-    if (!isDisabled) hovered.value = withTiming(1, HOVER_TIMING)
-  }, [isDisabled, hovered])
-
-  const handleHoverOut = useCallback(() => {
-    hovered.value = withTiming(0, HOVER_TIMING)
-  }, [hovered])
-
-  const handlePressIn = useCallback(() => {
-    if (!isDisabled) pressed.value = withTiming(1, PRESS_TIMING)
-  }, [isDisabled, pressed])
-
-  const handlePressOut = useCallback(() => {
-    pressed.value = withTiming(0, PRESS_TIMING)
-  }, [pressed])
-
-  // Match :focus-visible — only show focus state from keyboard navigation.
-  const handleFocus = useCallback(() => {
-    if (!isDisabled && isFocusVisible()) {
-      focused.value = withTiming(1, FOCUS_TIMING)
-    }
-  }, [isDisabled, focused])
-
-  const handleBlur = useCallback(() => {
-    focused.value = withTiming(0, FOCUS_TIMING)
-  }, [focused])
-
   const disabledOverride = isDisabled
-    ? {
-        backgroundColor: colors.disabledBackgroundColor,
-        borderColor: colors.disabledBorderColor,
-      }
+    ? { borderColor: colors.disabledBorderColor }
     : undefined
 
+  // Function-form `style` is dropped on animated components — wrapping the
+  // style array in a function hides the gesture-driven backgroundColor from
+  // Inertia's prop diff and breaks the cascade. Use `containerColor` /
+  // `contentColor` for state-aware styling.
+  const userStyle = typeof style === 'function' ? undefined : style
+
   return (
-    <Animated.View style={styles.wrapper}>
-      <Animated.View
+    <View style={styles.wrapper}>
+      <Motion.View
         pointerEvents="none"
-        style={[styles.focusRing, animatedFocusRingStyle]}
+        {...layer.focusRing}
+        style={styles.focusRing}
       />
-      <AnimatedPressable
+      <Motion.Pressable
         {...props}
         accessibilityRole="button"
         accessibilityLabel={accessibilityLabel}
@@ -207,25 +158,14 @@ export function IconButton({
         disabled={isDisabled}
         hitSlop={hitSlop ?? getDefaultHitSlop(size)}
         onPress={onPress}
-        onHoverIn={handleHoverIn}
-        onHoverOut={handleHoverOut}
-        onPressIn={handlePressIn}
-        onPressOut={handlePressOut}
-        onFocus={handleFocus}
-        onBlur={handleBlur}
+        {...layer.container}
         style={[
           styles.container,
           getSizeStyle(styles, size),
           { borderColor: colors.borderColor, borderWidth: colors.borderWidth },
-          animatedContainerStyle,
           disabledOverride,
           isDisabled ? styles.disabled : undefined,
-          // Function-form `style` is intentionally dropped on animated
-          // components — wrapping the whole `style` array in a function would
-          // hide the animated container style from Reanimated's prop diff and
-          // break the state-layer transitions. Use `containerColor` /
-          // `contentColor` for state-aware styling instead.
-          typeof style === 'function' ? undefined : style,
+          userStyle,
         ]}
       >
         {renderIcon(
@@ -233,7 +173,7 @@ export function IconButton({
           { size: iconPixelSize, color: resolvedIconColor },
           iconResolver,
         )}
-      </AnimatedPressable>
-    </Animated.View>
+      </Motion.Pressable>
+    </View>
   )
 }

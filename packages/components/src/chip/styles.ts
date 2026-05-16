@@ -230,7 +230,9 @@ export function createStyles(
   const labelStyle = theme.typography.labelLarge
   const elevationLevel0 = elevationStyle(theme.elevation.level0)
   const elevationLevel1 = elevationStyle(theme.elevation.level1)
-  const elevationLevel2 = elevationStyle(theme.elevation.level2)
+  // Input variant ignores `elevated` — always flat per MD3.
+  const isElevatedSurface = elevated && variant !== 'input'
+  const baseElevation = isElevatedSurface ? elevationLevel1 : elevationLevel0
   const focusRingInset = -(CHIP_FOCUS_RING_OFFSET + CHIP_FOCUS_RING_WIDTH)
   const focusRingRadius = theme.shape.cornerSmall + CHIP_FOCUS_RING_OFFSET
 
@@ -248,35 +250,14 @@ export function createStyles(
       borderColor: colors.borderColor,
       borderWidth: colors.borderWidth,
       cursor: 'pointer',
-      ...elevationLevel0,
+      ...baseElevation,
     },
     disabledContainer: {
       backgroundColor: colors.disabledBackgroundColor,
       borderColor: colors.disabledBorderColor,
       cursor: 'auto',
+      // MD3: disabled chips drop to flat regardless of `elevated`.
       ...elevationLevel0,
-    },
-    // Two stacked, absolutely-positioned shadow layers that cross-fade the
-    // elevated chip from level 1 (rest) → level 2 (hover), per MD3.
-    elevationLayerLevel1: {
-      position: 'absolute' as const,
-      top: 0,
-      left: 0,
-      right: 0,
-      bottom: 0,
-      borderRadius: theme.shape.cornerSmall,
-      backgroundColor: colors.backgroundColor,
-      ...elevationLevel1,
-    },
-    elevationLayerLevel2: {
-      position: 'absolute' as const,
-      top: 0,
-      left: 0,
-      right: 0,
-      bottom: 0,
-      borderRadius: theme.shape.cornerSmall,
-      backgroundColor: colors.backgroundColor,
-      ...elevationLevel2,
     },
     focusRing: {
       position: 'absolute' as const,

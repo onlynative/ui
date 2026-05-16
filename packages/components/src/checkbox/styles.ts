@@ -52,6 +52,7 @@ function getColors(theme: MaterialTheme, checked: boolean): CheckboxColors {
 
 function applyColorOverrides(
   colors: CheckboxColors,
+  checked: boolean,
   containerColor?: string,
   contentColor?: string,
 ): CheckboxColors {
@@ -63,14 +64,19 @@ function applyColorOverrides(
     result.iconColor = contentColor
   }
 
-  if (containerColor) {
+  // `containerColor` is the fill of the *checked* box. Per MD3, the unchecked
+  // checkbox is a hollow outline regardless of consumer overrides — applying
+  // the override to both palettes would render an unchecked checkbox as a
+  // solid filled square in the override colour, which is not what consumers
+  // expect from a Checkbox.
+  if (containerColor && checked) {
     result.backgroundColor = containerColor
     result.borderColor = containerColor
-    // Halo follows the custom container so the visual stays cohesive — a
-    // low-opacity tint of the same color around the box. Render-time view
-    // opacity (8/10 %) handles transparency, so we keep this color solid.
-    result.stateLayerColor = containerColor
   }
+
+  // `stateLayerColor` is intentionally not overridden — MD3 specifies a fixed
+  // tonal overlay (`onSurface` unchecked, `primary` checked) independent of
+  // container customisation.
 
   return result
 }
@@ -83,6 +89,7 @@ export function getResolvedCheckboxColors(
 ): CheckboxColors {
   return applyColorOverrides(
     getColors(theme, checked),
+    checked,
     containerColor,
     contentColor,
   )

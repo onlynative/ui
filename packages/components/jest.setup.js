@@ -57,14 +57,32 @@ jest.mock('react-native-reanimated', () => {
     Text: AnimatedText,
     useSharedValue: (initial) => ({ value: initial }),
     useDerivedValue: (fn) => ({ value: fn() }),
+    useAnimatedReaction: () => {},
+    useReducedMotion: () => false,
+    isWorkletFunction: () => false,
     // One-shot: see the warning above the mock.
     useAnimatedStyle: (fn) => fn(),
     useAnimatedProps: (fn) => fn(),
     cancelAnimation: () => {},
+    runOnJS: (fn) => fn,
     withSpring: (v) => v,
     withTiming: (v) => v,
     withRepeat: (v) => v,
-    Easing: { bezier: () => () => 0 },
+    withDecay: (v) => v,
+    withDelay: (_d, v) => v,
+    withSequence: (...args) => args[args.length - 1],
+    Easing: {
+      // Real `Easing.bezier(...)` returns an `EasingFunctionFactory` wrapper
+      // (`{ factory: () => (t) => number }`). Reanimated's `withTiming` accepts
+      // either the factory or a plain function; Inertia consumers call
+      // `.factory()` to unwrap. Mock both shapes.
+      bezier: () => ({ factory: () => () => 0 }),
+      linear: () => 0,
+      ease: () => 0,
+      in: () => () => 0,
+      out: () => () => 0,
+      inOut: () => () => 0,
+    },
     // Pick the input-matched output for static rendering. value=0 → first, value=1 → last.
     // This lets tests assert against the at-rest visual without animation running.
     interpolate: (value, _input, output) =>
@@ -73,6 +91,13 @@ jest.mock('react-native-reanimated', () => {
       value >= 1 ? output[output.length - 1] : output[0],
   }
 })
+
+jest.mock('react-native-worklets', () => ({
+  __esModule: true,
+  isWorkletFunction: () => false,
+  runOnJS: (fn) => fn,
+  runOnUI: (fn) => fn,
+}))
 
 jest.mock('react-native-safe-area-context', () => {
   const React = require('react')

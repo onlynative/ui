@@ -39,11 +39,13 @@ export const labelPositions = {
 interface VariantColors {
   backgroundColor: string
   borderColor: string
+  hoverBorderColor: string
   focusedBorderColor: string
   errorBorderColor: string
   disabledBorderColor: string
   disabledBackgroundColor: string
   labelColor: string
+  hoverLabelColor: string
   focusedLabelColor: string
   errorLabelColor: string
   disabledLabelColor: string
@@ -64,6 +66,11 @@ function getVariantColors(
   const disabledOpacity = theme.stateLayer.disabledOpacity
 
   const common = {
+    // MD3 hover-state indicator/border colour (deeper than the rest token).
+    // Used by both filled and outlined variants when not focused/errored.
+    hoverBorderColor: theme.colors.onSurface,
+    // MD3 hover-state label colour. Same token as the border hover colour.
+    hoverLabelColor: theme.colors.onSurface,
     focusedBorderColor: theme.colors.primary,
     errorBorderColor: theme.colors.error,
     focusedLabelColor: theme.colors.primary,

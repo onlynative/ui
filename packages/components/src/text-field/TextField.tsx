@@ -1,6 +1,7 @@
 import { useIconResolver, useTheme } from '@onlynative/core'
+import { useAnimation, useGesture } from '@onlynative/inertia'
 import { renderIcon } from '@onlynative/utils'
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useMemo, useRef, useState } from 'react'
 import { Pressable, Text, TextInput, View } from 'react-native'
 import type { NativeSyntheticEvent, TargetedEvent } from 'react-native'
 import Animated, {
@@ -9,8 +10,6 @@ import Animated, {
   interpolateColor,
   useAnimatedStyle,
   useDerivedValue,
-  useSharedValue,
-  withTiming,
 } from 'react-native-reanimated'
 import { createStyles, labelPositions } from './styles'
 import type { TextFieldProps } from './types'
@@ -21,15 +20,34 @@ const ICON_WITH_GAP = 12 + 24 + 16
 
 // M3 standard easing — `cubic-bezier(0.2, 0, 0, 1)`. Decelerates into the
 // resting position and reads as polished even if iOS drops a frame mid-anim.
-const M3_STANDARD = Easing.bezier(0.2, 0, 0, 1)
+// `Easing.bezier(...)` returns an `EasingFunctionFactory` wrapper; calling
+// `.factory()` unwraps it to the plain `(t: number) => number` shape Inertia's
+// `TimingTransition.easing` expects.
+const M3_STANDARD = Easing.bezier(0.2, 0, 0, 1).factory()
 
 // 200 ms = M3 short4 duration. The previous 150 ms left only ~9 frames at
 // 60 fps; one dropped frame on iOS was enough to read as choppy. 200 ms
 // (~12 frames) gives the curve room to breathe.
-const LABEL_TIMING = { duration: 200, easing: M3_STANDARD }
-const FOCUS_TIMING = { duration: 200, easing: M3_STANDARD }
-const HOVER_TIMING = { duration: 150, easing: M3_STANDARD }
-const ERROR_TIMING = { duration: 200, easing: M3_STANDARD }
+const LABEL_TRANSITION = {
+  type: 'timing',
+  duration: 200,
+  easing: M3_STANDARD,
+} as const
+const FOCUS_TRANSITION = {
+  type: 'timing',
+  duration: 200,
+  easing: M3_STANDARD,
+} as const
+const ERROR_TRANSITION = {
+  type: 'timing',
+  duration: 200,
+  easing: M3_STANDARD,
+} as const
+const HOVER_TRANSITION = {
+  type: 'timing',
+  duration: 150,
+  easing: M3_STANDARD,
+} as const
 
 // MD3: filled text-field hover state-layer opacity (on-surface 8%).
 const HOVER_OPACITY = 0.08
@@ -78,26 +96,26 @@ export function TextField({
   const hasValue = isControlled ? value !== '' : internalHasText
   const isLabelFloated = isFocused || hasValue
 
-  const focused = useSharedValue(0)
-  const hovered = useSharedValue(0)
-  const errored = useSharedValue(isError ? 1 : 0)
-  // Mirror of hasValue on the UI thread so labelProgress can be derived
-  // entirely without waiting on a JS-thread effect to fire.
-  const hasValueShared = useSharedValue(hasValue ? 1 : 0)
+  // Three JS-thread-driven progress values. `useAnimation` re-runs whenever
+  // its target changes, so the useEffect + withTiming pairs collapse to one
+  // declaration each.
+  const focused = useAnimation(isFocused ? 1 : 0, FOCUS_TRANSITION)
+  const errored = useAnimation(isError ? 1 : 0, ERROR_TRANSITION)
+  const hasValueShared = useAnimation(hasValue ? 1 : 0, LABEL_TRANSITION)
+
+  // `useGesture` provides the hovered SV and a handler bag. The press/focus
+  // sub-states it allocates are unused — TextField focus lives on the inner
+  // TextInput (not on the wrapper Pressable, which is `focusable={false}`).
+  const { hovered, handlers: gestureHandlers } = useGesture({
+    hovered: HOVER_TRANSITION,
+  })
+
   // 0 = resting (label large, centered), 1 = floated (label small, top).
   // Derived on the UI thread so it starts moving the same frame `focused`
   // does — no one-frame skew between the color/border and position animations.
   const labelProgress = useDerivedValue(() =>
     Math.max(focused.value, hasValueShared.value),
   )
-
-  useEffect(() => {
-    hasValueShared.value = withTiming(hasValue ? 1 : 0, LABEL_TIMING)
-  }, [hasValue, hasValueShared])
-
-  useEffect(() => {
-    errored.value = withTiming(isError ? 1 : 0, ERROR_TIMING)
-  }, [isError, errored])
 
   // Label is rendered at bodySmall and scaled up to bodyLarge when at rest.
   const restingScale =
@@ -113,9 +131,11 @@ export function TextField({
   const restingOffset = restingTop - floatedTop
 
   const labelRestColor = colors.labelColor
+  const labelHoverColor = colors.hoverLabelColor
   const labelFocusColor = colors.focusedLabelColor
   const labelErrorColor = colors.errorLabelColor
   const borderRestColor = colors.borderColor
+  const borderHoverColor = colors.hoverBorderColor
   const borderFocusColor = colors.focusedBorderColor
   const borderErrorColor = colors.errorBorderColor
 
@@ -134,13 +154,19 @@ export function TextField({
     ],
   }))
 
-  // Color on the inner Animated.Text. Layered crossfade: rest → error → focus.
-  // Focus wins when both are active, matching the prior style-array precedence.
+  // Color on the inner Animated.Text. MD3 cascade: rest → hover → error →
+  // focused. Hover is the lowest-priority modifier; error and focused both
+  // override it. Matches the indicator/border colour cascade.
   const animatedLabelColorStyle = useAnimatedStyle(() => {
+    const hoveredColor = interpolateColor(
+      hovered.value,
+      [0, 1],
+      [labelRestColor, labelHoverColor],
+    )
     const erroredColor = interpolateColor(
       errored.value,
       [0, 1],
-      [labelRestColor, labelErrorColor],
+      [hoveredColor, labelErrorColor],
     )
     const finalColor = interpolateColor(
       focused.value,
@@ -150,12 +176,19 @@ export function TextField({
     return { color: finalColor }
   })
 
-  // Filled active indicator: 1 dp resting → 2 dp focus or error, color crossfade.
+  // Filled active indicator: 1 dp resting → 2 dp focus or error, color
+  // crossfade. MD3 cascade: rest → hover → error → focused. Hover is the
+  // lowest-priority modifier; error and focused both override it.
   const animatedIndicatorStyle = useAnimatedStyle(() => {
+    const hoveredBg = interpolateColor(
+      hovered.value,
+      [0, 1],
+      [borderRestColor, borderHoverColor],
+    )
     const erroredBg = interpolateColor(
       errored.value,
       [0, 1],
-      [borderRestColor, borderErrorColor],
+      [hoveredBg, borderErrorColor],
     )
     const finalBg = interpolateColor(
       focused.value,
@@ -173,11 +206,17 @@ export function TextField({
   // Outlined border drawn as an absolute overlay so its width can animate
   // 1 → 2 dp without ever moving the container's padding box. The label and
   // input keep their static positions; nothing snaps on focus/blur.
+  // Same MD3 colour cascade as the filled indicator: rest → hover → error → focus.
   const animatedBorderLayerStyle = useAnimatedStyle(() => {
+    const hoveredBorder = interpolateColor(
+      hovered.value,
+      [0, 1],
+      [borderRestColor, borderHoverColor],
+    )
     const erroredBorder = interpolateColor(
       errored.value,
       [0, 1],
-      [borderRestColor, borderErrorColor],
+      [hoveredBorder, borderErrorColor],
     )
     const finalBorder = interpolateColor(
       focused.value,
@@ -189,8 +228,12 @@ export function TextField({
     return { borderWidth: finalWidth, borderColor: finalBorder }
   })
 
+  // Manual gate on isDisabled — `useGesture` updates `hovered` on hover
+  // regardless, so we mute the opacity here when the field is disabled. The
+  // hover layer is only rendered for the filled variant, so we don't need an
+  // `isFilled` gate.
   const animatedHoverLayerStyle = useAnimatedStyle(() => ({
-    opacity: hovered.value * HOVER_OPACITY,
+    opacity: isDisabled ? 0 : hovered.value * HOVER_OPACITY,
   }))
 
   // Label start: 16dp container padding + leading icon space (12dp inset + 24dp + 16dp gap)
@@ -210,30 +253,18 @@ export function TextField({
     (event: NativeSyntheticEvent<TargetedEvent>) => {
       if (isDisabled) return
       setIsFocused(true)
-      focused.value = withTiming(1, FOCUS_TIMING)
       onFocus?.(event)
     },
-    [isDisabled, onFocus, focused],
+    [isDisabled, onFocus],
   )
 
   const handleBlur = useCallback(
     (event: NativeSyntheticEvent<TargetedEvent>) => {
       setIsFocused(false)
-      focused.value = withTiming(0, FOCUS_TIMING)
       onBlur?.(event)
     },
-    [onBlur, focused],
+    [onBlur],
   )
-
-  const handleHoverIn = useCallback(() => {
-    if (!isDisabled && isFilled) {
-      hovered.value = withTiming(1, HOVER_TIMING)
-    }
-  }, [isDisabled, isFilled, hovered])
-
-  const handleHoverOut = useCallback(() => {
-    hovered.value = withTiming(0, HOVER_TIMING)
-  }, [hovered])
 
   const handleContainerPress = useCallback(() => {
     if (!isDisabled) inputRef.current?.focus()
@@ -306,6 +337,16 @@ export function TextField({
     [isDisabled, colors.disabledLabelColor],
   )
 
+  // The notch paints over the border at the top of an outlined field so the
+  // floated label reads cleanly. Its background must match the effective
+  // container behind the field — when a consumer supplies `containerColor`
+  // on an outlined variant, the default `theme.colors.surface` would punch
+  // through with the wrong colour.
+  const labelNotchOverride = useMemo(
+    () => (containerColor ? { backgroundColor: containerColor } : undefined),
+    [containerColor],
+  )
+
   const labelWrapperStyleArr = useMemo(
     () => [
       styles.labelWrapper,
@@ -313,6 +354,7 @@ export function TextField({
       variant === 'outlined' && isLabelFloated
         ? styles.labelWrapperNotch
         : undefined,
+      variant === 'outlined' && isLabelFloated ? labelNotchOverride : undefined,
       animatedLabelTransformStyle,
     ],
     [
@@ -320,6 +362,7 @@ export function TextField({
       labelStaticPos,
       variant,
       isLabelFloated,
+      labelNotchOverride,
       animatedLabelTransformStyle,
     ],
   )
@@ -368,8 +411,7 @@ export function TextField({
     <View style={rootStyle}>
       <Pressable
         onPress={handleContainerPress}
-        onHoverIn={handleHoverIn}
-        onHoverOut={handleHoverOut}
+        {...gestureHandlers}
         disabled={isDisabled}
         accessible={false}
         focusable={false}

@@ -1,18 +1,12 @@
 import { useIconResolver, useTheme } from '@onlynative/core'
-import {
-  isFocusVisible,
-  renderIcon,
-  resolveColorFromStyle,
-} from '@onlynative/utils'
-import { useCallback, useEffect, useMemo } from 'react'
+import { useGesture, useSpring } from '@onlynative/inertia'
+import { renderIcon, resolveColorFromStyle } from '@onlynative/utils'
+import { useCallback, useMemo } from 'react'
 import { Platform, Pressable, View } from 'react-native'
 import Animated, {
   interpolate,
   interpolateColor,
   useAnimatedStyle,
-  useSharedValue,
-  withSpring,
-  withTiming,
 } from 'react-native-reanimated'
 import {
   SWITCH_STATE_LAYER_SIZE,
@@ -32,23 +26,22 @@ const AnimatedPressable = Animated.createAnimatedComponent(Pressable)
 const THUMB_TRANSLATE_X =
   SWITCH_TRACK_WIDTH - SWITCH_TRACK_PADDING * 2 - SWITCH_THUMB_ON_SIZE
 
-// MD3 state-layer opacity tokens.
+// MD3 state-layer opacity tokens — drive the halo via `Math.max(...)`.
 const HOVER_OPACITY = 0.08
 const FOCUS_OPACITY = 0.1
 const PRESS_OPACITY = 0.1
 
 // MD3 emphasized spring for the toggle (slight overshoot, ~0.85 damping ratio).
-const TOGGLE_SPRING = {
-  damping: 33,
-  stiffness: 380,
-  mass: 1,
-}
+// React-spring vocabulary: `tension` ≡ stiffness, `friction` ≡ damping.
+const TOGGLE_SPRING = { tension: 380, friction: 33, mass: 1 } as const
 
-// Press in/out uses a fast, predictable timing curve — no spring oscillation,
-// so the 28 dp thumb grow is reached in full within 120 ms.
-const PRESS_TIMING = { duration: 120 }
-const HOVER_TIMING = { duration: 150 }
-const FOCUS_TIMING = { duration: 200 }
+// Per-layer state-layer transitions. Press uses a fast, predictable timing
+// curve so the 28 dp thumb grow is reached in full within 120 ms.
+const GESTURE_TRANSITIONS = {
+  pressed: { type: 'timing', duration: 120 },
+  hovered: { type: 'timing', duration: 150 },
+  focusVisible: { type: 'timing', duration: 200 },
+} as const
 
 const ICON_SIZE = 16
 
@@ -72,10 +65,7 @@ export function Switch({
 
   const theme = useTheme()
   const iconResolver = useIconResolver()
-  const styles = useMemo(
-    () => createStyles(theme, containerColor, contentColor),
-    [theme, containerColor, contentColor],
-  )
+  const styles = useMemo(() => createStyles(theme), [theme])
 
   const offColors = useMemo(
     () => getResolvedColors(theme, false, containerColor, contentColor),
@@ -86,14 +76,33 @@ export function Switch({
     [theme, containerColor, contentColor],
   )
 
-  const progress = useSharedValue(isSelected ? 1 : 0)
-  const pressed = useSharedValue(0)
-  const hovered = useSharedValue(0)
-  const focused = useSharedValue(0)
+  // MD3: disabled visuals differ between selected and unselected — the
+  // selected-disabled thumb is `surface` (no opacity ramp) and the track has
+  // no outline, while the unselected-disabled thumb is `onSurface@38%` with a
+  // 12% outline. Pick the right palette here rather than baking the
+  // unselected-only set into the stylesheet.
+  const disabledPalette = isSelected ? onColors : offColors
+  const disabledTrackOverride = useMemo(
+    () => ({
+      backgroundColor: disabledPalette.disabledTrackColor,
+      borderColor: disabledPalette.disabledBorderColor,
+    }),
+    [disabledPalette.disabledTrackColor, disabledPalette.disabledBorderColor],
+  )
+  const disabledThumbOverride = useMemo(
+    () => ({ backgroundColor: disabledPalette.disabledThumbColor }),
+    [disabledPalette.disabledThumbColor],
+  )
 
-  useEffect(() => {
-    progress.value = withSpring(isSelected ? 1 : 0, TOGGLE_SPRING)
-  }, [isSelected, progress])
+  const progress = useSpring(isSelected ? 1 : 0, TOGGLE_SPRING)
+  // `focusVisible` mirrors the prior manual `isFocusVisible()` gate — it only
+  // raises on keyboard focus, so it maps to the old `focused` SV.
+  const {
+    pressed,
+    hovered,
+    focusVisible: focused,
+    handlers,
+  } = useGesture(GESTURE_TRANSITIONS)
 
   const animatedTrackStyle = useAnimatedStyle(() => ({
     backgroundColor: interpolateColor(
@@ -167,10 +176,12 @@ export function Switch({
         focused.value * FOCUS_OPACITY,
         pressed.value * PRESS_OPACITY,
       ),
+      // MD3 spec halo colour: `onSurface` (unselected) ↔ `primary` (selected).
+      // Independent of any `contentColor` override, which targets the thumb.
       backgroundColor: interpolateColor(
         progress.value,
         [0, 1],
-        [offColors.thumbColor, onColors.thumbColor],
+        [theme.colors.onSurface, theme.colors.primary],
       ),
       transform: [
         {
@@ -207,37 +218,6 @@ export function Switch({
     }
   }, [isDisabled, isSelected, onValueChange])
 
-  const handlePressIn = useCallback(() => {
-    if (!isDisabled) {
-      pressed.value = withTiming(1, PRESS_TIMING)
-    }
-  }, [isDisabled, pressed])
-
-  const handlePressOut = useCallback(() => {
-    pressed.value = withTiming(0, PRESS_TIMING)
-  }, [pressed])
-
-  const handleHoverIn = useCallback(() => {
-    if (!isDisabled) {
-      hovered.value = withTiming(1, HOVER_TIMING)
-    }
-  }, [isDisabled, hovered])
-
-  const handleHoverOut = useCallback(() => {
-    hovered.value = withTiming(0, HOVER_TIMING)
-  }, [hovered])
-
-  // Match :focus-visible — only show focus state from keyboard navigation.
-  const handleFocus = useCallback(() => {
-    if (!isDisabled && isFocusVisible()) {
-      focused.value = withTiming(1, FOCUS_TIMING)
-    }
-  }, [isDisabled, focused])
-
-  const handleBlur = useCallback(() => {
-    focused.value = withTiming(0, FOCUS_TIMING)
-  }, [focused])
-
   return (
     <View style={styles.wrapper}>
       <Animated.View
@@ -254,16 +234,12 @@ export function Switch({
         hitSlop={Platform.OS === 'web' ? undefined : 4}
         disabled={isDisabled}
         onPress={handlePress}
-        onPressIn={handlePressIn}
-        onPressOut={handlePressOut}
-        onHoverIn={handleHoverIn}
-        onHoverOut={handleHoverOut}
-        onFocus={handleFocus}
-        onBlur={handleBlur}
+        {...handlers}
         style={[
           styles.track,
           animatedTrackStyle,
           isDisabled ? styles.disabledTrack : undefined,
+          isDisabled ? disabledTrackOverride : undefined,
           style,
         ]}
       >
@@ -275,7 +251,7 @@ export function Switch({
           style={[
             styles.thumbBase,
             animatedThumbStyle,
-            isDisabled ? styles.disabledThumb : undefined,
+            isDisabled ? disabledThumbOverride : undefined,
           ]}
         >
           {selectedIcon ? (

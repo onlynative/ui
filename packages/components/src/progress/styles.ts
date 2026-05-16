@@ -55,8 +55,8 @@ export function createLinearStyles(
     },
     inactiveTrackFull: {
       position: 'absolute',
-      left: 0,
-      right: 0,
+      start: 0,
+      end: 0,
       height: thickness,
       borderRadius: radius,
       backgroundColor: c.track,

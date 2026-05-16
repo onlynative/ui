@@ -6,6 +6,14 @@ import type { CardVariant } from './types'
 export const CARD_FOCUS_RING_OFFSET = 2
 export const CARD_FOCUS_RING_WIDTH = 3
 
+// MD3 state-layer opacity tokens. Card pins these to spec values rather than
+// reading `theme.stateLayer.*` because the theme defaults drift from MD3
+// (focus/press = 0.12 vs spec 0.10). If the theme tokens are realigned with
+// MD3 later, swap these back to `theme.stateLayer.{focused,pressed}Opacity`.
+const HOVER_OPACITY = 0.08
+const FOCUS_OPACITY = 0.1
+const PRESS_OPACITY = 0.1
+
 export interface CardColors {
   backgroundColor: string
   borderColor: string
@@ -34,7 +42,6 @@ function getVariantColors(
 ): CardColors {
   const disabledContainerColor = alphaColor(theme.colors.onSurface, 0.12)
   const disabledOutlineColor = alphaColor(theme.colors.onSurface, 0.12)
-  const stateLayerFocus = 0.1
 
   if (variant === 'outlined') {
     return {
@@ -44,17 +51,17 @@ function getVariantColors(
       hoveredBackgroundColor: blendStateLayer(
         theme.colors.surface,
         theme.colors.onSurface,
-        theme.stateLayer.hoveredOpacity,
+        HOVER_OPACITY,
       ),
       focusedBackgroundColor: blendStateLayer(
         theme.colors.surface,
         theme.colors.onSurface,
-        stateLayerFocus,
+        FOCUS_OPACITY,
       ),
       pressedBackgroundColor: blendStateLayer(
         theme.colors.surface,
         theme.colors.onSurface,
-        theme.stateLayer.pressedOpacity,
+        PRESS_OPACITY,
       ),
       disabledBackgroundColor: theme.colors.surface,
       disabledBorderColor: disabledOutlineColor,
@@ -69,17 +76,17 @@ function getVariantColors(
       hoveredBackgroundColor: blendColor(
         theme.colors.surfaceContainerHighest,
         theme.colors.onSurface,
-        theme.stateLayer.hoveredOpacity,
+        HOVER_OPACITY,
       ),
       focusedBackgroundColor: blendColor(
         theme.colors.surfaceContainerHighest,
         theme.colors.onSurface,
-        stateLayerFocus,
+        FOCUS_OPACITY,
       ),
       pressedBackgroundColor: blendColor(
         theme.colors.surfaceContainerHighest,
         theme.colors.onSurface,
-        theme.stateLayer.pressedOpacity,
+        PRESS_OPACITY,
       ),
       disabledBackgroundColor: disabledContainerColor,
       disabledBorderColor: 'transparent',
@@ -94,17 +101,17 @@ function getVariantColors(
     hoveredBackgroundColor: blendColor(
       theme.colors.surface,
       theme.colors.onSurface,
-      theme.stateLayer.hoveredOpacity,
+      HOVER_OPACITY,
     ),
     focusedBackgroundColor: blendColor(
       theme.colors.surface,
       theme.colors.onSurface,
-      stateLayerFocus,
+      FOCUS_OPACITY,
     ),
     pressedBackgroundColor: blendColor(
       theme.colors.surface,
       theme.colors.onSurface,
-      theme.stateLayer.pressedOpacity,
+      PRESS_OPACITY,
     ),
     disabledBackgroundColor: disabledContainerColor,
     disabledBorderColor: 'transparent',
@@ -117,7 +124,6 @@ function applyContainerColorOverride(
   containerColor?: string,
 ): CardColors {
   if (!containerColor) return colors
-  const stateLayerFocus = 0.1
 
   return {
     ...colors,
@@ -127,17 +133,17 @@ function applyContainerColorOverride(
     hoveredBackgroundColor: blendColor(
       containerColor,
       theme.colors.onSurface,
-      theme.stateLayer.hoveredOpacity,
+      HOVER_OPACITY,
     ),
     focusedBackgroundColor: blendColor(
       containerColor,
       theme.colors.onSurface,
-      stateLayerFocus,
+      FOCUS_OPACITY,
     ),
     pressedBackgroundColor: blendColor(
       containerColor,
       theme.colors.onSurface,
-      theme.stateLayer.pressedOpacity,
+      PRESS_OPACITY,
     ),
   }
 }
@@ -192,11 +198,13 @@ export function createStyles(
       borderWidth: CARD_FOCUS_RING_WIDTH,
       borderColor: theme.colors.secondary,
     },
+    // Disabled keeps the variant's rest elevation (MD3: elevated stays at
+    // level1 when disabled, only content opacity drops to 38%). No elevation
+    // override here — the base `container` style carries the right level.
     disabledContainer: {
       backgroundColor: colors.disabledBackgroundColor,
       borderColor: colors.disabledBorderColor,
       cursor: 'auto',
-      ...elevationLevel0,
     },
     disabledContent: {
       opacity: theme.stateLayer.disabledOpacity,

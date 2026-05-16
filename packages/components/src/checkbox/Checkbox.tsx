@@ -1,13 +1,11 @@
 import { useIconResolver, useTheme } from '@onlynative/core'
-import { isFocusVisible, renderIcon } from '@onlynative/utils'
-import { useCallback, useEffect, useMemo } from 'react'
+import { useGesture, useSpring } from '@onlynative/inertia'
+import { renderIcon } from '@onlynative/utils'
+import { useCallback, useMemo } from 'react'
 import { Platform, Pressable } from 'react-native'
 import Animated, {
   interpolateColor,
   useAnimatedStyle,
-  useSharedValue,
-  withSpring,
-  withTiming,
 } from 'react-native-reanimated'
 import {
   CHECKBOX_ICON_SIZE,
@@ -18,19 +16,19 @@ import type { CheckboxProps } from './types'
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable)
 
+// MD3 state-layer opacity tokens — drive the halo via `Math.max(...)`.
 const HOVER_OPACITY = 0.08
 const FOCUS_OPACITY = 0.1
 const PRESS_OPACITY = 0.1
 
-const TOGGLE_SPRING = {
-  damping: 26,
-  stiffness: 380,
-  mass: 1,
-}
+// React-spring vocabulary: `tension` ≡ stiffness, `friction` ≡ damping.
+const TOGGLE_SPRING = { tension: 380, friction: 26, mass: 1 } as const
 
-const HOVER_TIMING = { duration: 150 }
-const PRESS_TIMING = { duration: 100 }
-const FOCUS_TIMING = { duration: 200 }
+const GESTURE_TRANSITIONS = {
+  pressed: { type: 'timing', duration: 100 },
+  hovered: { type: 'timing', duration: 150 },
+  focusVisible: { type: 'timing', duration: 200 },
+} as const
 
 export function Checkbox({
   style,
@@ -58,14 +56,15 @@ export function Checkbox({
     [theme, containerColor, contentColor],
   )
 
-  const progress = useSharedValue(isChecked ? 1 : 0)
-  const hovered = useSharedValue(0)
-  const focused = useSharedValue(0)
-  const pressed = useSharedValue(0)
-
-  useEffect(() => {
-    progress.value = withSpring(isChecked ? 1 : 0, TOGGLE_SPRING)
-  }, [isChecked, progress])
+  const progress = useSpring(isChecked ? 1 : 0, TOGGLE_SPRING)
+  // `focusVisible` mirrors the prior manual `isFocusVisible()` gate — it only
+  // raises on keyboard focus, so it maps to the old `focused` SV.
+  const {
+    hovered,
+    focusVisible: focused,
+    pressed,
+    handlers,
+  } = useGesture(GESTURE_TRANSITIONS)
 
   const animatedBoxStyle = useAnimatedStyle(() => ({
     backgroundColor: interpolateColor(
@@ -111,32 +110,6 @@ export function Checkbox({
     if (!isDisabled) onValueChange?.(!isChecked)
   }, [isDisabled, isChecked, onValueChange])
 
-  const handleHoverIn = useCallback(() => {
-    if (!isDisabled) hovered.value = withTiming(1, HOVER_TIMING)
-  }, [isDisabled, hovered])
-  const handleHoverOut = useCallback(() => {
-    hovered.value = withTiming(0, HOVER_TIMING)
-  }, [hovered])
-
-  const handlePressIn = useCallback(() => {
-    if (!isDisabled) pressed.value = withTiming(1, PRESS_TIMING)
-  }, [isDisabled, pressed])
-  const handlePressOut = useCallback(() => {
-    pressed.value = withTiming(0, PRESS_TIMING)
-  }, [pressed])
-
-  // Only show focus state when reached via keyboard (Tab/arrows). Mouse clicks
-  // technically focus the element on web but shouldn't trigger the visual
-  // focus indicator — mirrors CSS `:focus-visible` semantics.
-  const handleFocus = useCallback(() => {
-    if (!isDisabled && isFocusVisible()) {
-      focused.value = withTiming(1, FOCUS_TIMING)
-    }
-  }, [isDisabled, focused])
-  const handleBlur = useCallback(() => {
-    focused.value = withTiming(0, FOCUS_TIMING)
-  }, [focused])
-
   const iconColor = isDisabled
     ? isChecked
       ? onColors.disabledIconColor
@@ -167,12 +140,7 @@ export function Checkbox({
       hitSlop={Platform.OS === 'web' ? undefined : 4}
       disabled={isDisabled}
       onPress={handlePress}
-      onHoverIn={handleHoverIn}
-      onHoverOut={handleHoverOut}
-      onPressIn={handlePressIn}
-      onPressOut={handlePressOut}
-      onFocus={handleFocus}
-      onBlur={handleBlur}
+      {...handlers}
       style={[
         styles.container,
         isDisabled ? styles.disabledContainer : undefined,

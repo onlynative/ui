@@ -1,21 +1,10 @@
 import { useTheme } from '@onlynative/core'
-import { isFocusVisible } from '@onlynative/utils'
-import { useCallback, useMemo } from 'react'
-import { Platform, Pressable, Text, View } from 'react-native'
-import Animated, {
-  interpolateColor,
-  useAnimatedStyle,
-  useSharedValue,
-  withTiming,
-} from 'react-native-reanimated'
+import { Motion } from '@onlynative/inertia'
+import { useMemo } from 'react'
+import { Platform, Text, View } from 'react-native'
+import { useStateLayer } from '../internal/useStateLayer'
 import { createListItemStyles, getResolvedListItemColors } from './styles'
 import type { ListItemLines, ListItemProps } from './types'
-
-const AnimatedPressable = Animated.createAnimatedComponent(Pressable)
-
-const HOVER_TIMING = { duration: 150 }
-const PRESS_TIMING = { duration: 100 }
-const FOCUS_TIMING = { duration: 200 }
 
 function getLines(
   supportingText?: string,
@@ -67,60 +56,15 @@ export function ListItem({
     [theme, containerColor],
   )
 
-  const hovered = useSharedValue(0)
-  const focused = useSharedValue(0)
-  const pressed = useSharedValue(0)
-
-  // Layered crossfade: rest → focus → hover → press (priority: press > hover > focus > rest).
-  const animatedContainerStyle = useAnimatedStyle(() => {
-    const focusedBg = interpolateColor(
-      focused.value,
-      [0, 1],
-      [colors.backgroundColor, colors.focusedBackgroundColor],
-    )
-    const hoveredBg = interpolateColor(
-      hovered.value,
-      [0, 1],
-      [focusedBg, colors.hoveredBackgroundColor],
-    )
-    const pressedBg = interpolateColor(
-      pressed.value,
-      [0, 1],
-      [hoveredBg, colors.pressedBackgroundColor],
-    )
-    return { backgroundColor: pressedBg }
+  const layer = useStateLayer({
+    colors: {
+      rest: colors.backgroundColor,
+      hovered: colors.hoveredBackgroundColor,
+      focused: colors.focusedBackgroundColor,
+      pressed: colors.pressedBackgroundColor,
+    },
+    isDisabled,
   })
-
-  const animatedFocusRingStyle = useAnimatedStyle(() => ({
-    opacity: focused.value,
-  }))
-
-  const handleHoverIn = useCallback(() => {
-    if (!isDisabled) hovered.value = withTiming(1, HOVER_TIMING)
-  }, [isDisabled, hovered])
-
-  const handleHoverOut = useCallback(() => {
-    hovered.value = withTiming(0, HOVER_TIMING)
-  }, [hovered])
-
-  const handlePressIn = useCallback(() => {
-    if (!isDisabled) pressed.value = withTiming(1, PRESS_TIMING)
-  }, [isDisabled, pressed])
-
-  const handlePressOut = useCallback(() => {
-    pressed.value = withTiming(0, PRESS_TIMING)
-  }, [pressed])
-
-  // Match :focus-visible — only show focus state from keyboard navigation.
-  const handleFocus = useCallback(() => {
-    if (!isDisabled && isFocusVisible()) {
-      focused.value = withTiming(1, FOCUS_TIMING)
-    }
-  }, [isDisabled, focused])
-
-  const handleBlur = useCallback(() => {
-    focused.value = withTiming(0, FOCUS_TIMING)
-  }, [focused])
 
   const content = (
     <>
@@ -166,37 +110,34 @@ export function ListItem({
     )
   }
 
+  const userStyle = typeof style === 'function' ? undefined : style
+
   return (
-    <AnimatedPressable
+    <Motion.Pressable
       {...props}
       role="button"
       accessibilityState={{ disabled: isDisabled }}
       hitSlop={Platform.OS === 'web' ? undefined : 4}
       disabled={isDisabled}
       onPress={onPress}
-      onHoverIn={handleHoverIn}
-      onHoverOut={handleHoverOut}
-      onPressIn={handlePressIn}
-      onPressOut={handlePressOut}
-      onFocus={handleFocus}
-      onBlur={handleBlur}
+      {...layer.container}
       style={[
         styles.container,
         styles.interactiveContainer,
-        animatedContainerStyle,
         isDisabled ? styles.disabledContainer : undefined,
-        style,
+        userStyle,
       ]}
     >
-      <Animated.View
+      <Motion.View
         pointerEvents="none"
-        style={[styles.focusRing, animatedFocusRingStyle]}
+        {...layer.focusRing}
+        style={styles.focusRing}
       />
       {isDisabled ? (
         <View style={styles.disabledContentWrapper}>{content}</View>
       ) : (
         content
       )}
-    </AnimatedPressable>
+    </Motion.Pressable>
   )
 }

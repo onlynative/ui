@@ -69,6 +69,9 @@ for (const [util, exports] of Object.entries(UTIL_TYPE_EXPORTS)) {
 
 // Directories to skip
 const SKIP_DIRS = new Set(['__tests__'])
+// Private helper folders: get a per-file registry entry (so CLI can copy them
+// when a public component depends on them) but are hidden from `onlynative list`.
+const INTERNAL_DIRS = new Set(['internal'])
 
 interface ComponentEntry {
   name: string
@@ -172,6 +175,11 @@ function analyzeImports(componentDir: string): {
     if (content.includes('react-native-reanimated')) {
       externalDeps.add('react-native-reanimated')
     }
+    if (content.includes('@onlynative/inertia-gestures')) {
+      externalDeps.add('@onlynative/inertia-gestures')
+    } else if (content.includes('@onlynative/inertia')) {
+      externalDeps.add('@onlynative/inertia')
+    }
   }
 
   return { utils, componentDeps, externalDeps }
@@ -202,6 +210,14 @@ function buildComponentEntry(componentDir: string): ComponentEntry {
 
   if (externalDeps.has('react-native-reanimated')) {
     dependencies['react-native-reanimated'] = '>=4.0.0'
+  }
+
+  if (externalDeps.has('@onlynative/inertia')) {
+    dependencies['@onlynative/inertia'] = '0.0.1-alpha.3'
+  }
+
+  if (externalDeps.has('@onlynative/inertia-gestures')) {
+    dependencies['@onlynative/inertia-gestures'] = '0.0.1-alpha.2'
   }
 
   // Special case: layout uses safe-area-context only in Layout.tsx (optional)
@@ -298,13 +314,17 @@ for (const dir of componentDirs) {
   console.log(`Wrote registry/components/${dir}.json`)
 }
 
-// Build index (with descriptions for fast list command)
+// Build index (with descriptions for fast list command). Internal helper
+// dirs are written to disk above so CLI can resolve componentDeps, but they
+// shouldn't appear in the public listing.
 const indexData = {
   version: VERSION,
-  components: componentEntries.map((e) => ({
-    name: e.name,
-    description: e.description,
-  })),
+  components: componentEntries
+    .filter((e) => !INTERNAL_DIRS.has(e.name))
+    .map((e) => ({
+      name: e.name,
+      description: e.description,
+    })),
 }
 fs.writeFileSync(
   path.join(REGISTRY_DIR, 'index.json'),

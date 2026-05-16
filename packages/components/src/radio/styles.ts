@@ -45,6 +45,7 @@ function getColors(theme: MaterialTheme, selected: boolean): RadioColors {
 
 function applyColorOverrides(
   colors: RadioColors,
+  selected: boolean,
   containerColor?: string,
   contentColor?: string,
 ): RadioColors {
@@ -52,16 +53,22 @@ function applyColorOverrides(
 
   const result = { ...colors }
 
-  if (containerColor) {
+  // `containerColor` is the selected-state fill (border + dot). Per MD3, the
+  // unselected radio is always the spec-default neutral outline — applying
+  // the override to both palettes would tint the unselected border with the
+  // consumer's "filled" colour, which is visually wrong.
+  if (containerColor && selected) {
     result.borderColor = containerColor
     result.dotColor = containerColor
-    // Halo follows the custom container color so the visual stays cohesive.
-    result.stateLayerColor = containerColor
   }
 
   if (contentColor) {
     result.borderColor = contentColor
   }
+
+  // `stateLayerColor` is intentionally not overridden — MD3 specifies a fixed
+  // tonal overlay (`onSurface` unselected, `primary` selected) independent of
+  // container customisation.
 
   return result
 }
@@ -74,6 +81,7 @@ export function getResolvedRadioColors(
 ): RadioColors {
   return applyColorOverrides(
     getColors(theme, selected),
+    selected,
     containerColor,
     contentColor,
   )

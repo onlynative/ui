@@ -1,17 +1,8 @@
 import { useIconResolver, useTheme } from '@onlynative/core'
 import type { MaterialTheme } from '@onlynative/core'
-import {
-  isFocusVisible,
-  renderIcon,
-  resolveColorFromStyle,
-} from '@onlynative/utils'
-import {
-  useCallback,
-  useEffect,
-  useMemo,
-  useState,
-  type ReactElement,
-} from 'react'
+import { useAnimation, useGesture } from '@onlynative/inertia'
+import { renderIcon, resolveColorFromStyle } from '@onlynative/utils'
+import { useCallback, useMemo, useState, type ReactElement } from 'react'
 import {
   Platform,
   Pressable,
@@ -24,8 +15,6 @@ import Animated, {
   interpolate,
   interpolateColor,
   useAnimatedStyle,
-  useSharedValue,
-  withTiming,
 } from 'react-native-reanimated'
 import {
   createGroupStyles,
@@ -44,10 +33,14 @@ import type {
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable)
 
-const HOVER_TIMING = { duration: 150 }
-const PRESS_TIMING = { duration: 100 }
-const FOCUS_TIMING = { duration: 200 }
-const SELECTED_TIMING = { duration: 200 }
+// Per-layer transitions for `useGesture` — matches the prior manual timings.
+const GESTURE_TRANSITIONS = {
+  hovered: { type: 'timing', duration: 150 },
+  focusVisible: { type: 'timing', duration: 200 },
+  pressed: { type: 'timing', duration: 100 },
+} as const
+
+const SELECTED_TRANSITION = { type: 'timing', duration: 200 } as const
 
 export function ButtonGroup(props: ButtonGroupProps): ReactElement {
   const {
@@ -247,14 +240,16 @@ function ButtonGroupItemImpl({
     [theme, variant, size, index, total],
   )
 
-  const hovered = useSharedValue(0)
-  const focused = useSharedValue(0)
-  const pressed = useSharedValue(0)
-  const selectedProgress = useSharedValue(isSelected ? 1 : 0)
-
-  useEffect(() => {
-    selectedProgress.value = withTiming(isSelected ? 1 : 0, SELECTED_TIMING)
-  }, [isSelected, selectedProgress])
+  // `useGesture` returns the four state-layer SVs with handlers pre-bound.
+  // `focusVisible` mirrors the prior manual `isFocusVisible()` gate — it only
+  // raises on keyboard focus, so it maps to the old `focused` SV.
+  const {
+    hovered,
+    focusVisible: focused,
+    pressed,
+    handlers,
+  } = useGesture(GESTURE_TRANSITIONS)
+  const selectedProgress = useAnimation(isSelected ? 1 : 0, SELECTED_TRANSITION)
 
   const disabledBackgroundColor = activeColors.disabledBackgroundColor
 
@@ -401,32 +396,6 @@ function ButtonGroupItemImpl({
     ],
   )
 
-  const handleHoverIn = useCallback(() => {
-    if (!isDisabled) hovered.value = withTiming(1, HOVER_TIMING)
-  }, [isDisabled, hovered])
-
-  const handleHoverOut = useCallback(() => {
-    hovered.value = withTiming(0, HOVER_TIMING)
-  }, [hovered])
-
-  const handlePressIn = useCallback(() => {
-    if (!isDisabled) pressed.value = withTiming(1, PRESS_TIMING)
-  }, [isDisabled, pressed])
-
-  const handlePressOut = useCallback(() => {
-    pressed.value = withTiming(0, PRESS_TIMING)
-  }, [pressed])
-
-  const handleFocus = useCallback(() => {
-    if (!isDisabled && isFocusVisible()) {
-      focused.value = withTiming(1, FOCUS_TIMING)
-    }
-  }, [isDisabled, focused])
-
-  const handleBlur = useCallback(() => {
-    focused.value = withTiming(0, FOCUS_TIMING)
-  }, [focused])
-
   const handlePress = useCallback(() => {
     if (isDisabled) return
     onPress(item.value)
@@ -457,12 +426,7 @@ function ButtonGroupItemImpl({
         hitSlop={Platform.OS === 'web' ? undefined : 4}
         disabled={isDisabled}
         onPress={handlePress}
-        onHoverIn={handleHoverIn}
-        onHoverOut={handleHoverOut}
-        onPressIn={handlePressIn}
-        onPressOut={handlePressOut}
-        onFocus={handleFocus}
-        onBlur={handleBlur}
+        {...handlers}
         style={[
           itemStyles.container,
           animatedContainerStyle,
