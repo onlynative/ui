@@ -6,6 +6,18 @@ import type { ButtonGroupSize, ButtonGroupVariant } from './types'
 export const BUTTON_GROUP_FOCUS_RING_OFFSET = 2
 export const BUTTON_GROUP_FOCUS_RING_WIDTH = 3
 
+// MD3 state-layer opacity tokens. ButtonGroup pins these to spec values rather
+// than reading `theme.stateLayer.*` because the theme defaults drift from MD3
+// (press = 0.12 vs spec 0.10). If the theme tokens are realigned with MD3
+// later, swap these back to `theme.stateLayer.{hovered,focused,pressed}Opacity`.
+const HOVER_OPACITY = 0.08
+const FOCUS_OPACITY = 0.1
+const PRESS_OPACITY = 0.1
+
+// MD3 disabled-container opacity for filled-style buttons.
+const DISABLED_CONTAINER_OPACITY = 0.12
+const DISABLED_CONTENT_OPACITY = 0.38
+
 interface SizeTokens {
   height: number
   paddingHorizontal: number
@@ -73,8 +85,9 @@ export function getItemGap(
   theme: MaterialTheme,
   variant: ButtonGroupVariant,
 ): number {
+  // MD3 expressive: 8dp between standard items, 2dp between connected items.
   if (variant === 'connected') return 2
-  return theme.spacing.xs
+  return theme.spacing.sm
 }
 
 export interface ItemColors {
@@ -92,71 +105,48 @@ interface ResolveColorOptions {
   contentOverride?: string
 }
 
+function resolveItemColors(
+  theme: MaterialTheme,
+  baseBackground: string,
+  baseText: string,
+): ItemColors {
+  return {
+    backgroundColor: baseBackground,
+    textColor: baseText,
+    hoveredBackgroundColor: blendColor(baseBackground, baseText, HOVER_OPACITY),
+    focusedBackgroundColor: blendColor(baseBackground, baseText, FOCUS_OPACITY),
+    pressedBackgroundColor: blendColor(baseBackground, baseText, PRESS_OPACITY),
+    disabledBackgroundColor: alphaColor(
+      theme.colors.onSurface,
+      DISABLED_CONTAINER_OPACITY,
+    ),
+    disabledTextColor: alphaColor(
+      theme.colors.onSurface,
+      DISABLED_CONTENT_OPACITY,
+    ),
+  }
+}
+
 function resolveSelectedColors(
   theme: MaterialTheme,
   options: ResolveColorOptions,
 ): ItemColors {
-  const baseBackground = options.containerOverride ?? theme.colors.primary
-  const baseText = options.contentOverride ?? theme.colors.onPrimary
-  const stateLayerFocus = 0.1
-  const disabledContainerColor = alphaColor(theme.colors.onSurface, 0.1)
-  const disabledLabelColor = alphaColor(theme.colors.onSurface, 0.38)
-
-  return {
-    backgroundColor: baseBackground,
-    textColor: baseText,
-    hoveredBackgroundColor: blendColor(
-      baseBackground,
-      baseText,
-      theme.stateLayer.hoveredOpacity,
-    ),
-    focusedBackgroundColor: blendColor(
-      baseBackground,
-      baseText,
-      stateLayerFocus,
-    ),
-    pressedBackgroundColor: blendColor(
-      baseBackground,
-      baseText,
-      theme.stateLayer.pressedOpacity,
-    ),
-    disabledBackgroundColor: disabledContainerColor,
-    disabledTextColor: disabledLabelColor,
-  }
+  return resolveItemColors(
+    theme,
+    options.containerOverride ?? theme.colors.primary,
+    options.contentOverride ?? theme.colors.onPrimary,
+  )
 }
 
 function resolveUnselectedColors(
   theme: MaterialTheme,
   options: ResolveColorOptions,
 ): ItemColors {
-  const baseBackground =
-    options.containerOverride ?? theme.colors.secondaryContainer
-  const baseText = options.contentOverride ?? theme.colors.onSecondaryContainer
-  const stateLayerFocus = 0.1
-  const disabledContainerColor = alphaColor(theme.colors.onSurface, 0.1)
-  const disabledLabelColor = alphaColor(theme.colors.onSurface, 0.38)
-
-  return {
-    backgroundColor: baseBackground,
-    textColor: baseText,
-    hoveredBackgroundColor: blendColor(
-      baseBackground,
-      baseText,
-      theme.stateLayer.hoveredOpacity,
-    ),
-    focusedBackgroundColor: blendColor(
-      baseBackground,
-      baseText,
-      stateLayerFocus,
-    ),
-    pressedBackgroundColor: blendColor(
-      baseBackground,
-      baseText,
-      theme.stateLayer.pressedOpacity,
-    ),
-    disabledBackgroundColor: disabledContainerColor,
-    disabledTextColor: disabledLabelColor,
-  }
+  return resolveItemColors(
+    theme,
+    options.containerOverride ?? theme.colors.secondaryContainer,
+    options.contentOverride ?? theme.colors.onSecondaryContainer,
+  )
 }
 
 export function getResolvedItemColors(

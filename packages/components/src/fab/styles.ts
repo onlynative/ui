@@ -6,6 +6,18 @@ import type { FABSize, FABVariant } from './types'
 export const FAB_FOCUS_RING_OFFSET = 2
 export const FAB_FOCUS_RING_WIDTH = 3
 
+// MD3 state-layer opacity tokens. FAB pins these to spec values rather than
+// reading `theme.stateLayer.*` because the theme defaults drift from MD3
+// (press = 0.12 vs spec 0.10). If the theme tokens are realigned with MD3
+// later, swap these back to `theme.stateLayer.{hovered,focused,pressed}Opacity`.
+const HOVER_OPACITY = 0.08
+const FOCUS_OPACITY = 0.1
+const PRESS_OPACITY = 0.1
+
+// MD3 disabled-state opacities for FAB (matches the filled-button tokens).
+const DISABLED_CONTAINER_OPACITY = 0.12
+const DISABLED_CONTENT_OPACITY = 0.38
+
 export interface FABColors {
   backgroundColor: string
   contentColor: string
@@ -48,7 +60,6 @@ function getVariantColors(
 }
 
 function deriveStateLayers(
-  theme: MaterialTheme,
   backgroundColor: string,
   overlay: string,
 ): {
@@ -56,23 +67,10 @@ function deriveStateLayers(
   focusedBackgroundColor: string
   pressedBackgroundColor: string
 } {
-  const stateLayerFocus = 0.1
   return {
-    hoveredBackgroundColor: blendColor(
-      backgroundColor,
-      overlay,
-      theme.stateLayer.hoveredOpacity,
-    ),
-    focusedBackgroundColor: blendColor(
-      backgroundColor,
-      overlay,
-      stateLayerFocus,
-    ),
-    pressedBackgroundColor: blendColor(
-      backgroundColor,
-      overlay,
-      theme.stateLayer.pressedOpacity,
-    ),
+    hoveredBackgroundColor: blendColor(backgroundColor, overlay, HOVER_OPACITY),
+    focusedBackgroundColor: blendColor(backgroundColor, overlay, FOCUS_OPACITY),
+    pressedBackgroundColor: blendColor(backgroundColor, overlay, PRESS_OPACITY),
   }
 }
 
@@ -90,10 +88,15 @@ export function getResolvedFABColors(
   return {
     backgroundColor,
     contentColor,
-    ...deriveStateLayers(theme, backgroundColor, contentColor),
-    // Per MD3: DisabledContainerOpacity = 0.10, DisabledContentOpacity = 0.38
-    disabledBackgroundColor: alphaColor(theme.colors.onSurface, 0.1),
-    disabledContentColor: alphaColor(theme.colors.onSurface, 0.38),
+    ...deriveStateLayers(backgroundColor, contentColor),
+    disabledBackgroundColor: alphaColor(
+      theme.colors.onSurface,
+      DISABLED_CONTAINER_OPACITY,
+    ),
+    disabledContentColor: alphaColor(
+      theme.colors.onSurface,
+      DISABLED_CONTENT_OPACITY,
+    ),
   }
 }
 
