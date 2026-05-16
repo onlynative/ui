@@ -57,6 +57,7 @@ jest.mock('react-native-reanimated', () => {
     Text: AnimatedText,
     useSharedValue: (initial) => ({ value: initial }),
     useDerivedValue: (fn) => ({ value: fn() }),
+    useAnimatedReaction: () => {},
     useReducedMotion: () => false,
     isWorkletFunction: () => false,
     // One-shot: see the warning above the mock.
