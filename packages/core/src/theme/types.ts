@@ -177,12 +177,13 @@ export interface StateLayer {
   disabledOpacity: number
 }
 
-/** Shadow/elevation levels (0–3) for surface hierarchy. */
+/** Shadow/elevation levels (0–4) for surface hierarchy. */
 export interface Elevation {
   level0: ElevationLevel
   level1: ElevationLevel
   level2: ElevationLevel
   level3: ElevationLevel
+  level4: ElevationLevel
 }
 
 export interface ElevationLevel {

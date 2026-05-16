@@ -1,13 +1,9 @@
 import { useIconResolver, useTheme } from '@onlynative/core'
-import { isFocusVisible, renderIcon } from '@onlynative/utils'
-import { useCallback, useMemo } from 'react'
-import { Pressable, Text, View } from 'react-native'
-import Animated, {
-  interpolateColor,
-  useAnimatedStyle,
-  useSharedValue,
-  withTiming,
-} from 'react-native-reanimated'
+import { Motion } from '@onlynative/inertia'
+import { renderIcon } from '@onlynative/utils'
+import { useMemo } from 'react'
+import { Text, View } from 'react-native'
+import { useStateLayer } from '../internal/useStateLayer'
 import {
   createStyles,
   getFABIconPixelSize,
@@ -16,11 +12,8 @@ import {
 } from './styles'
 import type { FABProps, FABSize } from './types'
 
-const AnimatedPressable = Animated.createAnimatedComponent(Pressable)
-
-const HOVER_TIMING = { duration: 150 }
-const PRESS_TIMING = { duration: 100 }
-const FOCUS_TIMING = { duration: 200 }
+// MD3 elevation transitions follow the standard short4 duration.
+const ELEVATION_TRANSITION = { type: 'timing', duration: 250 } as const
 
 function getFocusRingSizeStyle(
   styles: ReturnType<typeof createStyles>,
@@ -69,80 +62,71 @@ export function FAB({
     : colors.contentColor
   const iconPixelSize = getFABIconPixelSize(size)
 
-  const hovered = useSharedValue(0)
-  const focused = useSharedValue(0)
-  const pressed = useSharedValue(0)
-
-  const animatedContainerStyle = useAnimatedStyle(() => {
-    const focusedBg = interpolateColor(
-      focused.value,
-      [0, 1],
-      [colors.backgroundColor, colors.focusedBackgroundColor],
-    )
-    const hoveredBg = interpolateColor(
-      hovered.value,
-      [0, 1],
-      [focusedBg, colors.hoveredBackgroundColor],
-    )
-    const pressedBg = interpolateColor(
-      pressed.value,
-      [0, 1],
-      [hoveredBg, colors.pressedBackgroundColor],
-    )
-    return { backgroundColor: pressedBg }
+  const layer = useStateLayer({
+    colors: {
+      rest: colors.backgroundColor,
+      hovered: colors.hoveredBackgroundColor,
+      focused: colors.focusedBackgroundColor,
+      pressed: colors.pressedBackgroundColor,
+      disabled: colors.disabledBackgroundColor,
+    },
+    isDisabled,
   })
 
-  const animatedFocusRingStyle = useAnimatedStyle(() => ({
-    opacity: focused.value,
-  }))
-
-  const handleHoverIn = useCallback(() => {
-    if (!isDisabled) hovered.value = withTiming(1, HOVER_TIMING)
-  }, [isDisabled, hovered])
-
-  const handleHoverOut = useCallback(() => {
-    hovered.value = withTiming(0, HOVER_TIMING)
-  }, [hovered])
-
-  const handlePressIn = useCallback(() => {
-    if (!isDisabled) pressed.value = withTiming(1, PRESS_TIMING)
-  }, [isDisabled, pressed])
-
-  const handlePressOut = useCallback(() => {
-    pressed.value = withTiming(0, PRESS_TIMING)
-  }, [pressed])
-
-  // Match :focus-visible — only show focus state from keyboard navigation.
-  const handleFocus = useCallback(() => {
-    if (!isDisabled && isFocusVisible()) {
-      focused.value = withTiming(1, FOCUS_TIMING)
+  // MD3 elevation-on-hover cascade for FAB: level 3 (rest) → level 4 (hover).
+  // Only the numeric shadow properties animate; `shadowOffset` stays at the
+  // rest level (set by `styles.container`).
+  const containerMotion = useMemo(() => {
+    const rest = theme.elevation.level3
+    const hover = theme.elevation.level4
+    const animate = {
+      ...layer.container.animate,
+      shadowOpacity: rest.shadowOpacity,
+      shadowRadius: rest.shadowRadius,
+      elevation: rest.elevation,
     }
-  }, [isDisabled, focused])
-
-  const handleBlur = useCallback(() => {
-    focused.value = withTiming(0, FOCUS_TIMING)
-  }, [focused])
+    const gesture = layer.container.gesture
+      ? {
+          ...layer.container.gesture,
+          hovered: {
+            ...layer.container.gesture.hovered,
+            shadowOpacity: hover.shadowOpacity,
+            shadowRadius: hover.shadowRadius,
+            elevation: hover.elevation,
+          },
+        }
+      : undefined
+    const transition = {
+      ...layer.container.transition,
+      shadowOpacity: ELEVATION_TRANSITION,
+      shadowRadius: ELEVATION_TRANSITION,
+      elevation: ELEVATION_TRANSITION,
+    }
+    return { animate, gesture, transition }
+  }, [layer.container, theme.elevation])
 
   const labelTextStyle = useMemo(
     () => [styles.label, { color: resolvedContentColor }, labelStyleOverride],
     [styles.label, resolvedContentColor, labelStyleOverride],
   )
 
-  const disabledOverride = isDisabled
-    ? { backgroundColor: colors.disabledBackgroundColor }
-    : undefined
+  // Function-form `style` is dropped on animated components — wrapping the
+  // style array in a function hides the gesture-driven backgroundColor from
+  // Inertia's prop diff and breaks the cascade. Use `containerColor` /
+  // `contentColor` for state-aware styling instead.
+  const userStyle = typeof style === 'function' ? undefined : style
 
   return (
     <View style={styles.wrapper}>
-      <Animated.View
+      <Motion.View
         pointerEvents="none"
+        {...layer.focusRing}
         style={[
           styles.focusRing,
           getFocusRingSizeStyle(styles, size, isExtended),
-          animatedFocusRingStyle,
         ]}
       />
-      <AnimatedPressable
+      <Motion.Pressable
         {...rest}
         accessibilityRole="button"
         accessibilityLabel={accessibilityLabel ?? label}
@@ -150,26 +134,14 @@ export function FAB({
         disabled={isDisabled}
         hitSlop={resolvedHitSlop}
         onPress={onPress}
-        onHoverIn={handleHoverIn}
-        onHoverOut={handleHoverOut}
-        onPressIn={handlePressIn}
-        onPressOut={handlePressOut}
-        onFocus={handleFocus}
-        onBlur={handleBlur}
+        {...containerMotion}
         style={[
           styles.container,
           isExtended
             ? [styles.extended, icon ? styles.extendedWithIcon : undefined]
             : getFABSizeStyle(styles, size),
-          animatedContainerStyle,
-          disabledOverride,
           isDisabled ? styles.disabled : undefined,
-          // Function-form `style` is intentionally dropped on animated
-          // components — wrapping the whole `style` array in a function would
-          // hide the animated container style from Reanimated's prop diff and
-          // break the state-layer transitions. Use `containerColor` /
-          // `contentColor` for state-aware styling instead.
-          typeof style === 'function' ? undefined : style,
+          userStyle,
         ]}
       >
         {icon ? (
@@ -182,7 +154,7 @@ export function FAB({
           </View>
         ) : null}
         {isExtended ? <Text style={labelTextStyle}>{label}</Text> : null}
-      </AnimatedPressable>
+      </Motion.Pressable>
     </View>
   )
 }
